@@ -1,0 +1,42 @@
+[
+  {
+    "id": "login",
+    "defaultMessage": "Login",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "sign_in_message",
+    "defaultMessage": "Sign In to your account",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "login_email_error_message",
+    "defaultMessage": "Please enter a valid email",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "login_password_error_message",
+    "defaultMessage": "Please enter your password",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "login_button",
+    "defaultMessage": "Login",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "forgot_password",
+    "defaultMessage": "Forgot password?",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "sign_up_title",
+    "defaultMessage": "Sign up",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "sign_up_message",
+    "defaultMessage": "This section is reserved for the staff at SoloTodo",
+    "filepath": "./src/views/Pages/Login/Login.js"
+  }
+]

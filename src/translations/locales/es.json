@@ -1,0 +1,10 @@
+{
+  "forgot_password": "Olvidaste tu contraseña?",
+  "login": "Acceso",
+  "login_button": "Entrar",
+  "login_email_error_message": "Por favor ingrese un e-mail válido",
+  "login_password_error_message": "Por favor ingrese su contraseña",
+  "sign_in_message": "Accede a tu cuenta",
+  "sign_up_message": "Esta sección está reservada para el staff de SoloTodo",
+  "sign_up_title": "Registro"
+}

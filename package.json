@@ -1,0 +1,29 @@
+{
+  "name": "backend_try",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^3.1.0",
+    "history": "^4.6.3",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-intl": "^2.3.0",
+    "react-intl-cra": "^0.2.7",
+    "react-router-dom": "^4.1.2",
+    "react-scripts": "1.0.10",
+    "react-transition-group": "^1.2.0",
+    "reactstrap": "^4.8.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "translate": "react-intl-cra './src/**/*.js' './src/translations/messages.json' && node ./translationRunner.js"
+  },
+  "devDependencies": {
+    "react-intl-translations-manager": "^5.0.0"
+  }
+}
