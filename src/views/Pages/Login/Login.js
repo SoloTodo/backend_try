@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { TokenAuth } from './../../../auth/TokenAuth';
+import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
   constructor(props) {
@@ -9,7 +10,8 @@ class Login extends Component {
       email: '',
       password: '',
       emailValid: true,
-      passwordValid: true
+      passwordValid: true,
+      credentialsValid: true
     }
   }
 
@@ -68,13 +70,28 @@ class Login extends Component {
     let passwordValid = this.handlePasswordBlur();
 
     if (emailValid && passwordValid) {
-      // alert('Mal wn!');
+      TokenAuth.authenticate(this.state.email, this.state.password).then(
+          () => {
+            if (TokenAuth.isAuthenticated()) {
+              this.setState({
+                credentialsValid: true
+              });
+            } else {
+              this.setState({
+                credentialsValid: false
+              })
+            }
+          })
     }
   };
 
   render() {
     let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
+
+    if (TokenAuth.isAuthenticated()) {
+      return <Redirect to="/" />
+    }
 
     return (
         <div className="app flex-row align-items-center">
@@ -88,7 +105,10 @@ class Login extends Component {
                         <FormattedMessage id="login" defaultMessage={`Login`} />
                       </h1>
                       <form onSubmit={this.handleOnSubmit}>
-                        <p className="text-muted"><FormattedMessage id="sign_in_message" defaultMessage={`Sign In to your account`} /></p>
+                        {!this.state.credentialsValid && <p>Bad email / password</p>}
+                        <p className="text-muted">
+                          <FormattedMessage id="sign_in_message" defaultMessage={`Sign In to your account`} />
+                        </p>
                         <div className={this.formGroupClassName(emailValid)}>
                           <div className="input-group">
                             <span className="input-group-addon"><i className="icon-user"></i></span>

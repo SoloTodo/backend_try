@@ -5,7 +5,7 @@ import { TokenAuth } from './TokenAuth'
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-    TokenAuth.isAuthenticated ? (
+    TokenAuth.isAuthenticated() ? (
       <Component {...props}/>
     ) : (
       <Redirect to={{
