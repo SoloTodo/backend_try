@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { TokenAuth } from './../../../auth/TokenAuth';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { settings } from '../../../settings'
 
 class Login extends Component {
   constructor(props) {
@@ -70,17 +71,26 @@ class Login extends Component {
     let passwordValid = this.handlePasswordBlur();
 
     if (emailValid && passwordValid) {
-      TokenAuth.authenticate(this.state.email, this.state.password).then(
-          () => {
-            if (TokenAuth.isAuthenticated()) {
-              this.setState({
-                credentialsValid: true
-              });
+      let formData = new FormData();
+
+      formData.append('username', this.state.email);
+      formData.append('password', this.state.password);
+
+      return fetch(`${settings.endpoint}/obtain-auth-token/`, {
+        method: 'POST',
+        body: formData
+      })
+          .then(response => {
+            if (response.ok) {
+              return response.json()
             } else {
-              this.setState({
-                credentialsValid: false
-              })
+              return {
+                token: null
+              }
             }
+          })
+          .then(json => {
+            this.props.setAuthToken(json.token);
           })
     }
   };
@@ -89,7 +99,7 @@ class Login extends Component {
     let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
 
-    if (TokenAuth.isAuthenticated()) {
+    if (this.props.isLoggedIn) {
       return <Redirect to="/" />
     }
 
@@ -151,4 +161,19 @@ class Login extends Component {
   }
 }
 
-export default Login;
+let mapStateToProps = (state) => {
+  return {
+    isLoggedIn: Boolean(state.authToken)
+  }
+};
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    setAuthToken : (authToken) => { dispatch({
+      type: 'setAuthToken',
+      authToken
+    }) }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

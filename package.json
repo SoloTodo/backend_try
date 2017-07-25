@@ -11,10 +11,12 @@
     "react-dom": "^15.6.1",
     "react-intl": "^2.3.0",
     "react-intl-cra": "^0.2.7",
+    "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.2",
     "react-scripts": "1.0.10",
     "react-transition-group": "^1.2.0",
-    "reactstrap": "^4.8.0"
+    "reactstrap": "^4.8.0",
+    "redux": "^3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",

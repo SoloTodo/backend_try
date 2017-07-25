@@ -1,5 +1,20 @@
 [
   {
+    "id": "header_language_title",
+    "defaultMessage": "Language",
+    "filepath": "./src/components/Header/Header.js"
+  },
+  {
+    "id": "header_signout_title",
+    "defaultMessage": "Logout",
+    "filepath": "./src/components/Header/Header.js"
+  },
+  {
+    "id": "hello_world",
+    "defaultMessage": "Hello World",
+    "filepath": "./src/views/Dashboard/Dashboard.js"
+  },
+  {
     "id": "login",
     "defaultMessage": "Login",
     "filepath": "./src/views/Pages/Login/Login.js"

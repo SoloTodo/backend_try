@@ -1,17 +1,28 @@
 import React from 'react';
-import { Component } from 'react'
+import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
-import { TokenAuth } from './TokenAuth'
 
-export const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={props => (
-    TokenAuth.isAuthenticated() ? (
-      <Component {...props}/>
-    ) : (
-      <Redirect to={{
-        pathname: '/login',
-        state: { from: props.location }
-      }}/>
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  if (rest.isLoggedIn) {
+    return (
+        <Route {...rest} render={props => {
+          return <Component {...props}/>
+        }
+        }/>
     )
-  )}/>
-);
+  } else {
+    return <Redirect to={{
+      pathname: '/login',
+      state: {from: rest.location}
+    }}/>
+  }
+};
+
+let mapStateToProps = (state) => {
+  return {
+    isLoggedIn: Boolean(state.authToken)
+  }
+};
+
+
+export default connect(mapStateToProps)(PrivateRoute)

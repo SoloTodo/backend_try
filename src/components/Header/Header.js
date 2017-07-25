@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
-import { TokenAuth } from './../../auth/TokenAuth';
+import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 class Header extends Component {
   constructor(props) {
@@ -8,8 +9,7 @@ class Header extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      dropdownOpen: false,
-      loggedIn: true
+      dropdownOpen: false
     };
   }
 
@@ -41,17 +41,16 @@ class Header extends Component {
 
   handleSignOut = (event) => {
     event.preventDefault();
-    TokenAuth.signOut();
-    this.setState({
-      loggedIn: false
-    })
+    this.props.signOut();
   };
 
   render() {
+    const user = this.props.user;
+
     return (
         <header className="app-header navbar">
           <button className="navbar-toggler mobile-sidebar-toggler d-lg-none" onClick={this.mobileSidebarToggle} type="button">&#9776;</button>
-          <a className="navbar-brand" href="#"></a>
+          <a className="navbar-brand" href="">&nbsp;</a>
           <ul className="nav navbar-nav d-md-down-none mr-auto">
             <li className="nav-item">
               <button className="nav-link navbar-toggler sidebar-toggler" type="button" onClick={this.sidebarToggle}>&#9776;</button>
@@ -60,18 +59,20 @@ class Header extends Component {
           <ul className="nav navbar-nav ml-auto">
             <li className="nav-item dropdown">
               <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                <a onClick={this.toggle} className="nav-link nav-pill avatar" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen} id="account-nav-link">
-                  <img src={'img/avatars/default.png'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
+                <a onClick={this.toggle} className="nav-link nav-pill avatar" data-toggle="dropdown"  role="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen} id="account-nav-link">
+                  <img src={'img/avatars/default.png'} className="img-avatar" alt={ user.email }/>
                 </a>
 
                 <DropdownMenu className="dropdown-menu-right">
-                  <DropdownItem header className="text-center"><strong>Account</strong></DropdownItem>
-                  <DropdownItem onClick={this.handleSignOut}><i className="fa fa-lock"/> Logout</DropdownItem>
+                  <DropdownItem header className="text-center"><strong><FormattedMessage id="header_language_title" defaultMessage={`Language`} /></strong></DropdownItem>
+                  {this.props.languages.map(language => (
+                      <DropdownItem key={language.id} onClick={() => this.props.setUserLanguage(language)}>
+                        <i className={language.id === user.preferred_language_id && 'fa fa-check'}/>{language.name}
+                      </DropdownItem>))}
+                  <DropdownItem header className="text-center"><strong>{ user.email }</strong></DropdownItem>
+                  <DropdownItem onClick={this.handleSignOut}><i className="fa fa-lock"/> <FormattedMessage id="header_signout_title" defaultMessage={`Logout`} /></DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-            </li>
-            <li className="nav-item d-md-down-none">
-              <a className="nav-link navbar-toggler aside-menu-toggler" href="#">&#9776;</a>
             </li>
           </ul>
         </header>
@@ -79,4 +80,33 @@ class Header extends Component {
   }
 }
 
-export default Header;
+let mapStateToProps = (state) => {
+  return {
+    languages: state.languages,
+    user: state.user
+  };
+};
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    signOut: () => {
+      dispatch({
+        type: 'setAuthToken',
+        authToken: null
+      })
+    },
+    setUserLanguage: (language) => {
+      dispatch({
+        type: 'setUserLanguage',
+        language
+      });
+
+      dispatch({
+        type: 'setLocaleLanguage',
+        languageId: language.id
+      })
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
