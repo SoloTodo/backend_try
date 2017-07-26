@@ -1,5 +1,9 @@
 {
+  "configuration": "Configuration",
+  "dashboard": "Dashboard",
   "forgot_password": "Forgot password?",
+  "header_country_title": "Country",
+  "header_currency_title": "Currency",
   "header_language_title": "Language",
   "header_signout_title": "Logout",
   "hello_world": "Hello World",
@@ -7,6 +11,7 @@
   "login_button": "Login",
   "login_email_error_message": "Please enter a valid email",
   "login_password_error_message": "Please enter your password",
+  "menu": "Menu",
   "sign_in_message": "Sign In to your account",
   "sign_up_message": "This section is reserved for the staff at SoloTodo",
   "sign_up_title": "Sign up"

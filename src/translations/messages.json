@@ -5,9 +5,49 @@
     "filepath": "./src/components/Header/Header.js"
   },
   {
+    "id": "header_currency_title",
+    "defaultMessage": "Currency",
+    "filepath": "./src/components/Header/Header.js"
+  },
+  {
+    "id": "header_country_title",
+    "defaultMessage": "Country",
+    "filepath": "./src/components/Header/Header.js"
+  },
+  {
     "id": "header_signout_title",
     "defaultMessage": "Logout",
     "filepath": "./src/components/Header/Header.js"
+  },
+  {
+    "id": "menu",
+    "defaultMessage": "Menu",
+    "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "dashboard",
+    "defaultMessage": "Dashboard",
+    "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "configuration",
+    "defaultMessage": "Configuration",
+    "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "header_currency_title",
+    "defaultMessage": "Currency",
+    "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "header_country_title",
+    "defaultMessage": "Country",
+    "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "header_language_title",
+    "defaultMessage": "Language",
+    "filepath": "./src/components/Sidebar/Sidebar.js"
   },
   {
     "id": "hello_world",

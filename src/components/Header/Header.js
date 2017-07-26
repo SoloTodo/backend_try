@@ -64,11 +64,6 @@ class Header extends Component {
                 </a>
 
                 <DropdownMenu className="dropdown-menu-right">
-                  <DropdownItem header className="text-center"><strong><FormattedMessage id="header_language_title" defaultMessage={`Language`} /></strong></DropdownItem>
-                  {this.props.languages.map(language => (
-                      <DropdownItem key={language.id} onClick={() => this.props.setUserLanguage(language)}>
-                        <i className={language.id === user.preferred_language_id && 'fa fa-check'}/>{language.name}
-                      </DropdownItem>))}
                   <DropdownItem header className="text-center"><strong>{ user.email }</strong></DropdownItem>
                   <DropdownItem onClick={this.handleSignOut}><i className="fa fa-lock"/> <FormattedMessage id="header_signout_title" defaultMessage={`Logout`} /></DropdownItem>
                 </DropdownMenu>
@@ -82,7 +77,6 @@ class Header extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    languages: state.languages,
     user: state.user
   };
 };
@@ -93,17 +87,6 @@ let mapDispatchToProps = (dispatch) => {
       dispatch({
         type: 'setAuthToken',
         authToken: null
-      })
-    },
-    setUserLanguage: (language) => {
-      dispatch({
-        type: 'setUserLanguage',
-        language
-      });
-
-      dispatch({
-        type: 'setLocaleLanguage',
-        languageId: language.id
       })
     }
   }

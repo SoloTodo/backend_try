@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 
+import { localeData } from './translations/locales/index';
+
 // REF https://github.com/yahoo/react-intl/issues/243
 
 // This function will map the current redux state to the props for the component that it is "connected" to.
@@ -15,8 +17,18 @@ class ConnectedIntlProvider extends Component {
 }
 
 function mapStateToProps(state) {
-  const { language, messages } = state.locales;
-  return { locale: language, messages };
+  let languageCode = state.language.code;
+  let messages = localeData[languageCode];
+
+  if (!messages) {
+    languageCode = 'en';
+    messages = localeData[languageCode]
+  }
+
+  return {
+    locale: languageCode,
+    messages
+  };
 }
 
 export default connect(mapStateToProps)(ConnectedIntlProvider);
