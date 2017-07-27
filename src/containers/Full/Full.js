@@ -8,7 +8,10 @@ import Breadcrumb from '../../components/Breadcrumb/';
 import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
+import Stores from '../../views/Stores';
+import PermissionRoute from '../../auth/PermissionRoute';
 import { addAuthFetch } from '../../utils';
+import { routes } from '../../TopLevelRoutes';
 
 
 class Full extends Component {
@@ -23,6 +26,9 @@ class Full extends Component {
               <div className="container-fluid">
                 <Switch>
                   <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                  {routes.map(route =>
+                      <PermissionRoute key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={Stores}/>
+                  )}
                   <Redirect from="/" to="/dashboard"/>
                 </Switch>
               </div>

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 
 import { createBrowserHistory } from 'history';
 import { HashRouter, Route, Switch } from 'react-router-dom'
+import 'fixed-data-table/dist/fixed-data-table.min.css';
 
 import PrivateRoute from './auth/PrivateRoute';
 import ConnectedIntlProvider from './ConnectedIntlProvider';
@@ -214,6 +215,7 @@ class App extends Component {
           this.updateUserPreferredCountry(preferredCountry);
         }
       }
+
       return user;
     }
 

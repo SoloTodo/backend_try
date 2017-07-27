@@ -1,32 +1,22 @@
 [
   {
-    "id": "header_language_title",
-    "defaultMessage": "Language",
-    "filepath": "./src/components/Header/Header.js"
-  },
-  {
-    "id": "header_currency_title",
-    "defaultMessage": "Currency",
-    "filepath": "./src/components/Header/Header.js"
-  },
-  {
-    "id": "header_country_title",
-    "defaultMessage": "Country",
-    "filepath": "./src/components/Header/Header.js"
-  },
-  {
     "id": "header_signout_title",
     "defaultMessage": "Logout",
     "filepath": "./src/components/Header/Header.js"
   },
   {
-    "id": "menu",
-    "defaultMessage": "Menu",
+    "id": "stores",
+    "defaultMessage": "Stores",
     "filepath": "./src/components/Sidebar/Sidebar.js"
   },
   {
-    "id": "dashboard",
-    "defaultMessage": "Dashboard",
+    "id": "show_list",
+    "defaultMessage": "Show all",
+    "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "menu",
+    "defaultMessage": "Menu",
     "filepath": "./src/components/Sidebar/Sidebar.js"
   },
   {

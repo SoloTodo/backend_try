@@ -1,6 +1,5 @@
 {
   "configuration": "Configuración",
-  "dashboard": "Dashboard",
   "forgot_password": "Olvidaste tu contraseña?",
   "header_country_title": "País",
   "header_currency_title": "Moneda",
@@ -12,7 +11,9 @@
   "login_email_error_message": "Por favor ingrese un e-mail válido",
   "login_password_error_message": "Por favor ingrese su contraseña",
   "menu": "Menú",
+  "show_list": "Todas",
   "sign_in_message": "Accede a tu cuenta",
   "sign_up_message": "Esta sección está reservada para el staff de SoloTodo",
-  "sign_up_title": "Registro"
+  "sign_up_title": "Registro",
+  "stores": "Tiendas"
 }
