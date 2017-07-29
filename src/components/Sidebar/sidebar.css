@@ -1,7 +1,13 @@
 .glyphicons:before {
     padding: 3px 0;
+    margin-left: -3px;
 }
 
 .glyphicons {
     height: 14px;
+}
+
+i.icon {
+    padding-left: 2px;
+    margin-right: 4px !important;
 }

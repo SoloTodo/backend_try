@@ -5,16 +5,6 @@
     "filepath": "./src/components/Header/Header.js"
   },
   {
-    "id": "stores",
-    "defaultMessage": "Stores",
-    "filepath": "./src/components/Sidebar/Sidebar.js"
-  },
-  {
-    "id": "show_list",
-    "defaultMessage": "Show all",
-    "filepath": "./src/components/Sidebar/Sidebar.js"
-  },
-  {
     "id": "menu",
     "defaultMessage": "Menu",
     "filepath": "./src/components/Sidebar/Sidebar.js"
@@ -38,6 +28,16 @@
     "id": "header_language_title",
     "defaultMessage": "Language",
     "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "show_list",
+    "defaultMessage": "Show all",
+    "filepath": "./src/TopLevelRoutes.js"
   },
   {
     "id": "hello_world",
@@ -83,5 +83,30 @@
     "id": "sign_up_message",
     "defaultMessage": "This section is reserved for the staff at SoloTodo",
     "filepath": "./src/views/Pages/Login/Login.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Stores.js"
+  },
+  {
+    "id": "type",
+    "defaultMessage": "type",
+    "filepath": "./src/views/Stores.js"
+  },
+  {
+    "id": "country",
+    "defaultMessage": "Country",
+    "filepath": "./src/views/Stores.js"
+  },
+  {
+    "id": "scraper",
+    "defaultMessage": "Scraper",
+    "filepath": "./src/views/Stores.js"
+  },
+  {
+    "id": "active_question",
+    "defaultMessage": "Active?",
+    "filepath": "./src/views/Stores.js"
   }
 ]

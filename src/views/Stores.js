@@ -1,87 +1,73 @@
 import React, { Component } from 'react';
-import {Table, Column, Cell} from 'fixed-data-table';
-import { FakeObjectDataListStore } from '../FakeObjectDataListStore';
+import { addFetchAuth } from '../utils';
+import {connect} from "react-redux";
+import ApiResource from "../ApiResource";
+import {FormattedMessage} from "react-intl";
 
 
-const TextCell = ({rowIndex, data, columnKey, ...props}) => (
-    <Cell {...props}>
-      {data.getObjectAt(rowIndex)[columnKey]}
-    </Cell>
-);
-
-
-class Store extends Component {
+class Stores extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      dataList: new FakeObjectDataListStore(1000000),
-      columnWidths: {
-        firstName: 240,
-        lastName: 150,
-        sentence: 140,
-        companyName: 60,
-      },
-    };
-
-    this._onColumnResizeEndCallback = this._onColumnResizeEndCallback.bind(this);
+      stores: []
+    }
   }
 
-  _onColumnResizeEndCallback(newColumnWidth, columnKey) {
-    this.setState(({columnWidths}) => ({
-      columnWidths: {
-        ...columnWidths,
-        [columnKey]: newColumnWidth,
-      }
-    }));
+  componentDidMount() {
+    this.props.fetchAuth('/stores/').then(json => {
+      this.setState({
+        stores: json
+      })
+    });
   }
 
   render() {
-    let {dataList, columnWidths} = this.state;
-    return (
-        <Table
-            rowHeight={30}
-            headerHeight={50}
-            rowsCount={dataList.getSize()}
-            onColumnResizeEndCallback={this._onColumnResizeEndCallback}
-            isColumnResizing={false}
-            width={1000}
-            height={500}
-            {...this.props}>
-          <Column
-              columnKey="firstName"
-              header={<Cell>First Name</Cell>}
-              cell={<TextCell data={dataList} />}
-              fixed={true}
-              width={columnWidths.firstName}
-              isResizable={true}
-          />
-          <Column
-              columnKey="lastName"
-              header={<Cell>Last Name (min/max constrained)</Cell>}
-              cell={<TextCell data={dataList} />}
-              width={columnWidths.lastName}
-              isResizable={true}
-              minWidth={70}
-              maxWidth={170}
-          />
-          <Column
-              columnKey="companyName"
-              header={<Cell>Company</Cell>}
-              cell={<TextCell data={dataList} />}
-              width={columnWidths.companyName}
-              isResizable={true}
-          />
-          <Column
-              columnKey="sentence"
-              header={<Cell>Sentence</Cell>}
-              cell={<TextCell data={dataList} />}
-              width={columnWidths.sentence}
-              isResizable={true}
-          />
-        </Table>
-    );
+    const apiResourceStores = this.state.stores.map(x => ApiResource(x, this.props.apiResources));
+
+    console.log(apiResourceStores);
+
+    return <div className="animated fadeIn">
+      <div className="row">
+        <div className="col-xs-12 col-md-8 col-lg-8 col-xl-6">
+          <div className="card">
+            <div className="card-header">
+              <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="stores" defaultMessage={`Stores`} />
+            </div>
+            <div className="card-block">
+              <table className="table table-striped">
+                <thead>
+                <tr>
+                  <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
+                  <th><FormattedMessage id="type" defaultMessage={`type`} /></th>
+                  <th><FormattedMessage id="country" defaultMessage={`Country`} /></th>
+                  <th className="hidden-sm-down"><FormattedMessage id="scraper" defaultMessage={`Scraper`} /></th>
+                  <th className="text-center hidden-sm-down"><FormattedMessage id="active_question" defaultMessage={`Active?`} /></th>
+                </tr>
+                </thead>
+                <tbody>
+                {apiResourceStores.map(store => (
+                    <tr key={store.url}>
+                      <td>{store.name}</td>
+                      <td>{store.type.name}</td>
+                      <td>{store.country.name}</td>
+                      <td className="hidden-sm-down">{store.storescraperClass}</td>
+                      <td className="text-center hidden-sm-down"><i className={store.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i></td>
+                    </tr>
+                ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   }
 }
 
-export default Store;
+let mapStateToProps = (state) => {
+  return {
+    apiResources: state.apiResources
+  };
+};
+
+export default connect(addFetchAuth(mapStateToProps))(Stores);

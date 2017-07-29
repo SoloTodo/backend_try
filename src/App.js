@@ -11,24 +11,20 @@ import PrivateRoute from './auth/PrivateRoute';
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
 import Login from './views/Pages/Login/';
-import { localeData } from './translations/locales/index';
 import { settings } from './settings';
 import { navigatorLanguage, fetchAuth } from './utils';
+import {
+  ApiResourceByStore,
+  getResourcesByType
+} from './ApiResource';
 
 
 class App extends Component {
-
-
   constructor(props) {
     super(props);
 
     this.store = createStore(combineReducers({
-      languages: this.languagesReducer,
-      language: this.languageReducer,
-      currencies: this.currenciesReducer,
-      currency: this.currencyReducer,
-      countries: this.countriesReducer,
-      country: this.countryReducer,
+      apiResources: this.apiResourcesReducer,
       authToken: this.authTokenReducer,
       user: this.userReducer
     }));
@@ -38,35 +34,80 @@ class App extends Component {
 
   getUserData = () => {
     const state = this.store.getState();
-    if (state.authToken && state.languages.length && state.currencies.length && state.countries.length && !state.user.email) {
-      fetchAuth(state.authToken, '/users/me/').then(
-          res => res.json()
-      ).then(
+
+    let languages = getResourcesByType(state, 'languages');
+    let currencies = getResourcesByType(state, 'currencies');
+    let countries = getResourcesByType(state, 'countries');
+
+    if (state.authToken && languages.length && currencies.length && countries.length && !state.user.email) {
+      fetchAuth(state.authToken, settings.ownUserApiPath).then(
           user => {
             this.store.dispatch({
               type: 'setUser',
               user
             });
 
-            if (user.preferred_language_id) {
-              this.store.dispatch({
-                type: 'setLanguage',
-                languageId: user.preferred_language_id
-              });
+            user = ApiResourceByStore(this.store.getState().user, this.store);
+
+            // Set language
+            let languagesDictByUrl = {};
+            let languagesDictByCode = {};
+
+            getResourcesByType(state, 'languages').map(x => {
+              languagesDictByUrl[x.url] = x;
+              languagesDictByCode[x.code] = x;
+              return null;
+            });
+
+            let preferredLanguage = user.preferredLanguage;
+
+            if (!preferredLanguage) {
+              preferredLanguage = languagesDictByCode[navigatorLanguage()]
             }
 
-            if (user.preferred_currency_id) {
-              this.store.dispatch({
-                type: 'setCurrency',
-                currencyId: user.preferred_currency_id
-              });
+            if (!preferredLanguage) {
+              preferredLanguage = languagesDictByUrl[
+                  settings.defaultLanguageUrl]
             }
 
-            if (user.preferred_country_id) {
-              this.store.dispatch({
-                type: 'setCountry',
-                countryId: user.preferred_country_id
-              });
+            if (!user.preferredLanguage || (user.preferredLanguage.url !== preferredLanguage.url)) {
+              user.preferredLanguage = preferredLanguage;
+            }
+
+            // Set currency
+            let currenciesByUrl = {};
+
+            getResourcesByType(state, 'currencies').map(x => {
+              currenciesByUrl[x.url] = x;
+              return null;
+            });
+
+            let preferredCurrency = user.preferredCurrency;
+
+            if (!preferredCurrency) {
+              preferredCurrency = currenciesByUrl[settings.defaultCurrencyUrl]
+            }
+
+            if (!user.preferredCurrency || user.preferredCurrency.url !== preferredCurrency.url) {
+              user.preferredCurrency = preferredCurrency
+            }
+
+            // Set country
+            let countriesByUrl = {};
+
+            getResourcesByType(state, 'countries').map(x => {
+              countriesByUrl[x.url] = x;
+              return null;
+            });
+
+            let preferredCountry = user.preferredCountry;
+
+            if (!preferredCountry) {
+              preferredCountry = countriesByUrl[settings.defaultCountryUrl]
+            }
+
+            if (!user.preferredCountry || user.preferredCountry.url !== preferredCountry.url) {
+              user.preferredCountry = preferredCountry;
             }
           }
       )
@@ -83,231 +124,75 @@ class App extends Component {
       })
     }
 
-    // Fetch available languages
-    fetch(`${ settings.endpoint }/languages/`).then(
-        res => res.json()
-    ).then(
-        json => {
-          this.store.dispatch({
-            type: 'setLanguages',
-            languages: json
-          });
-        }
-    );
+    const resources = ['languages', 'currencies', 'countries', 'store_types'];
 
-    // Fetch available currencies
-    fetch(`${ settings.endpoint }/currencies/`).then(
-        res => res.json()
-    ).then(
-        json => {
-          this.store.dispatch({
-            type: 'setCurrencies',
-            currencies: json
-          });
-        }
-    );
-
-    // Fetch available countries
-    fetch(`${ settings.endpoint }/countries/`).then(
-        res => res.json()
-    ).then(
-        json => {
-          this.store.dispatch({
-            type: 'setCountries',
-            countries: json
-          });
-        }
-    );
+    for (let resource of resources) {
+      fetch(`${ settings.endpoint }/${resource}/`).then(
+          res => res.json()
+      ).then(
+          json => {
+            this.store.dispatch({
+              type: 'addApiResources',
+              apiResources: json,
+              resourceType: resource
+            });
+          }
+      );
+    }
   }
 
-  updateUserPreferredLanguage = (language) => {
-    const state = this.store.getState();
-    fetchAuth(state.authToken, '/users/me/', {
-      method: 'PATCH',
-      body: JSON.stringify({'preferred_language': language.id})
-    });
-  };
+  apiResourcesReducer = (state={}, action) => {
+    if (action.type === 'addApiResources') {
+      let newApiResources = {};
 
-  updateUserPreferredCurrency = currency => {
-    const state = this.store.getState();
-    fetchAuth(state.authToken, '/users/me/', {
-      method: 'PATCH',
-      body: JSON.stringify({'preferred_currency': currency.id})
-    });
-  };
+      action.apiResources.map((newApiResource) => {
+        newApiResources[newApiResource['url']] = {
+          ...newApiResource,
+          ...{resourceType: action.resourceType}
+        };
+        return null;
+      });
 
-  updateUserPreferredCountry = country => {
-    const state = this.store.getState();
-    fetchAuth(state.authToken, '/users/me/', {
-      method: 'PATCH',
-      body: JSON.stringify({'preferred_country': country.id})
-    });
+      return {...state, ...newApiResources}
+    }
+
+    if (action.type === 'ApiResourceUpdate') {
+      const previousValue = state[action.payload.url];
+      const newValue = {...previousValue, ...action.payload};
+
+      return {...state, ...{[action.payload.url]: newValue}}
+    }
+
+    if (action.type === 'setUser') {
+      const newUser = {
+        ...action.user,
+        ...{resourceType: 'users'}
+      };
+
+      return {...state, ...{[action.user.url]: newUser}}
+    }
+
+    return state
   };
 
   userReducer = (state={}, action) => {
     if (action.type === 'setUser') {
-      const user = action.user;
-      if (state.email !== user.email) {
-        const state = this.store.getState();
-
-        // Set language
-        let languagesDictById = {};
-        let languagesDictByCode = {};
-
-        state.languages.map(x => {
-          languagesDictById[x.id] = x;
-          languagesDictByCode[x.code] = x;
-          return null;
-        });
-
-        let preferredLanguage = languagesDictById[user.preferred_language_id];
-
-        if (!preferredLanguage) {
-          preferredLanguage = languagesDictByCode[navigatorLanguage()]
-        }
-
-        if (!preferredLanguage) {
-          preferredLanguage = languagesDictById[settings.defaultLanguageId]
-        }
-
-        if (preferredLanguage) {
-          if (user.preferred_language_id !== preferredLanguage.id) {
-            user.preferred_language_id = preferredLanguage.id;
-            this.updateUserPreferredLanguage(preferredLanguage);
-          }
-        }
-
-        // Set currency
-        let currenciesById = {};
-
-        state.currencies.map(x => {
-          currenciesById[x.id] = x;
-          return null;
-        });
-
-        let preferredCurrency = currenciesById[user.preferred_currency_id];
-
-        if (!preferredCurrency) {
-          preferredCurrency = currenciesById[settings.defaultCurrencyId]
-        }
-
-        if (preferredCurrency && user.preferred_currency_id !== preferredCurrency.id) {
-          user.preferred_currency_id = preferredCurrency.id;
-          this.updateUserPreferredCurrency(preferredCurrency);
-        }
-
-        // Set country
-        let countriesById = {};
-
-        state.countries.map(x => {
-          countriesById[x.id] = x;
-          return null;
-        });
-
-        let preferredCountry = countriesById[user.preferred_country_id];
-
-        if (!preferredCountry) {
-          preferredCountry = countriesById[settings.defaultCountryId]
-        }
-
-        if (preferredCountry && user.preferred_country_id !== preferredCountry.id) {
-          user.preferred_country_id = preferredCountry.id;
-          this.updateUserPreferredCountry(preferredCountry);
-        }
-      }
-
-      return user;
+      return action.user;
     }
 
-    if (action.type === 'setUserLanguage') {
-      if (state.preferred_language_id !== action.language.id) {
-        this.updateUserPreferredLanguage(action.language);
-        return {...state, preferred_language_id: action.language.id}
-      }
-    }
-
-    if (action.type === 'setUserCurrency') {
-      if (state.preferred_currency_id !== action.currency.id) {
-        this.updateUserPreferredCurrency(action.currency);
-        return {...state, preferred_currency_id: action.currency.id}
-      }
-    }
-
-    if (action.type === 'setUserCountry') {
-      if (state.preferred_country_id !== action.country.id) {
-        this.updateUserPreferredCountry(action.country);
-        return {...state, preferred_country_id: action.country.id}
-      }
+    if (action.type === 'ApiResourceUpdate' && action.payload.url.includes(settings.ownUserApiPath)) {
+      return action.payload;
     }
 
     return state;
   };
 
-  authTokenReducer(state = null, action) {
+  authTokenReducer = (state = null, action) => {
     if (action.type === 'setAuthToken') {
       if (state !== action.authToken) {
         window.localStorage.setItem('authToken', action.authToken)
       }
       return action.authToken
-    }
-
-    return state
-  }
-
-  languagesReducer(state = [], action) {
-    if (action.type === 'setLanguages') {
-      return action.languages
-    }
-    return state
-  }
-
-  currenciesReducer(state = [], action) {
-    if (action.type === 'setCurrencies') {
-      return action.currencies
-    }
-    return state
-  }
-
-  countriesReducer(state = [], action) {
-    if (action.type === 'setCountries') {
-      return action.countries
-    }
-    return state
-  }
-
-  languageReducer = (state, action) => {
-    if (typeof state === 'undefined') {
-      let languageWithoutRegionCode = navigatorLanguage();
-
-      if (!localeData[languageWithoutRegionCode]) {
-        languageWithoutRegionCode = 'en'
-      }
-
-      return languageWithoutRegionCode
-    }
-
-    if (action.type === 'setLanguage') {
-      const state = this.store.getState();
-      const language = state.languages.filter(x => x.id === action.languageId)[0];
-      return language
-    }
-
-    return state
-  };
-
-  currencyReducer = (state=null, action) => {
-    if (action.type === 'setCurrency') {
-      const state = this.store.getState();
-      return state.currencies.filter(x => x.id === action.currencyId)[0];
-    }
-
-    return state
-  };
-
-  countryReducer = (state=null, action) => {
-    if (action.type === 'setCountry') {
-      const state = this.store.getState();
-      return state.countries.filter(x => x.id === action.countryId)[0];
     }
 
     return state

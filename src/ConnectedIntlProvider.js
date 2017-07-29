@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 
 import { localeData } from './translations/locales/index';
+import { foreignKeyLookup } from './utils';
+import { settings } from './settings';
 
 // REF https://github.com/yahoo/react-intl/issues/243
 
@@ -17,12 +19,17 @@ class ConnectedIntlProvider extends Component {
 }
 
 function mapStateToProps(state) {
-  let languageCode = state.language.code;
+  const language = foreignKeyLookup(state.user, 'preferred_language', state);
+
+  let languageCode = settings.defaultLanguageCode;
+  if (language) {
+    languageCode = language.code
+  }
+
   let messages = localeData[languageCode];
 
   if (!messages) {
-    languageCode = 'en';
-    messages = localeData[languageCode]
+    messages = localeData[settings.defaultLanguageCode]
   }
 
   return {

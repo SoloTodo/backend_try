@@ -1,5 +1,7 @@
 {
+  "active_question": "Active?",
   "configuration": "Configuration",
+  "country": "Country",
   "forgot_password": "Forgot password?",
   "header_country_title": "Country",
   "header_currency_title": "Currency",
@@ -11,9 +13,12 @@
   "login_email_error_message": "Please enter a valid email",
   "login_password_error_message": "Please enter your password",
   "menu": "Menu",
+  "name": "Name",
+  "scraper": "Scraper",
   "show_list": "Show all",
   "sign_in_message": "Sign In to your account",
   "sign_up_message": "This section is reserved for the staff at SoloTodo",
   "sign_up_title": "Sign up",
-  "stores": "Stores"
+  "stores": "Stores",
+  "type": "type"
 }

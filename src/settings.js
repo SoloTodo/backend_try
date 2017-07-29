@@ -1,6 +1,10 @@
+let endpoint = 'http://192.168.1.101:8000/api';
+
 export const settings = {
-  endpoint: 'http://192.168.99.100:8000',
-  defaultLanguageId: 1,
-  defaultCurrencyId: 4,
-  defaultCountryId: 6
+  endpoint,
+  ownUserApiPath: '/users/me/',
+  defaultLanguageUrl: endpoint + '/languages/1/',
+  defaultCurrencyUrl: endpoint + '/currencies/4/',
+  defaultCountryUrl: endpoint + '/countries/6/',
+  defaultLanguageCode: 'en'
 };
