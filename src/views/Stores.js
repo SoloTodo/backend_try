@@ -1,30 +1,24 @@
 import React, { Component } from 'react';
-import { addFetchAuth } from '../utils';
+import {
+  addApiResourceDispatchToPropsUtils,
+  addApiResourceStateToPropsUtils
+} from '../ApiResource';
 import {connect} from "react-redux";
-import ApiResource from "../ApiResource";
+import {
+  filterApiResourcesByType
+} from "../ApiResource";
 import {FormattedMessage} from "react-intl";
 
 
 class Stores extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stores: []
+  componentDidMount() {
+    if (!this.props.stores.length) {
+      this.props.fetchApiResource('stores', this.props.dispatch)
     }
   }
 
-  componentDidMount() {
-    this.props.fetchAuth('/stores/').then(json => {
-      this.setState({
-        stores: json
-      })
-    });
-  }
-
   render() {
-    const apiResourceStores = this.state.stores.map(x => ApiResource(x, this.props.apiResources));
-
-    console.log(apiResourceStores);
+    const apiResourceStores = this.props.stores.map(x => this.props.ApiResource(x));
 
     return <div className="animated fadeIn">
       <div className="row">
@@ -66,8 +60,11 @@ class Stores extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    apiResources: state.apiResources
-  };
+    apiResources: state.apiResources,
+    stores: filterApiResourcesByType(state, 'stores')
+  }
 };
 
-export default connect(addFetchAuth(mapStateToProps))(Stores);
+export default connect(
+    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceDispatchToPropsUtils())(Stores);

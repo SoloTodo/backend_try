@@ -12,10 +12,9 @@ import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
 import Login from './views/Pages/Login/';
 import { settings } from './settings';
-import { navigatorLanguage, fetchAuth } from './utils';
+import {navigatorLanguage, fetchAuth, defaultProperty} from './utils';
 import {
-  ApiResourceByStore,
-  getResourcesByType
+  ApiResourceByStore, fetchApiResource, filterApiResourcesByType
 } from './ApiResource';
 
 
@@ -26,34 +25,47 @@ class App extends Component {
     this.store = createStore(combineReducers({
       apiResources: this.apiResourcesReducer,
       authToken: this.authTokenReducer,
-      user: this.userReducer
     }));
 
     this.store.subscribe(this.getUserData);
   }
 
+  componentDidMount() {
+    fetch(settings.endpoint)
+        .then(res => res.json())
+        .then(json => settings.resourceEndpoints = json)
+        .then(() => {
+          const resources = ['languages', 'currencies', 'countries', 'store_types'];
+
+          for (let resource of resources) {
+            fetchApiResource(resource, this.store.dispatch)
+          }
+        });
+  }
+
   getUserData = () => {
     const state = this.store.getState();
 
-    let languages = getResourcesByType(state, 'languages');
-    let currencies = getResourcesByType(state, 'currencies');
-    let countries = getResourcesByType(state, 'countries');
+    let languages = filterApiResourcesByType(state, 'languages');
+    let currencies = filterApiResourcesByType(state, 'currencies');
+    let countries = filterApiResourcesByType(state, 'countries');
+    let user = state.apiResources[settings.ownUserUrl];
 
-    if (state.authToken && languages.length && currencies.length && countries.length && !state.user.email) {
-      fetchAuth(state.authToken, settings.ownUserApiPath).then(
+    if (state.authToken && languages.length && currencies.length && countries.length && !user) {
+      fetchAuth(state.authToken, settings.ownUserUrl).then(
           user => {
             this.store.dispatch({
-              type: 'setUser',
-              user
+              type: 'updateApiResource',
+              payload: user
             });
 
-            user = ApiResourceByStore(this.store.getState().user, this.store);
+            user = ApiResourceByStore(user, this.store);
 
             // Set language
             let languagesDictByUrl = {};
             let languagesDictByCode = {};
 
-            getResourcesByType(state, 'languages').map(x => {
+            filterApiResourcesByType(state, 'languages').map(x => {
               languagesDictByUrl[x.url] = x;
               languagesDictByCode[x.code] = x;
               return null;
@@ -67,7 +79,7 @@ class App extends Component {
 
             if (!preferredLanguage) {
               preferredLanguage = languagesDictByUrl[
-                  settings.defaultLanguageUrl]
+                  defaultProperty('languages')]
             }
 
             if (!user.preferredLanguage || (user.preferredLanguage.url !== preferredLanguage.url)) {
@@ -77,7 +89,7 @@ class App extends Component {
             // Set currency
             let currenciesByUrl = {};
 
-            getResourcesByType(state, 'currencies').map(x => {
+            filterApiResourcesByType(state, 'currencies').map(x => {
               currenciesByUrl[x.url] = x;
               return null;
             });
@@ -85,7 +97,7 @@ class App extends Component {
             let preferredCurrency = user.preferredCurrency;
 
             if (!preferredCurrency) {
-              preferredCurrency = currenciesByUrl[settings.defaultCurrencyUrl]
+              preferredCurrency = currenciesByUrl[defaultProperty('currencies')]
             }
 
             if (!user.preferredCurrency || user.preferredCurrency.url !== preferredCurrency.url) {
@@ -95,7 +107,7 @@ class App extends Component {
             // Set country
             let countriesByUrl = {};
 
-            getResourcesByType(state, 'countries').map(x => {
+            filterApiResourcesByType(state, 'countries').map(x => {
               countriesByUrl[x.url] = x;
               return null;
             });
@@ -103,7 +115,7 @@ class App extends Component {
             let preferredCountry = user.preferredCountry;
 
             if (!preferredCountry) {
-              preferredCountry = countriesByUrl[settings.defaultCountryUrl]
+              preferredCountry = countriesByUrl[defaultProperty('countries')]
             }
 
             if (!user.preferredCountry || user.preferredCountry.url !== preferredCountry.url) {
@@ -113,33 +125,6 @@ class App extends Component {
       )
     }
   };
-
-  componentDidMount() {
-    // Check if the user already logged in
-    let authToken = window.localStorage.getItem('authToken');
-    if (authToken) {
-      this.store.dispatch({
-        type: 'setAuthToken',
-        authToken
-      })
-    }
-
-    const resources = ['languages', 'currencies', 'countries', 'store_types'];
-
-    for (let resource of resources) {
-      fetch(`${ settings.endpoint }/${resource}/`).then(
-          res => res.json()
-      ).then(
-          json => {
-            this.store.dispatch({
-              type: 'addApiResources',
-              apiResources: json,
-              resourceType: resource
-            });
-          }
-      );
-    }
-  }
 
   apiResourcesReducer = (state={}, action) => {
     if (action.type === 'addApiResources') {
@@ -156,38 +141,27 @@ class App extends Component {
       return {...state, ...newApiResources}
     }
 
-    if (action.type === 'ApiResourceUpdate') {
+    if (action.type === 'updateApiResource') {
       const previousValue = state[action.payload.url];
       const newValue = {...previousValue, ...action.payload};
 
       return {...state, ...{[action.payload.url]: newValue}}
     }
 
-    if (action.type === 'setUser') {
-      const newUser = {
-        ...action.user,
-        ...{resourceType: 'users'}
-      };
-
-      return {...state, ...{[action.user.url]: newUser}}
+    if (action.type === 'setAuthToken') {
+      let newApiResources = {...state};
+      delete newApiResources[settings.ownUserUrl];
+      return newApiResources
     }
 
     return state
   };
 
-  userReducer = (state={}, action) => {
-    if (action.type === 'setUser') {
-      return action.user;
+  authTokenReducer = (state, action) => {
+    if (typeof state === 'undefined') {
+      return window.localStorage.getItem('authToken');
     }
 
-    if (action.type === 'ApiResourceUpdate' && action.payload.url.includes(settings.ownUserApiPath)) {
-      return action.payload;
-    }
-
-    return state;
-  };
-
-  authTokenReducer = (state = null, action) => {
     if (action.type === 'setAuthToken') {
       if (state !== action.authToken) {
         window.localStorage.setItem('authToken', action.authToken)

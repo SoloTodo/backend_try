@@ -1,19 +1,8 @@
 import { settings } from './settings';
 
-export function addFetchAuth(f=null) {
-  return (state) => {
-    let original_result = {};
-    if (f !== null) {
-      original_result = f(state)
-    }
-
-    return {
-      fetchAuth: (input, init={}) => {
-        return fetchAuth(state.authToken, input, init);
-      },
-      ...original_result
-    };
-  }
+// REF: https://stackoverflow.com/questions/6660977/convert-hyphens-to-camel-case-camelcase
+export function camelize(str) {
+  return str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
 }
 
 export function fetchAuth(authToken, input, init={}) {
@@ -38,6 +27,6 @@ export function navigatorLanguage() {
   return language.toLowerCase().split(/[_-]+/)[0];
 }
 
-export function foreignKeyLookup(rawApiResource, field, state) {
-  return state.apiResources[rawApiResource[field]]
+export function defaultProperty(property) {
+  return `${settings.resourceEndpoints[property]}${settings.defaults[property]}/`;
 }

@@ -10,7 +10,6 @@ import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
 import Stores from '../../views/Stores';
 import PermissionRoute from '../../auth/PermissionRoute';
-import { addFetchAuth } from '../../utils';
 import { routes } from '../../TopLevelRoutes';
 
 
@@ -42,4 +41,4 @@ class Full extends Component {
 }
 
 
-export default connect(addFetchAuth())(Full);
+export default connect()(Full);

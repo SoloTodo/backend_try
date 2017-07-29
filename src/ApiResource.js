@@ -1,30 +1,67 @@
 import { settings } from "./settings"
-import { fetchAuth } from './utils';
+import { camelize, fetchAuth } from './utils';
 
-export function getResourcesByType(state, resourceType) {
+export function filterApiResourcesByType(state, resourceType) {
   return Object.values(state.apiResources).filter(x => x.resourceType === resourceType)
 }
 
-function createApiResourceForeignKeyProperty(obj, entry, apiResources, authToken, dispatch) {
-  let camelizedEntry = camelize(entry);
+export function fetchApiResource(resource, dispatch, authToken=null) {
+  const resourceUrl = settings.resourceEndpoints[resource];
 
-  return {
-    get: () => {
-      return ApiResource(apiResources[obj[camelizedEntry + 'Url']], apiResources, authToken, dispatch);
-    },
-    set: (value) => {
-      fetchAuth(authToken, obj.url, {
-        method: 'PATCH',
-        body: JSON.stringify({[entry]: value.url})
-      }).then(json => {
-        dispatch({
-          type: 'ApiResourceUpdate',
-          payload: json
-        })
-      });
-      obj[camelizedEntry + 'Url'] = value.url
-    },
-    configurable: true
+  let resourceRequest = null;
+
+  if (authToken) {
+    resourceRequest = fetchAuth(authToken, resourceUrl)
+  } else {
+    resourceRequest = fetch(resourceUrl).then(res => res.json())
+  }
+
+  resourceRequest.then(json => {
+    dispatch({
+      type: 'addApiResources',
+      apiResources: json,
+      resourceType: resource
+    });
+  })
+}
+
+export function apiResourceForeignKey(rawApiResource, field, state) {
+  return state.apiResources[rawApiResource[field]]
+}
+
+export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
+  return (state) => {
+    let originalMapStateToPropsResult = {};
+    if (mapStateToProps !== null) {
+      originalMapStateToPropsResult = mapStateToProps(state)
+    }
+
+    return {
+      ApiResource: (jsonData) => {
+        return ApiResource(jsonData, state.apiResources, state.authToken)
+      },
+      fetchAuth: (input, init={}) => {
+        return fetchAuth(state.authToken, input, init);
+      },
+      fetchApiResource: (resource, dispatch) => {
+        return fetchApiResource(resource, dispatch, state.authToken)
+      },
+      ...originalMapStateToPropsResult
+    };
+  }
+}
+
+export function addApiResourceDispatchToPropsUtils(mapDispatchToProps=null) {
+  return (dispatch) => {
+    let originalMapDispatchToPropsResult = {};
+    if (mapDispatchToProps !== null) {
+      originalMapDispatchToPropsResult = mapDispatchToProps(dispatch)
+    }
+
+    return {
+      dispatch,
+      ...originalMapDispatchToPropsResult
+    }
   }
 }
 
@@ -32,7 +69,6 @@ export function ApiResourceByStore (jsonData, reduxStore) {
   const state = reduxStore.getState();
   return ApiResource(jsonData, state.apiResources, state.authToken, reduxStore.dispatch)
 }
-
 
 let ApiResource = (jsonData, apiResources, authToken, dispatch) => {
   let newObject = {};
@@ -45,14 +81,14 @@ let ApiResource = (jsonData, apiResources, authToken, dispatch) => {
         newObject[camelizedEntry + 'Url'] = jsonData[entry];
         properties[camelizedEntry] = createApiResourceForeignKeyProperty(newObject, entry, apiResources, authToken, dispatch)
       } else {
-        // The property is a primitive value OR is a null valued ForeignKey
+        // The property is a primitive value OR is a orignally null valued ForeignKey
         properties[camelizedEntry] = {
           get: () => {
             return jsonData[entry];
           },
           set: (value) => {
-            // Check whether this was originally a null value
-            if (value.url) {
+            // Check whether this was originally a null value foreign key
+            if (value && value.url) {
               // Yup, the field was originally a null value, modify the object
               let newProperties = {
                 [camelizedEntry]: createApiResourceForeignKeyProperty(newObject, entry, apiResources, authToken, dispatch)
@@ -71,9 +107,28 @@ let ApiResource = (jsonData, apiResources, authToken, dispatch) => {
   return Object.defineProperties(newObject, properties)
 };
 
-// REF: https://stackoverflow.com/questions/6660977/convert-hyphens-to-camel-case-camelcase
-function camelize(str) {
-  return str.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+function createApiResourceForeignKeyProperty(obj, entry, apiResources, authToken, dispatch) {
+  let camelizedEntry = camelize(entry);
+
+  return {
+    get: () => {
+      return ApiResource(apiResources[obj[camelizedEntry + 'Url']], apiResources, authToken, dispatch);
+    },
+    set: (value) => {
+      fetchAuth(authToken, obj.url, {
+        method: 'PATCH',
+        body: JSON.stringify({[entry]: value.url})
+      }).then(json => {
+        dispatch({
+          type: 'updateApiResource',
+          payload: json
+        });
+      });
+
+      obj[camelizedEntry + 'Url'] = value.url;
+    },
+    configurable: true
+  }
 }
 
 export default ApiResource;

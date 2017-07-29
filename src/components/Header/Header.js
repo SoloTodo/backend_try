@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import {settings} from "../../settings";
 
 class Header extends Component {
   constructor(props) {
@@ -77,7 +78,7 @@ class Header extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.apiResources[settings.ownUserUrl] || {}
   };
 };
 

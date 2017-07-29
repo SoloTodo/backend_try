@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { sidebarLayout } from '../../TopLevelRoutes';
-import { getResourcesByType } from '../../ApiResource';
+import {
+  apiResourceForeignKey,
+  filterApiResourcesByType
+} from '../../ApiResource';
 import './sidebar.css';
-import {foreignKeyLookup} from "../../utils";
 import ApiResource from "../../ApiResource";
+import {settings} from "../../settings";
 
 
 class Sidebar extends Component {
@@ -56,7 +59,7 @@ class Sidebar extends Component {
                     <ul className="nav-dropdown-items">
                       {section.entries.map(entry => (
                           <li className="nav-item" key={entry.key}>
-                            <NavLink to={entry.path} className="nav-link" activeClassName="active"><i className={entry.icon}>&nbsp;</i> {entry.label}</NavLink>
+                            <NavLink to={entry.path} className="nav-link" activeClassName="active"><i className='false' />{entry.label}</NavLink>
                           </li>
                       ))}
                     </ul>
@@ -105,26 +108,21 @@ class Sidebar extends Component {
 }
 
 let mapStateToProps = (state) => {
+  const user = state.apiResources[settings.ownUserUrl] || {}
   return {
-    languages: getResourcesByType(state, 'languages'),
-    language: foreignKeyLookup(state.user, 'preferred_language', state),
-    currencies: getResourcesByType(state, 'currencies'),
-    currency: foreignKeyLookup(state.user, 'preferred_currency', state),
-    countries: getResourcesByType(state, 'countries'),
-    country: foreignKeyLookup(state.user, 'preferred_country', state),
+    languages: filterApiResourcesByType(state, 'languages'),
+    language: apiResourceForeignKey(user, 'preferred_language', state),
+    currencies: filterApiResourcesByType(state, 'currencies'),
+    currency: apiResourceForeignKey(user, 'preferred_currency', state),
+    countries: filterApiResourcesByType(state, 'countries'),
+    country: apiResourceForeignKey(user, 'preferred_country', state),
     authToken: state.authToken,
-    user: state.user
+    user: user
   };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    signOut: () => {
-      dispatch({
-        type: 'setAuthToken',
-        authToken: null
-      })
-    },
     setUserProperty: (e, user, property, value, authToken) => {
       e.preventDefault();
       e.target.parentElement.parentElement.parentElement.classList.toggle('open');

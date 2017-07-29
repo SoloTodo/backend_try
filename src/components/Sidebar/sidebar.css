@@ -11,3 +11,7 @@ i.icon {
     padding-left: 2px;
     margin-right: 4px !important;
 }
+
+.nav-link-without-icon {
+    padding-left: 20px;
+}
