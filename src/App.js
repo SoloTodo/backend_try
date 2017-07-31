@@ -38,7 +38,7 @@ export function initialUserLoad(authToken, languages, countries, currencies, dis
           }
         }
 
-        user = ApiResource(user, apiResources, authToken, dispatch);
+        user = new ApiResource(user, apiResources);
 
         // Set language
         let preferredLanguage = user.preferredLanguage;
@@ -59,7 +59,8 @@ export function initialUserLoad(authToken, languages, countries, currencies, dis
 
         if (user.preferredCountry) {
           if (!user.preferredCurrency) {
-            user.preferredCurrency = user.preferredCountry.currency
+            user.preferredCurrency = user.preferredCountry.currency;
+            user.save(authToken, dispatch);
           }
         } else {
           let countryByIpUrl = `${settings.endpoint}/countries/by_ip/`;
@@ -80,6 +81,8 @@ export function initialUserLoad(authToken, languages, countries, currencies, dis
                 if (!user.preferredCurrency) {
                   user.preferredCurrency = user.preferredCountry.currency
                 }
+
+                user.save(authToken, dispatch);
               })
         }
       }
@@ -102,7 +105,7 @@ class App extends Component {
         .then(res => res.json())
         .then(json => settings.resourceEndpoints = json)
         .then(() => {
-          const userRequiredResources = ['languages', 'currencies', 'countries', 'store_types'];
+          const userRequiredResources = ['languages', 'currencies', 'countries'];
 
           for (let resource of userRequiredResources.concat(['store_types'])) {
             fetchApiResource(resource, this.store.dispatch)

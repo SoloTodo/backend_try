@@ -108,7 +108,7 @@ class Sidebar extends Component {
 }
 
 let mapStateToProps = (state) => {
-  const user = state.apiResources[settings.ownUserUrl] || {}
+  const user = state.apiResources[settings.ownUserUrl] || {};
   return {
     languages: filterApiResourcesByType(state, 'languages'),
     language: apiResourceForeignKey(user, 'preferred_language', state),
@@ -127,7 +127,7 @@ let mapDispatchToProps = (dispatch) => {
       e.preventDefault();
       e.target.parentElement.parentElement.parentElement.classList.toggle('open');
 
-      const apiResourceUser = ApiResource(user, {}, authToken, dispatch);
+      const apiResourceUser = new ApiResource(user, {});
       apiResourceUser[property] = value;
     }
   }
