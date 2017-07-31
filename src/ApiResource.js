@@ -1,12 +1,12 @@
 import { settings } from "./settings"
 import { camelize, fetchAuth } from './utils';
 
-export function filterApiResourcesByType(state, resourceType) {
-  return Object.values(state.apiResources).filter(x => x.resourceType === resourceType)
+export function filterApiResourcesByType(apiResources, resourceType) {
+  return Object.values(apiResources).filter(x => x.resourceType === resourceType)
 }
 
-export function fetchApiResource(resource, dispatch, authToken=null) {
-  const resourceUrl = settings.resourceEndpoints[resource];
+export function fetchApiResource(resourceEndpoints, resource, dispatch, authToken=null) {
+  const resourceUrl = resourceEndpoints[resource];
 
   let resourceRequest = null;
 
@@ -20,6 +20,19 @@ export function fetchApiResource(resource, dispatch, authToken=null) {
     dispatch({
       type: 'addApiResources',
       apiResources: json,
+      resourceType: resource
+    });
+    return json;
+  })
+}
+
+export function fetchApiResourceObject(resourceEndpoints, resource, id, dispatch, authToken) {
+  const resourceObjectUrl = `${resourceEndpoints[resource]}${id}/`;
+
+  return fetchAuth(authToken, resourceObjectUrl).then(json => {
+    dispatch({
+      type: 'addApiResources',
+      apiResources: [json],
       resourceType: resource
     });
   })
@@ -43,8 +56,11 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
       fetchAuth: (input, init={}) => {
         return fetchAuth(state.authToken, input, init);
       },
-      fetchApiResource: (resource, dispatch) => {
-        return fetchApiResource(resource, dispatch, state.authToken)
+      fetchApiResource: (resourceEndpoints, resource, dispatch) => {
+        return fetchApiResource(resourceEndpoints, resource, dispatch, state.authToken)
+      },
+      fetchApiResourceObject: (resource, id, dispatch) => {
+        return fetchApiResourceObject(state.resourceEndpoints, resource, id, dispatch, state.authToken)
       },
       ...originalMapStateToPropsResult
     };

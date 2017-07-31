@@ -18,7 +18,8 @@
     "react-scripts": "1.0.10",
     "react-transition-group": "^1.2.0",
     "reactstrap": "^4.8.0",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "route-parser": "0.0.5"
   },
   "scripts": {
     "start": "react-scripts start",

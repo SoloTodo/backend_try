@@ -4,13 +4,15 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
-import Breadcrumb from '../../components/Breadcrumb/';
+import Breadcrumbs from '../../components/Breadcrumbs/';
 import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
-import Stores from '../../views/Stores';
 import PermissionRoute from '../../auth/PermissionRoute';
 import { routes } from '../../TopLevelRoutes';
+import StoreList from "../../views/Store/StoreList";
+import StoreDetail from "../../views/Store/StoreDetail";
+import DetailPermissionRoute from "../../auth/DetailPermissionRoute";
 
 
 class Full extends Component {
@@ -21,13 +23,15 @@ class Full extends Component {
           <div className="app-body">
             <Sidebar {...this.props}/>
             <main className="main">
-              <Breadcrumb />
+              <Breadcrumbs location={this.props.location} />
               <div className="container-fluid">
                 <Switch>
                   <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                  <DetailPermissionRoute path="/stores/:id" resource="stores" permission="view_store" name="StoresDetail" component={StoreDetail}/>
                   {routes.map(route =>
-                      <PermissionRoute key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={Stores}/>
+                      <PermissionRoute key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={StoreList}/>
                   )}
+
                   <Redirect from="/" to="/dashboard"/>
                 </Switch>
               </div>

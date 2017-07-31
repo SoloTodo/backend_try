@@ -109,12 +109,13 @@ class Sidebar extends Component {
 
 let mapStateToProps = (state) => {
   const user = state.apiResources[settings.ownUserUrl] || {};
+  const apiResources = state.apiResources;
   return {
-    languages: filterApiResourcesByType(state, 'languages'),
+    languages: filterApiResourcesByType(apiResources, 'languages'),
     language: apiResourceForeignKey(user, 'preferred_language', state),
-    currencies: filterApiResourcesByType(state, 'currencies'),
+    currencies: filterApiResourcesByType(apiResources, 'currencies'),
     currency: apiResourceForeignKey(user, 'preferred_currency', state),
-    countries: filterApiResourcesByType(state, 'countries'),
+    countries: filterApiResourcesByType(apiResources, 'countries'),
     country: apiResourceForeignKey(user, 'preferred_country', state),
     authToken: state.authToken,
     user: user

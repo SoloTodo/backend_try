@@ -166,11 +166,12 @@ class Login extends Component {
 }
 
 let mapStateToProps = (state) => {
+  const apiResources = state.apiResources;
   return {
     isLoggedIn: Boolean(state.authToken),
-    languages: filterApiResourcesByType(state, 'languages'),
-    currencies: filterApiResourcesByType(state, 'currencies'),
-    countries: filterApiResourcesByType(state, 'countries')
+    languages: filterApiResourcesByType(apiResources, 'languages'),
+    currencies: filterApiResourcesByType(apiResources, 'currencies'),
+    countries: filterApiResourcesByType(apiResources, 'countries')
   }
 };
 

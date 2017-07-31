@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Stores from './views/Stores';
+import StoreList from './views/Store/StoreList';
 
 export const sidebarLayout = [
   {
@@ -15,7 +15,7 @@ export const sidebarLayout = [
         path: '/stores',
         requiredPermission: 'solotodo.backend_list_stores',
         name: 'Stores',
-        component: Stores
+        component: StoreList
       }
     ]
   }

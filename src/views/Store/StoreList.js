@@ -2,23 +2,38 @@ import React, { Component } from 'react';
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from '../ApiResource';
+} from '../../ApiResource';
 import {connect} from "react-redux";
-import {
-  filterApiResourcesByType
-} from "../ApiResource";
 import {FormattedMessage} from "react-intl";
+import NavLink from "react-router-dom/es/NavLink";
 
 
-class Stores extends Component {
+class StoreList extends Component {
+  constructor() {
+    super();
+    this.state = {
+      stores: undefined
+    }
+  }
+
   componentDidMount() {
-    if (!this.props.stores.length) {
-      this.props.fetchApiResource('stores', this.props.dispatch)
+    if (typeof this.stores === 'undefined') {
+      this.stores = null;
+      this.props
+          .fetchApiResource(this.props.resourceEndpoints, 'stores', this.props.dispatch)
+          .then(json =>  {
+            this.setState({stores: json})
+          })
     }
   }
 
   render() {
-    const apiResourceStores = this.props.stores.map(x => this.props.ApiResource(x));
+    const stores = this.state.stores;
+
+    if (!stores) {
+      return <div />
+    }
+    const apiResourceStores = stores.map(x => this.props.ApiResource(x));
 
     return <div className="animated fadeIn">
       <div className="row">
@@ -41,7 +56,9 @@ class Stores extends Component {
                 <tbody>
                 {apiResourceStores.map(store => (
                     <tr key={store.url}>
-                      <td>{store.name}</td>
+                      <td>
+                        {store.permissions.includes('view_store') ? <NavLink to={'/stores/' + store.id}>{store.name}</NavLink> : store.name}
+                      </td>
                       <td>{store.type.name}</td>
                       <td>{store.country.name}</td>
                       <td className="hidden-sm-down">{store.storescraperClass}</td>
@@ -60,11 +77,10 @@ class Stores extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    apiResources: state.apiResources,
-    stores: filterApiResourcesByType(state, 'stores')
+    resourceEndpoints: state.resourceEndpoints,
   }
 };
 
 export default connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(Stores);
+    addApiResourceDispatchToPropsUtils())(StoreList);

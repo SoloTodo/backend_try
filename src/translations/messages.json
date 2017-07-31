@@ -30,6 +30,16 @@
     "filepath": "./src/components/Sidebar/Sidebar.js"
   },
   {
+    "id": "home",
+    "defaultMessage": "Home",
+    "filepath": "./src/routes.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/routes.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -87,26 +97,66 @@
   {
     "id": "name",
     "defaultMessage": "Name",
-    "filepath": "./src/views/Stores.js"
+    "filepath": "./src/views/Store/StoreDetail.js"
   },
   {
     "id": "type",
-    "defaultMessage": "type",
-    "filepath": "./src/views/Stores.js"
+    "defaultMessage": "Type",
+    "filepath": "./src/views/Store/StoreDetail.js"
   },
   {
     "id": "country",
     "defaultMessage": "Country",
-    "filepath": "./src/views/Stores.js"
+    "filepath": "./src/views/Store/StoreDetail.js"
+  },
+  {
+    "id": "active_question",
+    "defaultMessage": "Is active?",
+    "filepath": "./src/views/Store/StoreDetail.js"
+  },
+  {
+    "id": "options",
+    "defaultMessage": "Options",
+    "filepath": "./src/views/Store/StoreDetail.js"
+  },
+  {
+    "id": "general_information",
+    "defaultMessage": "General Information",
+    "filepath": "./src/views/Store/StoreDetail.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Store/StoreDetail.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "type",
+    "defaultMessage": "type",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "country",
+    "defaultMessage": "Country",
+    "filepath": "./src/views/Store/StoreList.js"
   },
   {
     "id": "scraper",
     "defaultMessage": "Scraper",
-    "filepath": "./src/views/Stores.js"
+    "filepath": "./src/views/Store/StoreList.js"
   },
   {
     "id": "active_question",
     "defaultMessage": "Active?",
-    "filepath": "./src/views/Stores.js"
+    "filepath": "./src/views/Store/StoreList.js"
   }
 ]

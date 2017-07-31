@@ -61,7 +61,7 @@ class Header extends Component {
             <li className="nav-item dropdown">
               <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                 <a onClick={this.toggle} className="nav-link nav-pill avatar" data-toggle="dropdown"  role="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen} id="account-nav-link">
-                  <img src={'img/avatars/default.png'} className="img-avatar" alt={ user.email }/>
+                  <img src={'/img/avatars/default.png'} className="img-avatar" alt={ user.email }/>
                 </a>
 
                 <DropdownMenu className="dropdown-menu-right">

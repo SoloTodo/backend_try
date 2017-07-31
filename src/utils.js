@@ -27,6 +27,6 @@ export function navigatorLanguage() {
   return language.toLowerCase().split(/[_-]+/)[0];
 }
 
-export function defaultProperty(property) {
-  return `${settings.resourceEndpoints[property]}${settings.defaults[property]}/`;
+export function defaultProperty(resourceEndpoints, property) {
+  return `${resourceEndpoints[property]}${settings.defaults[property]}/`;
 }

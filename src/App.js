@@ -4,7 +4,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
 import { createBrowserHistory } from 'history';
-import { HashRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import 'fixed-data-table/dist/fixed-data-table.min.css';
 
 import PrivateRoute from './auth/PrivateRoute';
@@ -95,33 +95,49 @@ class App extends Component {
     super(props);
 
     this.store = createStore(combineReducers({
-      apiResources: this.apiResourcesReducer,
       authToken: this.authTokenReducer,
+      resourceEndpoints: this.resourceEndpointsReducer,
+      apiResources: this.apiResourcesReducer,
     }));
   }
 
   componentDidMount() {
     fetch(settings.endpoint)
         .then(res => res.json())
-        .then(json => settings.resourceEndpoints = json)
+        .then(json => {
+          this.store.dispatch({
+            type: 'setResourceEndpoints',
+            resourceEndpoints: json
+          });
+        })
         .then(() => {
           const userRequiredResources = ['languages', 'currencies', 'countries'];
+          const resourceEndpoints = this.store.getState().resourceEndpoints;
 
           for (let resource of userRequiredResources.concat(['store_types'])) {
-            fetchApiResource(resource, this.store.dispatch)
+            fetchApiResource(resourceEndpoints, resource, this.store.dispatch)
                 .then(() => {
                   if (!userRequiredResources.includes(resource)) {
                     return;
                   }
                   const state = this.store.getState();
-                  const languages = filterApiResourcesByType(state, 'languages');
-                  const countries = filterApiResourcesByType(state, 'countries');
-                  const currencies = filterApiResourcesByType(state, 'currencies');
+                  const apiResources = state.apiResources;
+                  const languages = filterApiResourcesByType(apiResources, 'languages');
+                  const countries = filterApiResourcesByType(apiResources, 'countries');
+                  const currencies = filterApiResourcesByType(apiResources, 'currencies');
                   initialUserLoad(state.authToken, languages, countries, currencies, this.store.dispatch)
                 })
           }
         });
   }
+
+  resourceEndpointsReducer = (state = {}, action) => {
+    if (action.type === 'setResourceEndpoints') {
+      return action.resourceEndpoints
+    }
+
+    return state
+  };
 
   apiResourcesReducer = (state={}, action) => {
     if (action.type === 'addApiResources') {
@@ -183,12 +199,12 @@ class App extends Component {
     return (
         <Provider store={this.store}>
           <ConnectedIntlProvider>
-            <HashRouter history={history}>
+            <BrowserRouter history={history}>
               <Switch>
                 <Route exact path="/login" name="Login Page" component={Login}/>
                 <PrivateRoute path="/" name="Home" component={Full}/>
               </Switch>
-            </HashRouter>
+            </BrowserRouter>
           </ConnectedIntlProvider>
         </Provider>
     )
