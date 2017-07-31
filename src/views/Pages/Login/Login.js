@@ -3,6 +3,8 @@ import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { settings } from '../../../settings'
+import {filterApiResourcesByType} from "../../../ApiResource";
+import {initialUserLoad} from "../../../App";
 
 class Login extends Component {
   constructor(props) {
@@ -90,7 +92,9 @@ class Login extends Component {
             }
           })
           .then(json => {
-            this.props.setAuthToken(json.token);
+            if (json.token) {
+              this.props.setAuthToken(json.token, this.props.languages, this.props.countries, this.props.currencies);
+            }
           })
     }
   };
@@ -135,7 +139,7 @@ class Login extends Component {
                         </div>
                         <div className="row">
                           <div className="col-6">
-                            <button type="submit" className="btn btn-primary px-4"><FormattedMessage id="login_button" defaultMessage={`Login`} /></button>
+                            <button type="submit" disabled={!this.props.languages || !this.props.currencies || !this.props.countries} className="btn btn-primary px-4"><FormattedMessage id="login_button" defaultMessage={`Login`} /></button>
                           </div>
                           <div className="col-6 text-right">
                             <button type="button" className="btn btn-link px-0"><FormattedMessage id="forgot_password" defaultMessage={`Forgot password?`} /></button>
@@ -163,16 +167,22 @@ class Login extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    isLoggedIn: Boolean(state.authToken)
+    isLoggedIn: Boolean(state.authToken),
+    languages: filterApiResourcesByType(state, 'languages'),
+    currencies: filterApiResourcesByType(state, 'currencies'),
+    countries: filterApiResourcesByType(state, 'countries')
   }
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    setAuthToken : (authToken) => { dispatch({
-      type: 'setAuthToken',
-      authToken
-    }) }
+    setAuthToken : (authToken, languages, countries, currencies) => {
+      dispatch({
+        type: 'setAuthToken',
+        authToken
+      });
+      initialUserLoad(authToken, languages, countries, currencies, dispatch)
+    }
   }
 };
 

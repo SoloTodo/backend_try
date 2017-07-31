@@ -16,7 +16,7 @@ export function fetchApiResource(resource, dispatch, authToken=null) {
     resourceRequest = fetch(resourceUrl).then(res => res.json())
   }
 
-  resourceRequest.then(json => {
+  return resourceRequest.then(json => {
     dispatch({
       type: 'addApiResources',
       apiResources: json,
@@ -112,7 +112,15 @@ function createApiResourceForeignKeyProperty(obj, entry, apiResources, authToken
 
   return {
     get: () => {
-      return ApiResource(apiResources[obj[camelizedEntry + 'Url']], apiResources, authToken, dispatch);
+      const foreignKeyValue = apiResources[obj[camelizedEntry + 'Url']];
+      if (obj[camelizedEntry + 'Url'] && !foreignKeyValue) {
+        throw Object({
+          name: 'Invalid ApiResourceLookup',
+          object: obj,
+          field: camelizedEntry
+        })
+      }
+      return ApiResource(foreignKeyValue, apiResources, authToken, dispatch);
     },
     set: (value) => {
       fetchAuth(authToken, obj.url, {

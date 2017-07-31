@@ -14,8 +14,77 @@ import Login from './views/Pages/Login/';
 import { settings } from './settings';
 import {navigatorLanguage, fetchAuth, defaultProperty} from './utils';
 import {
-  ApiResourceByStore, fetchApiResource, filterApiResourcesByType
+  fetchApiResource, filterApiResourcesByType
 } from './ApiResource';
+import ApiResource from "./ApiResource";
+
+export function initialUserLoad(authToken, languages, countries, currencies, dispatch) {
+  if (!authToken || !languages.length || !countries.length || !currencies.length) {
+    return;
+  }
+
+  fetchAuth(authToken, settings.ownUserUrl).then(
+      user => {
+        dispatch({
+          type: 'updateApiResource',
+          payload: user
+        });
+
+        let apiResources = {};
+
+        for (let resource of [languages, countries, currencies]) {
+          for (let obj of resource) {
+            apiResources[obj.url] = obj;
+          }
+        }
+
+        user = ApiResource(user, apiResources, authToken, dispatch);
+
+        // Set language
+        let preferredLanguage = user.preferredLanguage;
+
+        if (!preferredLanguage) {
+          preferredLanguage = languages.filter(x => x.code === navigatorLanguage())[0]
+        }
+
+        if (!preferredLanguage) {
+          preferredLanguage = languages.filter(x => x.url === defaultProperty('languages'))[0]
+        }
+
+        if (!user.preferredLanguage || (user.preferredLanguage.url !== preferredLanguage.url)) {
+          user.preferredLanguage = preferredLanguage;
+        }
+
+        // Set country and currency
+
+        if (user.preferredCountry) {
+          if (!user.preferredCurrency) {
+            user.preferredCurrency = user.preferredCountry.currency
+          }
+        } else {
+          let countryByIpUrl = `${settings.endpoint}/countries/by_ip/`;
+          if (settings.customIp) {
+            countryByIpUrl += `?ip=${settings.customIp}`;
+          }
+
+          fetch(countryByIpUrl)
+              .then(res => res.json())
+              .then(json => {
+                let preferredCountry = json['url'] ?
+                    json : countries.filter(x => x.url === defaultProperty('countries'))[0];
+
+                if (!user.preferredCountry || user.preferredCountry.url !== preferredCountry.url) {
+                  user.preferredCountry = preferredCountry;
+                }
+
+                if (!user.preferredCurrency) {
+                  user.preferredCurrency = user.preferredCountry.currency
+                }
+              })
+        }
+      }
+  )
+}
 
 
 class App extends Component {
@@ -26,8 +95,6 @@ class App extends Component {
       apiResources: this.apiResourcesReducer,
       authToken: this.authTokenReducer,
     }));
-
-    this.store.subscribe(this.getUserData);
   }
 
   componentDidMount() {
@@ -35,96 +102,23 @@ class App extends Component {
         .then(res => res.json())
         .then(json => settings.resourceEndpoints = json)
         .then(() => {
-          const resources = ['languages', 'currencies', 'countries', 'store_types'];
+          const userRequiredResources = ['languages', 'currencies', 'countries', 'store_types'];
 
-          for (let resource of resources) {
+          for (let resource of userRequiredResources.concat(['store_types'])) {
             fetchApiResource(resource, this.store.dispatch)
+                .then(() => {
+                  if (!userRequiredResources.includes(resource)) {
+                    return;
+                  }
+                  const state = this.store.getState();
+                  const languages = filterApiResourcesByType(state, 'languages');
+                  const countries = filterApiResourcesByType(state, 'countries');
+                  const currencies = filterApiResourcesByType(state, 'currencies');
+                  initialUserLoad(state.authToken, languages, countries, currencies, this.store.dispatch)
+                })
           }
         });
   }
-
-  getUserData = () => {
-    const state = this.store.getState();
-
-    let languages = filterApiResourcesByType(state, 'languages');
-    let currencies = filterApiResourcesByType(state, 'currencies');
-    let countries = filterApiResourcesByType(state, 'countries');
-    let user = state.apiResources[settings.ownUserUrl];
-
-    if (state.authToken && languages.length && currencies.length && countries.length && !user) {
-      fetchAuth(state.authToken, settings.ownUserUrl).then(
-          user => {
-            this.store.dispatch({
-              type: 'updateApiResource',
-              payload: user
-            });
-
-            user = ApiResourceByStore(user, this.store);
-
-            // Set language
-            let languagesDictByUrl = {};
-            let languagesDictByCode = {};
-
-            filterApiResourcesByType(state, 'languages').map(x => {
-              languagesDictByUrl[x.url] = x;
-              languagesDictByCode[x.code] = x;
-              return null;
-            });
-
-            let preferredLanguage = user.preferredLanguage;
-
-            if (!preferredLanguage) {
-              preferredLanguage = languagesDictByCode[navigatorLanguage()]
-            }
-
-            if (!preferredLanguage) {
-              preferredLanguage = languagesDictByUrl[
-                  defaultProperty('languages')]
-            }
-
-            if (!user.preferredLanguage || (user.preferredLanguage.url !== preferredLanguage.url)) {
-              user.preferredLanguage = preferredLanguage;
-            }
-
-            // Set currency
-            let currenciesByUrl = {};
-
-            filterApiResourcesByType(state, 'currencies').map(x => {
-              currenciesByUrl[x.url] = x;
-              return null;
-            });
-
-            let preferredCurrency = user.preferredCurrency;
-
-            if (!preferredCurrency) {
-              preferredCurrency = currenciesByUrl[defaultProperty('currencies')]
-            }
-
-            if (!user.preferredCurrency || user.preferredCurrency.url !== preferredCurrency.url) {
-              user.preferredCurrency = preferredCurrency
-            }
-
-            // Set country
-            let countriesByUrl = {};
-
-            filterApiResourcesByType(state, 'countries').map(x => {
-              countriesByUrl[x.url] = x;
-              return null;
-            });
-
-            let preferredCountry = user.preferredCountry;
-
-            if (!preferredCountry) {
-              preferredCountry = countriesByUrl[defaultProperty('countries')]
-            }
-
-            if (!user.preferredCountry || user.preferredCountry.url !== preferredCountry.url) {
-              user.preferredCountry = preferredCountry;
-            }
-          }
-      )
-    }
-  };
 
   apiResourcesReducer = (state={}, action) => {
     if (action.type === 'addApiResources') {
@@ -149,9 +143,13 @@ class App extends Component {
     }
 
     if (action.type === 'setAuthToken') {
-      let newApiResources = {...state};
-      delete newApiResources[settings.ownUserUrl];
-      return newApiResources
+      // User changed, delete all API resources that include permissions,
+      // this includes the user itself
+      let filteredResources = {...state};
+      Object.values(state)
+          .filter(x => Boolean(x.permissions))
+          .map(x => delete filteredResources[x.url]);
+      return filteredResources
     }
 
     return state
@@ -164,7 +162,11 @@ class App extends Component {
 
     if (action.type === 'setAuthToken') {
       if (state !== action.authToken) {
-        window.localStorage.setItem('authToken', action.authToken)
+        if (action.authToken) {
+          window.localStorage.setItem('authToken', action.authToken)
+        } else {
+          window.localStorage.removeItem('authToken')
+        }
       }
       return action.authToken
     }
