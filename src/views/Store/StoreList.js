@@ -18,9 +18,8 @@ class StoreList extends Component {
 
   componentDidMount() {
     if (typeof this.stores === 'undefined') {
-      this.stores = null;
       this.props
-          .fetchApiResource(this.props.resourceEndpoints, 'stores', this.props.dispatch)
+          .fetchApiResource('stores', this.props.dispatch)
           .then(json =>  {
             this.setState({stores: json})
           })
@@ -75,12 +74,6 @@ class StoreList extends Component {
   }
 }
 
-let mapStateToProps = (state) => {
-  return {
-    resourceEndpoints: state.resourceEndpoints,
-  }
-};
-
 export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceStateToPropsUtils(),
     addApiResourceDispatchToPropsUtils())(StoreList);

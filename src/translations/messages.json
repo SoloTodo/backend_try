@@ -95,6 +95,21 @@
     "filepath": "./src/views/Pages/Login/Login.js"
   },
   {
+    "id": "404_title",
+    "defaultMessage": "Oops! You're lost",
+    "filepath": "./src/views/Pages/Page404/Page404.js"
+  },
+  {
+    "id": "404_body",
+    "defaultMessage": "The page you are looking for was not found.",
+    "filepath": "./src/views/Pages/Page404/Page404.js"
+  },
+  {
+    "id": "404_home_link",
+    "defaultMessage": "Go back to homepage",
+    "filepath": "./src/views/Pages/Page404/Page404.js"
+  },
+  {
     "id": "name",
     "defaultMessage": "Name",
     "filepath": "./src/views/Store/StoreDetail.js"
@@ -117,17 +132,17 @@
   {
     "id": "options",
     "defaultMessage": "Options",
-    "filepath": "./src/views/Store/StoreDetail.js"
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
     "id": "general_information",
     "defaultMessage": "General Information",
-    "filepath": "./src/views/Store/StoreDetail.js"
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
     "id": "update",
     "defaultMessage": "Update",
-    "filepath": "./src/views/Store/StoreDetail.js"
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
     "id": "stores",

@@ -1,4 +1,7 @@
 {
+  "404_body": "No hemos podido encontrar la página que buscas.",
+  "404_home_link": "Volver a la página principal",
+  "404_title": "Página no encontrada",
   "active_question": "¿Activa?",
   "configuration": "Configuración",
   "country": "País",

@@ -1,4 +1,7 @@
 {
+  "404_body": "The page you are looking for was not found.",
+  "404_home_link": "Go back to homepage",
+  "404_title": "Oops! You're lost",
   "active_question": "Active?",
   "configuration": "Configuration",
   "country": "Country",

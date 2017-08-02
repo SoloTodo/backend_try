@@ -5,11 +5,42 @@ import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
 } from "../ApiResource";
+import {settings} from "../settings";
 
 class DetailPermissionRoute extends Component {
   constructor() {
     super();
-    this.resourceObject = undefined;
+    this.state = {
+      resourceObject: undefined
+    }
+  }
+
+  componentDidMount() {
+    const resource = this.props.resource;
+    const resourceObject = this.state.resourceObject;
+
+    if (typeof resourceObject === 'undefined') {
+      const id = this.props.computedMatch.params.id;
+      const objUrl = `${settings.resourceEndpoints[resource]}${id}/`;
+      let localResourceObject = this.props.apiResources[objUrl];
+      if (localResourceObject) {
+        this.setState({
+          resourceObject: localResourceObject
+        })
+      } else {
+        this.setState({
+          resourceObject: null
+        });
+
+        this.props.fetchApiResourceObject(resource, id, this.props.dispatch)
+            .then(json => {
+              this.setState({
+                resourceObject: json
+              })
+            });
+      }
+    }
+
   }
 
   render = () => {
@@ -17,37 +48,23 @@ class DetailPermissionRoute extends Component {
     delete rest['component'];
     const MyComponent = this.props['component'];
 
-    const resource = this.props.resource;
-    const resourceEndpoints = this.props.resourceEndpoints;
+    const resourceObject = this.state.resourceObject;
 
-    if (this.resourceObject === null || !resourceEndpoints[resource]) {
+    if (resourceObject === null || typeof resourceObject === 'undefined') {
       // Object is currently fetching or resource endpoints have not been loaded
       return <div/>
-    }
-
-    const id = this.props.computedMatch.params.id;
-    const objUrl = `${resourceEndpoints[resource]}${id}/`;
-    this.resourceObject = this.props.apiResources[objUrl];
-
-    if (this.resourceObject) {
-      if (this.resourceObject.permissions.includes(this.props.permission)) {
-        return (
-            <Route {...rest} render={props => {
-              return <MyComponent resourceObject={this.resourceObject} {...rest}/>
-            }
-            }/>)
-      } else {
-        return <Redirect to={{
-          pathname: '/',
-          state: {from: this.props.location}
-        }}/>
-      }
+    } else if (!resourceObject.url) {
+      // Object does not exist
+      return <Redirect to={{
+        pathname: '/404',
+        state: {from: this.props.location}
+      }}/>
     } else {
-      if (typeof this.resourceObject === 'undefined') {
-        this.props.fetchApiResourceObject(resource, id, this.props.dispatch);
-        this.resourceObject = null;
-      }
-      return <div/>
+      return (
+          <Route {...rest} render={() => {
+            return <MyComponent resourceObject={resourceObject} {...rest}/>
+          }
+          }/>)
     }
   }
 }
@@ -55,7 +72,6 @@ class DetailPermissionRoute extends Component {
 let mapStateToProps = (state) => {
   return {
     apiResources: state.apiResources,
-    resourceEndpoints: state.resourceEndpoints
   }
 };
 

@@ -4,11 +4,11 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { sidebarLayout } from '../../TopLevelRoutes';
 import {
+  addApiResourceStateToPropsUtils,
   apiResourceForeignKey,
   filterApiResourcesByType
 } from '../../ApiResource';
 import './sidebar.css';
-import ApiResource from "../../ApiResource";
 import {settings} from "../../settings";
 
 
@@ -30,6 +30,8 @@ class Sidebar extends Component {
     const selectedLanguage = this.props.language;
     const selectedCurrency = this.props.currency;
     const selectedCountry = this.props.country;
+
+    const user = this.props.ApiResource(this.props.user)
 
     let layout = [];
 
@@ -73,7 +75,7 @@ class Sidebar extends Component {
                 <ul className="nav-dropdown-items">
                   {this.props.currencies.map(currency => (
                       <li className="nav-item" key={currency.url}>
-                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, this.props.user, 'preferredCurrency', currency, this.props.authToken)}><i className={currency === selectedCurrency && 'fa fa-check'}/>{ currency.name }</a>
+                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredCurrency', currency, this.props.authToken)}><i className={currency === selectedCurrency && 'fa fa-check'}/>{ currency.name }</a>
                       </li>
                   ))}
                 </ul>
@@ -84,7 +86,7 @@ class Sidebar extends Component {
                 <ul className="nav-dropdown-items">
                   {this.props.countries.map(country => (
                       <li className="nav-item" key={country.url}>
-                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, this.props.user, 'preferredCountry', country, this.props.authToken)}><i className={country === selectedCountry && 'fa fa-check'}/> { country.name }</a>
+                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredCountry', country, this.props.authToken)}><i className={country === selectedCountry && 'fa fa-check'}/> { country.name }</a>
                       </li>
                   ))}
                 </ul>
@@ -95,7 +97,7 @@ class Sidebar extends Component {
                 <ul className="nav-dropdown-items">
                   {this.props.languages.map(language => (
                       <li className="nav-item" key={language.url}>
-                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, this.props.user, 'preferredLanguage', language, this.props.authToken)}><i className={language === selectedLanguage && 'fa fa-check'}/>{ language.name }</a>
+                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredLanguage', language, this.props.authToken)}><i className={language === selectedLanguage && 'fa fa-check'}/>{ language.name }</a>
                       </li>
                   ))}
                 </ul>
@@ -118,7 +120,8 @@ let mapStateToProps = (state) => {
     countries: filterApiResourcesByType(apiResources, 'countries'),
     country: apiResourceForeignKey(user, 'preferred_country', state),
     authToken: state.authToken,
-    user: user
+    user: user,
+    apiResources: apiResources
   };
 };
 
@@ -128,10 +131,10 @@ let mapDispatchToProps = (dispatch) => {
       e.preventDefault();
       e.target.parentElement.parentElement.parentElement.classList.toggle('open');
 
-      const apiResourceUser = new ApiResource(user, {});
-      apiResourceUser[property] = value;
+      user[property] = value;
+      user.save(authToken, dispatch);
     }
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+export default connect(addApiResourceStateToPropsUtils(mapStateToProps), mapDispatchToProps)(Sidebar);
