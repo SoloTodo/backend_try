@@ -7,7 +7,8 @@ export const settings = {
     languages: endpoint + 'languages/',
     store_types: endpoint + 'store_types/',
     currencies: endpoint + 'currencies/',
-    countries: endpoint + 'countries/'
+    countries: endpoint + 'countries/',
+    product_types: endpoint + 'product_types/'
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA

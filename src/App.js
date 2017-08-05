@@ -20,10 +20,6 @@ import ApiResource from "./ApiResource";
 import Page404 from "./views/Pages/Page404/Page404";
 
 export function initialUserLoad(authToken, languages, countries, currencies, dispatch) {
-  if (!authToken || !languages.length || !countries.length || !currencies.length) {
-    return;
-  }
-
   return fetchAuth(authToken, settings.ownUserUrl).then(
       rawUser => {
         dispatch({
@@ -101,36 +97,33 @@ class App extends Component {
       authToken: this.authTokenReducer,
       apiResources: this.apiResourcesReducer,
     }));
-
-    this.state = {
-      user: undefined
-    }
   }
 
   componentDidMount() {
-    const userRequiredResources = ['languages', 'currencies', 'countries'];
+    const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'product_types'];
 
-    for (let resource of userRequiredResources.concat(['store_types'])) {
+    for (let resource of requiredResources) {
       fetchApiResource(resource, this.store.dispatch)
           .then(() => {
-            if (!userRequiredResources.includes(resource)) {
-              return;
-            }
             const state = this.store.getState();
             const apiResources = state.apiResources;
-            const languages = filterApiResourcesByType(apiResources, 'languages');
-            const countries = filterApiResourcesByType(apiResources, 'countries');
-            const currencies = filterApiResourcesByType(apiResources, 'currencies');
-            const userPromise = initialUserLoad(state.authToken, languages, countries, currencies, this.store.dispatch)
-            if (userPromise) {
-                userPromise.then(user => {
-                  this.setState({
-                    user: user
-                  })
-                })
+
+            const groupedApiResources = requiredResources.reduce((ongoing, resource) => {
+              ongoing[resource] = filterApiResourcesByType(apiResources, resource);
+              return ongoing
+            }, {});
+
+            if (requiredResources.every(resource => groupedApiResources[resource].length > 0)) {
+              initialUserLoad(
+                  state.authToken,
+                  groupedApiResources.languages,
+                  groupedApiResources.countries,
+                  groupedApiResources.currencies,
+                  this.store.dispatch)
             }
           })
     }
+
   }
 
   apiResourcesReducer = (state={}, action) => {
@@ -189,25 +182,20 @@ class App extends Component {
 
   render() {
     let history = createBrowserHistory();
-    const user = this.state.user;
-    if (user) {
-      return (
-          <Provider store={this.store}>
-            <ConnectedIntlProvider>
-              <BrowserRouter history={history}>
-                <Switch>
-                  <Route exact path="/login" name="Login Page"
-                         component={Login}/>
-                  <Route exact path="/404" name="404" component={Page404}/>
-                  <PrivateRoute path="/" name="Home" component={Full}/>
-                </Switch>
-              </BrowserRouter>
-            </ConnectedIntlProvider>
-          </Provider>
-      )
-    } else {
-      return <div/>
-    }
+    return (
+        <Provider store={this.store}>
+          <ConnectedIntlProvider>
+            <BrowserRouter history={history}>
+              <Switch>
+                <Route exact path="/login" name="Login Page"
+                       component={Login}/>
+                <Route exact path="/404" name="404" component={Page404}/>
+                <PrivateRoute path="/" name="Home" component={Full}/>
+              </Switch>
+            </BrowserRouter>
+          </ConnectedIntlProvider>
+        </Provider>
+    )
   }
 }
 

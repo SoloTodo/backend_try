@@ -13,6 +13,8 @@ export function fetchAuth(authToken, input, init={}) {
     init.headers = {}
   }
   init.headers.Authorization = `Token ${authToken}`;
+  init.headers['Content-Type'] = 'application/json';
+  init.headers['Accept'] = 'application/json';
   return fetch(input, init).then(res => res.json())
 }
 

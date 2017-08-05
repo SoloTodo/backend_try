@@ -20,12 +20,19 @@
   "menu": "Menu",
   "name": "Name",
   "options": "Options",
+  "product_scraping_concurrency": "Product scraping concurrency",
+  "product_types": "Product types",
+  "queue": "Queue",
   "scraper": "Scraper",
   "show_list": "Show all",
   "sign_in_message": "Sign In to your account",
   "sign_up_message": "This section is reserved for the staff at SoloTodo",
   "sign_up_title": "Sign up",
+  "store_inactive_warning": "This store is inactive, it has to be set as active to update its prices",
   "stores": "Stores",
   "type": "type",
-  "update": "Update"
+  "update": "Update",
+  "url_discovery_concurrency": "URL discovery concurrency",
+  "use_async_question": "Use async?",
+  "warning_exclamation": "Warning!"
 }

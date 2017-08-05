@@ -40,6 +40,11 @@
     "filepath": "./src/routes.js"
   },
   {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/routes.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -143,6 +148,46 @@
     "id": "update",
     "defaultMessage": "Update",
     "filepath": "./src/views/Store/StoreDetailMenu.js"
+  },
+  {
+    "id": "warning_exclamation",
+    "defaultMessage": "Warning!",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "store_inactive_warning",
+    "defaultMessage": "This store is inactive, it has to be set as active to update its prices",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "use_async_question",
+    "defaultMessage": "Use async?",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "url_discovery_concurrency",
+    "defaultMessage": "URL discovery concurrency",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "product_scraping_concurrency",
+    "defaultMessage": "Product scraping concurrency",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "queue",
+    "defaultMessage": "Queue",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "product_types",
+    "defaultMessage": "Product types",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
   },
   {
     "id": "stores",

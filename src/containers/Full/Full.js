@@ -28,7 +28,7 @@ class Full extends Component {
               <div className="container-fluid">
                 <Switch>
                   <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-                  <DetailPermissionRoute path="/stores/:id/update" resource="stores" permission="update_store" name="StoreDetailUpdate" component={StoreDetailUpdate}/>
+                  <DetailPermissionRoute path="/stores/:id/update" resource="stores" permission="update_store_prices" name="StoreDetailUpdate" component={StoreDetailUpdate}/>
                   <DetailPermissionRoute path="/stores/:id" resource="stores" permission="view_store" name="StoresDetail" component={StoreDetail}/>
                   {routes.map(route =>
                       <PermissionRoute key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={StoreList}/>

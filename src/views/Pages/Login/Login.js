@@ -78,7 +78,7 @@ class Login extends Component {
       formData.append('username', this.state.email);
       formData.append('password', this.state.password);
 
-      return fetch(`${settings.endpoint}/obtain-auth-token/`, {
+      return fetch(`${settings.endpoint}obtain-auth-token/`, {
         method: 'POST',
         body: formData
       })

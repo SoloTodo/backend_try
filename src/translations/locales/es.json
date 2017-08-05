@@ -20,12 +20,19 @@
   "menu": "Menú",
   "name": "Nombre",
   "options": "Opciones",
+  "product_scraping_concurrency": "Concurrencia para scraping de productos",
+  "product_types": "Tipos de producto",
+  "queue": "Cola",
   "scraper": "Scraper",
   "show_list": "Todas",
   "sign_in_message": "Accede a tu cuenta",
   "sign_up_message": "Esta sección está reservada para el staff de SoloTodo",
   "sign_up_title": "Registro",
+  "store_inactive_warning": "Esta tienda está inactiva. Debe ser marcada como activa para actualizar sus precios",
   "stores": "Tiendas",
   "type": "Tipo",
-  "update": "Actualizar"
+  "update": "Actualizar",
+  "url_discovery_concurrency": "Concurrencia para descubrimiento de URLs",
+  "use_async_question": "¿Usar asincronia?",
+  "warning_exclamation": "¡Advertencia!"
 }

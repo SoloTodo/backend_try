@@ -59,6 +59,12 @@ class DetailPermissionRoute extends Component {
         pathname: '/404',
         state: {from: this.props.location}
       }}/>
+    } else if (!resourceObject.permissions.includes(this.props.permission)) {
+      // User has no permissions over the object
+      return <Redirect to={{
+        pathname: '/',
+        state: {from: this.props.location}
+      }}/>
     } else {
       return (
           <Route {...rest} render={() => {

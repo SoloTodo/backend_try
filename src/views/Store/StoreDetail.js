@@ -10,8 +10,20 @@ class StoreDetail extends Component {
   render() {
     const store = this.props.ApiResource(this.props.resourceObject);
 
+    const locationState = this.props.location.state;
+
     return (
         <div className="animated fadeIn">
+          {locationState && locationState.warning && (
+              <div className="row">
+                <div className="col-sm-12">
+                  <div className="alert alert-warning" role="alert">
+                    <strong>Warning!</strong> This store is not associated to a scraper, so it can't be updated
+                  </div>
+                </div>
+              </div>
+          )}
+
           <div className="row">
             <div className="col-sm-6 col-md-4">
               <div className="card">
