@@ -29,9 +29,13 @@
   "sign_up_message": "Esta sección está reservada para el staff de SoloTodo",
   "sign_up_title": "Registro",
   "store_inactive_warning": "Esta tienda está inactiva. Debe ser marcada como activa para actualizar sus precios",
+  "store_no_scraper_warning": "La tienda no tiene un scraper válido asociado, así que no puede ser actualizada",
+  "store_update_requested_success": "Actualización de tienda encolada exitosamente",
   "stores": "Tiendas",
+  "success_exclamation": "¡Éxito!",
   "type": "Tipo",
   "update": "Actualizar",
+  "update_logs": "Registros de actualización",
   "url_discovery_concurrency": "Concurrencia para descubrimiento de URLs",
   "use_async_question": "¿Usar asincronia?",
   "warning_exclamation": "¡Advertencia!"

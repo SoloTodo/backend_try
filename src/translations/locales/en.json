@@ -29,9 +29,13 @@
   "sign_up_message": "This section is reserved for the staff at SoloTodo",
   "sign_up_title": "Sign up",
   "store_inactive_warning": "This store is inactive, it has to be set as active to update its prices",
+  "store_no_scraper_warning": "The store has no valid scraper, so it cannot be updated",
+  "store_update_requested_success": "Store update requested successfully",
   "stores": "Stores",
+  "success_exclamation": "Success!",
   "type": "type",
   "update": "Update",
+  "update_logs": "Update logs",
   "url_discovery_concurrency": "URL discovery concurrency",
   "use_async_question": "Use async?",
   "warning_exclamation": "Warning!"

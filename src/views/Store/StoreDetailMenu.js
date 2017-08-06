@@ -26,6 +26,14 @@ export default function StoreDetailMenu(props) {
               </button>
             </NavLink></li>
           }
+          {store.permissions.includes('view_store_update_logs') &&
+          <li>
+            <NavLink to={'/stores/' + store.id + '/update_logs'}>
+              <button type="button" className="btn btn-link">
+                <FormattedMessage id="update_logs" defaultMessage={`Update logs`} />
+              </button>
+            </NavLink></li>
+          }
         </ul>
       </div>
     </div>

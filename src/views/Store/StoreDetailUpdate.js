@@ -13,6 +13,8 @@ class StoreDetailUpdate extends Component {
     this.state = {
       formData: undefined,
       product_type_choices: undefined,
+      updateTaskId: undefined,
+      updateLogId: undefined
     }
   }
 
@@ -55,13 +57,34 @@ class StoreDetailUpdate extends Component {
     this.props.fetchAuth(`${this.props.resourceObject.url}update_prices/`, {
       method: 'POST',
       body: JSON.stringify(this.state.formData)
-    }).then(json => console.log(json))
+    }).then(json => {
+      this.setState({
+        updateTaskId: json.task_id,
+        updateLogId: json.log_id
+      });
+    })
 
 
   };
 
   render() {
     const store = this.props.ApiResource(this.props.resourceObject);
+
+    if (this.state.updateTaskId) {
+      return (
+          <Redirect to={{
+            pathname: `/stores/${store.id}/update_logs`,
+            state: {
+              alert: {
+                type: 'success',
+                labelId: 'success_exclamation',
+                messageId: 'store_update_requested_success'
+              }
+            }
+          }} />
+      )
+    }
+
     const formData = this.state.formData;
 
     if (!formData) {
@@ -73,7 +96,11 @@ class StoreDetailUpdate extends Component {
           <Redirect to={{
             pathname: `/stores/${store.id}/`,
             state: {
-              warning: 'no_scraper'
+              alert: {
+                type: 'warning',
+                labelId: 'warning_exclamation',
+                messageId: 'store_no_scraper_warning'
+              }
             }
           }} />
       )
@@ -100,7 +127,7 @@ class StoreDetailUpdate extends Component {
                 </div>
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-12">
+                    <div className="col-12">
                       <form onSubmit={this.handleFormSubmit}>
                         <div className="checkbox">
                           <label htmlFor="async">

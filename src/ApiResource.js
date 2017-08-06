@@ -101,6 +101,10 @@ class ApiResource {
           // The property is a primitive value OR is a originally null valued ForeignKey
           properties[camelizedEntry] = {
             get: () => {
+              const maybe_date = Date.parse(jsonData[entry]);
+              if (jsonData[entry] && jsonData[entry].match && jsonData[entry].match(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d+)/)) {
+                return new Date(maybe_date)
+              }
               return jsonData[entry];
             },
             set: (value) => {
@@ -114,7 +118,7 @@ class ApiResource {
               }
 
               this.dirtyFields.push(entry);
-              this[camelizedEntry] = value
+              jsonData[entry] = value
             },
             configurable: true
           }

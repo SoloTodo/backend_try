@@ -60,7 +60,7 @@ export function initialUserLoad(authToken, languages, countries, currencies, dis
             user.save(authToken, dispatch);
           }
         } else {
-          let countryByIpUrl = `${settings.endpoint}/countries/by_ip/`;
+          let countryByIpUrl = `${settings.endpoint}countries/by_ip/`;
           if (settings.customIp) {
             countryByIpUrl += `?ip=${settings.customIp}`;
           }
@@ -113,7 +113,7 @@ class App extends Component {
               return ongoing
             }, {});
 
-            if (requiredResources.every(resource => groupedApiResources[resource].length > 0)) {
+            if (state.authToken && requiredResources.every(resource => groupedApiResources[resource].length > 0)) {
               initialUserLoad(
                   state.authToken,
                   groupedApiResources.languages,

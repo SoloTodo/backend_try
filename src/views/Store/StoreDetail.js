@@ -10,22 +10,10 @@ class StoreDetail extends Component {
   render() {
     const store = this.props.ApiResource(this.props.resourceObject);
 
-    const locationState = this.props.location.state;
-
     return (
         <div className="animated fadeIn">
-          {locationState && locationState.warning && (
-              <div className="row">
-                <div className="col-sm-12">
-                  <div className="alert alert-warning" role="alert">
-                    <strong>Warning!</strong> This store is not associated to a scraper, so it can't be updated
-                  </div>
-                </div>
-              </div>
-          )}
-
           <div className="row">
-            <div className="col-sm-6 col-md-4">
+            <div className="col-sm-6 col-md-8">
               <div className="card">
                 <div className="card-header"><strong>{store.name}</strong></div>
                 <div className="card-block">
@@ -45,7 +33,7 @@ class StoreDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="active_question" defaultMessage={`Is active?`} /></th>
-                      <td>{store.is_active ? 'Yes' : 'No'}</td>
+                      <td><i className={store.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i></td>
                     </tr>
                     <tr>
                       <th>Scraper</th>

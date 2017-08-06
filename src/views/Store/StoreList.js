@@ -36,7 +36,7 @@ class StoreList extends Component {
 
     return <div className="animated fadeIn">
       <div className="row">
-        <div className="col-xs-12 col-md-8 col-lg-8 col-xl-6">
+        <div className="col-12 col-md-10 col-lg-10 col-xl-8">
           <div className="card">
             <div className="card-header">
               <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="stores" defaultMessage={`Stores`} />

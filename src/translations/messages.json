@@ -30,6 +30,26 @@
     "filepath": "./src/components/Sidebar/Sidebar.js"
   },
   {
+    "id": "success_exclamation",
+    "defaultMessage": "Success!",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "warning_exclamation",
+    "defaultMessage": "Warning!",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "store_update_requested_success",
+    "defaultMessage": "Store update requested successfully",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "store_no_scraper_warning",
+    "defaultMessage": "The store has no valid scraper, so it cannot be updated",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "home",
     "defaultMessage": "Home",
     "filepath": "./src/routes.js"
@@ -42,6 +62,11 @@
   {
     "id": "update",
     "defaultMessage": "Update",
+    "filepath": "./src/routes.js"
+  },
+  {
+    "id": "update_logs",
+    "defaultMessage": "Update logs",
     "filepath": "./src/routes.js"
   },
   {
@@ -150,6 +175,11 @@
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
+    "id": "update_logs",
+    "defaultMessage": "Update logs",
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
+  },
+  {
     "id": "warning_exclamation",
     "defaultMessage": "Warning!",
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
@@ -188,6 +218,11 @@
     "id": "product_types",
     "defaultMessage": "Product types",
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
+    "id": "update_logs",
+    "defaultMessage": "Update logs",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
   {
     "id": "stores",
