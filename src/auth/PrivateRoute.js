@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
 import {settings} from "../settings";
+import Loading from "../components/Loading";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   if (rest.user) {
@@ -14,7 +15,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }
   else if (rest.authToken) {
     // Waiting for user and required resources to load
-    return <div />
+    return <Loading />
   } else {
     return <Redirect to={{
       pathname: '/login',

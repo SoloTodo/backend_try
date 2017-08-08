@@ -220,8 +220,88 @@
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
   },
   {
+    "id": "pending",
+    "defaultMessage": "Pending",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "in_process",
+    "defaultMessage": "In process",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "success",
+    "defaultMessage": "Success",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "error",
+    "defaultMessage": "Error",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "previous",
+    "defaultMessage": "Previous",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "next",
+    "defaultMessage": "Next",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
     "id": "update_logs",
     "defaultMessage": "Update logs",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "status",
+    "defaultMessage": "Status",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "result",
+    "defaultMessage": "Result",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "last_update",
+    "defaultMessage": "Last update",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "product_types",
+    "defaultMessage": "Product types",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "start",
+    "defaultMessage": "Start",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "concurrency",
+    "defaultMessage": "Concurrency",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "async_question",
+    "defaultMessage": "Async?",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "log",
+    "defaultMessage": "Log",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "download",
+    "defaultMessage": "Download",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "unavailable",
+    "defaultMessage": "Unavailable",
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
   {
@@ -235,23 +315,23 @@
     "filepath": "./src/views/Store/StoreList.js"
   },
   {
-    "id": "type",
-    "defaultMessage": "type",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
     "id": "country",
     "defaultMessage": "Country",
     "filepath": "./src/views/Store/StoreList.js"
   },
   {
-    "id": "scraper",
-    "defaultMessage": "Scraper",
+    "id": "type",
+    "defaultMessage": "type",
     "filepath": "./src/views/Store/StoreList.js"
   },
   {
     "id": "active_question",
     "defaultMessage": "Active?",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "scraper",
+    "defaultMessage": "Scraper",
     "filepath": "./src/views/Store/StoreList.js"
   }
 ]

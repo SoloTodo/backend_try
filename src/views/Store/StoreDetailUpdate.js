@@ -4,6 +4,7 @@ import {addApiResourceStateToPropsUtils} from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
 import {Redirect} from "react-router-dom";
+import Loading from "../../components/Loading";
 
 
 
@@ -88,7 +89,7 @@ class StoreDetailUpdate extends Component {
     const formData = this.state.formData;
 
     if (!formData) {
-      return <div />
+      return <Loading />
     }
 
     if (formData.detail) {

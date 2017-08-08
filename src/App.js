@@ -22,6 +22,14 @@ import Page404 from "./views/Pages/Page404/Page404";
 export function initialUserLoad(authToken, languages, countries, currencies, dispatch) {
   return fetchAuth(authToken, settings.ownUserUrl).then(
       rawUser => {
+        // Check if the token was valid
+        if (rawUser.detail) {
+          dispatch({
+            type: 'setAuthToken',
+            authToken: null
+          });
+        }
+
         dispatch({
           type: 'updateApiResource',
           payload: rawUser

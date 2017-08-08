@@ -2,16 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
 import {settings} from "../settings";
+import Loading from "../components/Loading";
 
 const PermissionRoute = ({ component: Component, ...rest }) => {
   if (typeof rest.permissions === 'undefined') {
     // Permissions haven't been set yet (waiting for fetch user), standby
-    return <div/>
+    return <Loading />
   }
 
   if (rest.permissions.includes(rest.requiredPermission)) {
     return (
-        <Route {...rest} render={props => {
+        <Route exact {...rest} render={props => {
           return <Component {...props}/>
         }
         }/>

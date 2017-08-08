@@ -99,3 +99,20 @@
   list-style: none;
   padding-left: 0;
 }
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+main > .main-content {
+  flex: 1;
+}
+
+main > .container-fluid {
+  width: 100%;
+}
+
+#root {
+  flex: 1;
+}

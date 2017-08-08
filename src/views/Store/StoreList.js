@@ -6,6 +6,7 @@ import {
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import NavLink from "react-router-dom/es/NavLink";
+import Loading from "../../components/Loading";
 
 
 class StoreList extends Component {
@@ -18,10 +19,14 @@ class StoreList extends Component {
 
   componentDidMount() {
     if (typeof this.stores === 'undefined') {
+      this.setState({
+        stores: null
+      });
       this.props
           .fetchApiResource('stores', this.props.dispatch)
           .then(json =>  {
-            this.setState({stores: json})
+            const filtered_stores = json.filter(store => store.permissions.includes('backend_view_store'));
+            this.setState({stores: filtered_stores})
           })
     }
   }
@@ -30,7 +35,7 @@ class StoreList extends Component {
     const stores = this.state.stores;
 
     if (!stores) {
-      return <div />
+      return <Loading />
     }
     const apiResourceStores = stores.map(x => this.props.ApiResource(x));
 
@@ -46,10 +51,10 @@ class StoreList extends Component {
                 <thead>
                 <tr>
                   <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
-                  <th><FormattedMessage id="type" defaultMessage={`type`} /></th>
                   <th><FormattedMessage id="country" defaultMessage={`Country`} /></th>
+                  <th className="hidden-xs-down"><FormattedMessage id="type" defaultMessage={`type`} /></th>
+                  <th className="text-center hidden-xs-down"><FormattedMessage id="active_question" defaultMessage={`Active?`} /></th>
                   <th className="hidden-sm-down"><FormattedMessage id="scraper" defaultMessage={`Scraper`} /></th>
-                  <th className="text-center hidden-sm-down"><FormattedMessage id="active_question" defaultMessage={`Active?`} /></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,10 +63,10 @@ class StoreList extends Component {
                       <td>
                         {store.permissions.includes('view_store') ? <NavLink to={'/stores/' + store.id}>{store.name}</NavLink> : store.name}
                       </td>
-                      <td>{store.type.name}</td>
                       <td>{store.country.name}</td>
+                      <td className="hidden-xs-down">{store.type.name}</td>
+                      <td className="text-center hidden-xs-down"><i className={store.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i></td>
                       <td className="hidden-sm-down">{store.storescraperClass}</td>
-                      <td className="text-center hidden-sm-down"><i className={store.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i></td>
                     </tr>
                 ))}
                 </tbody>

@@ -67,7 +67,7 @@ class DetailPermissionRoute extends Component {
       }}/>
     } else {
       return (
-          <Route {...rest} render={() => {
+          <Route exact {...rest} render={() => {
             return <MyComponent resourceObject={resourceObject} {...rest}/>
           }
           }/>)

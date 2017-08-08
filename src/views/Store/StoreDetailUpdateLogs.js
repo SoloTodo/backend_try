@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {addApiResourceStateToPropsUtils} from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
+import Loading from "../../components/Loading";
 
 const pageSize = 5;
 
@@ -19,7 +20,8 @@ class StoreDetailUpdateLogs extends Component {
 
   updatePage(page) {
     const store = this.props.resourceObject;
-    return this.props.fetchAuth(`${settings.resourceEndpoints.store_update_logs}?store=${store.id}&page=${page}&page_size=${pageSize}`)
+    const url = `${settings.resourceEndpoints.store_update_logs}?store=${store.id}&page=${page}&page_size=${pageSize}`;
+    return this.props.fetchAuth(url)
         .then(json => {
           const newUpdateLogs = {
             ...this.state.updateLogs,
@@ -50,7 +52,7 @@ class StoreDetailUpdateLogs extends Component {
 
   render() {
     if (typeof this.state.resultCount === 'undefined') {
-      return <div />
+      return <Loading />
     }
 
     const rawPageLogs = this.state.updateLogs[this.state.page];
@@ -62,13 +64,16 @@ class StoreDetailUpdateLogs extends Component {
     });
 
     const statusDict = {
-      1: 'Pending',
-      2: 'In process',
-      3: 'Success',
-      4: 'Error'
+      1: <FormattedMessage id="pending" defaultMessage={`Pending`} />,
+      2: <FormattedMessage id="in_process" defaultMessage={`In process`} />,
+      3: <FormattedMessage id="success" defaultMessage={`Success`} />,
+      4: <FormattedMessage id="error" defaultMessage={`Error`} />
     };
 
     const pageCount = Math.ceil(this.state.resultCount / pageSize);
+
+    const previousLabel = <FormattedMessage id="previous" defaultMessage={`Previous`} />
+    const nextLabel = <FormattedMessage id="next" defaultMessage={`Next`} />
 
     return (
         <div className="animated fadeIn">
@@ -83,22 +88,26 @@ class StoreDetailUpdateLogs extends Component {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-12">
-                      <ReactPaginate
-                          pageCount={pageCount}
-                          pageRangeDisplayed={3}
-                          marginPagesDisplayed={2}
-                          containerClassName="pagination"
-                          pageClassName="page-item"
-                          pageLinkClassName="page-link"
-                          activeClassName="active"
-                          previousClassName="page-item"
-                          nextClassName="page-item"
-                          previousLinkClassName="page-link"
-                          nextLinkClassName="page-link"
-                          disabledClassName="disabled"
-                          hrefBuilder={page => `?page=${page}`}
-                          onPageChange={this.onPageChange}
-                      />
+                      <div className="float-right">
+                        <ReactPaginate
+                            pageCount={pageCount}
+                            pageRangeDisplayed={3}
+                            marginPagesDisplayed={2}
+                            containerClassName="pagination"
+                            pageClassName="page-item"
+                            pageLinkClassName="page-link"
+                            activeClassName="active"
+                            previousClassName="page-item"
+                            nextClassName="page-item"
+                            previousLinkClassName="page-link"
+                            nextLinkClassName="page-link"
+                            disabledClassName="disabled"
+                            hrefBuilder={page => `?page=${page}`}
+                            onPageChange={this.onPageChange}
+                            previousLabel={previousLabel}
+                            nextLabel={nextLabel}
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="row">
@@ -106,37 +115,51 @@ class StoreDetailUpdateLogs extends Component {
                       <table className="table table-striped">
                         <thead>
                         <tr>
-                          <th>Start</th>
-                          <th>Last update</th>
-                          <th>Status</th>
-                          <th>Async</th>
-                          <th>Concurrency</th>
-                          <th>Product types</th>
-                          <th>Log</th>
+                          <th><FormattedMessage id="status" defaultMessage={`Status`} /></th>
+                          <th><FormattedMessage id="result" defaultMessage={`Result`} /></th>
+                          <th><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
+                          <th className="hidden-xs-down"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></th>
+                          <th className="hidden-sm-down"><FormattedMessage id="start" defaultMessage={`Start`} /></th>
+                          <th className="hidden-sm-down"><FormattedMessage id="concurrency" defaultMessage={`Concurrency`} /></th>
+                          <th className="hidden-md-down"><FormattedMessage id="async_question" defaultMessage={`Async?`} /></th>
+                          <th className="hidden-md-down"><FormattedMessage id="log" defaultMessage={`Log`} /></th>
                         </tr>
                         </thead>
                         <tbody>
                         {pageLogs.map(log => (
                             <tr key={log.url}>
-                              <td>{log.creationDate.toLocaleString()}</td>
-                              <td>{log.lastUpdated.toLocaleString()}</td>
                               <td>{statusDict[log.status]}</td>
-                              <td><i className={log.useAsync ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i></td>
                               <td>
-                                {log.discoveryUrlConcurrency
-                                    ? `${log.discoveryUrlConcurrency} / ${log.productsForUrlConcurrency}`
+                                {log.availableProductsCount
+                                    ? `${log.availableProductsCount} / ${log.unavailableProductsCount} / ${log.discoveryUrlsWithoutProductsCount}`
                                     : 'N/A'
                                 }
                               </td>
-                              <td>
+                              <td>{log.lastUpdated.toLocaleString()}</td>
+                              <td className="hidden-xs-down">
                                 <ul>
                                   {log.productTypes.map(pt => (
                                       <li key={pt.url}>{pt.name}</li>
                                   ))}
                                 </ul>
                               </td>
-                              <td>
-                                <a href={log.registryFile} target="_blank">Download</a>
+
+                              <td className="hidden-sm-down">{log.creationDate.toLocaleString()}</td>
+                              <td className="hidden-sm-down">
+                                {log.discoveryUrlConcurrency
+                                    ? `${log.discoveryUrlConcurrency} / ${log.productsForUrlConcurrency}`
+                                    : 'N/A'
+                                }
+                              </td>
+
+
+                              <td className="hidden-md-down"><i className={log.useAsync ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i></td>
+
+                              <td className="hidden-md-down">
+                                {log.registryFile ?
+                                  <a href={log.registryFile} target="_blank"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
+                                  <FormattedMessage id="unavailable" defaultMessage={`Unavailable`} />
+                                }
                               </td>
                             </tr>
                         ))}

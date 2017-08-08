@@ -1,0 +1,14 @@
+.d-flex {
+    height: 100%;
+    flex: 1;
+}
+
+.d-flex > div {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sk-wave .sk-rect {
+    background-color: rgb(56, 64, 66);
+}

@@ -115,10 +115,12 @@ class ApiResource {
                   [camelizedEntry]: this.createApiResourceForeignKeyProperty(entry)
                 };
                 Object.defineProperties(this, newProperties);
+                this[camelizedEntry] = value
+              } else {
+                jsonData[entry] = value
               }
 
               this.dirtyFields.push(entry);
-              jsonData[entry] = value
             },
             configurable: true
           }
@@ -129,7 +131,7 @@ class ApiResource {
     Object.defineProperties(this, properties);
   }
 
-  createApiResourceForeignKeyProperty(entry, authToken, dispatch) {
+  createApiResourceForeignKeyProperty(entry) {
     let camelizedEntry = camelize(entry);
 
     return {

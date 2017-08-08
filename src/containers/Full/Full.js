@@ -7,11 +7,9 @@ import Sidebar from '../../components/Sidebar/';
 import Breadcrumbs from '../../components/Breadcrumbs/';
 import Aside from '../../components/Aside/';
 import Alerts from '../../components/Alerts';
-import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
 import PermissionRoute from '../../auth/PermissionRoute';
 import { routes } from '../../TopLevelRoutes';
-import StoreList from "../../views/Store/StoreList";
 import StoreDetail from "../../views/Store/StoreDetail";
 import StoreDetailUpdate from "../../views/Store/StoreDetailUpdate";
 import DetailPermissionRoute from "../../auth/DetailPermissionRoute";
@@ -28,15 +26,15 @@ class Full extends Component {
             <main className="main">
               <Alerts location={this.props.location} />
               <Breadcrumbs location={this.props.location} />
-              <div className="container-fluid">
+              <div className="container-fluid main-content">
                 <Switch>
-                  <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-                  <DetailPermissionRoute path="/stores/:id/update_logs" resource="stores" permission="view_store_update_logs" name="StoreDetailUpdateLogs" component={StoreDetailUpdateLogs}/>
-                  <DetailPermissionRoute path="/stores/:id/update" resource="stores" permission="update_store_prices" name="StoreDetailUpdate" component={StoreDetailUpdate}/>
-                  <DetailPermissionRoute path="/stores/:id" resource="stores" permission="view_store" name="StoresDetail" component={StoreDetail}/>
+                  <Route exact path="/dashboard" name="Dashboard" component={Dashboard}/>
                   {routes.map(route =>
-                      <PermissionRoute key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={StoreList}/>
+                      <PermissionRoute exact key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={route.component}/>
                   )}
+                  <DetailPermissionRoute exact path="/stores/:id/update_logs" resource="stores" permission="view_store_update_logs" name="StoreDetailUpdateLogs" component={StoreDetailUpdateLogs}/>
+                  <DetailPermissionRoute exact path="/stores/:id/update" resource="stores" permission="update_store_prices" name="StoreDetailUpdate" component={StoreDetailUpdate}/>
+                  <DetailPermissionRoute exact path="/stores/:id" resource="stores" permission="backend_view_store" name="StoresDetail" component={StoreDetail}/>
 
                   <Redirect from="/" to="/dashboard"/>
                 </Switch>
@@ -44,7 +42,6 @@ class Full extends Component {
             </main>
             <Aside />
           </div>
-          <Footer />
         </div>
     );
   }
