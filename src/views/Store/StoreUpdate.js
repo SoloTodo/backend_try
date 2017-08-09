@@ -1,15 +1,348 @@
 import React, { Component } from 'react';
-import ReactPaginate from 'react-paginate';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {
+  addApiResourceStateToPropsUtils,
+  filterApiResourcesByType
+} from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
+import {NavLink} from "react-router-dom";
+import {
+  DropdownItem, DropdownMenu,
+  DropdownToggle, UncontrolledDropdown
+} from "reactstrap";
+import './StoreUpdate.css';
 
 class StoreUpdate extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      formData: {
+        product_types: [],
+        async: true,
+        stores: []
+      },
+      availableStores: undefined,
+      updatedStores: undefined,
+    }
+  }
+
+  componentDidMount() {
+    if (typeof this.state.availableStores === 'undefined') {
+      this.setState({
+        availableStores: null
+      });
+
+      this.props
+          .fetchApiResource('stores', this.props.dispatch)
+          .then(json => {
+            const filteredStores = json.filter(store => store.permissions.includes('update_store_prices') && store.is_active);
+            const newStores = filteredStores.map(store => ({store, latestUpdateLog: undefined}));
+            this.setState({availableStores: newStores});
+
+            return this.props.fetchAuth(`${settings.resourceEndpoints.store_update_logs}latest/`);
+          })
+          .then((latestUpdateLogs) => {
+            const newAvailableStores = this.state.availableStores.map(storeEntry => ({
+              store: storeEntry.store,
+              latestUpdateLog: latestUpdateLogs[storeEntry.store.url]
+            }));
+
+            this.setState({
+              availableStores: newAvailableStores
+            });
+
+            this.selectPendingStores();
+          })
+    }
+  }
+
+  handleInputChange = (event) => {
+    const target = event.target;
+
+    let value = undefined;
+
+    if (target.type === 'checkbox') {
+      value = target.checked
+    } else if (event.target.multiple) {
+      value = [...event.target.options].filter(o => o.selected).map(o => o.value);
+    } else {
+      value = target.value
+    }
+
+    this.setState({
+      formData: {...this.state.formData, [target.name]: value}
+    });
+  };
+
+  handleStoreSelection = (event) => {
+    const target = event.target;
+    let newStores = undefined;
+
+    if (target.checked) {
+      newStores = [...this.state.formData.stores, target.name];
+    } else {
+      newStores = this.state.formData.stores.filter(store => store !== target.name)
+    }
+
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        stores: newStores
+      }
+    })
+  };
+
+  selectAllStores = () => {
+    const newStores = this.state.availableStores.map(storeEntry => storeEntry.store.url);
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        stores: newStores
+      }
+    })
+  };
+
+  selectNoneStores = () => {
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        stores: []
+      }
+    })
+  };
+
+  selectPendingStores = () => {
+    const newStores = this.state.availableStores
+        .filter(storeEntry => !storeEntry.latestUpdateLog || storeEntry.latestUpdateLog.status !== 3)
+        .map(storeEntry => storeEntry.store.url);
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        stores: newStores
+      }
+    })
+  };
+
+  updateStores = () => {
+    let product_types = this.state.formData.product_types;
+    if (product_types.length === 0) {
+      product_types = null
+    }
+
+    this.setState({
+      updatedStores: 0
+    });
+
+    for (let store of this.state.formData.stores) {
+      const payload = {
+        product_types,
+        async: this.state.formData.async
+      };
+
+      this.props.fetchAuth(`${store}update_prices/`, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      }).then(() => {
+        this.setState({
+          updatedStores: this.state.updatedStores + 1
+        })
+      })
+    }
+  };
+
   render() {
-    return <h1>Actualizacion tiendas</h1>
+    if (!this.state.availableStores) {
+      return <Loading />
+    }
+
+    const formData = this.state.formData;
+    const productTypeChoices = this.props.productTypeChoices;
+
+    const availableStores = this.state.availableStores.map(storeEntry => {
+      let newLatestUpdateLog = storeEntry.latestUpdateLog;
+
+      if (newLatestUpdateLog) {
+        newLatestUpdateLog = this.props.ApiResource(newLatestUpdateLog)
+      }
+
+      return {
+        store: this.props.ApiResource(storeEntry.store),
+        latestUpdateLog: newLatestUpdateLog
+      }});
+
+    const statusDict = {
+      1: <FormattedMessage id="pending" defaultMessage={`Pending`} />,
+      2: <FormattedMessage id="in_process" defaultMessage={`In process`} />,
+      3: <FormattedMessage id="success" defaultMessage={`Success`} />,
+      4: <FormattedMessage id="error" defaultMessage={`Error`} />
+    };
+
+    const productTypeChoicesDict = this.props.productTypeChoices.reduce(
+        (acum, pt) => ({
+          ...acum,
+          [pt.url]: pt.name
+        }), {}
+    );
+
+    return (
+        <div className="animated fadeIn">
+          {this.state.updatedStores && (
+              <div className="row">
+                <div className="col-12">
+                  <div className={`alert alert-success mt-3`} role="alert">
+                    Requested updates: {this.state.updatedStores}
+                  </div>
+                </div>
+              </div>
+          )}
+          <div className="row">
+            <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+              <div className="card">
+                <div className="card-header">
+                  <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="parameters" defaultMessage={`Parameters`} />
+                </div>
+                <div className="card-block">
+                  <div className="form-group">
+                    <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></label>
+                    <select className="form-control" id="product_types" name="product_types" multiple="multiple" size="8"
+                            value={formData.product_types} onChange={this.handleInputChange}>
+                      {productTypeChoices.map(productType => (
+                          <option key={productType.url} value={productType.url}>{productType.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="checkbox">
+                    <label htmlFor="async">
+                      <input
+                          name="async"
+                          id="async"
+                          type="checkbox"
+                          checked={formData.async}
+                          onChange={this.handleInputChange} /> <FormattedMessage id="use_async_question" defaultMessage={`Use async?`} />
+                    </label>
+                  </div>
+                  <div className="form-actions">
+                    {/*<button type="submit" className="btn btn-primary" disabled={!store.isActive}><FormattedMessage id="update" defaultMessage={`Update`} /></button>*/}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-12">
+              <div className="card">
+                <div className="card-header">
+                  <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="stores" defaultMessage={`Stores`} />
+                </div>
+                <div className="card-block">
+                  <div className="row pb-3">
+                    <div className="col-12 d-flex justify-content-start">
+                      <UncontrolledDropdown className="no-flex">
+                        <DropdownToggle caret color="primary">
+                          <FormattedMessage id="select_dropdown" defaultMessage={`Select`} />
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem onClick={this.selectPendingStores}><FormattedMessage id="pending" defaultMessage={`Pending`} /></DropdownItem>
+                          <DropdownItem onClick={this.selectAllStores}><FormattedMessage id="all" defaultMessage={`All`} /></DropdownItem>
+                          <DropdownItem onClick={this.selectNoneStores}><FormattedMessage id="none" defaultMessage={`None`} /></DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+
+                      <div className="spacer flex-1">&nbsp;</div>
+
+                      <div className="no-flex">
+                        <button type="button" className="btn btn-success" disabled={!formData.stores.length} onClick={this.updateStores}>
+                          <FormattedMessage id="update" defaultMessage={`Update`} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <table className="table table-striped">
+                    <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
+                      <th><FormattedMessage id="status" defaultMessage={`Status`} /></th>
+                      <th className="hidden-xs-down"><FormattedMessage id="result" defaultMessage={`Result`} /></th>
+                      <th className="hidden-sm-down"><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
+                      <th className="hidden-sm-down"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></th>
+                      <th className="hidden-sm-down"><FormattedMessage id="start" defaultMessage={`Start`} /></th>
+                      <th className="hidden-md-down"><FormattedMessage id="log" defaultMessage={`Log`} /></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {availableStores.map(storeEntry => (
+                        storeEntry.latestUpdateLog ?
+                            <tr key={storeEntry.store.url}>
+                              <td className="text-center">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.stores.includes(storeEntry.store.url)}
+                                    onChange={this.handleStoreSelection}
+                                    name={storeEntry.store.url}
+                                />
+                              </td>
+                              <td>
+                                <NavLink to={'/stores/' + storeEntry.store.id}>{storeEntry.store.name}</NavLink>
+                              </td>
+                              <td>{statusDict[storeEntry.latestUpdateLog.status]}</td>
+                              <td className="hidden-xs-down">
+                                {storeEntry.latestUpdateLog.availableProductsCount
+                                    ? `${storeEntry.latestUpdateLog.availableProductsCount} / ${storeEntry.latestUpdateLog.unavailableProductsCount} / ${storeEntry.latestUpdateLog.discoveryUrlsWithoutProductsCount}`
+                                    : 'N/A'
+                                }
+                              </td>
+                              <td className="hidden-sm-down">{storeEntry.latestUpdateLog.lastUpdated.toLocaleString()}</td>
+                              <td className="hidden-sm-down">
+                                <ul>
+                                  {storeEntry.latestUpdateLog.productTypes.map(pt => (
+                                      <li key={pt}>{productTypeChoicesDict[pt]}</li>
+                                  ))}
+                                </ul>
+                              </td>
+
+                              <td className="hidden-sm-down">{storeEntry.latestUpdateLog.creationDate.toLocaleString()}</td>
+
+                              <td className="hidden-md-down">
+                                {storeEntry.latestUpdateLog.registryFile ?
+                                    <a href={storeEntry.latestUpdateLog.registryFile} target="_blank"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
+                                    <FormattedMessage id="unavailable" defaultMessage={`Unavailable`} />
+                                }
+                              </td>
+                            </tr>
+                            : <tr key={storeEntry.store.url}>
+                              <td className="text-center">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.stores.includes(storeEntry.store.url)}
+                                    onChange={this.handleStoreSelection}
+                                    name={storeEntry.store.url}
+                                />
+                              </td>
+                              <td><NavLink to={'/stores/' + storeEntry.store.id}>{storeEntry.store.name}</NavLink></td>
+                              <td className="text-center" colSpan="8">
+                                {typeof storeEntry.latestUpdateLog === 'undefined' ?
+                                    <FormattedMessage id="loading_dots" defaultMessage={`Loading...`} /> :
+                                    <FormattedMessage id="no_registry_found" defaultMessage={`No registry found`} />
+                                }
+                              </td>
+                            </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    )
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(StoreUpdate);
+function mapStateToProps(state) {
+  return {
+    productTypeChoices: filterApiResourcesByType(state.apiResources, 'product_types')
+  }
+}
+
+export default connect(addApiResourceStateToPropsUtils(mapStateToProps))(StoreUpdate);

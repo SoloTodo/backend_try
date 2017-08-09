@@ -80,6 +80,11 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
     "id": "hello_world",
     "defaultMessage": "Hello World",
     "filepath": "./src/views/Dashboard/Dashboard.js"
@@ -333,5 +338,110 @@
     "id": "scraper",
     "defaultMessage": "Scraper",
     "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "pending",
+    "defaultMessage": "Pending",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "in_process",
+    "defaultMessage": "In process",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "success",
+    "defaultMessage": "Success",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "error",
+    "defaultMessage": "Error",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "parameters",
+    "defaultMessage": "Parameters",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "product_types",
+    "defaultMessage": "Product types",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "use_async_question",
+    "defaultMessage": "Use async?",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "select_dropdown",
+    "defaultMessage": "Select",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "all",
+    "defaultMessage": "Todas",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "none",
+    "defaultMessage": "None",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "status",
+    "defaultMessage": "Status",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "result",
+    "defaultMessage": "Result",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "last_update",
+    "defaultMessage": "Last update",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "start",
+    "defaultMessage": "Start",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "log",
+    "defaultMessage": "Log",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "download",
+    "defaultMessage": "Download",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "unavailable",
+    "defaultMessage": "Unavailable",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "loading_dots",
+    "defaultMessage": "Loading...",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "no_registry_found",
+    "defaultMessage": "No registry found",
+    "filepath": "./src/views/Store/StoreUpdate.js"
   }
 ]

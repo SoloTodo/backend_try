@@ -18,7 +18,7 @@ class StoreList extends Component {
   }
 
   componentDidMount() {
-    if (typeof this.stores === 'undefined') {
+    if (typeof this.state.stores === 'undefined') {
       this.setState({
         stores: null
       });
@@ -61,7 +61,7 @@ class StoreList extends Component {
                 {apiResourceStores.map(store => (
                     <tr key={store.url}>
                       <td>
-                        {store.permissions.includes('view_store') ? <NavLink to={'/stores/' + store.id}>{store.name}</NavLink> : store.name}
+                        <NavLink to={'/stores/' + store.id}>{store.name}</NavLink>
                       </td>
                       <td>{store.country.name}</td>
                       <td className="hidden-xs-down">{store.type.name}</td>

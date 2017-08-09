@@ -1,7 +1,7 @@
 import React from 'react';
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
-import './StoreDetail.css';
+import './StoreDetailMenu.css';
 
 export default function StoreDetailMenu(props) {
   const store = props.store;
