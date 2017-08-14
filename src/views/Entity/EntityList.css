@@ -1,0 +1,7 @@
+.entity-form-controls > div {
+    margin-bottom: 1rem;
+}
+
+.entity-form-controls label {
+    display: block;
+}

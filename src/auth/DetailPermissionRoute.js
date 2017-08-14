@@ -6,6 +6,7 @@ import {
   addApiResourceStateToPropsUtils
 } from "../ApiResource";
 import {settings} from "../settings";
+import Loading from "../components/Loading";
 
 class DetailPermissionRoute extends Component {
   constructor() {
@@ -52,7 +53,7 @@ class DetailPermissionRoute extends Component {
 
     if (resourceObject === null || typeof resourceObject === 'undefined') {
       // Object is currently fetching or resource endpoints have not been loaded
-      return <div/>
+      return <Loading />
     } else if (!resourceObject.url) {
       // Object does not exist
       return <Redirect to={{

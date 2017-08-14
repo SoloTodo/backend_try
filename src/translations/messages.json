@@ -70,6 +70,11 @@
     "filepath": "./src/routes.js"
   },
   {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/routes.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -85,9 +90,84 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
     "id": "hello_world",
     "defaultMessage": "Hello World",
     "filepath": "./src/views/Dashboard/Dashboard.js"
+  },
+  {
+    "id": "any",
+    "defaultMessage": "Any",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "yes",
+    "defaultMessage": "Yes",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "no",
+    "defaultMessage": "No",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "product_types",
+    "defaultMessage": "Product types",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_visible_question",
+    "defaultMessage": "Visible?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_available_question",
+    "defaultMessage": "Available?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_associated_question",
+    "defaultMessage": "Associated?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "keywords",
+    "defaultMessage": "Keywords",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Entity/EntityList.js"
   },
   {
     "id": "login",
@@ -386,12 +466,17 @@
   },
   {
     "id": "all",
-    "defaultMessage": "Todas",
+    "defaultMessage": "All",
     "filepath": "./src/views/Store/StoreUpdate.js"
   },
   {
     "id": "none",
     "defaultMessage": "None",
+    "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
     "filepath": "./src/views/Store/StoreUpdate.js"
   },
   {

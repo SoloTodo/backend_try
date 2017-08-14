@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import ReactPaginate from 'react-paginate';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {
+  addApiResourceDispatchToPropsUtils,
+  addApiResourceStateToPropsUtils,
+  filterApiResourcesByType
+} from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
@@ -16,6 +20,19 @@ class StoreDetailUpdateLogs extends Component {
       resultCount: undefined,
       page: 1
     }
+  }
+
+  componentDidMount() {
+    if (!this.props.productTypes) {
+      this.props.fetchApiResource('product_types', this.props.dispatch)
+    }
+
+    this.updatePage(1)
+        .then(json => {
+          this.setState({
+            resultCount: json.count
+          })
+        });
   }
 
   updatePage(page) {
@@ -36,22 +53,13 @@ class StoreDetailUpdateLogs extends Component {
         })
   }
 
-  componentDidMount() {
-    this.updatePage(1)
-        .then(json => {
-          this.setState({
-            resultCount: json.count
-          })
-        })
-  }
-
   onPageChange = (selectedObject) => {
     const page = selectedObject.selected + 1;
     this.updatePage(page)
   };
 
   render() {
-    if (typeof this.state.resultCount === 'undefined') {
+    if (typeof this.state.resultCount === 'undefined' || !this.props.productTypes) {
       return <Loading />
     }
 
@@ -59,7 +67,7 @@ class StoreDetailUpdateLogs extends Component {
 
     const pageLogs = rawPageLogs.map(rawPageLog => {
       const pageLog = this.props.ApiResource(rawPageLog);
-      pageLog.productTypes = pageLog.productTypes.map(pt => this.props.ApiResource(this.props.apiResources[pt]));
+      pageLog.apiResourceProductTypes = pageLog.productTypes.map(pt => this.props.ApiResource(this.props.apiResources[pt]));
       return pageLog
     });
 
@@ -138,7 +146,7 @@ class StoreDetailUpdateLogs extends Component {
                               <td>{log.lastUpdated.toLocaleString()}</td>
                               <td className="hidden-xs-down">
                                 <ul>
-                                  {log.productTypes.map(pt => (
+                                  {log.apiResourceProductTypes.map(pt => (
                                       <li key={pt.url}>{pt.name}</li>
                                   ))}
                                 </ul>
@@ -157,8 +165,8 @@ class StoreDetailUpdateLogs extends Component {
 
                               <td className="hidden-md-down">
                                 {log.registryFile ?
-                                  <a href={log.registryFile} target="_blank"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
-                                  <FormattedMessage id="unavailable" defaultMessage={`Unavailable`} />
+                                    <a href={log.registryFile} target="_blank"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
+                                    <FormattedMessage id="unavailable" defaultMessage={`Unavailable`} />
                                 }
                               </td>
                             </tr>
@@ -176,4 +184,16 @@ class StoreDetailUpdateLogs extends Component {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(StoreDetailUpdateLogs);
+function mapStateToProps(state) {
+  let productTypes = undefined;
+  if (state.loadedResources.includes('product_types')) {
+    productTypes = filterApiResourcesByType(state.apiResources, 'product_types')
+  }
+  return {
+    productTypes: productTypes
+  }
+}
+
+export default connect(
+    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceDispatchToPropsUtils())(StoreDetailUpdateLogs);

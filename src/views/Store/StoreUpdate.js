@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
+  addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils,
   filterApiResourcesByType
 } from "../../ApiResource";
@@ -29,6 +30,10 @@ class StoreUpdate extends Component {
   }
 
   componentDidMount() {
+    if (!this.props.productTypes) {
+      this.props.fetchApiResource('product_types', this.props.dispatch)
+    }
+
     if (typeof this.state.availableStores === 'undefined') {
       this.setState({
         availableStores: null
@@ -153,12 +158,11 @@ class StoreUpdate extends Component {
   };
 
   render() {
-    if (!this.state.availableStores) {
+    if (!this.state.availableStores || !this.props.productTypes) {
       return <Loading />
     }
 
     const formData = this.state.formData;
-    const productTypeChoices = this.props.productTypeChoices;
 
     const availableStores = this.state.availableStores.map(storeEntry => {
       let newLatestUpdateLog = storeEntry.latestUpdateLog;
@@ -179,7 +183,7 @@ class StoreUpdate extends Component {
       4: <FormattedMessage id="error" defaultMessage={`Error`} />
     };
 
-    const productTypeChoicesDict = this.props.productTypeChoices.reduce(
+    const productTypeDict = this.props.productTypes.reduce(
         (acum, pt) => ({
           ...acum,
           [pt.url]: pt.name
@@ -208,7 +212,7 @@ class StoreUpdate extends Component {
                     <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></label>
                     <select className="form-control" id="product_types" name="product_types" multiple="multiple" size="8"
                             value={formData.product_types} onChange={this.handleInputChange}>
-                      {productTypeChoices.map(productType => (
+                      {this.props.productTypes.map(productType => (
                           <option key={productType.url} value={productType.url}>{productType.name}</option>
                       ))}
                     </select>
@@ -222,9 +226,6 @@ class StoreUpdate extends Component {
                           checked={formData.async}
                           onChange={this.handleInputChange} /> <FormattedMessage id="use_async_question" defaultMessage={`Use async?`} />
                     </label>
-                  </div>
-                  <div className="form-actions">
-                    {/*<button type="submit" className="btn btn-primary" disabled={!store.isActive}><FormattedMessage id="update" defaultMessage={`Update`} /></button>*/}
                   </div>
                 </div>
               </div>
@@ -252,7 +253,7 @@ class StoreUpdate extends Component {
 
                       <div className="no-flex">
                         <button type="button" className="btn btn-success" disabled={!formData.stores.length} onClick={this.updateStores}>
-                          <FormattedMessage id="update" defaultMessage={`Update`} />
+                          <FormattedMessage id="update" defaultMessage={`Update`} /> ({formData.stores.length})
                         </button>
                       </div>
                     </div>
@@ -296,7 +297,7 @@ class StoreUpdate extends Component {
                               <td className="hidden-sm-down">
                                 <ul>
                                   {storeEntry.latestUpdateLog.productTypes.map(pt => (
-                                      <li key={pt}>{productTypeChoicesDict[pt]}</li>
+                                      <li key={pt}>{productTypeDict[pt]}</li>
                                   ))}
                                 </ul>
                               </td>
@@ -340,9 +341,15 @@ class StoreUpdate extends Component {
 }
 
 function mapStateToProps(state) {
+  let productTypes = undefined;
+  if (state.loadedResources.includes('product_types')) {
+    productTypes = filterApiResourcesByType(state.apiResources, 'product_types')
+  }
   return {
-    productTypeChoices: filterApiResourcesByType(state.apiResources, 'product_types')
+    productTypes: productTypes
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils(mapStateToProps))(StoreUpdate);
+export default connect(
+    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceDispatchToPropsUtils())(StoreUpdate);

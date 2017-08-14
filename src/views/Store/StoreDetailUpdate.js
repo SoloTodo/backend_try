@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {
+  addApiResourceDispatchToPropsUtils,
+  addApiResourceStateToPropsUtils, filterApiResourcesByType
+} from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
 import {Redirect} from "react-router-dom";
@@ -13,13 +16,17 @@ class StoreDetailUpdate extends Component {
     super(props);
     this.state = {
       formData: undefined,
-      product_type_choices: undefined,
+      productTypeChoices: undefined,
       updateTaskId: undefined,
       updateLogId: undefined
     }
   }
 
   componentDidMount() {
+    if (!this.props.productTypes) {
+      this.props.fetchApiResource('product_types', this.props.dispatch)
+    }
+
     const store = this.props.ApiResource(this.props.resourceObject);
 
     this.props.fetchAuth(`${store.url}scraper/`).then(formData => {
@@ -28,9 +35,9 @@ class StoreDetailUpdate extends Component {
           ...formData,
           product_types: []
         },
-        product_type_choices: formData.product_types,
+        productTypeChoices: formData.product_types,
       })
-    })
+    });
   }
 
   handleInputChange = (event) => {
@@ -88,7 +95,7 @@ class StoreDetailUpdate extends Component {
 
     const formData = this.state.formData;
 
-    if (!formData) {
+    if (!formData || !this.props.productTypes) {
       return <Loading />
     }
 
@@ -107,7 +114,7 @@ class StoreDetailUpdate extends Component {
       )
     }
 
-    const productTypeChoices = this.state.product_type_choices.map(
+    const productTypeChoices = this.state.productTypeChoices.map(
         x => this.props.ApiResource(this.props.apiResources[x]));
 
     return (
@@ -181,4 +188,16 @@ class StoreDetailUpdate extends Component {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(StoreDetailUpdate);
+function mapStateToProps(state) {
+  let productTypes = undefined;
+  if (state.loadedResources.includes('product_types')) {
+    productTypes = filterApiResourcesByType(state.apiResources, 'product_types')
+  }
+  return {
+    productTypes: productTypes
+  }
+}
+
+export default connect(
+    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceDispatchToPropsUtils())(StoreDetailUpdate);

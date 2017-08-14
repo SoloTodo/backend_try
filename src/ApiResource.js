@@ -32,8 +32,8 @@ export function fetchApiResourceObject(resource, id, dispatch, authToken) {
   return fetchAuth(authToken, resourceObjectUrl).then(json => {
     if (json.url) {
       dispatch({
-        type: 'addApiResources',
-        apiResources: [json],
+        type: 'addApiResource',
+        apiResource: json,
         resourceType: resource
       });
     }

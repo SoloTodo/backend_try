@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-
 import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import 'fixed-data-table/dist/fixed-data-table.min.css';
-
 import PrivateRoute from './auth/PrivateRoute';
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
@@ -18,6 +14,9 @@ import {
 } from './ApiResource';
 import ApiResource from "./ApiResource";
 import Page404 from "./views/Pages/Page404/Page404";
+
+import 'fixed-data-table/dist/fixed-data-table.min.css';
+import 'react-select/dist/react-select.css';
 
 export function initialUserLoad(authToken, languages, countries, currencies, dispatch) {
   return fetchAuth(authToken, settings.ownUserUrl).then(
@@ -104,11 +103,12 @@ class App extends Component {
     this.store = createStore(combineReducers({
       authToken: this.authTokenReducer,
       apiResources: this.apiResourcesReducer,
+      loadedResources: this.loadedResourcesReducer
     }));
   }
 
   componentDidMount() {
-    const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'product_types'];
+    const requiredResources = ['languages', 'currencies', 'countries', 'store_types'];
 
     for (let resource of requiredResources) {
       fetchApiResource(resource, this.store.dispatch)
@@ -137,16 +137,24 @@ class App extends Component {
   apiResourcesReducer = (state={}, action) => {
     if (action.type === 'addApiResources') {
       let newApiResources = {};
-
-      action.apiResources.map((newApiResource) => {
-        newApiResources[newApiResource['url']] = {
+      for (let newApiResource of action.apiResources) {
+        newApiResources[newApiResource.url] = {
           ...newApiResource,
-          ...{resourceType: action.resourceType}
+          resourceType: action.resourceType
         };
-        return null;
-      });
+      }
 
       return {...state, ...newApiResources}
+    }
+
+    if (action.type === 'addApiResource') {
+      return {
+        ...state,
+        [action.apiResource.url]: {
+          ...action.apiResource,
+          resourceType: action.resourceType
+        }
+      }
     }
 
     if (action.type === 'updateApiResource') {
@@ -183,6 +191,14 @@ class App extends Component {
         }
       }
       return action.authToken
+    }
+
+    return state
+  };
+
+  loadedResourcesReducer = (state=[], action) => {
+    if (action.type === 'addApiResources') {
+      return [...state, action.resourceType]
     }
 
     return state
