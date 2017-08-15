@@ -1,4 +1,5 @@
 import { settings } from './settings';
+import Big from 'big.js';
 
 // REF: https://stackoverflow.com/questions/6660977/convert-hyphens-to-camel-case-camelcase
 export function camelize(str) {
@@ -31,4 +32,24 @@ export function navigatorLanguage() {
 
 export function defaultProperty(property) {
   return `${settings.resourceEndpoints[property]}${settings.defaults[property]}/`;
+}
+
+export function formatCurrency(value, valueCurrency, conversionCurrency) {
+  let formattingCurrency = valueCurrency;
+
+  if (conversionCurrency && valueCurrency.url !== conversionCurrency.url) {
+    value *= conversionCurrency.exchangeRate / valueCurrency.exchangeRate;
+    formattingCurrency = conversionCurrency
+  }
+
+  const decimalPlaces = formattingCurrency.decimalPlaces;
+  const decimalSeparator = formattingCurrency.decimalSeparator;
+  const thousandsSeparator = formattingCurrency.thousandsSeparator;
+  const prefix = formattingCurrency.prefix;
+
+  const decimalValue = new Big(value);
+
+  return prefix + " " + decimalValue.toFixed(decimalPlaces).replace(/./g, function(c, i, a) {
+    return i > 0 && c !== decimalSeparator && (a.length - i) % 3 === 0 ? thousandsSeparator + c : c;
+  });
 }

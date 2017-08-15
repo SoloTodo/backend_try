@@ -9,6 +9,7 @@ import {
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
+import messages from "../../messages";
 
 const pageSize = 5;
 
@@ -80,9 +81,6 @@ class StoreDetailUpdateLogs extends Component {
 
     const pageCount = Math.ceil(this.state.resultCount / pageSize);
 
-    const previousLabel = <FormattedMessage id="previous" defaultMessage={`Previous`} />
-    const nextLabel = <FormattedMessage id="next" defaultMessage={`Next`} />
-
     return (
         <div className="animated fadeIn">
           <div className="row">
@@ -112,8 +110,8 @@ class StoreDetailUpdateLogs extends Component {
                             disabledClassName="disabled"
                             hrefBuilder={page => `?page=${page}`}
                             onPageChange={this.onPageChange}
-                            previousLabel={previousLabel}
-                            nextLabel={nextLabel}
+                            previousLabel={messages.previous}
+                            nextLabel={messages.next}
                         />
                       </div>
                     </div>

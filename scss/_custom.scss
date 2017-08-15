@@ -116,3 +116,19 @@ main > .container-fluid {
 #root {
   flex: 1;
 }
+
+.left-aligned {
+  text-align: left;
+}
+
+.center-aligned {
+    text-align: center;
+}
+
+.right-aligned {
+    text-align: right;
+}
+
+.nowrap {
+  white-space: nowrap;
+}

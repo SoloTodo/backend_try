@@ -15,7 +15,6 @@ import {
 import ApiResource from "./ApiResource";
 import Page404 from "./views/Pages/Page404/Page404";
 
-import 'fixed-data-table/dist/fixed-data-table.min.css';
 import 'react-select/dist/react-select.css';
 
 export function initialUserLoad(authToken, languages, countries, currencies, dispatch) {

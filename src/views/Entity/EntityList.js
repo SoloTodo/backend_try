@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
+import ReactPaginate from 'react-paginate';
 import Select from 'react-select';
-import {Table, Column, Cell} from 'fixed-data-table';
-
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils,
@@ -12,6 +11,27 @@ import {
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import './EntityList.css'
+import {NavLink} from "react-router-dom";
+import {formatCurrency} from "../../utils";
+import {UncontrolledTooltip} from "reactstrap";
+import messages from "../../messages";
+
+const pageSize = 50;
+
+const nullBooleanOptions = [
+  {
+    value: 'any',
+    label: <FormattedMessage id="any" defaultMessage={`Any`} />
+  },
+  {
+    value: 'true',
+    label: messages.yes
+  },
+  {
+    value: 'false',
+    label: messages.no
+  }
+];
 
 class EntityList extends Component {
   constructor(props) {
@@ -19,17 +39,21 @@ class EntityList extends Component {
     this.state = {
       formData: {
         stores: [],
-        product_types: [],
-        is_visible: 1,
-        is_available: 1,
-        is_associated: 1,
-        keywords: ''
+        productTypes: [],
+        isAvailable: nullBooleanOptions[0],
+        isActive: nullBooleanOptions[0],
+        isVisible: nullBooleanOptions[0],
+        isAssociated: nullBooleanOptions[0],
+        keywords: '',
+        page: 1
       },
       entities: undefined
     }
   }
 
   componentDidMount() {
+    document.body.classList.add('sidebar-hidden');
+
     if (!this.props.productTypes) {
       this.props.fetchApiResource('product_types', this.props.dispatch)
     }
@@ -45,6 +69,7 @@ class EntityList extends Component {
     this.setState({
       formData: {
         ...this.state.formData,
+        page: 1,
         [name]: value
       }
     })
@@ -54,7 +79,17 @@ class EntityList extends Component {
     this.handleValueChange('keywords', event.target.value);
   };
 
+  onPageChange = (selectedObject) => {
+    const page = selectedObject.selected + 1;
+    this.handleValueChange('page', page);
+    this.updateSearchResults();
+  };
+
   updateSearchResults = () => {
+    this.setState({
+      entities: undefined
+    });
+
     let url = settings.resourceEndpoints.entities + '?';
 
     const formData = this.state.formData;
@@ -63,11 +98,11 @@ class EntityList extends Component {
       url += `stores=${store.value}&`
     }
 
-    for (let productType of formData.product_types) {
+    for (let productType of formData.productTypes) {
       url += `product_types=${productType.value}&`
     }
 
-    url += `is_visible=${formData.is_visible.value}&is_available=${formData.is_available.value}&is_associated=${formData.is_associated.value}&search=${formData.keywords}`;
+    url += `is_visible=${formData.isVisible.value}&is_available=${formData.isAvailable.value}&is_associated=${formData.isAssociated.value}&is_active=${formData.isActive.value}&search=${formData.keywords}&page=${formData.page}&page_size=${pageSize}`;
 
     this.props.fetchAuth(url).then(json => {
       this.setState({
@@ -92,25 +127,84 @@ class EntityList extends Component {
       label: productType.name
     }));
 
-    const nullBooleanOptions = [
-      {
-        value: 1,
-        label: <FormattedMessage id="any" defaultMessage={`Any`} />
-      },
-      {
-        value: 2,
-        label: <FormattedMessage id="yes" defaultMessage={`Yes`} />
-      },
-      {
-        value: 3,
-        label: <FormattedMessage id="no" defaultMessage={`No`} />
-      }
-    ];
+    const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 
-    const entities = this.state.entities;
+    const labels = {
+      normalPrice: <FormattedMessage id="normal_price_short" defaultMessage={`Normal`} />,
+      offerPrice: <FormattedMessage id="offer_price_short" defaultMessage={`Offer`} />,
+      original: <FormattedMessage id="original_label_short" defaultMessage={`orig.`} />,
+      converted: <FormattedMessage id="converted_label_short" defaultMessage={`conv.`} />,
+    };
+
+    let pageRangeDisplayed = 3;
+    let marginPagesDisplayed= 2;
+    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    if (viewportWidth < 600) {
+      pageRangeDisplayed = 1;
+      marginPagesDisplayed = 1;
+    }
+
+    let entityResults = undefined;
+    let convertCurrencies = undefined;
+    let displayCellPlanColumn = undefined;
+    let pageCount = undefined;
+    if (this.state.entities) {
+      entityResults = this.state.entities.results.map(entity => this.props.ApiResource(entity));
+      convertCurrencies = entityResults.some(entity => entity.currencyUrl !== preferredCurrency.url);
+      displayCellPlanColumn = entityResults.some(entity => entity.cellPlanName !== null)
+      pageCount = Math.ceil(this.state.entities.count / pageSize);
+    }
 
     return (
         <div className="animated fadeIn">
+          <UncontrolledTooltip placement="top" target="is_available_label">
+            <dl>
+              <dt className="left-aligned">{messages.yes}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_available_label_yes" defaultMessage='The entity is available for purchase' />
+              </dd>
+              <dt className="left-aligned">{messages.no}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_available_label_no" defaultMessage='The entity is not available for purchase, whether because it is unlisted ("inactive") or "out of stock"' />
+              </dd>
+            </dl>
+          </UncontrolledTooltip>
+          <UncontrolledTooltip placement="top" target="is_active_label">
+            <dl>
+              <dt className="left-aligned">{messages.yes}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_active_label_yes" defaultMessage='The entity is listed in the store website. It may be available for purchase or not' />
+              </dd>
+              <dt className="left-aligned">{messages.no}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_active_label_no" defaultMessage='The entity is no longer listed in the store website. It is unavailable for purchase' />
+              </dd>
+            </dl>
+          </UncontrolledTooltip>
+          <UncontrolledTooltip placement="top" target="is_visible_label">
+            <dl>
+              <dt className="left-aligned">{messages.yes}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_visible_label_yes" defaultMessage='Defaut state of an entity' />
+              </dd>
+              <dt className="left-aligned">{messages.no}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_visible_label_no" defaultMessage='The entity has been flagged by our staff as non-relevant' />
+              </dd>
+            </dl>
+          </UncontrolledTooltip>
+          <UncontrolledTooltip placement="top" target="is_associated_label">
+            <dl>
+              <dt className="left-aligned">{messages.yes}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_associated_label_yes" defaultMessage='The entity has been matched with a product' />
+              </dd>
+              <dt className="left-aligned">{messages.no}</dt>
+              <dd className="left-aligned">
+                <FormattedMessage id="entity_is_associated_label_no" defaultMessage="The entity hasn't been matched" />
+              </dd>
+            </dl>
+          </UncontrolledTooltip>
           <div className="row">
             <div className="col-12">
               <div className="card">
@@ -137,47 +231,58 @@ class EntityList extends Component {
                           name="product_types"
                           id="product_types"
                           options={productTypeOptions}
-                          value={this.state.formData.product_types}
-                          onChange={val => this.handleValueChange('product_types', val)}
+                          value={this.state.formData.productTypes}
+                          onChange={val => this.handleValueChange('productTypes', val)}
                           multi={true}
                           placeholder={<FormattedMessage id="all_masculine" defaultMessage={`All`} />}
                       />
                     </div>
                     <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-                      <label htmlFor="is_visible"><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></label>
-                      <Select
-                          name="is_visible"
-                          id="is_visible"
-                          options={nullBooleanOptions}
-                          value={this.state.formData.is_visible}
-                          onChange={val => this.handleValueChange('is_visible', val)}
-                          clearable={false}
-                      />
-                    </div>
-                    <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-                      <label htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>
+                      <label id="is_available_label" className="dashed" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>
                       <Select
                           name="is_available"
                           id="is_available"
                           options={nullBooleanOptions}
-                          value={this.state.formData.is_available}
-                          onChange={val => this.handleValueChange('is_available', val)}
+                          value={this.state.formData.isAvailable}
+                          onChange={val => this.handleValueChange('isAvailable', val)}
                           clearable={false}
                       />
                     </div>
                     <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-                      <label htmlFor="is_associated"><FormattedMessage id="is_associated_question" defaultMessage={`Associated?`} /></label>
+                      <label id="is_active_label" className="dashed" htmlFor="is_active"><FormattedMessage id="is_active_question" defaultMessage={`Active?`} /></label>
+                      <Select
+                          name="is_active"
+                          id="is_active"
+                          options={nullBooleanOptions}
+                          value={this.state.formData.isActive}
+                          onChange={val => this.handleValueChange('isActive', val)}
+                          clearable={false}
+                      />
+                    </div>
+                    <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                      <label id="is_visible_label" className="dashed" htmlFor="is_visible"><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></label>
+                      <Select
+                          name="is_visible"
+                          id="is_visible"
+                          options={nullBooleanOptions}
+                          value={this.state.formData.isVisible}
+                          onChange={val => this.handleValueChange('isVisible', val)}
+                          clearable={false}
+                      />
+                    </div>
+                    <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                      <label id="is_associated_label" className="dashed" htmlFor="is_associated"><FormattedMessage id="is_associated_question" defaultMessage={`Associated?`} /></label>
                       <Select
                           name="is_associated"
                           id="is_associated"
                           options={nullBooleanOptions}
-                          value={this.state.formData.is_associated}
-                          onChange={val => this.handleValueChange('is_associated', val)}
+                          value={this.state.formData.isAssociated}
+                          onChange={val => this.handleValueChange('isAssociated', val)}
                           clearable={false}
                       />
                     </div>
                     <div className="col-12 col-sm-9 col-md-10 col-lg-4 col-xl-4">
-                      <label htmlFor="keywords"><FormattedMessage id="keywords" defaultMessage={`Keywords`} /></label>
+                      <label htmlFor="keywords"><FormattedMessage id="keywords" defaultMessage={'Keywords'} /></label>
                       <input
                           type="text"
                           name="keywords"
@@ -206,43 +311,143 @@ class EntityList extends Component {
                   <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="entities" defaultMessage={`Entities`} />
                 </div>
                 <div className="card-block">
-                  {entities ?
-                      <Table
-                          rowHeight={50}
-                          headerHeight={50}
-                          rowsCount={entities.results.length}
-                          width={1000}
-                          height={500}
-                          {...this.props}>
-                        <Column
-                            header={<Cell>URL</Cell>}
-                            cell={({rowIndex, ...props}) => (
-                                <Cell {...props}>
-                                  {entities.results[rowIndex].url}
-                                </Cell>
-                            )}
-                            fixed={true}
-                            width={600}
-                        />
-                        <Column
-                            header={<Cell>Sentence! (flexGrow greediness=2)</Cell>}
-                            cell={<Cell data={entities.results} />}
-                            flexGrow={2}
-                            width={200}
-                        />
-                        <Column
-                            header={<Cell>Company (flexGrow greediness=1)</Cell>}
-                            cell={<Cell data={entities.results} />}
-                            flexGrow={1}
-                            width={200}
-                        />
-                        <Column
-                            width={100}
-                            header={<Cell>Last Name</Cell>}
-                            cell={<Cell data={entities.results} />}
-                        />
-                      </Table> :
-                      <Loading />
+                  {entityResults ?
+                      <div>
+                        <div className="row">
+                          <div className="col-12">
+                            <div className="float-right">
+                              <ReactPaginate
+                                  pageCount={pageCount}
+                                  pageRangeDisplayed={pageRangeDisplayed}
+                                  marginPagesDisplayed={marginPagesDisplayed}
+                                  containerClassName="pagination"
+                                  pageClassName="page-item"
+                                  pageLinkClassName="page-link"
+                                  activeClassName="active"
+                                  previousClassName="page-item"
+                                  nextClassName="page-item"
+                                  previousLinkClassName="page-link"
+                                  nextLinkClassName="page-link"
+                                  disabledClassName="disabled"
+                                  hrefBuilder={page => `?page=${page}`}
+                                  onPageChange={this.onPageChange}
+                                  forcePage={this.state.formData.page - 1}
+                                  previousLabel={messages.previous}
+                                  nextLabel={messages.next}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <table className="table table-striped">
+                          <thead>
+                          <tr>
+                            <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
+                            {displayCellPlanColumn && <th><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} /></th>}
+                            <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
+                            <th className="hidden-xs-down"><FormattedMessage id="sku" defaultMessage={`SKU`} /></th>
+                            <th className="hidden-xs-down"><FormattedMessage id="product_type" defaultMessage={`Product type`} /></th>
+                            <th className="hidden-xs-down"><FormattedMessage id="product" defaultMessage={`Product`} /></th>
+                            <th className="hidden-sm-down center-aligned"><FormattedMessage id="is_available_short_question" defaultMessage={`Avail?`} /></th>
+                            <th className="hidden-sm-down center-aligned"><FormattedMessage id="is_active_short_question" defaultMessage={`Act?`} /></th>
+                            <th className="hidden-sm-down center-aligned"><FormattedMessage id="is_visible_short_question" defaultMessage={`Vis?`} /></th>
+
+                            <th className="hidden-md-down right-aligned">
+                              {labels.normalPrice}
+                              {convertCurrencies &&
+                              <span>&nbsp;({labels.original})</span>
+                              }
+                            </th>
+                            <th className="hidden-md-down right-aligned">
+                              {labels.offerPrice}
+                              {convertCurrencies &&
+                              <span>&nbsp;({labels.original})</span>
+                              }
+                            </th>
+                            {convertCurrencies &&
+                            <th className="hidden-md-down right-aligned">
+                              {labels.normalPrice}
+                              {convertCurrencies &&
+                              <span>&nbsp;({labels.converted})</span>
+                              }
+                            </th>}
+                            {convertCurrencies &&
+                            <th className="hidden-md-down right-aligned">
+                              {labels.offerPrice}
+                              {convertCurrencies &&
+                              <span>&nbsp;({labels.converted})</span>
+                              }
+                            </th>
+                            }
+                          </tr>
+                          </thead>
+                          <tbody>
+                          {entityResults.map(entity =>
+                              <tr key={entity.url}>
+                                <td className="entity-name-cell">
+                                  <NavLink to={'/entities/' + entity.id}>{entity.name}</NavLink>
+                                </td>
+                                {displayCellPlanColumn && <td>{entity.cellPlanName || <em>N/A</em>}</td>}
+                                <td><a href={entity.externalUrl} target="_blank">{entity.store.name}</a></td>
+                                <td>{entity.sku || <em>N/A</em>}</td>
+                                <td>{entity.productType.name}</td>
+                                <td>
+                                  {entity.product ?
+                                      <span>
+                                      <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink>
+                                        {entity.cellPlan &&
+                                        <span>
+                                            &nbsp;/&nbsp;<NavLink to={'/products/' + entity.cellPlan.id}>{entity.cellPlan.name}</NavLink>
+                                          </span>
+                                        }
+                                    </span>
+                                      : <em>N/A</em>
+                                  }
+                                </td>
+                                <td className="center-aligned"><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
+                                    'glyphicons glyphicons-check' :
+                                    'glyphicons glyphicons-unchecked' }/>
+                                </td>
+                                <td className="center-aligned"><i className={entity.activeRegistry ?
+                                    'glyphicons glyphicons-check' :
+                                    'glyphicons glyphicons-unchecked'}/>
+                                </td>
+                                <td className="center-aligned"><i className={entity.isVisible ?
+                                    'glyphicons glyphicons-check' :
+                                    'glyphicons glyphicons-unchecked'}/>
+                                </td>
+                                <td className="right-aligned nowrap">
+                                  {entity.activeRegistry ?
+                                      <span>{formatCurrency(entity.activeRegistry.normal_price, entity.currency)}</span> :
+                                      <em>N/A</em>
+                                  }
+                                </td>
+                                <td className="right-aligned nowrap">
+                                  {entity.activeRegistry ?
+                                      <span>{formatCurrency(entity.activeRegistry.offer_price, entity.currency)}</span> :
+                                      <em>N/A</em>
+                                  }
+                                </td>
+                                {convertCurrencies &&
+                                <td className="right-aligned nowrap">
+                                  {entity.activeRegistry ?
+                                      <span>{formatCurrency(entity.activeRegistry.normal_price, entity.currency, preferredCurrency)}</span> :
+                                      <em>N/A</em>
+                                  }
+                                </td>}
+                                {convertCurrencies &&
+                                <td className="right-aligned nowrap">
+                                  {entity.activeRegistry ?
+                                      <span>{formatCurrency(entity.activeRegistry.offer_price, entity.currency, preferredCurrency)}</span> :
+                                      <em>N/A</em>
+                                  }
+                                </td>
+                                }
+                              </tr>
+                          )}
+                          </tbody>
+                        </table>
+                      </div>
+                      : <Loading />
                   }
                 </div>
               </div>
@@ -269,6 +474,7 @@ function mapStateToProps(state) {
   return {
     productTypes,
     stores,
+    preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency]
   }
 }
 

@@ -50,6 +50,16 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "yes",
+    "defaultMessage": "Yes",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "no",
+    "defaultMessage": "No",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "home",
     "defaultMessage": "Home",
     "filepath": "./src/routes.js"
@@ -105,13 +115,63 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "yes",
-    "defaultMessage": "Yes",
+    "id": "normal_price_short",
+    "defaultMessage": "Normal",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "no",
-    "defaultMessage": "No",
+    "id": "offer_price_short",
+    "defaultMessage": "Offer",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "original_label_short",
+    "defaultMessage": "orig.",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "converted_label_short",
+    "defaultMessage": "conv.",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_available_label_yes",
+    "defaultMessage": "The entity is available for purchase",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_available_label_no",
+    "defaultMessage": "The entity is not available for purchase, whether because it is unlisted (\"inactive\") or \"out of stock\"",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_active_label_yes",
+    "defaultMessage": "The entity is listed in the store website. It may be available for purchase or not",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_active_label_no",
+    "defaultMessage": "The entity is no longer listed in the store website. It is unavailable for purchase",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_visible_label_yes",
+    "defaultMessage": "Defaut state of an entity",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_visible_label_no",
+    "defaultMessage": "The entity has been flagged by our staff as non-relevant",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_associated_label_yes",
+    "defaultMessage": "The entity has been matched with a product",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "entity_is_associated_label_no",
+    "defaultMessage": "The entity hasn't been matched",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -140,13 +200,18 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "is_visible_question",
-    "defaultMessage": "Visible?",
+    "id": "is_available_question",
+    "defaultMessage": "Available?",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "is_available_question",
-    "defaultMessage": "Available?",
+    "id": "is_active_question",
+    "defaultMessage": "Active?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_visible_question",
+    "defaultMessage": "Visible?",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -167,6 +232,51 @@
   {
     "id": "entities",
     "defaultMessage": "Entities",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "cell_plan_name",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "sku",
+    "defaultMessage": "SKU",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "product_type",
+    "defaultMessage": "Product type",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_available_short_question",
+    "defaultMessage": "Avail?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_active_short_question",
+    "defaultMessage": "Act?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_visible_short_question",
+    "defaultMessage": "Vis?",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
