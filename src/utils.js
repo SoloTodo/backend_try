@@ -34,7 +34,7 @@ export function defaultProperty(property) {
   return `${settings.resourceEndpoints[property]}${settings.defaults[property]}/`;
 }
 
-export function formatCurrency(value, valueCurrency, conversionCurrency) {
+export function formatCurrency(value, valueCurrency, conversionCurrency, thousandsSeparator, decimalSeparator) {
   let formattingCurrency = valueCurrency;
 
   if (conversionCurrency && valueCurrency.url !== conversionCurrency.url) {
@@ -43,13 +43,22 @@ export function formatCurrency(value, valueCurrency, conversionCurrency) {
   }
 
   const decimalPlaces = formattingCurrency.decimalPlaces;
-  const decimalSeparator = formattingCurrency.decimalSeparator;
-  const thousandsSeparator = formattingCurrency.thousandsSeparator;
   const prefix = formattingCurrency.prefix;
-
   const decimalValue = new Big(value);
 
-  return prefix + " " + decimalValue.toFixed(decimalPlaces).replace(/./g, function(c, i, a) {
-    return i > 0 && c !== decimalSeparator && (a.length - i) % 3 === 0 ? thousandsSeparator + c : c;
-  });
+  return prefix + ' ' + _formatCurrency(decimalValue, decimalPlaces, 3, thousandsSeparator, decimalSeparator);
+}
+
+/**
+ * @param value: Value to format
+ * @param n: length of decimal
+ * @param x: length of whole part
+ * @param s: sections delimiter
+ * @param c: decimal delimiter
+ */
+function _formatCurrency(value, n, x, s, c) {
+    const re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = value.toFixed(Math.max(0, ~~n));
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
 }

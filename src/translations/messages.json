@@ -20,8 +20,8 @@
     "filepath": "./src/components/Sidebar/Sidebar.js"
   },
   {
-    "id": "header_country_title",
-    "defaultMessage": "Country",
+    "id": "header_number_format_title",
+    "defaultMessage": "Number format",
     "filepath": "./src/components/Sidebar/Sidebar.js"
   },
   {
@@ -57,6 +57,16 @@
   {
     "id": "no",
     "defaultMessage": "No",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "previous",
+    "defaultMessage": "Previous",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "next",
+    "defaultMessage": "Next",
     "filepath": "./src/messages.js"
   },
   {
@@ -110,8 +120,8 @@
     "filepath": "./src/views/Dashboard/Dashboard.js"
   },
   {
-    "id": "any",
-    "defaultMessage": "Any",
+    "id": "all",
+    "defaultMessage": "All",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -127,11 +137,6 @@
   {
     "id": "original_label_short",
     "defaultMessage": "orig.",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "converted_label_short",
-    "defaultMessage": "conv.",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -277,6 +282,11 @@
   {
     "id": "is_visible_short_question",
     "defaultMessage": "Vis?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "currency_label",
+    "defaultMessage": "Currency",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -432,16 +442,6 @@
   {
     "id": "error",
     "defaultMessage": "Error",
-    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
-  },
-  {
-    "id": "previous",
-    "defaultMessage": "Previous",
-    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
-  },
-  {
-    "id": "next",
-    "defaultMessage": "Next",
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
   {

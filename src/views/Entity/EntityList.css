@@ -7,14 +7,17 @@
 }
 
 .dashed {
-    /*border-bottom: 1px dashed #999;*/
     text-decoration: underline;
     text-decoration-style: dotted;
 }
 
 .entity-name-cell {
     max-width: 150px;
-    /*text-overflow: ellipsis;*/
-    /*overflow: hidden;*/
-    /*white-space: nowrap;*/
+}
+
+
+@media (max-width: 1450px) {
+    .show-xxl-up {
+        display: none !important;
+    }
 }

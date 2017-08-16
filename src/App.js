@@ -17,7 +17,7 @@ import Page404 from "./views/Pages/Page404/Page404";
 
 import 'react-select/dist/react-select.css';
 
-export function initialUserLoad(authToken, languages, countries, currencies, dispatch) {
+export function initialUserLoad(authToken, languages, countries, currencies, numberFormats, dispatch) {
   return fetchAuth(authToken, settings.ownUserUrl).then(
       rawUser => {
         // Check if the token was valid
@@ -35,7 +35,7 @@ export function initialUserLoad(authToken, languages, countries, currencies, dis
 
         let apiResources = {};
 
-        for (let resource of [languages, countries, currencies]) {
+        for (let resource of [languages, countries, currencies, numberFormats]) {
           for (let obj of resource) {
             apiResources[obj.url] = obj;
           }
@@ -58,14 +58,9 @@ export function initialUserLoad(authToken, languages, countries, currencies, dis
           user.preferredLanguage = preferredLanguage;
         }
 
-        // Set country and currency
+        // Set currency and number format
 
-        if (user.preferredCountry) {
-          if (!user.preferredCurrency) {
-            user.preferredCurrency = user.preferredCountry.currency;
-            user.save(authToken, dispatch);
-          }
-        } else {
+        if (!user.preferredCurrency || !user.preferredNumberFormat) {
           let countryByIpUrl = `${settings.endpoint}countries/by_ip/`;
           if (settings.customIp) {
             countryByIpUrl += `?ip=${settings.customIp}`;
@@ -74,15 +69,15 @@ export function initialUserLoad(authToken, languages, countries, currencies, dis
           fetch(countryByIpUrl)
               .then(res => res.json())
               .then(json => {
-                let preferredCountry = json['url'] ?
-                    json : countries.filter(x => x.url === defaultProperty('countries'))[0];
-
-                if (!user.preferredCountry || user.preferredCountry.url !== preferredCountry.url) {
-                  user.preferredCountry = preferredCountry;
-                }
+                let userCountry = json['url'] ?
+                    json : apiResources[defaultProperty('countries')];
 
                 if (!user.preferredCurrency) {
-                  user.preferredCurrency = user.preferredCountry.currency
+                  user.preferredCurrency = new ApiResource(apiResources[userCountry.currency])
+                }
+
+                if (!user.preferredNumberFormat) {
+                  user.preferredNumberFormat = new ApiResource(apiResources[userCountry.number_format]);
                 }
 
                 user.save(authToken, dispatch);
@@ -107,7 +102,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const requiredResources = ['languages', 'currencies', 'countries', 'store_types'];
+    const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'number_formats'];
 
     for (let resource of requiredResources) {
       fetchApiResource(resource, this.store.dispatch)
@@ -126,6 +121,7 @@ class App extends Component {
                   groupedApiResources.languages,
                   groupedApiResources.countries,
                   groupedApiResources.currencies,
+                  groupedApiResources.number_formats,
                   this.store.dispatch)
             }
           })

@@ -10,6 +10,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^3.1.0",
     "history": "^4.6.3",
+    "query-string": "^5.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-intl": "^2.3.0",

@@ -18,20 +18,12 @@ class Sidebar extends Component {
     e.target.parentElement.classList.toggle('open');
   };
 
-  activeRoute(routeName) {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
-  }
-
-  // secondLevelActive(routeName) {
-  //   return this.props.location.pathname.indexOf(routeName) > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
-  // }
-
   render() {
     const selectedLanguage = this.props.language;
     const selectedCurrency = this.props.currency;
-    const selectedCountry = this.props.country;
+    const selectedNumberFormat = this.props.numberFormat;
 
-    const user = this.props.ApiResource(this.props.user)
+    const user = this.props.ApiResource(this.props.user);
 
     let layout = [];
 
@@ -82,11 +74,11 @@ class Sidebar extends Component {
               </li>
 
               <li className="nav-item nav-dropdown">
-                <a className="nav-link nav-dropdown-toggle" href="/" onClick={this.handleClick}><i className="fa fa-globe">&nbsp;</i><FormattedMessage id="header_country_title" defaultMessage={`Country`} />: <strong>{ selectedCountry && selectedCountry.name }</strong></a>
+                <a className="nav-link nav-dropdown-toggle" href="/" onClick={this.handleClick}><i className="fa fa-globe">&nbsp;</i><FormattedMessage id="header_number_format_title" defaultMessage={`Number format`} />: <strong>{ selectedNumberFormat && selectedNumberFormat.name }</strong></a>
                 <ul className="nav-dropdown-items">
-                  {this.props.countries.map(country => (
-                      <li className="nav-item" key={country.url}>
-                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredCountry', country, this.props.authToken)}><i className={country === selectedCountry && 'fa fa-check'}/> { country.name }</a>
+                  {this.props.numberFormats.map(numberFormat => (
+                      <li className="nav-item" key={numberFormat.url}>
+                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredNumberFormat', numberFormat, this.props.authToken)}><i className={numberFormat === selectedNumberFormat && 'fa fa-check'}/> { numberFormat.name }</a>
                       </li>
                   ))}
                 </ul>
@@ -117,8 +109,8 @@ let mapStateToProps = (state) => {
     language: apiResourceForeignKey(user, 'preferred_language', state),
     currencies: filterApiResourcesByType(apiResources, 'currencies'),
     currency: apiResourceForeignKey(user, 'preferred_currency', state),
-    countries: filterApiResourcesByType(apiResources, 'countries'),
-    country: apiResourceForeignKey(user, 'preferred_country', state),
+    numberFormats: filterApiResourcesByType(apiResources, 'number_formats'),
+    numberFormat: apiResourceForeignKey(user, 'preferred_number_format', state),
     authToken: state.authToken,
     user: user,
     apiResources: apiResources

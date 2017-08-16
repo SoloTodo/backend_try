@@ -3,6 +3,8 @@ import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import ReactPaginate from 'react-paginate';
 import Select from 'react-select';
+import createHistory from 'history/createBrowserHistory'
+import queryString from 'query-string';
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils,
@@ -21,7 +23,7 @@ const pageSize = 50;
 const nullBooleanOptions = [
   {
     value: 'any',
-    label: <FormattedMessage id="any" defaultMessage={`Any`} />
+    label: <FormattedMessage id="all" defaultMessage={`All`} />
   },
   {
     value: 'true',
@@ -36,6 +38,8 @@ const nullBooleanOptions = [
 class EntityList extends Component {
   constructor(props) {
     super(props);
+    this.history = createHistory();
+
     this.state = {
       formData: {
         stores: [],
@@ -47,9 +51,38 @@ class EntityList extends Component {
         keywords: '',
         page: 1
       },
-      entities: undefined
+      entities: undefined,
+      size: 'xs'
     }
+
+    this.history.listen(this.onHistoryChange);
+    this.onHistoryChange(window.location);
   }
+
+  onHistoryChange = (location, action) => {
+    console.log(location)
+    console.log(action)
+    const parameters = queryString.parse(location.search);
+
+    let stores = parameters['stores'];
+    if (!Array.isArray(stores)) {
+      stores = [stores]
+    }
+    const storeOptions = this.createOptions(this.props.stores).reduce((acum, option) => {
+      return {...acum, [option.value]: option}
+    }, {});
+    stores = stores.map(store => storeOptions[store]).filter(option => Boolean(option));
+    console.log(stores);
+
+    if (this.props.productTypes && this.props.stores) {
+      this.setState({
+        formData: {
+          ...this.state.formData,
+          stores
+        }
+      }, () => this.updateSearchResults(false))
+    }
+  };
 
   componentDidMount() {
     document.body.classList.add('sidebar-hidden');
@@ -62,17 +95,35 @@ class EntityList extends Component {
       this.props.fetchApiResource('stores', this.props.dispatch)
     }
 
-    this.updateSearchResults();
+    this.updateSearchResults(false);
+
+    this.onResize();
+    window.onresize = this.onResize
   }
 
-  handleValueChange = (name, value) => {
+  onResize = () => {
+    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    let size = undefined;
+    if (viewportWidth < 576) {
+      size = 'xs'
+    } else {
+      size = 'normal'
+    }
+
+    if (size !== this.state.size) {
+      this.setState({
+        size
+      })
+    }
+  };
+
+  handleValueChange = (name, value, callback=() => {}) => {
     this.setState({
       formData: {
         ...this.state.formData,
-        page: 1,
         [name]: value
       }
-    })
+    }, callback)
   };
 
   handleKeywordsChange = event => {
@@ -81,28 +132,44 @@ class EntityList extends Component {
 
   onPageChange = (selectedObject) => {
     const page = selectedObject.selected + 1;
-    this.handleValueChange('page', page);
-    this.updateSearchResults();
+    this.handleValueChange('page', page, this.updateSearchResults);
   };
 
-  updateSearchResults = () => {
+  handleFormSubmit = (event) => {
+    event.preventDefault();
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        page: 1
+      }
+    }, this.updateSearchResults);
+  };
+
+  updateSearchResults = (pushLocation=true) => {
     this.setState({
       entities: undefined
     });
 
-    let url = settings.resourceEndpoints.entities + '?';
+    let search = '?';
 
     const formData = this.state.formData;
 
     for (let store of formData.stores) {
-      url += `stores=${store.value}&`
+      search += `stores=${store.value}&`
     }
 
     for (let productType of formData.productTypes) {
-      url += `product_types=${productType.value}&`
+      search += `product_types=${productType.value}&`
     }
 
-    url += `is_visible=${formData.isVisible.value}&is_available=${formData.isAvailable.value}&is_associated=${formData.isAssociated.value}&is_active=${formData.isActive.value}&search=${formData.keywords}&page=${formData.page}&page_size=${pageSize}`;
+    search += `is_visible=${formData.isVisible.value}&is_available=${formData.isAvailable.value}&is_associated=${formData.isAssociated.value}&is_active=${formData.isActive.value}&search=${formData.keywords}&page=${formData.page}&page_size=${pageSize}`;
+
+    if (pushLocation) {
+      const newRoute = this.history.location.pathname + search;
+      this.history.push(newRoute)
+    }
+
+    let url = settings.resourceEndpoints.entities + search;
 
     this.props.fetchAuth(url).then(json => {
       this.setState({
@@ -111,35 +178,33 @@ class EntityList extends Component {
     })
   };
 
+  createOptions = (options) => {
+    return options.map(option => ({
+      value: option.id,
+      label: option.name
+    }))
+  };
+
 
   render() {
     if (!this.props.stores || !this.props.productTypes) {
       return <Loading />
     }
 
-    const storeOptions = this.props.stores.map(store => ({
-      value: store.id,
-      label: store.name
-    }));
-
-    const productTypeOptions = this.props.productTypes.map(productType => ({
-      value: productType.id,
-      label: productType.name
-    }));
+    const storeOptions = this.createOptions(this.props.stores);
+    const productTypeOptions = this.createOptions(this.props.productTypes);
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 
     const labels = {
       normalPrice: <FormattedMessage id="normal_price_short" defaultMessage={`Normal`} />,
       offerPrice: <FormattedMessage id="offer_price_short" defaultMessage={`Offer`} />,
-      original: <FormattedMessage id="original_label_short" defaultMessage={`orig.`} />,
-      converted: <FormattedMessage id="converted_label_short" defaultMessage={`conv.`} />,
+      original: <FormattedMessage id="original_label_short" defaultMessage={`orig.`} />
     };
 
     let pageRangeDisplayed = 3;
     let marginPagesDisplayed= 2;
-    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    if (viewportWidth < 600) {
+    if (this.state.size === 'xs') {
       pageRangeDisplayed = 1;
       marginPagesDisplayed = 1;
     }
@@ -154,6 +219,12 @@ class EntityList extends Component {
       displayCellPlanColumn = entityResults.some(entity => entity.cellPlanName !== null)
       pageCount = Math.ceil(this.state.entities.count / pageSize);
     }
+
+    const localFormatCurrency = (value, valueCurrency, conversionCurrency) => {
+      return formatCurrency(value, valueCurrency, conversionCurrency,
+          this.props.preferredNumberFormat.thousands_separator,
+          this.props.preferredNumberFormat.decimal_separator)
+    };
 
     return (
         <div className="animated fadeIn">
@@ -237,7 +308,7 @@ class EntityList extends Component {
                           placeholder={<FormattedMessage id="all_masculine" defaultMessage={`All`} />}
                       />
                     </div>
-                    <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                    <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
                       <label id="is_available_label" className="dashed" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>
                       <Select
                           name="is_available"
@@ -248,7 +319,7 @@ class EntityList extends Component {
                           clearable={false}
                       />
                     </div>
-                    <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                    <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
                       <label id="is_active_label" className="dashed" htmlFor="is_active"><FormattedMessage id="is_active_question" defaultMessage={`Active?`} /></label>
                       <Select
                           name="is_active"
@@ -259,7 +330,7 @@ class EntityList extends Component {
                           clearable={false}
                       />
                     </div>
-                    <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                    <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
                       <label id="is_visible_label" className="dashed" htmlFor="is_visible"><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></label>
                       <Select
                           name="is_visible"
@@ -270,7 +341,7 @@ class EntityList extends Component {
                           clearable={false}
                       />
                     </div>
-                    <div className="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                    <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
                       <label id="is_associated_label" className="dashed" htmlFor="is_associated"><FormattedMessage id="is_associated_question" defaultMessage={`Associated?`} /></label>
                       <Select
                           name="is_associated"
@@ -281,21 +352,23 @@ class EntityList extends Component {
                           clearable={false}
                       />
                     </div>
-                    <div className="col-12 col-sm-9 col-md-10 col-lg-4 col-xl-4">
+                    <div className="col-12 col-sm-9 col-md-10 col-lg-2 col-xl-2">
                       <label htmlFor="keywords"><FormattedMessage id="keywords" defaultMessage={'Keywords'} /></label>
-                      <input
-                          type="text"
-                          name="keywords"
-                          id="keywords"
-                          className="form-control"
-                          placeholder="Keywords"
-                          value={this.state.formData.keywords}
-                          onChange={this.handleKeywordsChange}
-                      />
+                      <form onSubmit={this.handleFormSubmit}>
+                        <input
+                            type="text"
+                            name="keywords"
+                            id="keywords"
+                            className="form-control"
+                            placeholder="Keywords"
+                            value={this.state.formData.keywords}
+                            onChange={this.handleKeywordsChange}
+                        />
+                      </form>
                     </div>
                     <div className="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-2">
                       <label htmlFor="submit" className="hidden-xs-down">&nbsp;</label>
-                      <button name="submit" id="submit" type="submit" className="btn btn-primary" onClick={this.updateSearchResults}>
+                      <button name="submit" id="submit" type="submit" className="btn btn-primary" onClick={this.handleFormSubmit}>
                         <FormattedMessage id="search" defaultMessage={`Search`} />
                       </button>
                     </div>
@@ -342,39 +415,40 @@ class EntityList extends Component {
                           <thead>
                           <tr>
                             <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
-                            {displayCellPlanColumn && <th><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} /></th>}
+                            {displayCellPlanColumn && <th className="hidden-xs-down"><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} /></th>}
                             <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
                             <th className="hidden-xs-down"><FormattedMessage id="sku" defaultMessage={`SKU`} /></th>
                             <th className="hidden-xs-down"><FormattedMessage id="product_type" defaultMessage={`Product type`} /></th>
-                            <th className="hidden-xs-down"><FormattedMessage id="product" defaultMessage={`Product`} /></th>
-                            <th className="hidden-sm-down center-aligned"><FormattedMessage id="is_available_short_question" defaultMessage={`Avail?`} /></th>
-                            <th className="hidden-sm-down center-aligned"><FormattedMessage id="is_active_short_question" defaultMessage={`Act?`} /></th>
-                            <th className="hidden-sm-down center-aligned"><FormattedMessage id="is_visible_short_question" defaultMessage={`Vis?`} /></th>
+                            <th className="hidden-sm-down"><FormattedMessage id="product" defaultMessage={`Product`} /></th>
+                            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_available_short_question" defaultMessage={`Avail?`} /></th>
+                            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_active_short_question" defaultMessage={`Act?`} /></th>
+                            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_visible_short_question" defaultMessage={`Vis?`} /></th>
 
-                            <th className="hidden-md-down right-aligned">
+                            <th className="hidden-lg-down right-aligned">
                               {labels.normalPrice}
                               {convertCurrencies &&
                               <span>&nbsp;({labels.original})</span>
                               }
                             </th>
-                            <th className="hidden-md-down right-aligned">
+                            <th className="hidden-lg-down right-aligned">
                               {labels.offerPrice}
                               {convertCurrencies &&
                               <span>&nbsp;({labels.original})</span>
                               }
                             </th>
+                            <th className="show-xxl-up center-aligned"><FormattedMessage id="currency_label" defaultMessage={`Currency`} /></th>
                             {convertCurrencies &&
-                            <th className="hidden-md-down right-aligned">
+                            <th className="show-xxl-up right-aligned">
                               {labels.normalPrice}
                               {convertCurrencies &&
-                              <span>&nbsp;({labels.converted})</span>
+                              <span>&nbsp;({preferredCurrency.isoCode})</span>
                               }
                             </th>}
                             {convertCurrencies &&
-                            <th className="hidden-md-down right-aligned">
+                            <th className="show-xxl-up right-aligned">
                               {labels.offerPrice}
                               {convertCurrencies &&
-                              <span>&nbsp;({labels.converted})</span>
+                              <span>&nbsp;({preferredCurrency.isoCode})</span>
                               }
                             </th>
                             }
@@ -386,11 +460,11 @@ class EntityList extends Component {
                                 <td className="entity-name-cell">
                                   <NavLink to={'/entities/' + entity.id}>{entity.name}</NavLink>
                                 </td>
-                                {displayCellPlanColumn && <td>{entity.cellPlanName || <em>N/A</em>}</td>}
+                                {displayCellPlanColumn && <td className="hidden-xs-down">{entity.cellPlanName || <em>N/A</em>}</td>}
                                 <td><a href={entity.externalUrl} target="_blank">{entity.store.name}</a></td>
-                                <td>{entity.sku || <em>N/A</em>}</td>
-                                <td>{entity.productType.name}</td>
-                                <td>
+                                <td className="hidden-xs-down">{entity.sku || <em>N/A</em>}</td>
+                                <td className="hidden-xs-down">{entity.productType.name}</td>
+                                <td className="hidden-sm-down">
                                   {entity.product ?
                                       <span>
                                       <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink>
@@ -403,41 +477,44 @@ class EntityList extends Component {
                                       : <em>N/A</em>
                                   }
                                 </td>
-                                <td className="center-aligned"><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
+                                <td className="hidden-md-down center-aligned"><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
                                     'glyphicons glyphicons-check' :
                                     'glyphicons glyphicons-unchecked' }/>
                                 </td>
-                                <td className="center-aligned"><i className={entity.activeRegistry ?
+                                <td className="hidden-md-down center-aligned"><i className={entity.activeRegistry ?
                                     'glyphicons glyphicons-check' :
                                     'glyphicons glyphicons-unchecked'}/>
                                 </td>
-                                <td className="center-aligned"><i className={entity.isVisible ?
+                                <td className="hidden-md-down center-aligned"><i className={entity.isVisible ?
                                     'glyphicons glyphicons-check' :
                                     'glyphicons glyphicons-unchecked'}/>
                                 </td>
-                                <td className="right-aligned nowrap">
+                                <td className="hidden-lg-down right-aligned nowrap">
                                   {entity.activeRegistry ?
-                                      <span>{formatCurrency(entity.activeRegistry.normal_price, entity.currency)}</span> :
+                                      <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency)}</span> :
                                       <em>N/A</em>
                                   }
                                 </td>
-                                <td className="right-aligned nowrap">
+                                <td className="hidden-lg-down right-aligned nowrap">
                                   {entity.activeRegistry ?
-                                      <span>{formatCurrency(entity.activeRegistry.offer_price, entity.currency)}</span> :
+                                      <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency)}</span> :
                                       <em>N/A</em>
                                   }
+                                </td>
+                                <td className="show-xxl-up center-aligned">
+                                  {entity.currency.isoCode}
                                 </td>
                                 {convertCurrencies &&
-                                <td className="right-aligned nowrap">
+                                <td className="show-xxl-up right-aligned nowrap">
                                   {entity.activeRegistry ?
-                                      <span>{formatCurrency(entity.activeRegistry.normal_price, entity.currency, preferredCurrency)}</span> :
+                                      <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency, preferredCurrency)}</span> :
                                       <em>N/A</em>
                                   }
                                 </td>}
                                 {convertCurrencies &&
-                                <td className="right-aligned nowrap">
+                                <td className="show-xxl-up right-aligned nowrap">
                                   {entity.activeRegistry ?
-                                      <span>{formatCurrency(entity.activeRegistry.offer_price, entity.currency, preferredCurrency)}</span> :
+                                      <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency, preferredCurrency)}</span> :
                                       <em>N/A</em>
                                   }
                                 </td>
@@ -474,7 +551,8 @@ function mapStateToProps(state) {
   return {
     productTypes,
     stores,
-    preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency]
+    preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
+    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format]
   }
 }
 

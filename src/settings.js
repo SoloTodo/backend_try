@@ -6,6 +6,7 @@ export const settings = {
     stores: endpoint + 'stores/',
     languages: endpoint + 'languages/',
     store_types: endpoint + 'store_types/',
+    number_formats: endpoint + 'number_formats/',
     currencies: endpoint + 'currencies/',
     countries: endpoint + 'countries/',
     product_types: endpoint + 'product_types/',
