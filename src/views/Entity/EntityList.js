@@ -3,17 +3,15 @@ import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import ReactPaginate from 'react-paginate';
 import Select from 'react-select';
-import createHistory from 'history/createBrowserHistory'
 import queryString from 'query-string';
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils,
-  filterApiResourcesByType
+  addApiResourceStateToPropsUtils
 } from "../../ApiResource";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import './EntityList.css'
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 import {formatCurrency} from "../../utils";
 import {UncontrolledTooltip} from "reactstrap";
 import messages from "../../messages";
@@ -38,83 +36,75 @@ const nullBooleanOptions = [
 class EntityList extends Component {
   constructor(props) {
     super(props);
-    this.history = createHistory();
 
     this.state = {
-      formData: {
-        stores: [],
-        productTypes: [],
-        isAvailable: nullBooleanOptions[0],
-        isActive: nullBooleanOptions[0],
-        isVisible: nullBooleanOptions[0],
-        isAssociated: nullBooleanOptions[0],
-        keywords: '',
-        page: 1
-      },
+      formData: this.parseUrlArgs(window.location),
       entities: undefined,
-      size: 'xs'
-    }
+      size: this.getViewportSize()
+    };
 
-    this.history.listen(this.onHistoryChange);
-    this.onHistoryChange(window.location);
+    this.props.history.listen(this.onHistoryChange);
   }
 
-  onHistoryChange = (location, action) => {
-    console.log(location)
-    console.log(action)
+  parseUrlArgs = (location) => {
     const parameters = queryString.parse(location.search);
 
-    let stores = parameters['stores'];
-    if (!Array.isArray(stores)) {
-      stores = [stores]
-    }
-    const storeOptions = this.createOptions(this.props.stores).reduce((acum, option) => {
-      return {...acum, [option.value]: option}
-    }, {});
-    stores = stores.map(store => storeOptions[store]).filter(option => Boolean(option));
-    console.log(stores);
+    const result = [];
 
-    if (this.props.productTypes && this.props.stores) {
-      this.setState({
-        formData: {
-          ...this.state.formData,
-          stores
-        }
-      }, () => this.updateSearchResults(false))
+    for (const resource of ['stores', 'product_types']) {
+      let resourceObjects = parameters[resource];
+      if (!Array.isArray(resourceObjects)) {
+        resourceObjects = [resourceObjects]
+      }
+      resourceObjects = this.props[resource]
+          .filter(resourceObject => resourceObjects.includes(resourceObject.id.toString()))
+          .map(this.createOption);
+      result[resource] = resourceObjects;
     }
+
+    for (const field of ['is_available', 'is_active', 'is_visible', 'is_associated']) {
+      let fieldValue = nullBooleanOptions.filter(option => option.value === parameters[field])[0];
+      if (!fieldValue) {
+        fieldValue = nullBooleanOptions[0]
+      }
+      result[field] = fieldValue;
+    }
+
+    result['search'] = parameters['search'] || '';
+    result['page'] = parameters['page'] || 1;
+
+    return result;
+  };
+
+  onHistoryChange = (location, action) => {
+    if (action !== 'POP') {
+      return
+    }
+
+    this.setState({
+      formData: this.parseUrlArgs(location)
+    }, this.updateSearchResults)
   };
 
   componentDidMount() {
     document.body.classList.add('sidebar-hidden');
-
-    if (!this.props.productTypes) {
-      this.props.fetchApiResource('product_types', this.props.dispatch)
-    }
-
-    if (!this.props.stores) {
-      this.props.fetchApiResource('stores', this.props.dispatch)
-    }
-
-    this.updateSearchResults(false);
-
-    this.onResize();
+    this.updateSearchResults();
     window.onresize = this.onResize
   }
 
   onResize = () => {
-    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    let size = undefined;
-    if (viewportWidth < 576) {
-      size = 'xs'
-    } else {
-      size = 'normal'
-    }
+    const size = this.getViewportSize();
 
     if (size !== this.state.size) {
       this.setState({
         size
       })
     }
+  };
+
+  getViewportSize = () => {
+    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    return viewportWidth < 576 ? 'xs' : 'normal';
   };
 
   handleValueChange = (name, value, callback=() => {}) => {
@@ -126,26 +116,45 @@ class EntityList extends Component {
     }, callback)
   };
 
-  handleKeywordsChange = event => {
-    this.handleValueChange('keywords', event.target.value);
-  };
-
   onPageChange = (selectedObject) => {
     const page = selectedObject.selected + 1;
-    this.handleValueChange('page', page, this.updateSearchResults);
+    this.handleValueChange('page', page, () => this.updateSearchResults(true));
   };
 
   handleFormSubmit = (event) => {
-    event.preventDefault();
+    event && event.preventDefault();
     this.setState({
       formData: {
         ...this.state.formData,
         page: 1
       }
-    }, this.updateSearchResults);
+    }, () => this.updateSearchResults(true));
   };
 
-  updateSearchResults = (pushLocation=true) => {
+  filterPending = (event) => {
+    event.preventDefault();
+
+    const optionsDict = nullBooleanOptions.reduce((acum, option) => {
+      return {
+        ...acum,
+        [option.value]: option
+      }
+    }, {});
+
+    console.log(optionsDict);
+
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        is_available: optionsDict[true],
+        is_visible: optionsDict[true],
+        is_associated: optionsDict[false],
+        page: 1
+      }
+    }, () => this.updateSearchResults(true));
+  };
+
+  updateSearchResults = (pushLocation=false) => {
     this.setState({
       entities: undefined
     });
@@ -154,24 +163,26 @@ class EntityList extends Component {
 
     const formData = this.state.formData;
 
-    for (let store of formData.stores) {
-      search += `stores=${store.value}&`
+    for (const resource of ['stores', 'product_types']) {
+      for (let resourceObject of formData[resource]) {
+        search += `${resource}=${resourceObject.value}&`
+      }
     }
 
-    for (let productType of formData.productTypes) {
-      search += `product_types=${productType.value}&`
+    for (const field of ['is_available', 'is_active', 'is_visible', 'is_associated']) {
+      search += `${field}=${formData[field].value}&`
     }
 
-    search += `is_visible=${formData.isVisible.value}&is_available=${formData.isAvailable.value}&is_associated=${formData.isAssociated.value}&is_active=${formData.isActive.value}&search=${formData.keywords}&page=${formData.page}&page_size=${pageSize}`;
+    search += `search=${formData.search}&page=${formData.page}`;
 
     if (pushLocation) {
-      const newRoute = this.history.location.pathname + search;
-      this.history.push(newRoute)
+      const newRoute = this.props.history.location.pathname + search;
+      this.props.history.push(newRoute)
     }
 
-    let url = settings.resourceEndpoints.entities + search;
+    const endpoint = settings.resourceEndpoints.entities + search + `&page_size=${pageSize}`;
 
-    this.props.fetchAuth(url).then(json => {
+    this.props.fetchAuth(endpoint).then(json => {
       this.setState({
         entities: json
       })
@@ -179,20 +190,20 @@ class EntityList extends Component {
   };
 
   createOptions = (options) => {
-    return options.map(option => ({
+    return options.map(this.createOption)
+  };
+
+  createOption = (option) => {
+    return {
       value: option.id,
       label: option.name
-    }))
+    }
   };
 
 
   render() {
-    if (!this.props.stores || !this.props.productTypes) {
-      return <Loading />
-    }
-
     const storeOptions = this.createOptions(this.props.stores);
-    const productTypeOptions = this.createOptions(this.props.productTypes);
+    const productTypeOptions = this.createOptions(this.props.product_types);
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 
@@ -202,29 +213,174 @@ class EntityList extends Component {
       original: <FormattedMessage id="original_label_short" defaultMessage={`orig.`} />
     };
 
-    let pageRangeDisplayed = 3;
-    let marginPagesDisplayed= 2;
-    if (this.state.size === 'xs') {
-      pageRangeDisplayed = 1;
-      marginPagesDisplayed = 1;
-    }
-
-    let entityResults = undefined;
-    let convertCurrencies = undefined;
-    let displayCellPlanColumn = undefined;
-    let pageCount = undefined;
-    if (this.state.entities) {
-      entityResults = this.state.entities.results.map(entity => this.props.ApiResource(entity));
-      convertCurrencies = entityResults.some(entity => entity.currencyUrl !== preferredCurrency.url);
-      displayCellPlanColumn = entityResults.some(entity => entity.cellPlanName !== null)
-      pageCount = Math.ceil(this.state.entities.count / pageSize);
-    }
-
     const localFormatCurrency = (value, valueCurrency, conversionCurrency) => {
       return formatCurrency(value, valueCurrency, conversionCurrency,
           this.props.preferredNumberFormat.thousands_separator,
           this.props.preferredNumberFormat.decimal_separator)
     };
+
+    let cardContent = undefined;
+
+    if (typeof this.state.entities === 'undefined') {
+      cardContent = <Loading />;
+    } else if (this.state.entities.detail) {
+      cardContent = <span><strong>Error:</strong> {this.state.entities.detail}</span>
+    } else {
+      let pageRangeDisplayed = 3;
+      let marginPagesDisplayed= 2;
+      if (this.state.size === 'xs') {
+        pageRangeDisplayed = 1;
+        marginPagesDisplayed = 1;
+      }
+      const entities = this.state.entities.results.map(entity => this.props.ApiResource(entity));
+      const convertCurrencies = entities.some(entity => entity.currencyUrl !== preferredCurrency.url);
+      const displayCellPlanColumn = entities.some(entity => entity.cellPlanName !== null);
+      const pageCount = Math.ceil(this.state.entities.count / pageSize);
+      cardContent = <div>
+        <div className="row">
+          <div className="col-12">
+            <div className="float-right">
+              <ReactPaginate
+                  pageCount={pageCount}
+                  pageRangeDisplayed={pageRangeDisplayed}
+                  marginPagesDisplayed={marginPagesDisplayed}
+                  containerClassName="pagination"
+                  pageClassName="page-item"
+                  pageLinkClassName="page-link"
+                  activeClassName="active"
+                  previousClassName="page-item"
+                  nextClassName="page-item"
+                  previousLinkClassName="page-link"
+                  nextLinkClassName="page-link"
+                  disabledClassName="disabled"
+                  hrefBuilder={page => `?page=${page}`}
+                  onPageChange={this.onPageChange}
+                  forcePage={this.state.formData.page - 1}
+                  previousLabel={messages.previous}
+                  nextLabel={messages.next}
+              />
+            </div>
+          </div>
+        </div>
+        <table className="table table-striped">
+          <thead>
+          <tr>
+            <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
+            {displayCellPlanColumn && <th className="hidden-xs-down"><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} /></th>}
+            <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
+            <th className="hidden-xs-down"><FormattedMessage id="sku" defaultMessage={`SKU`} /></th>
+            <th className="hidden-xs-down"><FormattedMessage id="product_type" defaultMessage={`Product type`} /></th>
+            <th className="hidden-sm-down"><FormattedMessage id="product" defaultMessage={`Product`} /></th>
+            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_available_short_question" defaultMessage={`Avail?`} /></th>
+            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_active_short_question" defaultMessage={`Act?`} /></th>
+            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_visible_short_question" defaultMessage={`Vis?`} /></th>
+
+            <th className="hidden-lg-down right-aligned">
+              {labels.normalPrice}
+              {convertCurrencies &&
+              <span>&nbsp;({labels.original})</span>
+              }
+            </th>
+            <th className="hidden-lg-down right-aligned">
+              {labels.offerPrice}
+              {convertCurrencies &&
+              <span>&nbsp;({labels.original})</span>
+              }
+            </th>
+            <th className="show-xxl-up center-aligned"><FormattedMessage id="currency_label" defaultMessage={`Currency`} /></th>
+            {convertCurrencies &&
+            <th className="show-xxl-up right-aligned">
+              {labels.normalPrice}
+              {convertCurrencies &&
+              <span>&nbsp;({preferredCurrency.isoCode})</span>
+              }
+            </th>}
+            {convertCurrencies &&
+            <th className="show-xxl-up right-aligned">
+              {labels.offerPrice}
+              {convertCurrencies &&
+              <span>&nbsp;({preferredCurrency.isoCode})</span>
+              }
+            </th>
+            }
+          </tr>
+          </thead>
+          <tbody>
+          {!entities.length && (
+              <tr><td className="center-aligned" colSpan="20">
+                <em><FormattedMessage id="no_entities_found" defaultMessage={`No entities found`} /></em>
+              </td></tr>
+          )}
+          {entities.map(entity =>
+              <tr key={entity.url}>
+                <td className="entity-name-cell">
+                  <NavLink to={'/entities/' + entity.id}>{entity.name}</NavLink>
+                </td>
+                {displayCellPlanColumn && <td className="hidden-xs-down">{entity.cellPlanName || <em>N/A</em>}</td>}
+                <td><a href={entity.externalUrl} target="_blank">{entity.store.name}</a></td>
+                <td className="hidden-xs-down">{entity.sku || <em>N/A</em>}</td>
+                <td className="hidden-xs-down">{entity.productType.name}</td>
+                <td className="hidden-sm-down">
+                  {entity.product ?
+                      <span>
+                                      <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink>
+                        {entity.cellPlan &&
+                        <span>
+                                            &nbsp;/&nbsp;<NavLink to={'/products/' + entity.cellPlan.id}>{entity.cellPlan.name}</NavLink>
+                                          </span>
+                        }
+                                    </span>
+                      : <em>N/A</em>
+                  }
+                </td>
+                <td className="hidden-md-down center-aligned"><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
+                    'glyphicons glyphicons-check' :
+                    'glyphicons glyphicons-unchecked' }/>
+                </td>
+                <td className="hidden-md-down center-aligned"><i className={entity.activeRegistry ?
+                    'glyphicons glyphicons-check' :
+                    'glyphicons glyphicons-unchecked'}/>
+                </td>
+                <td className="hidden-md-down center-aligned"><i className={entity.isVisible ?
+                    'glyphicons glyphicons-check' :
+                    'glyphicons glyphicons-unchecked'}/>
+                </td>
+                <td className="hidden-lg-down right-aligned nowrap">
+                  {entity.activeRegistry ?
+                      <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency)}</span> :
+                      <em>N/A</em>
+                  }
+                </td>
+                <td className="hidden-lg-down right-aligned nowrap">
+                  {entity.activeRegistry ?
+                      <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency)}</span> :
+                      <em>N/A</em>
+                  }
+                </td>
+                <td className="show-xxl-up center-aligned">
+                  {entity.currency.isoCode}
+                </td>
+                {convertCurrencies &&
+                <td className="show-xxl-up right-aligned nowrap">
+                  {entity.activeRegistry ?
+                      <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency, preferredCurrency)}</span> :
+                      <em>N/A</em>
+                  }
+                </td>}
+                {convertCurrencies &&
+                <td className="show-xxl-up right-aligned nowrap">
+                  {entity.activeRegistry ?
+                      <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency, preferredCurrency)}</span> :
+                      <em>N/A</em>
+                  }
+                </td>
+                }
+              </tr>
+          )}
+          </tbody>
+        </table>
+      </div>
+    }
 
     return (
         <div className="animated fadeIn">
@@ -302,8 +458,8 @@ class EntityList extends Component {
                           name="product_types"
                           id="product_types"
                           options={productTypeOptions}
-                          value={this.state.formData.productTypes}
-                          onChange={val => this.handleValueChange('productTypes', val)}
+                          value={this.state.formData.product_types}
+                          onChange={val => this.handleValueChange('product_types', val)}
                           multi={true}
                           placeholder={<FormattedMessage id="all_masculine" defaultMessage={`All`} />}
                       />
@@ -314,8 +470,8 @@ class EntityList extends Component {
                           name="is_available"
                           id="is_available"
                           options={nullBooleanOptions}
-                          value={this.state.formData.isAvailable}
-                          onChange={val => this.handleValueChange('isAvailable', val)}
+                          value={this.state.formData.is_available}
+                          onChange={val => this.handleValueChange('is_available', val)}
                           clearable={false}
                       />
                     </div>
@@ -325,8 +481,8 @@ class EntityList extends Component {
                           name="is_active"
                           id="is_active"
                           options={nullBooleanOptions}
-                          value={this.state.formData.isActive}
-                          onChange={val => this.handleValueChange('isActive', val)}
+                          value={this.state.formData.is_active}
+                          onChange={val => this.handleValueChange('is_active', val)}
                           clearable={false}
                       />
                     </div>
@@ -336,8 +492,8 @@ class EntityList extends Component {
                           name="is_visible"
                           id="is_visible"
                           options={nullBooleanOptions}
-                          value={this.state.formData.isVisible}
-                          onChange={val => this.handleValueChange('isVisible', val)}
+                          value={this.state.formData.is_visible}
+                          onChange={val => this.handleValueChange('is_visible', val)}
                           clearable={false}
                       />
                     </div>
@@ -347,29 +503,32 @@ class EntityList extends Component {
                           name="is_associated"
                           id="is_associated"
                           options={nullBooleanOptions}
-                          value={this.state.formData.isAssociated}
-                          onChange={val => this.handleValueChange('isAssociated', val)}
+                          value={this.state.formData.is_associated}
+                          onChange={val => this.handleValueChange('is_associated', val)}
                           clearable={false}
                       />
                     </div>
-                    <div className="col-12 col-sm-9 col-md-10 col-lg-2 col-xl-2">
-                      <label htmlFor="keywords"><FormattedMessage id="keywords" defaultMessage={'Keywords'} /></label>
+                    <div className="col-12 col-sm-5 col-md-6 col-lg-4 col-xl-4">
+                      <label htmlFor="search"><FormattedMessage id="keywords" defaultMessage={'Keywords'} /></label>
                       <form onSubmit={this.handleFormSubmit}>
                         <input
                             type="text"
-                            name="keywords"
-                            id="keywords"
+                            name="search"
+                            id="search"
                             className="form-control"
                             placeholder="Keywords"
-                            value={this.state.formData.keywords}
-                            onChange={this.handleKeywordsChange}
+                            value={this.state.formData.search}
+                            onChange={event => this.handleValueChange('search', event.target.value)}
                         />
                       </form>
                     </div>
-                    <div className="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-2">
-                      <label htmlFor="submit" className="hidden-xs-down">&nbsp;</label>
-                      <button name="submit" id="submit" type="submit" className="btn btn-primary" onClick={this.handleFormSubmit}>
+                    <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12">
+                      <label htmlFor="submit" className="hidden-xs-down hidden-lg-up">&nbsp;</label>
+                      <button name="submit" id="submit" type="submit" className="btn btn-primary float-right ml-3" onClick={this.handleFormSubmit}>
                         <FormattedMessage id="search" defaultMessage={`Search`} />
+                      </button>
+                      <button name="filter_pending" id="filter_pending" type="button" className="btn btn-secondary float-right" onClick={this.filterPending}>
+                        <FormattedMessage id="filter_pending" defaultMessage={`Filter pending`} />
                       </button>
                     </div>
                   </div>
@@ -384,148 +543,7 @@ class EntityList extends Component {
                   <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="entities" defaultMessage={`Entities`} />
                 </div>
                 <div className="card-block">
-                  {entityResults ?
-                      <div>
-                        <div className="row">
-                          <div className="col-12">
-                            <div className="float-right">
-                              <ReactPaginate
-                                  pageCount={pageCount}
-                                  pageRangeDisplayed={pageRangeDisplayed}
-                                  marginPagesDisplayed={marginPagesDisplayed}
-                                  containerClassName="pagination"
-                                  pageClassName="page-item"
-                                  pageLinkClassName="page-link"
-                                  activeClassName="active"
-                                  previousClassName="page-item"
-                                  nextClassName="page-item"
-                                  previousLinkClassName="page-link"
-                                  nextLinkClassName="page-link"
-                                  disabledClassName="disabled"
-                                  hrefBuilder={page => `?page=${page}`}
-                                  onPageChange={this.onPageChange}
-                                  forcePage={this.state.formData.page - 1}
-                                  previousLabel={messages.previous}
-                                  nextLabel={messages.next}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <table className="table table-striped">
-                          <thead>
-                          <tr>
-                            <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
-                            {displayCellPlanColumn && <th className="hidden-xs-down"><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} /></th>}
-                            <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
-                            <th className="hidden-xs-down"><FormattedMessage id="sku" defaultMessage={`SKU`} /></th>
-                            <th className="hidden-xs-down"><FormattedMessage id="product_type" defaultMessage={`Product type`} /></th>
-                            <th className="hidden-sm-down"><FormattedMessage id="product" defaultMessage={`Product`} /></th>
-                            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_available_short_question" defaultMessage={`Avail?`} /></th>
-                            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_active_short_question" defaultMessage={`Act?`} /></th>
-                            <th className="hidden-md-down center-aligned"><FormattedMessage id="is_visible_short_question" defaultMessage={`Vis?`} /></th>
-
-                            <th className="hidden-lg-down right-aligned">
-                              {labels.normalPrice}
-                              {convertCurrencies &&
-                              <span>&nbsp;({labels.original})</span>
-                              }
-                            </th>
-                            <th className="hidden-lg-down right-aligned">
-                              {labels.offerPrice}
-                              {convertCurrencies &&
-                              <span>&nbsp;({labels.original})</span>
-                              }
-                            </th>
-                            <th className="show-xxl-up center-aligned"><FormattedMessage id="currency_label" defaultMessage={`Currency`} /></th>
-                            {convertCurrencies &&
-                            <th className="show-xxl-up right-aligned">
-                              {labels.normalPrice}
-                              {convertCurrencies &&
-                              <span>&nbsp;({preferredCurrency.isoCode})</span>
-                              }
-                            </th>}
-                            {convertCurrencies &&
-                            <th className="show-xxl-up right-aligned">
-                              {labels.offerPrice}
-                              {convertCurrencies &&
-                              <span>&nbsp;({preferredCurrency.isoCode})</span>
-                              }
-                            </th>
-                            }
-                          </tr>
-                          </thead>
-                          <tbody>
-                          {entityResults.map(entity =>
-                              <tr key={entity.url}>
-                                <td className="entity-name-cell">
-                                  <NavLink to={'/entities/' + entity.id}>{entity.name}</NavLink>
-                                </td>
-                                {displayCellPlanColumn && <td className="hidden-xs-down">{entity.cellPlanName || <em>N/A</em>}</td>}
-                                <td><a href={entity.externalUrl} target="_blank">{entity.store.name}</a></td>
-                                <td className="hidden-xs-down">{entity.sku || <em>N/A</em>}</td>
-                                <td className="hidden-xs-down">{entity.productType.name}</td>
-                                <td className="hidden-sm-down">
-                                  {entity.product ?
-                                      <span>
-                                      <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink>
-                                        {entity.cellPlan &&
-                                        <span>
-                                            &nbsp;/&nbsp;<NavLink to={'/products/' + entity.cellPlan.id}>{entity.cellPlan.name}</NavLink>
-                                          </span>
-                                        }
-                                    </span>
-                                      : <em>N/A</em>
-                                  }
-                                </td>
-                                <td className="hidden-md-down center-aligned"><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
-                                    'glyphicons glyphicons-check' :
-                                    'glyphicons glyphicons-unchecked' }/>
-                                </td>
-                                <td className="hidden-md-down center-aligned"><i className={entity.activeRegistry ?
-                                    'glyphicons glyphicons-check' :
-                                    'glyphicons glyphicons-unchecked'}/>
-                                </td>
-                                <td className="hidden-md-down center-aligned"><i className={entity.isVisible ?
-                                    'glyphicons glyphicons-check' :
-                                    'glyphicons glyphicons-unchecked'}/>
-                                </td>
-                                <td className="hidden-lg-down right-aligned nowrap">
-                                  {entity.activeRegistry ?
-                                      <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency)}</span> :
-                                      <em>N/A</em>
-                                  }
-                                </td>
-                                <td className="hidden-lg-down right-aligned nowrap">
-                                  {entity.activeRegistry ?
-                                      <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency)}</span> :
-                                      <em>N/A</em>
-                                  }
-                                </td>
-                                <td className="show-xxl-up center-aligned">
-                                  {entity.currency.isoCode}
-                                </td>
-                                {convertCurrencies &&
-                                <td className="show-xxl-up right-aligned nowrap">
-                                  {entity.activeRegistry ?
-                                      <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency, preferredCurrency)}</span> :
-                                      <em>N/A</em>
-                                  }
-                                </td>}
-                                {convertCurrencies &&
-                                <td className="show-xxl-up right-aligned nowrap">
-                                  {entity.activeRegistry ?
-                                      <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency, preferredCurrency)}</span> :
-                                      <em>N/A</em>
-                                  }
-                                </td>
-                                }
-                              </tr>
-                          )}
-                          </tbody>
-                        </table>
-                      </div>
-                      : <Loading />
-                  }
+                  {cardContent}
                 </div>
               </div>
             </div>
@@ -536,26 +554,12 @@ class EntityList extends Component {
 }
 
 function mapStateToProps(state) {
-  let productTypes = undefined;
-  if (state.loadedResources.includes('product_types')) {
-    productTypes = filterApiResourcesByType(state.apiResources, 'product_types')
-        .filter(productType => productType.permissions.includes('view_product_type_entities'))
-  }
-
-  let stores = undefined;
-  if (state.loadedResources.includes('stores')) {
-    stores = filterApiResourcesByType(state.apiResources, 'stores')
-        .filter(store => store.permissions.includes('view_store_entities'))
-  }
-
   return {
-    productTypes,
-    stores,
     preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
     preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format]
   }
 }
 
-export default connect(
+export default withRouter(connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(EntityList);
+    addApiResourceDispatchToPropsUtils())(EntityList));

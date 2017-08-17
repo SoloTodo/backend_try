@@ -140,6 +140,61 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "cell_plan_name",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "sku",
+    "defaultMessage": "SKU",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "product_type",
+    "defaultMessage": "Product type",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_available_short_question",
+    "defaultMessage": "Avail?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_active_short_question",
+    "defaultMessage": "Act?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "is_visible_short_question",
+    "defaultMessage": "Vis?",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "currency_label",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "no_entities_found",
+    "defaultMessage": "No entities found",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
     "id": "entity_is_available_label_yes",
     "defaultMessage": "The entity is available for purchase",
     "filepath": "./src/views/Entity/EntityList.js"
@@ -235,58 +290,13 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
+    "id": "filter_pending",
+    "defaultMessage": "Filter pending",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
     "id": "entities",
     "defaultMessage": "Entities",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "name",
-    "defaultMessage": "Name",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "cell_plan_name",
-    "defaultMessage": "Cell plan",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "store",
-    "defaultMessage": "Store",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "sku",
-    "defaultMessage": "SKU",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "product_type",
-    "defaultMessage": "Product type",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "product",
-    "defaultMessage": "Product",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "is_available_short_question",
-    "defaultMessage": "Avail?",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "is_active_short_question",
-    "defaultMessage": "Act?",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "is_visible_short_question",
-    "defaultMessage": "Vis?",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "currency_label",
-    "defaultMessage": "Currency",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {

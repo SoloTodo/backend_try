@@ -30,12 +30,11 @@ class Full extends Component {
                 <Switch>
                   <Route exact path="/dashboard" name="Dashboard" component={Dashboard}/>
                   {routes.map(route =>
-                      <PermissionRoute exact key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={route.component}/>
+                      <PermissionRoute exact key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={route.component} requiredResources={route.requiredResources} />
                   )}
                   <DetailPermissionRoute exact path="/stores/:id/update_logs" resource="stores" permission="view_store_update_logs" name="StoreDetailUpdateLogs" component={StoreDetailUpdateLogs}/>
                   <DetailPermissionRoute exact path="/stores/:id/update" resource="stores" permission="update_store_prices" name="StoreDetailUpdate" component={StoreDetailUpdate}/>
                   <DetailPermissionRoute exact path="/stores/:id" resource="stores" permission="backend_view_store" name="StoresDetail" component={StoreDetail}/>
-
                   <Redirect from="/" to="/dashboard"/>
                 </Switch>
               </div>

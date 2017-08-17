@@ -16,7 +16,8 @@ export const sidebarLayout = [
         path: '/stores',
         requiredPermission: 'solotodo.backend_view_store',
         name: 'Stores',
-        component: StoreList
+        component: StoreList,
+        requiredResources: ['stores']
       },
       {
         key: 2,
@@ -24,7 +25,8 @@ export const sidebarLayout = [
         path: '/stores/update',
         requiredPermission: 'solotodo.update_store_prices',
         name: 'StoresUpdate',
-        component: StoreUpdate
+        component: StoreUpdate,
+        requiredResources: ['stores', 'product_types']
       }
     ]
   },
@@ -39,7 +41,8 @@ export const sidebarLayout = [
         path: '/entities',
         requiredPermission: 'solotodo.backend_list_entity',
         name: 'Entities',
-        component: EntityList
+        component: EntityList,
+        requiredResources: ['stores', 'product_types']
       }
     ]
   }

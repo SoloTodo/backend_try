@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils,
-  filterApiResourcesByType
+  addApiResourceStateToPropsUtils
 } from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
@@ -30,32 +29,24 @@ class StoreUpdate extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.productTypes) {
-      this.props.fetchApiResource('product_types', this.props.dispatch)
-    }
-
     if (typeof this.state.availableStores === 'undefined') {
       this.setState({
         availableStores: null
       });
 
-      this.props
-          .fetchApiResource('stores', this.props.dispatch)
-          .then(json => {
-            const filteredStores = json.filter(store => store.permissions.includes('update_store_prices') && store.is_active);
-            const newStores = filteredStores.map(store => ({store, latestUpdateLog: undefined}));
-            this.setState({availableStores: newStores});
-
-            return this.props.fetchAuth(`${settings.resourceEndpoints.store_update_logs}latest/`);
-          })
+      this.props.fetchAuth(`${settings.resourceEndpoints.store_update_logs}latest/`)
           .then((latestUpdateLogs) => {
-            const newAvailableStores = this.state.availableStores.map(storeEntry => ({
-              store: storeEntry.store,
-              latestUpdateLog: latestUpdateLogs[storeEntry.store.url]
+            const storesForUpdate = this.props.stores
+                .filter(store => store.permissions.includes('update_store_prices')
+                    && store.is_active);
+
+            const availableStores = storesForUpdate.map(store => ({
+              store,
+              latestUpdateLog: latestUpdateLogs[store.url]
             }));
 
             this.setState({
-              availableStores: newAvailableStores
+              availableStores
             });
 
             this.selectPendingStores();
@@ -158,7 +149,7 @@ class StoreUpdate extends Component {
   };
 
   render() {
-    if (!this.state.availableStores || !this.props.productTypes) {
+    if (!this.state.availableStores || !this.props.product_types) {
       return <Loading />
     }
 
@@ -183,7 +174,7 @@ class StoreUpdate extends Component {
       4: <FormattedMessage id="error" defaultMessage={`Error`} />
     };
 
-    const productTypeDict = this.props.productTypes.reduce(
+    const productTypeDict = this.props.product_types.reduce(
         (acum, pt) => ({
           ...acum,
           [pt.url]: pt.name
@@ -212,7 +203,7 @@ class StoreUpdate extends Component {
                     <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></label>
                     <select className="form-control" id="product_types" name="product_types" multiple="multiple" size="8"
                             value={formData.product_types} onChange={this.handleInputChange}>
-                      {this.props.productTypes.map(productType => (
+                      {this.props.product_types.map(productType => (
                           <option key={productType.url} value={productType.url}>{productType.name}</option>
                       ))}
                     </select>
@@ -340,16 +331,6 @@ class StoreUpdate extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  let productTypes = undefined;
-  if (state.loadedResources.includes('product_types')) {
-    productTypes = filterApiResourcesByType(state.apiResources, 'product_types')
-  }
-  return {
-    productTypes: productTypes
-  }
-}
-
 export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceStateToPropsUtils(),
     addApiResourceDispatchToPropsUtils())(StoreUpdate);

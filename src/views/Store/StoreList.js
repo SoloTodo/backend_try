@@ -1,27 +1,16 @@
 import React, { Component } from 'react';
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourcesByType
+  addApiResourceStateToPropsUtils
 } from '../../ApiResource';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import NavLink from "react-router-dom/es/NavLink";
-import Loading from "../../components/Loading";
 
 
 class StoreList extends Component {
-  componentDidMount() {
-    if (!this.props.stores) {
-      this.props.fetchApiResource('stores', this.props.dispatch)
-    }
-  }
-
   render() {
     let stores = this.props.stores;
-
-    if (!stores) {
-      return <Loading />
-    }
 
     stores = stores
         .filter(store => store.permissions.includes('backend_view_store'))
@@ -67,16 +56,6 @@ class StoreList extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  let stores = undefined;
-  if (state.loadedResources.includes('stores')) {
-    stores = filterApiResourcesByType(state.apiResources, 'stores')
-  }
-  return {
-    stores
-  }
-}
-
 export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceStateToPropsUtils(),
     addApiResourceDispatchToPropsUtils())(StoreList);
