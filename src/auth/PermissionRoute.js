@@ -6,19 +6,6 @@ import Loading from "../components/Loading";
 import RequiredResourcesContainer from "../RequiredResourcesContainer";
 
 class PermissionRoute extends Component {
-  componentDidUpdate() {
-    if (typeof this.props.permissions === 'undefined') {
-      return;
-    }
-
-    const requiredResources = this.props.requiredResources || [];
-    for (let requiredResource of requiredResources) {
-      if (!this.props.loadedResources.includes(requiredResource)) {
-
-      }
-    }
-  }
-
   render() {
     const {component:MyComponent, ...rest} = this.props;
 
