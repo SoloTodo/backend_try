@@ -122,13 +122,24 @@ main > .container-fluid {
 }
 
 .center-aligned {
-    text-align: center;
+  text-align: center;
 }
 
 .right-aligned {
-    text-align: right;
+  text-align: right;
 }
 
 .nowrap {
+  white-space: nowrap;
+}
+
+.subnavigation-links span {
+  color: #444;
+}
+
+.overflowed-table-cell {
+  text-overflow: ellipsis;
+  max-width: 0;
+  overflow: hidden;
   white-space: nowrap;
 }

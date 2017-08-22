@@ -9,7 +9,8 @@ const messages = {
   yes: <FormattedMessage id="yes" defaultMessage='Yes' />,
   no: <FormattedMessage id="no" defaultMessage='No' />,
   previous: <FormattedMessage id="previous" defaultMessage={`Previous`} />,
-  next: <FormattedMessage id="next" defaultMessage={`Next`} />
+  next: <FormattedMessage id="next" defaultMessage={`Next`} />,
+  update_stores: <FormattedMessage id="update_stores" defaultMessage={`Update Stores`} />
 };
 
 export default messages;

@@ -42,8 +42,6 @@ class EntityList extends Component {
       entities: undefined,
       size: this.getViewportSize()
     };
-
-    this.props.history.listen(this.onHistoryChange);
   }
 
   parseUrlArgs = (location) => {
@@ -89,7 +87,12 @@ class EntityList extends Component {
   componentDidMount() {
     document.body.classList.add('sidebar-hidden');
     this.updateSearchResults();
-    window.onresize = this.onResize
+    window.onresize = this.onResize;
+    this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
+  }
+
+  componentWillUnmount() {
+    this.unlistenHistory();
   }
 
   onResize = () => {
@@ -140,8 +143,6 @@ class EntityList extends Component {
         [option.value]: option
       }
     }, {});
-
-    console.log(optionsDict);
 
     this.setState({
       formData: {

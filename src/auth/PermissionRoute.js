@@ -4,10 +4,13 @@ import { Route, Redirect } from 'react-router-dom'
 import {settings} from "../settings";
 import Loading from "../components/Loading";
 import RequiredResourcesContainer from "../RequiredResourcesContainer";
+import {injectIntl} from 'react-intl';
 
 class PermissionRoute extends Component {
   render() {
     const {component:MyComponent, ...rest} = this.props;
+
+    document.title = `${rest.intl.formatMessage({id: rest.title})} - SoloTodo`;
 
     if (typeof rest.permissions === 'undefined') {
       // Permissions haven't been set yet (waiting for fetch user), standby
@@ -38,4 +41,4 @@ let mapStateToProps = (state) => {
 };
 
 
-export default connect(mapStateToProps)(PermissionRoute)
+export default injectIntl(connect(mapStateToProps)(PermissionRoute))

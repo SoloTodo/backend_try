@@ -31,7 +31,7 @@ class Full extends Component {
                 <Switch>
                   <Route exact path="/dashboard" name="Dashboard" component={Dashboard}/>
                   {routes.map(route =>
-                      <PermissionRoute exact key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={route.component} requiredResources={route.requiredResources} />
+                      <PermissionRoute exact key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={route.component} requiredResources={route.requiredResources} title={route.title} />
                   )}
                   <DetailPermissionRoute key="1" exact path="/stores/:id/update_logs" resource="stores" permission="view_store_update_logs" name="StoreDetailUpdateLogs" component={StoreDetailUpdateLogs}/>
                   <DetailPermissionRoute key="2" exact path="/stores/:id/update" resource="stores" permission="update_store_prices" name="StoreDetailUpdate" component={StoreDetailUpdate}/>

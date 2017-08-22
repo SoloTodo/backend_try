@@ -70,6 +70,11 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "update_stores",
+    "defaultMessage": "Update Stores",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "home",
     "defaultMessage": "Home",
     "filepath": "./src/routes.js"
@@ -118,6 +123,136 @@
     "id": "hello_world",
     "defaultMessage": "Hello World",
     "filepath": "./src/views/Dashboard/Dashboard.js"
+  },
+  {
+    "id": "picture",
+    "defaultMessage": "Picture",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "cell_plan_name",
+    "defaultMessage": "Cell plan name",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "url",
+    "defaultMessage": "URL",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "product_type",
+    "defaultMessage": "Product Type",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell Plan",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "part_number",
+    "defaultMessage": "Part Number",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "sku",
+    "defaultMessage": "SKU",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "detection_date",
+    "defaultMessage": "Detection date",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "last_update",
+    "defaultMessage": "Last update",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "is_visible_question",
+    "defaultMessage": "Visible?",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "description",
+    "defaultMessage": "Description",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "pricing_information",
+    "defaultMessage": "Pricing Information",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "normal_price",
+    "defaultMessage": "Normal price",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "offer_price",
+    "defaultMessage": "Offer price",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "is_active_question",
+    "defaultMessage": "Is active?",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "is_available_question",
+    "defaultMessage": "Is available?",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "staff_information",
+    "defaultMessage": "Staff Information",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "key",
+    "defaultMessage": "Key",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "original_product_type",
+    "defaultMessage": "Original Product Type",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "discovery_url",
+    "defaultMessage": "Discovery URL",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "options",
+    "defaultMessage": "Options",
+    "filepath": "./src/views/Entity/EntityDetailMenu.js"
+  },
+  {
+    "id": "general_information",
+    "defaultMessage": "General Information",
+    "filepath": "./src/views/Entity/EntityDetailMenu.js"
   },
   {
     "id": "all",

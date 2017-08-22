@@ -68,6 +68,8 @@ class DetailPermissionRoute extends Component {
         state: {from: this.props.location}
       }}/>
     } else {
+      document.title = `${resourceObject.name} - SoloTodo`;
+
       return (
           <Route exact {...rest} render={() => {
             return <RequiredResourcesContainer resourceObject={resourceObject} {...rest} component={MyComponent}/>

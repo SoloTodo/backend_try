@@ -12,6 +12,7 @@
     "history": "^4.6.3",
     "query-string": "^5.0.0",
     "react": "^15.6.1",
+    "react-document-title": "^2.0.3",
     "react-dom": "^15.6.1",
     "react-intl": "^2.3.0",
     "react-intl-cra": "^0.2.7",
