@@ -125,8 +125,43 @@
     "filepath": "./src/views/Dashboard/Dashboard.js"
   },
   {
+    "id": "success_exclamation",
+    "defaultMessage": "Success!",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_information_updated_successfully",
+    "defaultMessage": "Entity information updated successfully",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "error_exclamation",
+    "defaultMessage": "Error!",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_information_updated_error",
+    "defaultMessage": "There was a problem updating the entity, it has been notified to our staff",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "unknown",
+    "defaultMessage": "Unknown",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "picture",
     "defaultMessage": "Picture",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "updating",
+    "defaultMessage": "Updating",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "update_information",
+    "defaultMessage": "Update information",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -222,6 +257,11 @@
   {
     "id": "is_available_question",
     "defaultMessage": "Is available?",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "stock",
+    "defaultMessage": "Stock",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {

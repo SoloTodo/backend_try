@@ -62,7 +62,7 @@ class StoreDetailUpdate extends Component {
   handleFormSubmit = (event) => {
     event.preventDefault();
 
-    this.props.fetchAuth(`${this.props.resourceObject.url}update_prices/`, {
+    this.props.fetchAuth(`${this.props.resourceObject.url}update_pricing/`, {
       method: 'POST',
       body: JSON.stringify(this.state.formData)
     }).then(json => {

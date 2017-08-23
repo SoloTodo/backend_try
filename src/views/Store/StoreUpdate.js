@@ -137,7 +137,7 @@ class StoreUpdate extends Component {
         async: this.state.formData.async
       };
 
-      this.props.fetchAuth(`${store}update_prices/`, {
+      this.props.fetchAuth(`${store}update_pricing/`, {
         method: 'POST',
         body: JSON.stringify(payload)
       }).then(() => {

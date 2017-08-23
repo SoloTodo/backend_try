@@ -15,6 +15,21 @@ export default function EntityDetailMenu(props) {
               <FormattedMessage id="general_information" defaultMessage={`General Information`} />
             </button>
           </NavLink></li>
+          <li><NavLink to={'/entities/' + entity.id}>
+            <button type="button" className="btn btn-link">
+              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
+            </button>
+          </NavLink></li>
+          <li><NavLink to={'/entities/' + entity.id}>
+            <button type="button" className="btn btn-link">
+              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
+            </button>
+          </NavLink></li>
+          <li><NavLink to={'/entities/' + entity.id}>
+            <button type="button" className="btn btn-link">
+              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
+            </button>
+          </NavLink></li>
         </ul>
       </div>
     </div>

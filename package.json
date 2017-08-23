@@ -16,6 +16,7 @@
     "react-dom": "^15.6.1",
     "react-intl": "^2.3.0",
     "react-intl-cra": "^0.2.7",
+    "react-ladda": "^5.0.7",
     "react-paginate": "^4.4.3",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.2",

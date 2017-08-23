@@ -10,20 +10,12 @@ import Loading from "../components/Loading";
 import RequiredResourcesContainer from "../RequiredResourcesContainer";
 
 class DetailPermissionRoute extends Component {
-  constructor() {
-    super();
-    this.state = {
-      resourceObject: undefined
-    };
-  }
-
   componentDidMount() {
-    const resource = this.props.resource;
-    const resourceObject = this.state.resourceObject;
+    const id = this.props.computedMatch.params.id;
+    const objUrl = `${settings.resourceEndpoints[this.props.resource]}${id}/`;
+    const resourceObject = this.props.apiResources[objUrl];
 
     if (typeof resourceObject === 'undefined') {
-      const id = this.props.computedMatch.params.id;
-      const objUrl = `${settings.resourceEndpoints[resource]}${id}/`;
       let localResourceObject = this.props.apiResources[objUrl];
       if (localResourceObject) {
         this.setState({
@@ -34,7 +26,7 @@ class DetailPermissionRoute extends Component {
           resourceObject: null
         });
 
-        this.props.fetchApiResourceObject(resource, id, this.props.dispatch)
+        this.props.fetchApiResourceObject(this.props.resource, id, this.props.dispatch)
             .then(json => {
               this.setState({
                 resourceObject: json
@@ -50,9 +42,11 @@ class DetailPermissionRoute extends Component {
     delete rest['component'];
     const MyComponent = this.props['component'];
 
-    const resourceObject = this.state.resourceObject;
+    const id = this.props.computedMatch.params.id;
+    const objUrl = `${settings.resourceEndpoints[this.props.resource]}${id}/`;
+    const resourceObject = this.props.apiResources[objUrl];
 
-    if (resourceObject === null || typeof resourceObject === 'undefined') {
+    if (typeof resourceObject === 'undefined') {
       // Object is currently fetching or resource endpoints have not been loaded
       return <Loading />
     } else if (!resourceObject.url) {

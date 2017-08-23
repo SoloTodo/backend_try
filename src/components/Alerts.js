@@ -11,8 +11,7 @@ class Alerts extends Component {
     const alert = this.props.location.state.alert;
     const message = messages[alert.messageId];
     const label = messages[alert.labelId];
-
-
+    
     return (
         <div className="container-fluid animated fadeIn">
           <div className="row">

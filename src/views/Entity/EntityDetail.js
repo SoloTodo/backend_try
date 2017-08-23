@@ -1,18 +1,83 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
+  addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
 } from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
+import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
 import {settings} from "../../settings";
 import {formatCurrency} from "../../utils";
 import EntityDetailMenu from "./EntityDetailMenu";
 import imageNotAvailable from '../../images/image-not-available.svg';
 import './EntityDetail.css'
+import PageAlerts from "../../components/PageAlerts";
 
 
 class EntityDetail extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      updatingPricing: false,
+      alerts: []
+    }
+  }
+
+  onAlertDismiss = (idx) => {
+    const oldAlerts = this.state.alerts;
+    this.setState({
+      alerts: [
+        ...oldAlerts.slice(0, idx),
+        {...oldAlerts[idx], visible: false},
+        ...oldAlerts.slice(idx+1)
+      ]
+    })
+  };
+
+  updatePricingInformation = () => {
+    this.setState({
+      updatingPricing: true
+    });
+
+    this.props.fetchAuth(`${this.props.resourceObject.url}update_pricing/`, {
+      method: 'POST'
+    }).then(json => {
+      this.setState({
+        updatingPricing: false
+      });
+      if (json.url) {
+        this.props.dispatch({
+          type: 'updateApiResource',
+          payload: json
+        });
+        this.setState({
+          alerts: [
+            ...this.state.alerts,
+            {
+              color: 'success',
+              title: <FormattedMessage id="success_exclamation" defaultMessage="Success!" />,
+              message: <FormattedMessage id="entity_information_updated_successfully" defaultMessage="Entity information updated successfully" />,
+              visible: true
+            }]
+        })
+      } else {
+        // Something wrong happened
+        this.setState({
+          alerts: [
+            ...this.state.alerts,
+            {
+              color: 'danger',
+              title: <FormattedMessage id="error_exclamation" defaultMessage="Error!" />,
+              message: <FormattedMessage id="entity_information_updated_error" defaultMessage="There was a problem updating the entity, it has been notified to our staff" />,
+              visible: true
+            }]
+        })
+      }
+    })
+  };
+
   render() {
     const entity = this.props.ApiResource(this.props.resourceObject);
 
@@ -22,10 +87,26 @@ class EntityDetail extends Component {
           this.props.preferredNumberFormat.decimal_separator)
     };
 
+    let stock = 0;
+    if (entity.activeRegistry) {
+      if (entity.activeRegistry.stock === -1) {
+        stock = <FormattedMessage id="unknown" defaultMessage="Unknown" />;
+      } else {
+        stock = entity.activeRegistry.stock
+      }
+    }
+
+    const canUpdatePricing =
+        entity.store.permissions.includes('update_store_prices') ||
+        entity.productType.permissions.includes('associate_product_type_entities') ||
+        entity.productType.permissions.includes('update_product_type_entities_prices');
+
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 
     return (
         <div className="animated fadeIn">
+          <PageAlerts alerts={this.state.alerts} onAlertDismiss={this.onAlertDismiss}/>
+
           <div className="row">
             <div className="col-sm-12 col-md-8 col-lg-8 col-xl-6">
               <div className="card">
@@ -42,6 +123,24 @@ class EntityDetail extends Component {
               <div className="card">
                 <div className="card-header"><strong>{entity.name}</strong></div>
                 <div className="card-block">
+                  {canUpdatePricing &&
+                  <LaddaButton
+                      loading={this.state.updatingPricing}
+                      onClick={this.updatePricingInformation}
+                      data-color="#eee"
+                      data-size={XL}
+                      data-style={EXPAND_LEFT}
+                      data-spinner-size={30}
+                      data-spinner-color="#ddd"
+                      data-spinner-lines={12}
+                      className="btn btn-primary mb-3"
+                  >
+                    {this.state.updatingPricing ?
+                        <FormattedMessage id="updating" defaultMessage={`Updating`}/> :
+                        <FormattedMessage id="update_information" defaultMessage={`Update information`}/>
+                    }
+                  </LaddaButton>
+                  }
                   <table className="table table-striped">
                     <tbody>
                     <tr>
@@ -170,11 +269,19 @@ class EntityDetail extends Component {
                           'glyphicons glyphicons-unchecked'}/>
                       </td>
                     </tr>
+
                     <tr>
                       <th><FormattedMessage id="is_available_question" defaultMessage={`Is available?`} /></th>
                       <td><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
                           'glyphicons glyphicons-check' :
                           'glyphicons glyphicons-unchecked'}/>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th><FormattedMessage id="stock" defaultMessage={`Stock`} /></th>
+                      <td>
+                        {stock}
                       </td>
                     </tr>
 
@@ -218,4 +325,6 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils(mapStateToProps))(EntityDetail);
+export default connect(
+    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceDispatchToPropsUtils())(EntityDetail);
