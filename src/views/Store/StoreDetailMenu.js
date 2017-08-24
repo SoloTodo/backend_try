@@ -18,7 +18,7 @@ export default function StoreDetailMenu(props) {
             </button>
           </NavLink></li>
           }
-          {store.permissions.includes('update_store_prices') &&
+          {store.permissions.includes('update_store_pricing') &&
           <li>
             <NavLink to={'/stores/' + store.id + '/update'}>
               <button type="button" className="btn btn-link">

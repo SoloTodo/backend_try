@@ -24,7 +24,7 @@ export const sidebarLayout = [
         key: 2,
         label: <FormattedMessage id='update' defaultMessage='Update' />,
         path: '/stores/update',
-        requiredPermission: 'solotodo.update_store_prices',
+        requiredPermission: 'solotodo.update_store_pricing',
         name: 'StoresUpdate',
         component: StoreUpdate,
         requiredResources: ['stores', 'product_types'],

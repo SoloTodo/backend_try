@@ -34,7 +34,7 @@ class Full extends Component {
                       <PermissionRoute exact key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={route.component} requiredResources={route.requiredResources} title={route.title} />
                   )}
                   <DetailPermissionRoute key="1" exact path="/stores/:id/update_logs" resource="stores" permission="view_store_update_logs" name="StoreDetailUpdateLogs" component={StoreDetailUpdateLogs}/>
-                  <DetailPermissionRoute key="2" exact path="/stores/:id/update" resource="stores" permission="update_store_prices" name="StoreDetailUpdate" component={StoreDetailUpdate}/>
+                  <DetailPermissionRoute key="2" exact path="/stores/:id/update" resource="stores" permission="update_store_pricing" name="StoreDetailUpdate" component={StoreDetailUpdate}/>
                   <DetailPermissionRoute key="3" exact path="/stores/:id" resource="stores" permission="backend_view_store" name="StoresDetail" component={StoreDetail}/>
                   <DetailPermissionRoute key="4" exact path="/entities/:id" resource="entities" name="EntityDetail" requiredResources={['stores', 'product_types']} component={EntityDetail}/>
                   <Redirect from="/" to="/dashboard"/>

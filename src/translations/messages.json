@@ -155,13 +155,23 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "update_information",
+    "defaultMessage": "Update information",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "update_entity_description",
+    "defaultMessage": "Updates the entity information from the store website",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "updating",
     "defaultMessage": "Updating",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "update_information",
-    "defaultMessage": "Update information",
+    "id": "general_information",
+    "defaultMessage": "General Information",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -225,11 +235,6 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "description",
-    "defaultMessage": "Description",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
     "id": "pricing_information",
     "defaultMessage": "Pricing Information",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -285,6 +290,11 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "description",
+    "defaultMessage": "Description",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "options",
     "defaultMessage": "Options",
     "filepath": "./src/views/Entity/EntityDetailMenu.js"
@@ -292,6 +302,21 @@
   {
     "id": "general_information",
     "defaultMessage": "General Information",
+    "filepath": "./src/views/Entity/EntityDetailMenu.js"
+  },
+  {
+    "id": "price_history",
+    "defaultMessage": "Price history",
+    "filepath": "./src/views/Entity/EntityDetailMenu.js"
+  },
+  {
+    "id": "events",
+    "defaultMessage": "Events",
+    "filepath": "./src/views/Entity/EntityDetailMenu.js"
+  },
+  {
+    "id": "associate_to_prduct",
+    "defaultMessage": "Associate",
     "filepath": "./src/views/Entity/EntityDetailMenu.js"
   },
   {

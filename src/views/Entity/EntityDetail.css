@@ -1,3 +1,7 @@
 th {
     width: 160px;
 }
+
+#description-container img {
+    max-width: 100%;
+}

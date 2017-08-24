@@ -5,7 +5,7 @@ import {NavLink} from "react-router-dom";
 export default function EntityDetailMenu(props) {
   const entity = props.entity;
 
-  return (<div className="col-sm-12 col-md-4">
+  return (
     <div className="card">
       <div className="card-header"><strong><FormattedMessage id="options" defaultMessage={`Options`} /></strong></div>
       <div className="card-block">
@@ -17,21 +17,21 @@ export default function EntityDetailMenu(props) {
           </NavLink></li>
           <li><NavLink to={'/entities/' + entity.id}>
             <button type="button" className="btn btn-link">
-              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
+              <FormattedMessage id="price_history" defaultMessage={`Price history`} />
             </button>
           </NavLink></li>
           <li><NavLink to={'/entities/' + entity.id}>
             <button type="button" className="btn btn-link">
-              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
+              <FormattedMessage id="events" defaultMessage={`Events`} />
             </button>
           </NavLink></li>
           <li><NavLink to={'/entities/' + entity.id}>
             <button type="button" className="btn btn-link">
-              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
+              <FormattedMessage id="associate_to_prduct" defaultMessage={`Associate`} />
             </button>
           </NavLink></li>
         </ul>
       </div>
     </div>
-  </div>)
+  )
 }

@@ -37,7 +37,7 @@ class StoreUpdate extends Component {
       this.props.fetchAuth(`${settings.resourceEndpoints.store_update_logs}latest/`)
           .then((latestUpdateLogs) => {
             const storesForUpdate = this.props.stores
-                .filter(store => store.permissions.includes('update_store_prices')
+                .filter(store => store.permissions.includes('update_store_pricing')
                     && store.is_active);
 
             const availableStores = storesForUpdate.map(store => ({

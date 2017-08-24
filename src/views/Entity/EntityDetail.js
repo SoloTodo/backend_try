@@ -7,6 +7,8 @@ import {
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
+import ReactMarkdown from 'react-markdown';
+import {v4} from 'uuid';
 import {settings} from "../../settings";
 import {formatCurrency} from "../../utils";
 import EntityDetailMenu from "./EntityDetailMenu";
@@ -24,17 +26,6 @@ class EntityDetail extends Component {
       alerts: []
     }
   }
-
-  onAlertDismiss = (idx) => {
-    const oldAlerts = this.state.alerts;
-    this.setState({
-      alerts: [
-        ...oldAlerts.slice(0, idx),
-        {...oldAlerts[idx], visible: false},
-        ...oldAlerts.slice(idx+1)
-      ]
-    })
-  };
 
   updatePricingInformation = () => {
     this.setState({
@@ -56,10 +47,12 @@ class EntityDetail extends Component {
           alerts: [
             ...this.state.alerts,
             {
+              id: v4(),
               color: 'success',
               title: <FormattedMessage id="success_exclamation" defaultMessage="Success!" />,
-              message: <FormattedMessage id="entity_information_updated_successfully" defaultMessage="Entity information updated successfully" />,
-              visible: true
+              message: <FormattedMessage
+                  id="entity_information_updated_successfully"
+                  defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />,
             }]
         })
       } else {
@@ -68,13 +61,15 @@ class EntityDetail extends Component {
           alerts: [
             ...this.state.alerts,
             {
+              id: v4(),
               color: 'danger',
               title: <FormattedMessage id="error_exclamation" defaultMessage="Error!" />,
               message: <FormattedMessage id="entity_information_updated_error" defaultMessage="There was a problem updating the entity, it has been notified to our staff" />,
-              visible: true
             }]
         })
       }
+
+      window.scrollTo(0, 0);
     })
   };
 
@@ -97,18 +92,18 @@ class EntityDetail extends Component {
     }
 
     const canUpdatePricing =
-        entity.store.permissions.includes('update_store_prices') ||
+        entity.store.permissions.includes('update_store_pricing') ||
         entity.productType.permissions.includes('associate_product_type_entities') ||
-        entity.productType.permissions.includes('update_product_type_entities_prices');
+        entity.productType.permissions.includes('update_product_type_entities_pricing');
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 
     return (
         <div className="animated fadeIn">
-          <PageAlerts alerts={this.state.alerts} onAlertDismiss={this.onAlertDismiss}/>
+          <PageAlerts alerts={this.state.alerts} />
 
           <div className="row">
-            <div className="col-sm-12 col-md-8 col-lg-8 col-xl-6">
+            <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5">
               <div className="card">
                 <div className="card-header"><strong><FormattedMessage id="picture" defaultMessage={`Picture`}/></strong></div>
                 <div className="card-block center-aligned">
@@ -116,14 +111,15 @@ class EntityDetail extends Component {
                 </div>
               </div>
             </div>
-            <EntityDetailMenu entity={entity}/>
-          </div>
-          <div className="row">
-            <div className="col-12 col-md-6">
+            <div className="col-sm-12 col-md-4 col-lg-6">
+              <EntityDetailMenu entity={entity}/>
               <div className="card">
-                <div className="card-header"><strong>{entity.name}</strong></div>
+                <div className="card-header"><strong><FormattedMessage id="update_information" defaultMessage={`Update information`} /></strong></div>
+                {canUpdatePricing &&
                 <div className="card-block">
-                  {canUpdatePricing &&
+                  <p>
+                    <FormattedMessage id="update_entity_description" defaultMessage={`Updates the entity information from the store website`} />
+                  </p>
                   <LaddaButton
                       loading={this.state.updatingPricing}
                       onClick={this.updatePricingInformation}
@@ -137,10 +133,19 @@ class EntityDetail extends Component {
                   >
                     {this.state.updatingPricing ?
                         <FormattedMessage id="updating" defaultMessage={`Updating`}/> :
-                        <FormattedMessage id="update_information" defaultMessage={`Update information`}/>
+                        <FormattedMessage id="update_information" defaultMessage={`Update information`} />
                     }
                   </LaddaButton>
-                  }
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-12 col-md-6">
+              <div className="card">
+                <div className="card-header"><strong><FormattedMessage id="general_information" defaultMessage={`General Information`}/></strong></div>
+                <div className="card-block">
                   <table className="table table-striped">
                     <tbody>
                     <tr>
@@ -157,7 +162,7 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="url" defaultMessage={`URL`} /></th>
-                      <td className="overflowed-table-cell"><NavLink to={entity.externalUrl}>{entity.externalUrl}</NavLink></td>
+                      <td className="overflowed-table-cell"><a href={entity.externalUrl} target="_blank">{entity.externalUrl}</a></td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="product_type" defaultMessage={`Product Type`} /></th>
@@ -192,10 +197,6 @@ class EntityDetail extends Component {
                       <td><i className={entity.isVisible ?
                           'glyphicons glyphicons-check' :
                           'glyphicons glyphicons-unchecked'}/></td>
-                    </tr>
-                    <tr>
-                      <th><FormattedMessage id="description" defaultMessage={`Description`} /></th>
-                      <td>{entity.description || <em>N/A</em>}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -305,12 +306,21 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="discovery_url" defaultMessage={`Discovery URL`} /></th>
-                      <td className="overflowed-table-cell"><NavLink to={entity.discoveryUrl}>{entity.discoveryUrl}</NavLink></td>
+                      <td className="overflowed-table-cell"><a href={entity.discoveryUrl} target="_blank">{entity.discoveryUrl}</a></td>
                     </tr>
                     </tbody>
                   </table>
                 </div>
               </div>}
+            </div>
+
+            <div className="col-12">
+              <div className="card">
+                <div className="card-header"><strong><FormattedMessage id="description" defaultMessage={`Description`}/></strong></div>
+                <div className="card-block" id="description-container">
+                  <ReactMarkdown source={entity.description} />
+                </div>
+              </div>
             </div>
 
           </div>
