@@ -34,6 +34,11 @@ export function defaultProperty(property) {
   return `${settings.resourceEndpoints[property]}${settings.defaults[property]}/`;
 }
 
+export function formatDateStr(timestampStr) {
+  const dateObj = new Date(timestampStr);
+  return dateObj.toLocaleString()
+}
+
 export function formatCurrency(value, valueCurrency, conversionCurrency, thousandsSeparator, decimalSeparator) {
   let formattingCurrency = valueCurrency;
 

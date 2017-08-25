@@ -10,7 +10,21 @@ const messages = {
   no: <FormattedMessage id="no" defaultMessage='No' />,
   previous: <FormattedMessage id="previous" defaultMessage={`Previous`} />,
   next: <FormattedMessage id="next" defaultMessage={`Next`} />,
-  update_stores: <FormattedMessage id="update_stores" defaultMessage={`Update Stores`} />
+  update_stores: <FormattedMessage id="update_stores" defaultMessage={`Update Stores`} />,
+  product_type: <FormattedMessage id="product_type" defaultMessage={`Product type`} />,
+  scraped_product_type: <FormattedMessage id="scraped_product_type" defaultMessage={`Scraped product type`} />,
+  currency: <FormattedMessage id="currency" defaultMessage={`Currency`} />,
+  product: <FormattedMessage id="product" defaultMessage={`Product`} />,
+  cell_plan: <FormattedMessage id="cell_plan" defaultMessage={`Cell Plan`} />,
+  name: <FormattedMessage id="name" defaultMessage={`Name`} />,
+  cell_plan_name: <FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan name`} />,
+  part_number: <FormattedMessage id="part_number" defaultMessage={`Part number`} />,
+  sku: <FormattedMessage id="sku" defaultMessage={`SKU`} />,
+  url: <FormattedMessage id="url" defaultMessage={`URL`} />,
+  discovery_url: <FormattedMessage id="discovery_url" defaultMessage={`Discovery URL`} />,
+  picture_url: <FormattedMessage id="picture_url" defaultMessage={`Picture URL`} />,
+  description: <FormattedMessage id="description" defaultMessage={`Description`} />,
+  is_visible: <FormattedMessage id="is_visible" defaultMessage={`Is visible`} />,
 };
 
 export default messages;

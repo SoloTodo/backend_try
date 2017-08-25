@@ -75,6 +75,76 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "product_type",
+    "defaultMessage": "Product type",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "scraped_product_type",
+    "defaultMessage": "Scraped product type",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell Plan",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "cell_plan_name",
+    "defaultMessage": "Cell plan name",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "part_number",
+    "defaultMessage": "Part number",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "sku",
+    "defaultMessage": "SKU",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "url",
+    "defaultMessage": "URL",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "discovery_url",
+    "defaultMessage": "Discovery URL",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "picture_url",
+    "defaultMessage": "Picture URL",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "description",
+    "defaultMessage": "Description",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "is_visible",
+    "defaultMessage": "Is visible",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "home",
     "defaultMessage": "Home",
     "filepath": "./src/routes.js"
@@ -97,6 +167,11 @@
   {
     "id": "entities",
     "defaultMessage": "Entities",
+    "filepath": "./src/routes.js"
+  },
+  {
+    "id": "events",
+    "defaultMessage": "Events",
     "filepath": "./src/routes.js"
   },
   {
@@ -131,7 +206,7 @@
   },
   {
     "id": "entity_information_updated_successfully",
-    "defaultMessage": "Entity information updated successfully",
+    "defaultMessage": "Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff.",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -293,6 +368,21 @@
     "id": "description",
     "defaultMessage": "Description",
     "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "user",
+    "defaultMessage": "User",
+    "filepath": "./src/views/Entity/EntityDetailEvents.js"
+  },
+  {
+    "id": "old_value",
+    "defaultMessage": "Old value",
+    "filepath": "./src/views/Entity/EntityDetailEvents.js"
+  },
+  {
+    "id": "new_value",
+    "defaultMessage": "New value",
+    "filepath": "./src/views/Entity/EntityDetailEvents.js"
   },
   {
     "id": "options",

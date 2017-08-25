@@ -15,16 +15,17 @@ export default function EntityDetailMenu(props) {
               <FormattedMessage id="general_information" defaultMessage={`General Information`} />
             </button>
           </NavLink></li>
-          <li><NavLink to={'/entities/' + entity.id}>
-            <button type="button" className="btn btn-link">
-              <FormattedMessage id="price_history" defaultMessage={`Price history`} />
-            </button>
-          </NavLink></li>
-          <li><NavLink to={'/entities/' + entity.id}>
+          <li><NavLink to={`/entities/${entity.id}/events`}>
             <button type="button" className="btn btn-link">
               <FormattedMessage id="events" defaultMessage={`Events`} />
             </button>
           </NavLink></li>
+          <li><NavLink to={`/entities/${entity.id}/price_history`}>
+            <button type="button" className="btn btn-link">
+              <FormattedMessage id="price_history" defaultMessage={`Price history`} />
+            </button>
+          </NavLink></li>
+
           <li><NavLink to={'/entities/' + entity.id}>
             <button type="button" className="btn btn-link">
               <FormattedMessage id="associate_to_prduct" defaultMessage={`Associate`} />

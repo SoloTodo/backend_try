@@ -1,0 +1,16 @@
+.field-name {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+dt {
+    color: #b0b0b0;
+}
+
+.url-link {
+    overflow-wrap: break-word;
+}
+
+.description-container img {
+    max-width: 100%;
+}
