@@ -10,7 +10,7 @@ import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
 import ReactMarkdown from 'react-markdown';
 import {v4} from 'uuid';
 import {settings} from "../../settings";
-import {formatCurrency} from "../../utils";
+import {formatCurrency, formatDateStr} from "../../utils";
 import EntityDetailMenu from "./EntityDetailMenu";
 import imageNotAvailable from '../../images/image-not-available.svg';
 import './EntityDetail.css'
@@ -186,11 +186,11 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="detection_date" defaultMessage={`Detection date`} /></th>
-                      <td>{entity.creationDate.toLocaleString()}</td>
+                      <td>{formatDateStr(entity.creationDate)}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
-                      <td>{entity.lastUpdated.toLocaleString()}</td>
+                      <td>{formatDateStr(entity.lastUpdated)}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></th>

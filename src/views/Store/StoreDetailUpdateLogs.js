@@ -10,6 +10,7 @@ import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import messages from "../../messages";
+import {formatDateStr} from "../../utils";
 
 const pageSize = 5;
 
@@ -141,7 +142,7 @@ class StoreDetailUpdateLogs extends Component {
                                     : 'N/A'
                                 }
                               </td>
-                              <td>{log.lastUpdated.toLocaleString()}</td>
+                              <td>{formatDateStr(log.lastUpdated)}</td>
                               <td className="hidden-xs-down">
                                 <ul>
                                   {log.apiResourceProductTypes.map(pt => (
@@ -150,7 +151,7 @@ class StoreDetailUpdateLogs extends Component {
                                 </ul>
                               </td>
 
-                              <td className="hidden-sm-down">{log.creationDate.toLocaleString()}</td>
+                              <td className="hidden-sm-down">{formatDateStr(log.creationDate)}</td>
                               <td className="hidden-sm-down">
                                 {log.discoveryUrlConcurrency
                                     ? `${log.discoveryUrlConcurrency} / ${log.productsForUrlConcurrency}`

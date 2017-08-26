@@ -5,6 +5,7 @@ import {settings} from "../settings";
 import Loading from "../components/Loading";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
+  document.body.classList.add('sidebar-hidden');
   if (rest.user) {
     return (
         <Route {...rest} render={props => {

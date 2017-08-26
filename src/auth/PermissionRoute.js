@@ -8,6 +8,7 @@ import {injectIntl} from 'react-intl';
 
 class PermissionRoute extends Component {
   render() {
+    document.body.classList.add('sidebar-hidden');
     const {component:MyComponent, ...rest} = this.props;
 
     document.title = `${rest.intl.formatMessage({id: rest.title})} - SoloTodo`;

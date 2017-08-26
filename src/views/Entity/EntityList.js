@@ -15,6 +15,7 @@ import {NavLink, withRouter} from "react-router-dom";
 import {formatCurrency} from "../../utils";
 import {UncontrolledTooltip} from "reactstrap";
 import messages from "../../messages";
+import {createOption, createOptions} from "../../form_utils";
 
 const pageSize = 50;
 
@@ -56,7 +57,7 @@ class EntityList extends Component {
       }
       resourceObjects = this.props[resource]
           .filter(resourceObject => resourceObjects.includes(resourceObject.id.toString()))
-          .map(this.createOption);
+          .map(createOption);
       result[resource] = resourceObjects;
     }
 
@@ -85,7 +86,6 @@ class EntityList extends Component {
   };
 
   componentDidMount() {
-    document.body.classList.add('sidebar-hidden');
     this.updateSearchResults();
     window.onresize = this.onResize;
     this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
@@ -190,21 +190,9 @@ class EntityList extends Component {
     })
   };
 
-  createOptions = (options) => {
-    return options.map(this.createOption)
-  };
-
-  createOption = (option) => {
-    return {
-      value: option.id,
-      label: option.name
-    }
-  };
-
-
   render() {
-    const storeOptions = this.createOptions(this.props.stores);
-    const productTypeOptions = this.createOptions(this.props.product_types);
+    const storeOptions = createOptions(this.props.stores);
+    const productTypeOptions = createOptions(this.props.product_types);
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 

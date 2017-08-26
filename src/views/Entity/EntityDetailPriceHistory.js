@@ -2,16 +2,31 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
+  addApiResourceStateToPropsUtils, filterApiResourcesByType
 } from "../../ApiResource";
 import {Line} from 'react-chartjs-2';
+import 'datejs';
 import {FormattedMessage} from "react-intl";
-import {NavLink} from "react-router-dom";
-import ReactMarkdown from 'react-markdown';
+import {withRouter} from "react-router-dom";
 import Loading from "../../components/Loading";
-import {camelize, formatDateStr} from "../../utils";
-import messages from "../../messages";
+import {camelize} from "../../utils";
 import './EntityDetailPriceHistory.css'
+import {createOption, createOptions} from "../../form_utils";
+import Select from "react-select";
+import queryString from 'query-string';
+import {settings} from "../../settings";
+import {chartColors, lightenDarkenColor} from "../../colors"
+
+const displayOptions = [
+  {
+    value: 'all',
+    label: <FormattedMessage id="all" defaultMessage={`All`} />
+  },
+  {
+    value: 'only_available',
+    label: <FormattedMessage id="only_available" defaultMessage={`Only when available`} />
+  },
+];
 
 
 class EntityDetailPriceHistory extends Component {
@@ -19,37 +34,219 @@ class EntityDetailPriceHistory extends Component {
     super(props);
 
     this.state = {
-      formData: {
-        startDate: '2017-08-01',
-        endDate: '2017-08-30',
-      }
+      chart: {
+        data: undefined,
+        startDate: undefined,
+        endDate: undefined
+      },
+      formData: this.parseUrlArgs(window.location)
     }
   }
 
+  parseUrlArgs = (location) => {
+    const parameters = queryString.parse(location.search);
+
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    // Start date
+    let startDate = parameters['start_date'];
+
+    if (dateRegex.test(startDate)) {
+      startDate = Date.parse(startDate)
+    } else {
+      startDate = Date.today().addDays(-30)
+    }
+
+    // End date
+    let endDate = parameters['end_date'];
+
+    if (dateRegex.test(endDate)) {
+      endDate = Date.parse(endDate)
+    } else {
+      endDate = Date.today()
+    }
+
+    if (startDate.compareTo(endDate) === 1) {
+      endDate = startDate;
+    }
+
+    // Display
+    let display = parameters['display'];
+
+    display = displayOptions.filter(option => option.value === display)[0];
+    if (!display) {
+      display = displayOptions[0]
+    }
+
+    // Currency
+    let currency = parseInt(parameters['currency'], 10);
+    const currencyOptions = createOptions(this.props.currencies);
+
+    currency = currencyOptions.filter(option => option.value === currency)[0];
+    if (!currency) {
+      currency = createOption(this.props.ApiResource(this.props.resourceObject).currency)
+    }
+
+    return {
+      startDate,
+      endDate,
+      display,
+      currency
+    };
+  };
+
   handleDateChange = event => {
     const field = camelize((event.target.getAttribute('name')));
-    console.log(field);
+    const newDate = Date.parse(event.target.value);
 
     this.setState({
       formData: {
         ...this.state.formData,
-        [field]: event.target.value
+        [field]: newDate
       }
     })
   };
 
-  fetchPriceData = () => {
-    const entity = this.props.resourceObject;
+  handleValueChange = (field, val) => {
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        [field]: val
+      }
+    })
+  };
 
-    // let targetUrl = `${}`;
+  updateChartData = (pushLocation=false) => {
+    this.setState({
+      chart: {
+        ...this.state.chart,
+        data: undefined,
+      }
+    });
 
-    this.props.fetchAuth(``)
+    const formData = this.state.formData;
+    const startDate = formData.startDate;
+    const endDate = formData.endDate;
+
+    if (pushLocation) {
+      const historySearch = this.props.history.location.pathname + `?display=${formData.display.value}&currency=${formData.currency.value}&start_date=${startDate.toString('yyyy-MM-dd')}&end_date=${endDate.toString('yyyy-MM-dd')}`;
+      this.props.history.push(historySearch)
+    }
+
+    const endpoint = settings.resourceEndpoints.entity_histories + `?date_0=${startDate.toString('yyyy-MM-dd')}&date_1=${endDate.toString('yyyy-MM-dd')}&entities=${this.props.resourceObject.id}`;
+
+    this.props.fetchAuth(endpoint).then(json => {
+      this.setState({
+        chart: {
+          startDate,
+          endDate,
+          data: json['results']
+        }
+      })
+    })
   };
 
   componentDidMount() {
+    this.updateChartData();
+    this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
   }
 
+  componentWillUnmount() {
+    this.unlistenHistory();
+  }
+
+  onHistoryChange = (location, action) => {
+    if (action !== 'POP') {
+      return
+    }
+
+    this.setState({
+      formData: this.parseUrlArgs(location)
+    }, this.updateChartData)
+  };
+
   render() {
+    const entity = this.props.ApiResource(this.props.resourceObject);
+
+    const currencyPriority = (currency) => {
+      switch(currency.id) {
+        case entity.currency.id: return 1;
+        case this.props.preferredCurrency.id: return 2;
+        default: return 3
+      }
+    };
+
+    const sortedCurrencies = [...this.props.currencies];
+    sortedCurrencies.sort((a, b) => {
+      return currencyPriority(a) - currencyPriority(b)
+    });
+    const currencyOptions = createOptions(sortedCurrencies);
+
+    let chart = <Loading />;
+
+    if (this.state.chart.data) {
+      const maxValue = this.state.chart.data.reduce((acum, datapoint) => {
+        return Math.max(acum, datapoint.normal_price, datapoint.offer_price, datapoint.cell_monthly_payment)
+      }, 0);
+
+
+      const chartOptions = {
+        title:{
+          text: "Chart.js Time Scale"
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              displayFormats: {
+                day: 'MMM DD'
+              },
+              min: this.state.chart.startDate,
+              max: this.state.chart.endDate.addDays(1),
+              unit: 'day'
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Date'
+            }
+          }, ],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Price'
+            },
+            ticks: {
+              beginAtZero: true,
+              suggestedMax: maxValue * 1.1,
+            }
+          }]
+        },
+      };
+
+      const chartData = {
+        labels: this.state.chart.data.map(datapoint => new Date(datapoint.timestamp)),
+        datasets: [
+          {
+            label: 'Normal price',
+            data: this.state.chart.data.map(datapoint => datapoint.normal_price),
+            fill: false,
+            borderColor: chartColors[0],
+            backgroundColor: lightenDarkenColor(chartColors[0], 40)
+          },
+          {
+            label: 'Offer price',
+            data: this.state.chart.data.map(datapoint => datapoint.offer_price),
+            fill: false,
+            borderColor: chartColors[1],
+            backgroundColor: lightenDarkenColor(chartColors[1], 40)
+          }
+        ]
+      };
+
+
+      chart = <Line data={chartData} options={chartOptions} />
+    }
+
     return (
         <div className="animated fadeIn">
           <div className="row">
@@ -58,24 +255,60 @@ class EntityDetailPriceHistory extends Component {
                 <div className="card-header"><strong><FormattedMessage id="chart" defaultMessage={`Chart`} /></strong></div>
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-12 col-sm-4">
+                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                       <div className="form-group">
                         <label htmlFor="start_date">Start date</label>
-                        <input type="date" className="form-control" name="start_date" id="start_date"
-                               value={this.state.formData.startDate} onChange={this.handleDateChange} />
+                        <input type="date" className="form-control"
+                               name="start_date" id="start_date"
+                               required={true}
+                               value={this.state.formData.startDate.toString('yyyy-MM-dd')}
+                               onChange={this.handleDateChange}
+                        />
                       </div>
                     </div>
-                    <div className="col-12 col-sm-4">
+                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                       <div className="form-group">
                         <label htmlFor="start_date">End date</label>
-                        <input type="date" className="form-control" name="end_date" id="end_date"
-                               value={this.state.formData.endDate} onChange={this.handleDateChange} />
+                        <input type="date" className="form-control"
+                               name="end_date"
+                               id="end_date"
+                               min={this.state.formData.startDate.toString('yyyy-MM-dd')}
+                               required={true}
+                               value={this.state.formData.endDate.toString('yyyy-MM-dd')}
+                               onChange={this.handleDateChange} />
                       </div>
                     </div>
-                    <div className="col-12 col-sm-4">
+                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                       <div className="form-group">
-                        <label className="hidden-xs-down">&nbsp;</label>
-                        <button type="button" id="update-button" className="btn btn-primary">Update</button>
+                        <label htmlFor="currency">Currency</label>
+                        <Select
+                            id="currency"
+                            options={currencyOptions}
+                            value={this.state.formData.currency}
+                            onChange={val => this.handleValueChange('currency', val)}
+                            clearable={false}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                      <div className="form-group">
+                        <label htmlFor="display">Display</label>
+                        <Select
+                            id="display"
+                            options={displayOptions}
+                            value={this.state.formData.display}
+                            onChange={val => this.handleValueChange('display', val)}
+                            clearable={false}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12 col-sm-4 col-xl-2">
+                      <div className="form-group">
+                        <label className="hidden-sm-down">&nbsp;</label>
+                        <button type="button" id="update-button" className="btn btn-primary"
+                                onClick={() => this.updateChartData(true)}>
+                          Update
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -88,7 +321,7 @@ class EntityDetailPriceHistory extends Component {
               <div className="card">
                 <div className="card-header"><strong><FormattedMessage id="chart" defaultMessage={`Chart`} /></strong></div>
                 <div className="card-block">
-                  {/*<Line />*/}
+                  {chart}
                 </div>
               </div>
             </div>
@@ -98,6 +331,14 @@ class EntityDetailPriceHistory extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(),
-    addApiResourceDispatchToPropsUtils())(EntityDetailPriceHistory);
+function mapStateToProps(state) {
+  return {
+    currencies: filterApiResourcesByType(state.apiResources, 'currencies'),
+    preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
+    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format]
+  }
+}
+
+export default withRouter(connect(
+    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceDispatchToPropsUtils())(EntityDetailPriceHistory));

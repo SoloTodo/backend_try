@@ -11,6 +11,7 @@ import RequiredResourcesContainer from "../RequiredResourcesContainer";
 
 class DetailPermissionRoute extends Component {
   componentDidMount() {
+    document.body.classList.add('sidebar-hidden');
     const id = this.props.computedMatch.params.id;
     const objUrl = `${settings.resourceEndpoints[this.props.resource]}${id}/`;
     const resourceObject = this.props.apiResources[objUrl];
