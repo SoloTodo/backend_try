@@ -165,6 +165,34 @@ class EntityDetailPriceHistory extends Component {
     }, this.updateChartData)
   };
 
+  fillPriceHistoriesMissingDates() {
+    const result = [];
+    let lastPriceHistorySeen = undefined;
+
+    for (const priceHistory of this.state.chart.data) {
+      if (typeof lastPriceHistorySeen !== 'undefined') {
+        const targetDate = new Date(priceHistory.timestamp).clearTime();
+        let iterDate = new Date(lastPriceHistorySeen.timestamp).clearTime().addDays(1);
+
+        while (iterDate < targetDate) {
+          result.push({
+            timestamp: iterDate,
+            normal_price: NaN,
+            offer_price: NaN,
+            cell_monthly_payment: NaN
+          });
+
+          iterDate = iterDate.addDays(1)
+        }
+
+      }
+      lastPriceHistorySeen = priceHistory;
+      result.push(priceHistory);
+    }
+
+    return result;
+  }
+
   render() {
     const entity = this.props.ApiResource(this.props.resourceObject);
 
@@ -189,10 +217,12 @@ class EntityDetailPriceHistory extends Component {
         return Math.max(acum, datapoint.normal_price, datapoint.offer_price, datapoint.cell_monthly_payment)
       }, 0);
 
+      const chartEndDate = new Date(this.state.chart.endDate).addDays(1);
 
       const chartOptions = {
-        title:{
-          text: "Chart.js Time Scale"
+        title: {
+          display: true,
+          text: `${entity.name} - ${entity.store.name}`
         },
         scales: {
           xAxes: [{
@@ -202,49 +232,54 @@ class EntityDetailPriceHistory extends Component {
                 day: 'MMM DD'
               },
               min: this.state.chart.startDate,
-              max: this.state.chart.endDate.addDays(1),
+              max: chartEndDate,
               unit: 'day'
-            },
-            scaleLabel: {
-              display: true,
-              labelString: 'Date'
             }
-          }, ],
+          }],
           yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: 'Price'
-            },
             ticks: {
               beginAtZero: true,
               suggestedMax: maxValue * 1.1,
             }
           }]
         },
+        legend: {
+          position: 'bottom',
+          text: 'foo'
+        },
+        maintainAspectRatio: false
       };
 
+      const filledChartData = this.fillPriceHistoriesMissingDates();
+
       const chartData = {
-        labels: this.state.chart.data.map(datapoint => new Date(datapoint.timestamp)),
+        labels: filledChartData.map(datapoint => new Date(datapoint.timestamp)),
         datasets: [
           {
             label: 'Normal price',
-            data: this.state.chart.data.map(datapoint => datapoint.normal_price),
+            data: filledChartData.map(datapoint => datapoint.normal_price),
             fill: false,
             borderColor: chartColors[0],
             backgroundColor: lightenDarkenColor(chartColors[0], 40)
           },
           {
             label: 'Offer price',
-            data: this.state.chart.data.map(datapoint => datapoint.offer_price),
+            data: filledChartData.map(datapoint => datapoint.offer_price),
             fill: false,
             borderColor: chartColors[1],
             backgroundColor: lightenDarkenColor(chartColors[1], 40)
+          },
+          {
+            label: 'Cell monthly payment',
+            data: filledChartData.map(datapoint => datapoint.cell_monthly_payment),
+            fill: false,
+            borderColor: chartColors[2],
+            backgroundColor: lightenDarkenColor(chartColors[2], 40)
           }
         ]
       };
 
-
-      chart = <Line data={chartData} options={chartOptions} />
+      chart = <Line height={400} data={chartData} options={chartOptions} />
     }
 
     return (

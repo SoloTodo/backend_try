@@ -40,7 +40,7 @@ class Full extends Component {
                   <DetailPermissionRoute key="3" exact path="/stores/:id" resource="stores" permission="backend_view_store" name="StoresDetail" component={StoreDetail}/>
                   <DetailPermissionRoute key="4" exact path="/entities/:id" resource="entities" name="EntityDetail" requiredResources={['stores', 'product_types']} component={EntityDetail} />
                   <DetailPermissionRoute key="5" exact path="/entities/:id/events" resource="entities" name="EntityDetailEvents" component={EntityDetailEvents} />
-                  <DetailPermissionRoute key="6" exact path="/entities/:id/price_history" resource="entities" name="EntityDetailPriceHistory" component={EntityDetailPriceHistory} />
+                  <DetailPermissionRoute key="6" exact path="/entities/:id/price_history" resource="entities" name="EntityDetailPriceHistory" requiredResources={['stores']} component={EntityDetailPriceHistory} />
                   <Redirect from="/" to="/dashboard"/>
                 </Switch>
               </div>
