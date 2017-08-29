@@ -145,6 +145,26 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "normal_price",
+    "defaultMessage": "Normal price",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "offer_price",
+    "defaultMessage": "Offer price",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "cell_monthly_payment",
+    "defaultMessage": "Cell monthly payment",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "default_text",
+    "defaultMessage": "default",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "home",
     "defaultMessage": "Home",
     "filepath": "./src/routes.js"
@@ -370,6 +390,16 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "no_events_found",
+    "defaultMessage": "No events found",
+    "filepath": "./src/views/Entity/EntityDetailEvents.js"
+  },
+  {
+    "id": "no_events_found_description",
+    "defaultMessage": "This entity dooesn't have any events",
+    "filepath": "./src/views/Entity/EntityDetailEvents.js"
+  },
+  {
     "id": "user",
     "defaultMessage": "User",
     "filepath": "./src/views/Entity/EntityDetailEvents.js"
@@ -395,19 +425,89 @@
     "filepath": "./src/views/Entity/EntityDetailMenu.js"
   },
   {
-    "id": "price_history",
-    "defaultMessage": "Price history",
+    "id": "events",
+    "defaultMessage": "Events",
     "filepath": "./src/views/Entity/EntityDetailMenu.js"
   },
   {
-    "id": "events",
-    "defaultMessage": "Events",
+    "id": "price_history",
+    "defaultMessage": "Price history",
     "filepath": "./src/views/Entity/EntityDetailMenu.js"
   },
   {
     "id": "associate_to_prduct",
     "defaultMessage": "Associate",
     "filepath": "./src/views/Entity/EntityDetailMenu.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "available_only",
+    "defaultMessage": "Only when available",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "entity_price_history_start_date",
+    "defaultMessage": "Starting date for the chart. The minimum value is the entity's detection date",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "entity_price_history_end_date",
+    "defaultMessage": "Ending date for the chart. The maximum value is today",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "entity_price_history_currency",
+    "defaultMessage": "The price points are converted to this currency. The values are calculated using standard exchange rates",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "entity_price_history_display_all",
+    "defaultMessage": "All price points are displayed, whether the entity was available for purchase at the time or not",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "entity_price_history_display_available_only",
+    "defaultMessage": "Only show a particular price point if the entity was available for purchase at that time",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "start_date",
+    "defaultMessage": "Start date",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "end_date",
+    "defaultMessage": "End date",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "display",
+    "defaultMessage": "Display",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
+    "id": "result",
+    "defaultMessage": "Result",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
   },
   {
     "id": "all",

@@ -1,4 +1,4 @@
-let endpoint = 'http://192.168.1.102:8000/api/';
+let endpoint = 'http://192.168.90.111:8000/api/';
 
 export const settings = {
   endpoint,

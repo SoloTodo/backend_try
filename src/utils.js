@@ -1,5 +1,7 @@
 import { settings } from './settings';
 import Big from 'big.js';
+import moment from 'moment';
+import locale_es from "moment/locale/es";
 
 // REF: https://stackoverflow.com/questions/6660977/convert-hyphens-to-camel-case-camelcase
 export function camelize(str) {
@@ -35,11 +37,15 @@ export function defaultProperty(property) {
 }
 
 export function formatDateStr(timestampStr) {
-  const dateObj = new Date(timestampStr);
-  return dateObj.toLocaleString()
+  const dateObj = moment(timestampStr);
+  return dateObj.format('llll')
 }
 
 export function formatCurrency(value, valueCurrency, conversionCurrency, thousandsSeparator, decimalSeparator) {
+  if (typeof value === 'undefined' || value === null || Number.isNaN(value)) {
+    return ''
+  }
+
   let formattingCurrency = valueCurrency;
 
   if (conversionCurrency && valueCurrency.url !== conversionCurrency.url) {
@@ -54,6 +60,31 @@ export function formatCurrency(value, valueCurrency, conversionCurrency, thousan
   return prefix + ' ' + _formatCurrency(decimalValue, decimalPlaces, 3, thousandsSeparator, decimalSeparator);
 }
 
+export function convertToDecimal(value) {
+  if (typeof value === 'undefined') {
+    return undefined
+  }
+
+  if (value === null) {
+    return null
+  }
+
+  return new Big(value)
+}
+
+export function setLocale(locale) {
+  const localesDict = {
+    'es': locale_es,
+    'en': null
+  };
+
+  if (typeof localesDict[locale] === 'undefined') {
+    console.warn('Using unsupported locale: ' + locale);
+  }
+
+  moment.locale(locale)
+}
+
 /**
  * @param value: Value to format
  * @param n: length of decimal
@@ -62,8 +93,8 @@ export function formatCurrency(value, valueCurrency, conversionCurrency, thousan
  * @param c: decimal delimiter
  */
 function _formatCurrency(value, n, x, s, c) {
-    const re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-        num = value.toFixed(Math.max(0, ~~n));
+  const re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+      num = value.toFixed(Math.max(0, ~~n));
 
-    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+  return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
 }

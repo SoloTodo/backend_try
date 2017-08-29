@@ -1,3 +1,20 @@
 #update-button {
     display: block;
 }
+
+#chart-container {
+    min-height: 400px;
+}
+
+input:invalid {
+  border-color: red;
+}
+
+.dashed {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+label {
+    display: block;
+}

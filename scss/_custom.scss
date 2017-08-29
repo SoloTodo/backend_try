@@ -113,6 +113,10 @@ main > .container-fluid {
   width: 100%;
 }
 
+.main-content > div {
+  flex: 1;
+}
+
 #root {
   flex: 1;
 }
@@ -142,4 +146,8 @@ main > .container-fluid {
   max-width: 0;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.flex-grow {
+  flex-grow: 1;
 }

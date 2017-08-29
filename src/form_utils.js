@@ -4,6 +4,7 @@ export function createOptions(options) {
 
 export function createOption(option) {
   return {
+    ...option,
     value: option.id,
     label: option.name
   }

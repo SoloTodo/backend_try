@@ -10,11 +10,6 @@ export default function EntityDetailMenu(props) {
       <div className="card-header"><strong><FormattedMessage id="options" defaultMessage={`Options`} /></strong></div>
       <div className="card-block">
         <ul className="list-without-decoration subnavigation-links">
-          <li><NavLink to={'/entities/' + entity.id}>
-            <button type="button" className="btn btn-link">
-              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
-            </button>
-          </NavLink></li>
           <li><NavLink to={`/entities/${entity.id}/events`}>
             <button type="button" className="btn btn-link">
               <FormattedMessage id="events" defaultMessage={`Events`} />

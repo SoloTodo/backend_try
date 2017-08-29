@@ -25,6 +25,10 @@ const messages = {
   picture_url: <FormattedMessage id="picture_url" defaultMessage={`Picture URL`} />,
   description: <FormattedMessage id="description" defaultMessage={`Description`} />,
   is_visible: <FormattedMessage id="is_visible" defaultMessage={`Is visible`} />,
+  normal_price: <FormattedMessage id="normal_price" defaultMessage={`Normal price`} />,
+  offer_price: <FormattedMessage id="offer_price" defaultMessage={`Offer price`} />,
+  cell_monthly_payment: <FormattedMessage id="cell_monthly_payment" defaultMessage={`Cell monthly payment`} />,
+  default_text: <FormattedMessage id="default_text" defaultMessage={`default`} />,
 };
 
 export default messages;

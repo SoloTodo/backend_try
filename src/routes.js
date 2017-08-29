@@ -12,5 +12,6 @@ const routes = {
   '/entities': <FormattedMessage id="entities" defaultMessage={`Entities`} />,
   '/entities/:id': params => ({resourceType: 'entities', resourceId: params.id}),
   '/entities/:id/events': <FormattedMessage id="events" defaultMessage={`Events`} />,
+  '/entities/:id/price_history': <FormattedMessage id="price_history" defaultMessage={`Price history`} />,
 };
 export default routes;

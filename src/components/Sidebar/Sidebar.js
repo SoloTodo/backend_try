@@ -10,6 +10,7 @@ import {
 } from '../../ApiResource';
 import './sidebar.css';
 import {settings} from "../../settings";
+import {setLocale} from "../../utils";
 
 
 class Sidebar extends Component {
@@ -125,6 +126,10 @@ let mapDispatchToProps = (dispatch) => {
 
       user[property] = value;
       user.save(authToken, dispatch);
+
+      if (property === 'preferredLanguage') {
+        setLocale(value.code);
+      }
     }
   }
 };

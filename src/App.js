@@ -8,7 +8,10 @@ import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
 import Login from './views/Pages/Login/';
 import { settings } from './settings';
-import {navigatorLanguage, fetchAuth, defaultProperty} from './utils';
+import {
+  navigatorLanguage, fetchAuth, defaultProperty,
+  setLocale
+} from './utils';
 import {
   fetchApiResource, filterApiResourcesByType
 } from './ApiResource';
@@ -16,6 +19,8 @@ import ApiResource from "./ApiResource";
 import Page404 from "./views/Pages/Page404/Page404";
 
 import 'react-select/dist/react-select.css';
+
+
 
 export function initialUserLoad(authToken, languages, countries, currencies, numberFormats, dispatch) {
   return fetchAuth(authToken, settings.ownUserUrl).then(
@@ -83,6 +88,8 @@ export function initialUserLoad(authToken, languages, countries, currencies, num
                 user.save(authToken, dispatch);
               })
         }
+
+        setLocale(user.preferredLanguage.code);
 
         return rawUser;
       }

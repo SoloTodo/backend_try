@@ -9,6 +9,7 @@ import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
 import ReactMarkdown from 'react-markdown';
 import {v4} from 'uuid';
+import { polyfill } from 'smoothscroll-polyfill'
 import {settings} from "../../settings";
 import {formatCurrency, formatDateStr} from "../../utils";
 import EntityDetailMenu from "./EntityDetailMenu";
@@ -20,6 +21,7 @@ import PageAlerts from "../../components/PageAlerts";
 class EntityDetail extends Component {
   constructor(props) {
     super(props);
+    polyfill();
 
     this.state = {
       updatingPricing: false,
@@ -69,7 +71,11 @@ class EntityDetail extends Component {
         })
       }
 
-      window.scrollTo(0, 0);
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
     })
   };
 

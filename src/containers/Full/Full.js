@@ -29,7 +29,7 @@ class Full extends Component {
             <main className="main">
               <Alerts location={this.props.location} />
               <Breadcrumbs location={this.props.location} />
-              <div className="container-fluid main-content">
+              <div className="container-fluid main-content d-flex flex-column">
                 <Switch>
                   <Route exact path="/dashboard" name="Dashboard" component={Dashboard}/>
                   {routes.map(route =>
