@@ -172,7 +172,9 @@ class EntityDetailPriceHistory extends Component {
       this.props.history.push(historySearch)
     }
 
-    const endpoint = settings.resourceEndpoints.entity_histories + `?date_0=${startDate.format('YYYY-MM-DD')}&date_1=${endDate.format('YYYY-MM-DD')}&entities=${this.entity.id}&available_only=${display.apiValue}`;
+    const offsetEndDate = endDate.clone().add(1, 'days')
+
+    const endpoint = settings.resourceEndpoints.entity_histories + `?date_0=${startDate.format('YYYY-MM-DD')}&date_1=${offsetEndDate.format('YYYY-MM-DD')}&entities=${this.entity.id}&available_only=${display.apiValue}`;
 
     const currency = this.props.currencies.filter(currency => currency.id === formData.currency.value)[0];
 
@@ -187,7 +189,7 @@ class EntityDetailPriceHistory extends Component {
       this.setState({
         chart: {
           startDate,
-          endDate,
+          endDate: offsetEndDate,
           currency,
           data: chartData
         }

@@ -4,18 +4,21 @@ import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
 } from "../../ApiResource";
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
 import ReactMarkdown from 'react-markdown';
-import {v4} from 'uuid';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { polyfill } from 'smoothscroll-polyfill'
+import { ToastContainer, toast } from 'react-toastify';
+import Select from 'react-select';
 import {settings} from "../../settings";
 import {formatCurrency, formatDateStr} from "../../utils";
 import EntityDetailMenu from "./EntityDetailMenu";
 import imageNotAvailable from '../../images/image-not-available.svg';
+import 'react-toastify/dist/ReactToastify.min.css';
 import './EntityDetail.css'
-import PageAlerts from "../../components/PageAlerts";
+import {createOption, createOptions} from "../../form_utils";
 
 
 class EntityDetail extends Component {
@@ -25,6 +28,8 @@ class EntityDetail extends Component {
 
     this.state = {
       updatingPricing: false,
+      changingVisibility: false,
+      changingProductType: false,
       alerts: []
     }
   }
@@ -45,48 +50,85 @@ class EntityDetail extends Component {
           type: 'updateApiResource',
           payload: json
         });
-        this.setState({
-          alerts: [
-            ...this.state.alerts,
-            {
-              id: v4(),
-              color: 'success',
-              title: <FormattedMessage id="success_exclamation" defaultMessage="Success!" />,
-              message: <FormattedMessage
-                  id="entity_information_updated_successfully"
-                  defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />,
-            }]
+        toast.success(<FormattedMessage
+            id="entity_information_updated_successfully"
+            defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />, {
+          autoClose: false
         })
       } else {
         // Something wrong happened
-        this.setState({
-          alerts: [
-            ...this.state.alerts,
-            {
-              id: v4(),
-              color: 'danger',
-              title: <FormattedMessage id="error_exclamation" defaultMessage="Error!" />,
-              message: <FormattedMessage id="entity_information_updated_error" defaultMessage="There was a problem updating the entity, it has been notified to our staff" />,
-            }]
+        toast.error(<FormattedMessage id="entity_information_updated_error" defaultMessage="There was a problem updating the entity, it has been notified to our staff" />, {
+          autoClose: false
         })
       }
-
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      });
     })
   };
 
-  render() {
-    const entity = this.props.ApiResource(this.props.resourceObject);
+  handleVisibilityToggle = (event) => {
+    this.setState({
+      changingVisibility: true
+    });
 
+    this.props.fetchAuth(`${this.props.resourceObject.url}toggle_visibility/`, {
+      method: 'POST'
+    }).then(json => {
+      this.props.dispatch({type: 'updateApiResource', payload: json});
+      this.setState({
+        changingVisibility: false
+      });
+      toast.success(<FormattedMessage id="entity_visibility_updated_successfully" defaultMessage="Entity visibility updated!" />);
+    })
+  };
+
+  handleVisibilityToggleClick = (event) => {
+    if (this.props.resourceObject.product) {
+      toast.warn(<FormattedMessage id="hiding_associated_entity_warning" defaultMessage="Please deassociate the the entity before hiding it" />, {
+        autoClose: false
+      });
+    }
+  };
+
+  handleChangeProductType = newProductTypeChoice => {
+    this.setState({
+      changingProductType: true
+    });
+
+    console.log(newProductTypeChoice.permissions);
+
+    if (!newProductTypeChoice.permissions.includes('product_type_entities_staff')) {
+
+    }
+
+    const request_body = JSON.stringify({product_type: newProductTypeChoice.id});
+
+    this.props.fetchAuth(`${this.props.resourceObject.url}change_product_type/`, {
+      method: 'POST',
+      body: request_body
+    }).then(json => {
+      this.props.dispatch({type: 'updateApiResource', payload: json});
+      this.setState({
+        changingProductType: false
+      });
+      toast.success(<FormattedMessage id="entity_product_type_changed_successfully" defaultMessage="Entity product type changed!" />);
+    })
+  };
+
+  handleChangeProductTypeClick = (event) => {
+    if (this.props.resourceObject.product) {
+      toast.warn(<FormattedMessage id="changing_product_type_of_associated_entity_warning" defaultMessage="Please deassociate the the entity before changing it's type" />, {
+        autoClose: false
+      });
+    }
+  };
+
+  render() {
     const localFormatCurrency = (value, valueCurrency, conversionCurrency) => {
       return formatCurrency(value, valueCurrency, conversionCurrency,
           this.props.preferredNumberFormat.thousands_separator,
           this.props.preferredNumberFormat.decimal_separator)
     };
+
+    const entity = this.props.ApiResource(this.props.resourceObject);
 
     let stock = 0;
     if (entity.activeRegistry) {
@@ -97,16 +139,31 @@ class EntityDetail extends Component {
       }
     }
 
+    const hasStaffPermissions =
+        entity.productType.permissions.includes('product_type_entities_staff') &&
+        entity.store.permissions.includes('store_entities_staff');
+
     const canUpdatePricing =
         entity.store.permissions.includes('update_store_pricing') ||
-        entity.productType.permissions.includes('associate_product_type_entities') ||
+        hasStaffPermissions ||
         entity.productType.permissions.includes('update_product_type_entities_pricing');
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
+    const visibilitySwitchEnabled = !this.state.changingVisibility && !entity.product;
+    const productTypeSelectEnabled = !this.state.changingProductType && !entity.product;
+    const productTypeOptions = createOptions(this.props.product_types);
 
     return (
         <div className="animated fadeIn">
-          <PageAlerts alerts={this.state.alerts} />
+          <ToastContainer
+              position="top-right"
+              type="default"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              pauseOnHover
+          />
 
           <div className="row">
             <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5">
@@ -119,12 +176,15 @@ class EntityDetail extends Component {
             </div>
             <div className="col-sm-12 col-md-4 col-lg-6">
               <EntityDetailMenu entity={entity}/>
+              {canUpdatePricing &&
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="update_information" defaultMessage={`Update information`} /></strong></div>
-                {canUpdatePricing &&
+                <div className="card-header"><strong><FormattedMessage
+                    id="update_information"
+                    defaultMessage={`Update information`}/></strong></div>
                 <div className="card-block">
                   <p>
-                    <FormattedMessage id="update_entity_description" defaultMessage={`Updates the entity information from the store website`} />
+                    <FormattedMessage id="update_entity_description"
+                                      defaultMessage={`Updates the entity information from the store website`}/>
                   </p>
                   <LaddaButton
                       loading={this.state.updatingPricing}
@@ -135,16 +195,17 @@ class EntityDetail extends Component {
                       data-spinner-size={30}
                       data-spinner-color="#ddd"
                       data-spinner-lines={12}
-                      className="btn btn-primary mb-3"
-                  >
+                      className="btn btn-primary mb-3">
                     {this.state.updatingPricing ?
-                        <FormattedMessage id="updating" defaultMessage={`Updating`}/> :
-                        <FormattedMessage id="update_information" defaultMessage={`Update information`} />
+                        <FormattedMessage id="updating"
+                                          defaultMessage={`Updating`}/> :
+                        <FormattedMessage id="update_information"
+                                          defaultMessage={`Update information`}/>
                     }
                   </LaddaButton>
                 </div>
-                }
               </div>
+              }
             </div>
           </div>
           <div className="row">
@@ -152,7 +213,7 @@ class EntityDetail extends Component {
               <div className="card">
                 <div className="card-header"><strong><FormattedMessage id="general_information" defaultMessage={`General Information`}/></strong></div>
                 <div className="card-block">
-                  <table className="table table-striped">
+                  <table className="table table-striped mb-0">
                     <tbody>
                     <tr>
                       <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
@@ -172,7 +233,24 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="product_type" defaultMessage={`Product Type`} /></th>
-                      <td>{entity.productType.name}</td>
+                      <td>
+                        {hasStaffPermissions ?
+                            <div onClick={this.handleChangeProductTypeClick}>
+                              <Select
+                                  name="product_types"
+                                  id="product_types"
+                                  options={productTypeOptions}
+                                  value={createOption(entity.productType)}
+                                  onChange={this.handleChangeProductType}
+                                  searchable={false}
+                                  clearable={false}
+                                  disabled={!productTypeSelectEnabled}
+                              />
+                            </div>
+                            :
+                            entity.productType.name
+                        }
+                      </td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="product" defaultMessage={`Product`} /></th>
@@ -200,9 +278,30 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></th>
-                      <td><i className={entity.isVisible ?
-                          'glyphicons glyphicons-check' :
-                          'glyphicons glyphicons-unchecked'}/></td>
+                      <td>
+                        {hasStaffPermissions ?
+                            <span>
+                              <label
+                                  id="visibility-toggle"
+                                  className={`switch switch-text ${visibilitySwitchEnabled ? 'switch-primary' : 'switch-secondary'}`}
+                                  onClick={this.handleVisibilityToggleClick}>
+                                <input
+                                    type="checkbox"
+                                    className="switch-input"
+                                    checked={entity.isVisible}
+                                    onChange={this.handleVisibilityToggle}
+                                    disabled={!visibilitySwitchEnabled}
+                                />
+                                <span className="switch-label"
+                                      data-on={this.props.intl.formatMessage({id: 'yes'})}
+                                      data-off={this.props.intl.formatMessage({id: 'no'})}>&nbsp;</span>
+                                <span className="switch-handle">&nbsp;</span>
+                              </label>
+                            </span>
+                            : <i className={entity.isVisible ?
+                                'glyphicons glyphicons-check' :
+                                'glyphicons glyphicons-unchecked'}/> }
+                      </td>
                     </tr>
                     </tbody>
                   </table>
@@ -213,7 +312,7 @@ class EntityDetail extends Component {
               <div className="card">
                 <div className="card-header"><strong><FormattedMessage id="pricing_information" defaultMessage={`Pricing Information`}/></strong></div>
                 <div className="card-block">
-                  <table className="table table-striped">
+                  <table className="table table-striped mb-0">
                     <tbody>
                     <tr>
                       <th><FormattedMessage id="normal_price" defaultMessage={`Normal price`} /></th>
@@ -236,7 +335,7 @@ class EntityDetail extends Component {
 
                     <tr>
                       <th><FormattedMessage id="currency" defaultMessage={`Currency`} /></th>
-                      <td>{entity.currency.name}</td>
+                      <td>{entity.currency.isoCode}</td>
                     </tr>
 
                     {preferredCurrency.url !== entity.currency.url &&
@@ -330,6 +429,17 @@ class EntityDetail extends Component {
             </div>
 
           </div>
+
+          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+            <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+            <ModalBody>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
+              <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
         </div>)
   }
 }
@@ -341,6 +451,6 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(
+export default injectIntl(connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(EntityDetail);
+    addApiResourceDispatchToPropsUtils())(EntityDetail));

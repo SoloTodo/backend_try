@@ -25,7 +25,7 @@ class EntityDetailEvents extends Component {
   componentDidMount() {
     const entity = this.props.resourceObject;
 
-    this.props.fetchAuth(`${entity.url}events`).then(
+    this.props.fetchAuth(`${entity.url}events/`).then(
         json => this.setState({events: json})
     )
   }
@@ -39,6 +39,8 @@ class EntityDetailEvents extends Component {
       return <a className="url-link" href={value} target="_blank">{value || <em>N/A</em>}</a>
     } else if (field === 'description') {
       return <div className="description-container"><ReactMarkdown source={value} /></div>
+    } else if (field === 'is_visible') {
+      return value ? messages.yes : messages.no
     }
 
     return value

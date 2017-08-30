@@ -38,6 +38,11 @@ class EntityList extends Component {
   constructor(props) {
     super(props);
 
+    this.resourcesObjectsWithPermission = {
+      stores: this.props.stores.filter(store => store.permissions.includes('view_store_entities')),
+      product_types: this.props.product_types.filter(productType => productType.permissions.includes('view_product_type_entities')),
+    };
+
     this.state = {
       formData: this.parseUrlArgs(window.location),
       entities: undefined,
@@ -55,7 +60,7 @@ class EntityList extends Component {
       if (!Array.isArray(resourceObjects)) {
         resourceObjects = [resourceObjects]
       }
-      resourceObjects = this.props[resource]
+      resourceObjects = this.resourcesObjectsWithPermission[resource]
           .filter(resourceObject => resourceObjects.includes(resourceObject.id.toString()))
           .map(createOption);
       result[resource] = resourceObjects;
@@ -191,8 +196,8 @@ class EntityList extends Component {
   };
 
   render() {
-    const storeOptions = createOptions(this.props.stores);
-    const productTypeOptions = createOptions(this.props.product_types);
+    const storeOptions = createOptions(this.resourcesObjectsWithPermission.stores);
+    const productTypeOptions = createOptions(this.resourcesObjectsWithPermission.product_types);
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 
@@ -462,6 +467,7 @@ class EntityList extends Component {
                           value={this.state.formData.is_available}
                           onChange={val => this.handleValueChange('is_available', val)}
                           clearable={false}
+                          searchable={false}
                       />
                     </div>
                     <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
@@ -473,6 +479,7 @@ class EntityList extends Component {
                           value={this.state.formData.is_active}
                           onChange={val => this.handleValueChange('is_active', val)}
                           clearable={false}
+                          searchable={false}
                       />
                     </div>
                     <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
@@ -484,6 +491,7 @@ class EntityList extends Component {
                           value={this.state.formData.is_visible}
                           onChange={val => this.handleValueChange('is_visible', val)}
                           clearable={false}
+                          searchable={false}
                       />
                     </div>
                     <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
@@ -495,6 +503,7 @@ class EntityList extends Component {
                           value={this.state.formData.is_associated}
                           onChange={val => this.handleValueChange('is_associated', val)}
                           clearable={false}
+                          searchable={false}
                       />
                     </div>
                     <div className="col-12 col-sm-5 col-md-6 col-lg-4 col-xl-4">
