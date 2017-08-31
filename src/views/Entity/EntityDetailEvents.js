@@ -31,10 +31,10 @@ class EntityDetailEvents extends Component {
   }
 
   fieldValueToComponent(field, value) {
-    if (['product_type', 'scraped_product_type', 'currency'].includes(field)) {
+    if (['categories', 'scraped_category', 'currency'].includes(field)) {
       return value.name
     } else if (['product', 'cell_plan'].includes(field)) {
-      return <NavLink to={`/products/${value.id}`}>{value.name}</NavLink>
+      return value ? <NavLink to={`/products/${value.id}`}>{value.name}</NavLink> : <em>N/A</em>
     } else if (['url', 'discovery_url', 'picture_url'].includes(field)) {
       return <a className="url-link" href={value} target="_blank">{value || <em>N/A</em>}</a>
     } else if (field === 'description') {

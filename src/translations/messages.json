@@ -75,13 +75,13 @@
     "filepath": "./src/messages.js"
   },
   {
-    "id": "product_type",
+    "id": "category",
     "defaultMessage": "Category",
     "filepath": "./src/messages.js"
   },
   {
-    "id": "scraped_product_type",
-    "defaultMessage": "Scraped product type",
+    "id": "scraped_category",
+    "defaultMessage": "Scraped category",
     "filepath": "./src/messages.js"
   },
   {
@@ -245,13 +245,13 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "entity_product_type_changed_successfully",
-    "defaultMessage": "Entity product type changed!",
+    "id": "entity_category_changed_successfully",
+    "defaultMessage": "Entity category changed!",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "changing_product_type_of_associated_entity_warning",
-    "defaultMessage": "Please deassociate the the entity before changing it's type",
+    "id": "changing_category_of_associated_entity_warning",
+    "defaultMessage": "Please deassociate the the entity before changing it's category",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -305,7 +305,7 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "product_type",
+    "id": "category",
     "defaultMessage": "Category",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
@@ -390,8 +390,8 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "original_product_type",
-    "defaultMessage": "Original Product Type",
+    "id": "original_category",
+    "defaultMessage": "Original category",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -405,17 +405,17 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "entity_irreversible_product_type_change_title",
-    "defaultMessage": "Irreversible product type change",
+    "id": "entity_irreversible_category_change_title",
+    "defaultMessage": "Irreversible category change",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "entity_irreversible_product_type_change_body",
-    "defaultMessage": "You don't have staff permissions over the product type you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more.",
+    "id": "entity_irreversible_category_change_body",
+    "defaultMessage": "You don't have staff permissions over the category you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more.",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "entity_irreversible_product_type_change_proceed",
+    "id": "entity_irreversible_category_change_proceed",
     "defaultMessage": "OK, Proceed either way",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
@@ -580,7 +580,7 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "product_type",
+    "id": "category",
     "defaultMessage": "Category",
     "filepath": "./src/views/Entity/EntityList.js"
   },
@@ -670,7 +670,7 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "product_types",
+    "id": "categories",
     "defaultMessage": "Categories",
     "filepath": "./src/views/Entity/EntityList.js"
   },
@@ -850,7 +850,7 @@
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
   },
   {
-    "id": "product_types",
+    "id": "categories",
     "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
   },
@@ -895,7 +895,7 @@
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
   {
-    "id": "product_types",
+    "id": "categories",
     "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
@@ -985,7 +985,7 @@
     "filepath": "./src/views/Store/StoreUpdate.js"
   },
   {
-    "id": "product_types",
+    "id": "categories",
     "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreUpdate.js"
   },

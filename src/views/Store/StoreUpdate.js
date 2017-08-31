@@ -19,7 +19,7 @@ class StoreUpdate extends Component {
     super(props);
     this.state = {
       formData: {
-        product_types: [],
+        categories: [],
         async: true,
         stores: []
       },
@@ -122,9 +122,9 @@ class StoreUpdate extends Component {
   };
 
   updateStores = () => {
-    let product_types = this.state.formData.product_types;
-    if (product_types.length === 0) {
-      product_types = null
+    let categories = this.state.formData.categories;
+    if (categories.length === 0) {
+      categories = null
     }
 
     this.setState({
@@ -133,7 +133,7 @@ class StoreUpdate extends Component {
 
     for (let store of this.state.formData.stores) {
       const payload = {
-        product_types,
+        categories: categories,
         async: this.state.formData.async
       };
 
@@ -149,7 +149,7 @@ class StoreUpdate extends Component {
   };
 
   render() {
-    if (!this.state.availableStores || !this.props.product_types) {
+    if (!this.state.availableStores || !this.props.categories) {
       return <Loading />
     }
 
@@ -174,10 +174,10 @@ class StoreUpdate extends Component {
       4: <FormattedMessage id="error" defaultMessage={`Error`} />
     };
 
-    const productTypeDict = this.props.product_types.reduce(
-        (acum, pt) => ({
+    const categoryDict = this.props.categories.reduce(
+        (acum, category) => ({
           ...acum,
-          [pt.url]: pt.name
+          [category.url]: category.name
         }), {}
     );
 
@@ -200,11 +200,11 @@ class StoreUpdate extends Component {
                 </div>
                 <div className="card-block">
                   <div className="form-group">
-                    <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></label>
-                    <select className="form-control" id="product_types" name="product_types" multiple="multiple" size="8"
-                            value={formData.product_types} onChange={this.handleInputChange}>
-                      {this.props.product_types.map(productType => (
-                          <option key={productType.url} value={productType.url}>{productType.name}</option>
+                    <label htmlFor="categories"><FormattedMessage id="categories" defaultMessage={`Categories`} /></label>
+                    <select className="form-control" id="categories" name="categories" multiple="multiple" size="8"
+                            value={formData.categories} onChange={this.handleInputChange}>
+                      {this.props.categories.map(category => (
+                          <option key={category.url} value={category.url}>{category.name}</option>
                       ))}
                     </select>
                   </div>
@@ -257,7 +257,7 @@ class StoreUpdate extends Component {
                       <th><FormattedMessage id="status" defaultMessage={`Status`} /></th>
                       <th className="hidden-xs-down"><FormattedMessage id="result" defaultMessage={`Result`} /></th>
                       <th className="hidden-sm-down"><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
-                      <th className="hidden-sm-down"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></th>
+                      <th className="hidden-sm-down"><FormattedMessage id="categories" defaultMessage={`Categories`} /></th>
                       <th className="hidden-sm-down"><FormattedMessage id="start" defaultMessage={`Start`} /></th>
                       <th className="hidden-md-down"><FormattedMessage id="log" defaultMessage={`Log`} /></th>
                     </tr>
@@ -287,8 +287,8 @@ class StoreUpdate extends Component {
                               <td className="hidden-sm-down">{storeEntry.latestUpdateLog.lastUpdated.toLocaleString()}</td>
                               <td className="hidden-sm-down">
                                 <ul>
-                                  {storeEntry.latestUpdateLog.productTypes.map(pt => (
-                                      <li key={pt}>{productTypeDict[pt]}</li>
+                                  {storeEntry.latestUpdateLog.categories.map(pt => (
+                                      <li key={pt}>{categoryDict[pt]}</li>
                                   ))}
                                 </ul>
                               </td>

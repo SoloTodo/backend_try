@@ -38,9 +38,9 @@ class EntityList extends Component {
   constructor(props) {
     super(props);
 
-    this.resourcesObjectsWithPermission = {
+    this.resourceObjectsWithPermission = {
       stores: this.props.stores.filter(store => store.permissions.includes('view_store_entities')),
-      product_types: this.props.product_types.filter(productType => productType.permissions.includes('view_product_type_entities')),
+      categories: this.props.categories.filter(category => category.permissions.includes('view_category_entities')),
     };
 
     this.state = {
@@ -55,12 +55,12 @@ class EntityList extends Component {
 
     const result = [];
 
-    for (const resource of ['stores', 'product_types']) {
+    for (const resource of ['stores', 'categories']) {
       let resourceObjects = parameters[resource];
       if (!Array.isArray(resourceObjects)) {
         resourceObjects = [resourceObjects]
       }
-      resourceObjects = this.resourcesObjectsWithPermission[resource]
+      resourceObjects = this.resourceObjectsWithPermission[resource]
           .filter(resourceObject => resourceObjects.includes(resourceObject.id.toString()))
           .map(createOption);
       result[resource] = resourceObjects;
@@ -169,7 +169,7 @@ class EntityList extends Component {
 
     const formData = this.state.formData;
 
-    for (const resource of ['stores', 'product_types']) {
+    for (const resource of ['stores', 'categories']) {
       for (let resourceObject of formData[resource]) {
         search += `${resource}=${resourceObject.value}&`
       }
@@ -196,8 +196,8 @@ class EntityList extends Component {
   };
 
   render() {
-    const storeOptions = createOptions(this.resourcesObjectsWithPermission.stores);
-    const productTypeOptions = createOptions(this.resourcesObjectsWithPermission.product_types);
+    const storeOptions = createOptions(this.resourceObjectsWithPermission.stores);
+    const categoryOptions = createOptions(this.resourceObjectsWithPermission.categories);
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
 
@@ -263,7 +263,7 @@ class EntityList extends Component {
             {displayCellPlanColumn && <th className="hidden-xs-down"><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} /></th>}
             <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
             <th className="hidden-xs-down"><FormattedMessage id="sku" defaultMessage={`SKU`} /></th>
-            <th className="hidden-xs-down"><FormattedMessage id="product_type" defaultMessage={`Category`} /></th>
+            <th className="hidden-xs-down"><FormattedMessage id="category" defaultMessage={`Category`} /></th>
             <th className="hidden-sm-down"><FormattedMessage id="product" defaultMessage={`Product`} /></th>
             <th className="hidden-md-down center-aligned"><FormattedMessage id="is_available_short_question" defaultMessage={`Avail?`} /></th>
             <th className="hidden-md-down center-aligned"><FormattedMessage id="is_active_short_question" defaultMessage={`Act?`} /></th>
@@ -313,7 +313,7 @@ class EntityList extends Component {
                 {displayCellPlanColumn && <td className="hidden-xs-down">{entity.cellPlanName || <em>N/A</em>}</td>}
                 <td><a href={entity.externalUrl} target="_blank">{entity.store.name}</a></td>
                 <td className="hidden-xs-down">{entity.sku || <em>N/A</em>}</td>
-                <td className="hidden-xs-down">{entity.productType.name}</td>
+                <td className="hidden-xs-down">{entity.category.name}</td>
                 <td className="hidden-sm-down">
                   {entity.product ?
                       <span>
@@ -447,13 +447,13 @@ class EntityList extends Component {
                       />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                      <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></label>
+                      <label htmlFor="categories"><FormattedMessage id="categories" defaultMessage={`Categories`} /></label>
                       <Select
-                          name="product_types"
-                          id="product_types"
-                          options={productTypeOptions}
-                          value={this.state.formData.product_types}
-                          onChange={val => this.handleValueChange('product_types', val)}
+                          name="categories"
+                          id="categories"
+                          options={categoryOptions}
+                          value={this.state.formData.categories}
+                          onChange={val => this.handleValueChange('categories', val)}
                           multi={true}
                           placeholder={<FormattedMessage id="all_masculine" defaultMessage={`All`} />}
                       />

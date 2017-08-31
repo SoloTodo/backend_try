@@ -16,15 +16,15 @@ class StoreDetailUpdate extends Component {
     super(props);
     this.state = {
       formData: undefined,
-      productTypeChoices: undefined,
+      categoryChoices: undefined,
       updateTaskId: undefined,
       updateLogId: undefined
     }
   }
 
   componentDidMount() {
-    if (!this.props.productTypes) {
-      this.props.fetchApiResource('product_types', this.props.dispatch)
+    if (!this.props.categories) {
+      this.props.fetchApiResource('categories', this.props.dispatch)
     }
 
     const store = this.props.ApiResource(this.props.resourceObject);
@@ -33,9 +33,9 @@ class StoreDetailUpdate extends Component {
       this.setState({
         formData: {
           ...formData,
-          product_types: []
+          categories: []
         },
-        productTypeChoices: formData.product_types,
+        categoryChoices: formData.categories,
       })
     });
   }
@@ -95,7 +95,7 @@ class StoreDetailUpdate extends Component {
 
     const formData = this.state.formData;
 
-    if (!formData || !this.props.productTypes) {
+    if (!formData || !this.props.categories) {
       return <Loading />
     }
 
@@ -114,7 +114,7 @@ class StoreDetailUpdate extends Component {
       )
     }
 
-    const productTypeChoices = this.state.productTypeChoices.map(
+    const categoryChoices = this.state.categoryChoices.map(
         x => this.props.ApiResource(this.props.apiResources[x]));
 
     return (
@@ -164,11 +164,11 @@ class StoreDetailUpdate extends Component {
                           </select>
                         </div>
                         <div className="form-group">
-                          <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></label>
-                          <select className="form-control" id="product_types" name="product_types" multiple="multiple" size="8"
-                                  value={formData.product_types} onChange={this.handleInputChange}>
-                            {productTypeChoices.map(productType => (
-                                <option key={productType.url} value={productType.url}>{productType.name}</option>
+                          <label htmlFor="categories"><FormattedMessage id="categories" defaultMessage={`Categories`} /></label>
+                          <select className="form-control" id="categories" name="categories" multiple="multiple" size="8"
+                                  value={formData.categories} onChange={this.handleInputChange}>
+                            {categoryChoices.map(category => (
+                                <option key={category.url} value={category.url}>{category.name}</option>
                             ))}
                           </select>
                         </div>
@@ -189,12 +189,12 @@ class StoreDetailUpdate extends Component {
 }
 
 function mapStateToProps(state) {
-  let productTypes = undefined;
-  if (state.loadedResources.includes('product_types')) {
-    productTypes = filterApiResourcesByType(state.apiResources, 'product_types')
+  let categories = undefined;
+  if (state.loadedResources.includes('categories')) {
+    categories = filterApiResourcesByType(state.apiResources, 'categories')
   }
   return {
-    productTypes: productTypes
+    categories
   }
 }
 

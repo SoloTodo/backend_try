@@ -30,7 +30,7 @@ class EntityDetail extends Component {
     this.state = {
       updatingPricing: false,
       changingVisibility: false,
-      productTypeForChange: null
+      categoryForChange: null
     }
   }
 
@@ -88,49 +88,49 @@ class EntityDetail extends Component {
     }
   };
 
-  changeProductType = () => {
-    const requestBody = JSON.stringify({product_type: this.state.productTypeForChange.id});
+  changeCategory = () => {
+    const requestBody = JSON.stringify({category: this.state.categoryForChange.id});
 
-    this.props.fetchAuth(`${this.props.resourceObject.url}change_product_type/`, {
+    this.props.fetchAuth(`${this.props.resourceObject.url}change_category/`, {
       method: 'POST',
       body: requestBody
     }).then(json => {
       this.setState({
-        productTypeForChange: null
+        categoryForChange: null
       });
 
       this.props.dispatch({type: 'updateApiResource', payload: json});
-      toast.success(<FormattedMessage id="entity_product_type_changed_successfully" defaultMessage="Entity product type changed!" />);
+      toast.success(<FormattedMessage id="entity_category_changed_successfully" defaultMessage="Entity category changed!" />);
 
       this.props.fetchApiResourceObject('entities', this.props.resourceObject.id, this.props.dispatch)
     });
   };
 
-  userHasStaffPermissionOverSelectedProductType = () => {
-    return this.state.productTypeForChange.permissions.includes('product_type_entities_staff')
+  userHasStaffPermissionOverSelectedCategory = () => {
+    return this.state.categoryForChange.permissions.includes('category_entities_staff')
   };
 
-  handleChangeProductType = newProductTypeChoice => {
+  handleChangeCategory = newCategoryChoice => {
     this.setState({
-      productTypeForChange: newProductTypeChoice
+      categoryForChange: newCategoryChoice
     }, () => {
-      if (this.userHasStaffPermissionOverSelectedProductType()) {
-        this.changeProductType();
+      if (this.userHasStaffPermissionOverSelectedCategory()) {
+        this.changeCategory();
       }
     });
   };
 
-  handleChangeProductTypeClick = (event) => {
+  handleChangeCategoryClick = (event) => {
     if (this.props.resourceObject.product) {
-      toast.warn(<FormattedMessage id="changing_product_type_of_associated_entity_warning" defaultMessage="Please deassociate the the entity before changing it's type" />, {
+      toast.warn(<FormattedMessage id="changing_category_of_associated_entity_warning" defaultMessage="Please deassociate the the entity before changing it's category" />, {
         autoClose: false
       });
     }
   };
 
-  resetProductTypeForChange = () => {
+  resetCategoryForChange = () => {
     this.setState({
-      productTypeForChange: null
+      categoryForChange: null
     })
   };
 
@@ -153,19 +153,19 @@ class EntityDetail extends Component {
     }
 
     const hasStaffPermissions =
-        entity.productType.permissions.includes('product_type_entities_staff') &&
+        entity.category.permissions.includes('category_entities_staff') &&
         entity.store.permissions.includes('store_entities_staff');
 
     const canUpdatePricing =
         entity.store.permissions.includes('update_store_pricing') ||
         hasStaffPermissions ||
-        entity.productType.permissions.includes('update_product_type_entities_pricing');
+        entity.category.permissions.includes('update_category_entities_pricing');
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
     const visibilitySwitchEnabled = !this.state.changingVisibility && !entity.product;
-    const productTypeSelectEnabled = !this.state.productTypeForChange && !entity.product;
-    const productTypeOptions = createOptions(this.props.product_types);
-    const isModalOpen = Boolean(this.state.productTypeForChange) && !this.userHasStaffPermissionOverSelectedProductType();
+    const categorySelectEnabled = !this.state.categoryForChange && !entity.product;
+    const categoryOptions = createOptions(this.props.categories);
+    const isModalOpen = Boolean(this.state.categoryForChange) && !this.userHasStaffPermissionOverSelectedCategory();
 
     return (
         <div className="animated fadeIn">
@@ -251,23 +251,23 @@ class EntityDetail extends Component {
                       <td className="overflowed-table-cell"><a href={entity.externalUrl} target="_blank">{entity.externalUrl}</a></td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="product_type" defaultMessage={`Category`} /></th>
+                      <th><FormattedMessage id="category" defaultMessage={`Category`} /></th>
                       <td>
                         {hasStaffPermissions ?
-                            <div onClick={this.handleChangeProductTypeClick}>
+                            <div onClick={this.handleChangeCategoryClick}>
                               <Select
-                                  name="product_types"
-                                  id="product_types"
-                                  options={productTypeOptions}
-                                  value={createOption(entity.productType)}
-                                  onChange={this.handleChangeProductType}
+                                  name="categories"
+                                  id="categories"
+                                  options={categoryOptions}
+                                  value={createOption(entity.category)}
+                                  onChange={this.handleChangeCategory}
                                   searchable={false}
                                   clearable={false}
-                                  disabled={!productTypeSelectEnabled}
+                                  disabled={!categorySelectEnabled}
                               />
                             </div>
                             :
-                            entity.productType.name
+                            entity.category.name
                         }
                       </td>
                     </tr>
@@ -416,7 +416,7 @@ class EntityDetail extends Component {
                 </div>
               </div>
 
-              {entity.store.permissions.includes('associate_store_entities') && entity.productType.permissions.includes('associate_product_type_entities') && <div className="card">
+              {entity.store.permissions.includes('associate_store_entities') && entity.category.permissions.includes('associate_category_entities') && <div className="card">
                 <div className="card-header"><strong><FormattedMessage id="staff_information" defaultMessage={`Staff Information`}/></strong></div>
                 <div className="card-block">
                   <table className="table table-striped">
@@ -426,8 +426,8 @@ class EntityDetail extends Component {
                       <td>{entity.key}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="original_product_type" defaultMessage={`Original category`} /></th>
-                      <td>{entity.scrapedProductType.name}</td>
+                      <th><FormattedMessage id="original_category" defaultMessage={`Original category`} /></th>
+                      <td>{entity.scrapedCategory.name}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="discovery_url" defaultMessage={`Discovery URL`} /></th>
@@ -451,14 +451,14 @@ class EntityDetail extends Component {
           </div>
 
           <Modal isOpen={isModalOpen}>
-            <ModalHeader><FormattedMessage id="entity_irreversible_product_type_change_title" defaultMessage='Irreversible product type change' /></ModalHeader>
+            <ModalHeader><FormattedMessage id="entity_irreversible_category_change_title" defaultMessage='Irreversible category change' /></ModalHeader>
             <ModalBody>
-              <FormattedMessage id="entity_irreversible_product_type_change_body" defaultMessage="You don't have staff permissions over the product type you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more." />
+              <FormattedMessage id="entity_irreversible_category_change_body" defaultMessage="You don't have staff permissions over the category you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more." />
 
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={this.changeProductType}><FormattedMessage id="entity_irreversible_product_type_change_proceed" defaultMessage='OK, Proceed either way' /></Button>{' '}
-              <Button color="secondary" onClick={this.resetProductTypeForChange}><FormattedMessage id="cancel" defaultMessage='Cancel' /></Button>
+              <Button color="primary" onClick={this.changeCategory}><FormattedMessage id="entity_irreversible_category_change_proceed" defaultMessage='OK, Proceed either way' /></Button>{' '}
+              <Button color="secondary" onClick={this.resetCategoryForChange}><FormattedMessage id="cancel" defaultMessage='Cancel' /></Button>
             </ModalFooter>
           </Modal>
         </div>)

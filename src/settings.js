@@ -9,7 +9,7 @@ export const settings = {
     number_formats: endpoint + 'number_formats/',
     currencies: endpoint + 'currencies/',
     countries: endpoint + 'countries/',
-    product_types: endpoint + 'product_types/',
+    categories: endpoint + 'categories/',
     store_update_logs: endpoint + 'store_update_logs/',
     entities: endpoint + 'entities/',
     entity_histories: endpoint + 'entity_histories/'

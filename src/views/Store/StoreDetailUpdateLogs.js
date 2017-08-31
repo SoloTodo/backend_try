@@ -25,8 +25,8 @@ class StoreDetailUpdateLogs extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.productTypes) {
-      this.props.fetchApiResource('product_types', this.props.dispatch)
+    if (!this.props.categories) {
+      this.props.fetchApiResource('categories', this.props.dispatch)
     }
 
     this.updatePage(1)
@@ -61,7 +61,7 @@ class StoreDetailUpdateLogs extends Component {
   };
 
   render() {
-    if (typeof this.state.resultCount === 'undefined' || !this.props.productTypes) {
+    if (typeof this.state.resultCount === 'undefined' || !this.props.categories) {
       return <Loading />
     }
 
@@ -69,7 +69,7 @@ class StoreDetailUpdateLogs extends Component {
 
     const pageLogs = rawPageLogs.map(rawPageLog => {
       const pageLog = this.props.ApiResource(rawPageLog);
-      pageLog.apiResourceProductTypes = pageLog.productTypes.map(pt => this.props.ApiResource(this.props.apiResources[pt]));
+      pageLog.apiResourcecategories = pageLog.categories.map(pt => this.props.ApiResource(this.props.apiResources[pt]));
       return pageLog
     });
 
@@ -125,7 +125,7 @@ class StoreDetailUpdateLogs extends Component {
                           <th><FormattedMessage id="status" defaultMessage={`Status`} /></th>
                           <th><FormattedMessage id="result" defaultMessage={`Result`} /></th>
                           <th><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
-                          <th className="hidden-xs-down"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></th>
+                          <th className="hidden-xs-down"><FormattedMessage id="categories" defaultMessage={`Categories`} /></th>
                           <th className="hidden-sm-down"><FormattedMessage id="start" defaultMessage={`Start`} /></th>
                           <th className="hidden-sm-down"><FormattedMessage id="concurrency" defaultMessage={`Concurrency`} /></th>
                           <th className="hidden-md-down"><FormattedMessage id="async_question" defaultMessage={`Async?`} /></th>
@@ -145,7 +145,7 @@ class StoreDetailUpdateLogs extends Component {
                               <td>{formatDateStr(log.lastUpdated)}</td>
                               <td className="hidden-xs-down">
                                 <ul>
-                                  {log.apiResourceProductTypes.map(pt => (
+                                  {log.apiResourcecategories.map(pt => (
                                       <li key={pt.url}>{pt.name}</li>
                                   ))}
                                 </ul>
@@ -184,12 +184,12 @@ class StoreDetailUpdateLogs extends Component {
 }
 
 function mapStateToProps(state) {
-  let productTypes = undefined;
-  if (state.loadedResources.includes('product_types')) {
-    productTypes = filterApiResourcesByType(state.apiResources, 'product_types')
+  let categories = undefined;
+  if (state.loadedResources.includes('categories')) {
+    categories = filterApiResourcesByType(state.apiResources, 'categories')
   }
   return {
-    productTypes: productTypes
+    categories: categories
   }
 }
 
