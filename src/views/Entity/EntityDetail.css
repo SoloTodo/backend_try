@@ -21,3 +21,8 @@ th {
 .switch.switch-secondary .switch-label::after {
     color: #aaa;
 }
+
+.sk-spinner-pulse {
+    display: inline;
+    margin-left: 10px;
+}

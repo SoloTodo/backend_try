@@ -76,7 +76,7 @@
   },
   {
     "id": "product_type",
-    "defaultMessage": "Product type",
+    "defaultMessage": "Category",
     "filepath": "./src/messages.js"
   },
   {
@@ -306,7 +306,7 @@
   },
   {
     "id": "product_type",
-    "defaultMessage": "Product Type",
+    "defaultMessage": "Category",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -402,6 +402,26 @@
   {
     "id": "description",
     "defaultMessage": "Description",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_irreversible_product_type_change_title",
+    "defaultMessage": "Irreversible product type change",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_irreversible_product_type_change_body",
+    "defaultMessage": "You don't have staff permissions over the product type you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more.",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_irreversible_product_type_change_proceed",
+    "defaultMessage": "OK, Proceed either way",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "cancel",
+    "defaultMessage": "Cancel",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -561,7 +581,7 @@
   },
   {
     "id": "product_type",
-    "defaultMessage": "Product type",
+    "defaultMessage": "Category",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -651,7 +671,7 @@
   },
   {
     "id": "product_types",
-    "defaultMessage": "Product types",
+    "defaultMessage": "Categories",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -831,7 +851,7 @@
   },
   {
     "id": "product_types",
-    "defaultMessage": "Product types",
+    "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
   },
   {
@@ -876,7 +896,7 @@
   },
   {
     "id": "product_types",
-    "defaultMessage": "Product types",
+    "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
   {
@@ -966,7 +986,7 @@
   },
   {
     "id": "product_types",
-    "defaultMessage": "Product types",
+    "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreUpdate.js"
   },
   {

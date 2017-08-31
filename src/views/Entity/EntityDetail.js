@@ -19,6 +19,7 @@ import imageNotAvailable from '../../images/image-not-available.svg';
 import 'react-toastify/dist/ReactToastify.min.css';
 import './EntityDetail.css'
 import {createOption, createOptions} from "../../form_utils";
+import LoadingInline from "../../components/LoadingInline";
 
 
 class EntityDetail extends Component {
@@ -29,8 +30,7 @@ class EntityDetail extends Component {
     this.state = {
       updatingPricing: false,
       changingVisibility: false,
-      changingProductType: false,
-      alerts: []
+      productTypeForChange: null
     }
   }
 
@@ -88,29 +88,36 @@ class EntityDetail extends Component {
     }
   };
 
-  handleChangeProductType = newProductTypeChoice => {
-    this.setState({
-      changingProductType: true
-    });
-
-    console.log(newProductTypeChoice.permissions);
-
-    if (!newProductTypeChoice.permissions.includes('product_type_entities_staff')) {
-
-    }
-
-    const request_body = JSON.stringify({product_type: newProductTypeChoice.id});
+  changeProductType = () => {
+    const requestBody = JSON.stringify({product_type: this.state.productTypeForChange.id});
 
     this.props.fetchAuth(`${this.props.resourceObject.url}change_product_type/`, {
       method: 'POST',
-      body: request_body
+      body: requestBody
     }).then(json => {
-      this.props.dispatch({type: 'updateApiResource', payload: json});
       this.setState({
-        changingProductType: false
+        productTypeForChange: null
       });
+
+      this.props.dispatch({type: 'updateApiResource', payload: json});
       toast.success(<FormattedMessage id="entity_product_type_changed_successfully" defaultMessage="Entity product type changed!" />);
-    })
+
+      this.props.fetchApiResourceObject('entities', this.props.resourceObject.id, this.props.dispatch)
+    });
+  };
+
+  userHasStaffPermissionOverSelectedProductType = () => {
+    return this.state.productTypeForChange.permissions.includes('product_type_entities_staff')
+  };
+
+  handleChangeProductType = newProductTypeChoice => {
+    this.setState({
+      productTypeForChange: newProductTypeChoice
+    }, () => {
+      if (this.userHasStaffPermissionOverSelectedProductType()) {
+        this.changeProductType();
+      }
+    });
   };
 
   handleChangeProductTypeClick = (event) => {
@@ -119,6 +126,12 @@ class EntityDetail extends Component {
         autoClose: false
       });
     }
+  };
+
+  resetProductTypeForChange = () => {
+    this.setState({
+      productTypeForChange: null
+    })
   };
 
   render() {
@@ -150,8 +163,9 @@ class EntityDetail extends Component {
 
     const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
     const visibilitySwitchEnabled = !this.state.changingVisibility && !entity.product;
-    const productTypeSelectEnabled = !this.state.changingProductType && !entity.product;
+    const productTypeSelectEnabled = !this.state.productTypeForChange && !entity.product;
     const productTypeOptions = createOptions(this.props.product_types);
+    const isModalOpen = Boolean(this.state.productTypeForChange) && !this.userHasStaffPermissionOverSelectedProductType();
 
     return (
         <div className="animated fadeIn">
@@ -225,14 +239,19 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
-                      <td><NavLink to={'/stores/' + entity.store.id}>{entity.store.name}</NavLink></td>
+                      <td>
+                        {entity.store.permissions.includes('backend_view_store') ?
+                            <NavLink to={'/stores/' + entity.store.id}>{entity.store.name}</NavLink> :
+                            entity.store.name
+                        }
+                      </td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="url" defaultMessage={`URL`} /></th>
                       <td className="overflowed-table-cell"><a href={entity.externalUrl} target="_blank">{entity.externalUrl}</a></td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="product_type" defaultMessage={`Product Type`} /></th>
+                      <th><FormattedMessage id="product_type" defaultMessage={`Category`} /></th>
                       <td>
                         {hasStaffPermissions ?
                             <div onClick={this.handleChangeProductTypeClick}>
@@ -280,7 +299,7 @@ class EntityDetail extends Component {
                       <th><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></th>
                       <td>
                         {hasStaffPermissions ?
-                            <span>
+                            <div>
                               <label
                                   id="visibility-toggle"
                                   className={`switch switch-text ${visibilitySwitchEnabled ? 'switch-primary' : 'switch-secondary'}`}
@@ -297,7 +316,8 @@ class EntityDetail extends Component {
                                       data-off={this.props.intl.formatMessage({id: 'no'})}>&nbsp;</span>
                                 <span className="switch-handle">&nbsp;</span>
                               </label>
-                            </span>
+                              {this.state.changingVisibility && <LoadingInline />}
+                            </div>
                             : <i className={entity.isVisible ?
                                 'glyphicons glyphicons-check' :
                                 'glyphicons glyphicons-unchecked'}/> }
@@ -406,7 +426,7 @@ class EntityDetail extends Component {
                       <td>{entity.key}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="original_product_type" defaultMessage={`Original Product Type`} /></th>
+                      <th><FormattedMessage id="original_product_type" defaultMessage={`Original category`} /></th>
                       <td>{entity.scrapedProductType.name}</td>
                     </tr>
                     <tr>
@@ -430,14 +450,15 @@ class EntityDetail extends Component {
 
           </div>
 
-          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-            <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <Modal isOpen={isModalOpen}>
+            <ModalHeader><FormattedMessage id="entity_irreversible_product_type_change_title" defaultMessage='Irreversible product type change' /></ModalHeader>
             <ModalBody>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              <FormattedMessage id="entity_irreversible_product_type_change_body" defaultMessage="You don't have staff permissions over the product type you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more." />
+
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-              <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+              <Button color="primary" onClick={this.changeProductType}><FormattedMessage id="entity_irreversible_product_type_change_proceed" defaultMessage='OK, Proceed either way' /></Button>{' '}
+              <Button color="secondary" onClick={this.resetProductTypeForChange}><FormattedMessage id="cancel" defaultMessage='Cancel' /></Button>
             </ModalFooter>
           </Modal>
         </div>)

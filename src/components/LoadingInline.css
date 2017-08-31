@@ -1,0 +1,11 @@
+#spinner {
+    display: inline-block;
+    margin-left: 10px;
+    padding-top: 2px;
+}
+
+#spinner div {
+    width: 20px;
+    height: 20px;
+    color: #bbb;
+}

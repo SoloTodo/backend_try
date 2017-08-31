@@ -263,7 +263,7 @@ class EntityList extends Component {
             {displayCellPlanColumn && <th className="hidden-xs-down"><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} /></th>}
             <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
             <th className="hidden-xs-down"><FormattedMessage id="sku" defaultMessage={`SKU`} /></th>
-            <th className="hidden-xs-down"><FormattedMessage id="product_type" defaultMessage={`Product type`} /></th>
+            <th className="hidden-xs-down"><FormattedMessage id="product_type" defaultMessage={`Category`} /></th>
             <th className="hidden-sm-down"><FormattedMessage id="product" defaultMessage={`Product`} /></th>
             <th className="hidden-md-down center-aligned"><FormattedMessage id="is_available_short_question" defaultMessage={`Avail?`} /></th>
             <th className="hidden-md-down center-aligned"><FormattedMessage id="is_active_short_question" defaultMessage={`Act?`} /></th>
@@ -447,7 +447,7 @@ class EntityList extends Component {
                       />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                      <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></label>
+                      <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></label>
                       <Select
                           name="product_types"
                           id="product_types"

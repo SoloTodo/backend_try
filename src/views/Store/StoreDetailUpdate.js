@@ -164,7 +164,7 @@ class StoreDetailUpdate extends Component {
                           </select>
                         </div>
                         <div className="form-group">
-                          <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></label>
+                          <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></label>
                           <select className="form-control" id="product_types" name="product_types" multiple="multiple" size="8"
                                   value={formData.product_types} onChange={this.handleInputChange}>
                             {productTypeChoices.map(productType => (

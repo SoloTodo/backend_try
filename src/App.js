@@ -3,6 +3,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import omit from 'lodash/omit';
 import PrivateRoute from './auth/PrivateRoute';
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
@@ -174,6 +175,10 @@ class App extends Component {
           .filter(x => Boolean(x.permissions))
           .map(x => delete filteredResources[x.url]);
       return filteredResources
+    }
+
+    if (action.type === 'deleteApiResource') {
+      return omit(state, [action.url])
     }
 
     return state

@@ -36,6 +36,11 @@ export function fetchApiResourceObject(resource, id, dispatch, authToken) {
         apiResource: json,
         resourceType: resource
       });
+    } else {
+      dispatch({
+        type: 'deleteApiResource',
+        url: resourceObjectUrl
+      })
     }
     return json;
   })

@@ -200,7 +200,7 @@ class StoreUpdate extends Component {
                 </div>
                 <div className="card-block">
                   <div className="form-group">
-                    <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></label>
+                    <label htmlFor="product_types"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></label>
                     <select className="form-control" id="product_types" name="product_types" multiple="multiple" size="8"
                             value={formData.product_types} onChange={this.handleInputChange}>
                       {this.props.product_types.map(productType => (
@@ -257,7 +257,7 @@ class StoreUpdate extends Component {
                       <th><FormattedMessage id="status" defaultMessage={`Status`} /></th>
                       <th className="hidden-xs-down"><FormattedMessage id="result" defaultMessage={`Result`} /></th>
                       <th className="hidden-sm-down"><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
-                      <th className="hidden-sm-down"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></th>
+                      <th className="hidden-sm-down"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></th>
                       <th className="hidden-sm-down"><FormattedMessage id="start" defaultMessage={`Start`} /></th>
                       <th className="hidden-md-down"><FormattedMessage id="log" defaultMessage={`Log`} /></th>
                     </tr>

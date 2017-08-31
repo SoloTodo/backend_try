@@ -125,7 +125,7 @@ class StoreDetailUpdateLogs extends Component {
                           <th><FormattedMessage id="status" defaultMessage={`Status`} /></th>
                           <th><FormattedMessage id="result" defaultMessage={`Result`} /></th>
                           <th><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
-                          <th className="hidden-xs-down"><FormattedMessage id="product_types" defaultMessage={`Product types`} /></th>
+                          <th className="hidden-xs-down"><FormattedMessage id="product_types" defaultMessage={`Categories`} /></th>
                           <th className="hidden-sm-down"><FormattedMessage id="start" defaultMessage={`Start`} /></th>
                           <th className="hidden-sm-down"><FormattedMessage id="concurrency" defaultMessage={`Concurrency`} /></th>
                           <th className="hidden-md-down"><FormattedMessage id="async_question" defaultMessage={`Async?`} /></th>

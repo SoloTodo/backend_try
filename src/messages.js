@@ -11,7 +11,7 @@ const messages = {
   previous: <FormattedMessage id="previous" defaultMessage={`Previous`} />,
   next: <FormattedMessage id="next" defaultMessage={`Next`} />,
   update_stores: <FormattedMessage id="update_stores" defaultMessage={`Update Stores`} />,
-  product_type: <FormattedMessage id="product_type" defaultMessage={`Product type`} />,
+  product_type: <FormattedMessage id="product_type" defaultMessage={`Category`} />,
   scraped_product_type: <FormattedMessage id="scraped_product_type" defaultMessage={`Scraped product type`} />,
   currency: <FormattedMessage id="currency" defaultMessage={`Currency`} />,
   product: <FormattedMessage id="product" defaultMessage={`Product`} />,
