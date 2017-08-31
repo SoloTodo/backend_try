@@ -416,7 +416,7 @@ class EntityDetail extends Component {
                 </div>
               </div>
 
-              {entity.store.permissions.includes('associate_store_entities') && entity.category.permissions.includes('associate_category_entities') && <div className="card">
+              {entity.store.permissions.includes('store_entities_staff') && entity.category.permissions.includes('category_entities_staff') && <div className="card">
                 <div className="card-header"><strong><FormattedMessage id="staff_information" defaultMessage={`Staff Information`}/></strong></div>
                 <div className="card-block">
                   <table className="table table-striped">
