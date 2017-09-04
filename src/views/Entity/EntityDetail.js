@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
+  addApiResourceStateToPropsUtils, filterApiResourcesByType
 } from "../../ApiResource";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
 import ReactMarkdown from 'react-markdown';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { polyfill } from 'smoothscroll-polyfill'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Select from 'react-select';
 import {settings} from "../../settings";
 import {formatCurrency, formatDateStr} from "../../utils";
@@ -20,19 +19,92 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import './EntityDetail.css'
 import {createOption, createOptions} from "../../form_utils";
 import LoadingInline from "../../components/LoadingInline";
+import moment from "moment";
 
 
 class EntityDetail extends Component {
   constructor(props) {
     super(props);
-    polyfill();
 
     this.state = {
       updatingPricing: false,
       changingVisibility: false,
-      categoryForChange: null
+      categoryForChange: null,
+      stateForChange: null,
     }
   }
+
+  componentDidMount() {
+    const entity = this.props.resourceObject;
+
+    // If the user is staff:
+    // if some other staff has been editing this entity in the last 10 minutes, show a warning
+    // Othjerwise register the staff entry
+    if (this.userHasStaffPermissions()) {
+      if (entity.last_staff_access_date) {
+        const lastStaffAccessDate = moment(entity.last_staff_access_date);
+        const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccessDate));
+        if (durationSinceLastStaffAccess.asMinutes() < 10) {
+          if (entity.last_staff_access_user !== this.props.user.detail_url) {
+            toast.warn(<FormattedMessage
+                id="entity_staff_overlap_warning"
+                defaultMessage="Someone has been working here recently. Be mindful!"/>, {autoClose: false})
+          }
+        } else {
+          this.props.fetchAuth(`${entity.url}register_staff_access/`, {method: 'POST'})
+              .then(json => {
+                this.saveEntityChanges(json)
+              })
+        }
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentEntity = this.props.ApiResource(this.props.resourceObject);
+    const nextEntity = this.props.ApiResource(nextProps.resourceObject);
+
+    // Pricing update notification
+    const currentLastPricingUpdate = moment(currentEntity.lastPricingUpdate);
+    const nextLastPricingUpdate = moment(nextEntity.lastPricingUpdate);
+
+    if (currentLastPricingUpdate.isBefore(nextLastPricingUpdate)) {
+      if (nextEntity.lastPricingUpdateUserUrl === this.props.user.detail_url) {
+        toast.success(<FormattedMessage
+            id="entity_information_updated_successfully"
+            defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />, {
+          autoClose: false
+        })
+      } else {
+        toast.info(<FormattedMessage
+            id="entity_pricing_information_updated_by_another_user"
+            defaultMessage='Another user has just updated the pricing information of this entity' />);
+      }
+    }
+
+    // Staff change notification
+    // const staffChangingSomething = this.state.updatingPricing || this.state.changingVisibility || this.state.categoryForChange || this.state.stateForChange;
+    const now = moment();
+    const currentLastStaffChange = currentEntity.lastStaffChange ? moment(currentEntity.lastStaffChange) : now;
+    const nextLastStaffChange = nextEntity.lastStaffChange ? moment(nextEntity.lastStaffChange) : now;
+
+    if (currentLastStaffChange.isBefore(nextLastStaffChange)) {
+      if (nextEntity.lastStaffChangeUserUrl === this.props.user.detail_url) {
+        toast.success(<FormattedMessage id="entity_updated_successfully" defaultMessage="Entity updated" />, {autoClose: 2000});
+      } else {
+        toast.warn(<FormattedMessage
+            id="entity_staff_someone_editing_warning"
+            defaultMessage="Someone else is editing this entity" />, {autoClose: false});
+      }
+    }
+  }
+
+  saveEntityChanges = (changedEntity) => {
+    this.props.dispatch({
+      type: 'updateApiResource',
+      payload: changedEntity
+    });
+  };
 
   updatePricingInformation = () => {
     this.setState({
@@ -46,15 +118,7 @@ class EntityDetail extends Component {
         updatingPricing: false
       });
       if (json.url) {
-        this.props.dispatch({
-          type: 'updateApiResource',
-          payload: json
-        });
-        toast.success(<FormattedMessage
-            id="entity_information_updated_successfully"
-            defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />, {
-          autoClose: false
-        })
+        this.saveEntityChanges(json);
       } else {
         // Something wrong happened
         toast.error(<FormattedMessage id="entity_information_updated_error" defaultMessage="There was a problem updating the entity, it has been notified to our staff" />, {
@@ -67,17 +131,16 @@ class EntityDetail extends Component {
   handleVisibilityToggle = (event) => {
     this.setState({
       changingVisibility: true
+    }, () => {
+      this.props.fetchAuth(`${this.props.resourceObject.url}toggle_visibility/`, {
+        method: 'POST'
+      }).then(json => {
+        this.saveEntityChanges(json);
+        this.setState({
+          changingVisibility: false
+        });
+      })
     });
-
-    this.props.fetchAuth(`${this.props.resourceObject.url}toggle_visibility/`, {
-      method: 'POST'
-    }).then(json => {
-      this.props.dispatch({type: 'updateApiResource', payload: json});
-      this.setState({
-        changingVisibility: false
-      });
-      toast.success(<FormattedMessage id="entity_visibility_updated_successfully" defaultMessage="Entity visibility updated!" />);
-    })
   };
 
   handleVisibilityToggleClick = (event) => {
@@ -97,12 +160,26 @@ class EntityDetail extends Component {
     }).then(json => {
       this.setState({
         categoryForChange: null
+      }, () => {
+        // We may no longer have permissions to access the entity, so fetch it again.
+        // If we don't, the rsource will be deleted from the app ApiResources and
+        // we will be automatically redirected to another page.
+        this.props.fetchApiResourceObject('entities', json.id, this.props.dispatch)
       });
+    });
+  };
 
-      this.props.dispatch({type: 'updateApiResource', payload: json});
-      toast.success(<FormattedMessage id="entity_category_changed_successfully" defaultMessage="Entity category changed!" />);
+  changeState = () => {
+    const requestBody = JSON.stringify({entity_state: this.state.stateForChange.id});
 
-      this.props.fetchApiResourceObject('entities', this.props.resourceObject.id, this.props.dispatch)
+    this.props.fetchAuth(`${this.props.resourceObject.url}change_state/`, {
+      method: 'POST',
+      body: requestBody
+    }).then(json => {
+      this.saveEntityChanges(json);
+      this.setState({
+        stateForChange: null
+      });
     });
   };
 
@@ -120,6 +197,14 @@ class EntityDetail extends Component {
     });
   };
 
+  handleChangeState = newStateChoice => {
+    this.setState({
+      stateForChange: newStateChoice
+    }, () => {
+      this.changeState();
+    });
+  };
+
   handleChangeCategoryClick = (event) => {
     if (this.props.resourceObject.product) {
       toast.warn(<FormattedMessage id="changing_category_of_associated_entity_warning" defaultMessage="Please deassociate the the entity before changing it's category" />, {
@@ -132,6 +217,12 @@ class EntityDetail extends Component {
     this.setState({
       categoryForChange: null
     })
+  };
+
+  userHasStaffPermissions = () => {
+    const entity = this.props.ApiResource(this.props.resourceObject);
+    return entity.category.permissions.includes('category_entities_staff') &&
+        entity.store.permissions.includes('store_entities_staff');
   };
 
   render() {
@@ -152,9 +243,8 @@ class EntityDetail extends Component {
       }
     }
 
-    const hasStaffPermissions =
-        entity.category.permissions.includes('category_entities_staff') &&
-        entity.store.permissions.includes('store_entities_staff');
+    const hasStaffPermissions = this.userHasStaffPermissions();
+
 
     const canUpdatePricing =
         entity.store.permissions.includes('update_store_pricing') ||
@@ -165,20 +255,11 @@ class EntityDetail extends Component {
     const visibilitySwitchEnabled = !this.state.changingVisibility && !entity.product;
     const categorySelectEnabled = !this.state.categoryForChange && !entity.product;
     const categoryOptions = createOptions(this.props.categories);
+    const stateOptions = createOptions(this.props.entityStates);
     const isModalOpen = Boolean(this.state.categoryForChange) && !this.userHasStaffPermissionOverSelectedCategory();
 
     return (
         <div className="animated fadeIn">
-          <ToastContainer
-              position="top-right"
-              type="default"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              pauseOnHover
-          />
-
           <div className="row">
             <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5">
               <div className="card">
@@ -272,6 +353,25 @@ class EntityDetail extends Component {
                       </td>
                     </tr>
                     <tr>
+                      <th><FormattedMessage id="state" defaultMessage={'State'} /></th>
+                      <td>
+                        {hasStaffPermissions ?
+                            <Select
+                                name="states"
+                                id="states"
+                                options={stateOptions}
+                                value={createOption(entity.state)}
+                                onChange={this.handleChangeState}
+                                searchable={false}
+                                clearable={false}
+                                disabled={Boolean(this.state.stateForChange)}
+                            />
+                            :
+                            entity.state.name
+                        }
+                      </td>
+                    </tr>
+                    <tr>
                       <th><FormattedMessage id="product" defaultMessage={`Product`} /></th>
                       <td>{entity.product ? <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink> : <em>N/A</em>}</td>
                     </tr>
@@ -290,10 +390,6 @@ class EntityDetail extends Component {
                     <tr>
                       <th><FormattedMessage id="detection_date" defaultMessage={`Detection date`} /></th>
                       <td>{formatDateStr(entity.creationDate)}</td>
-                    </tr>
-                    <tr>
-                      <th><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
-                      <td>{formatDateStr(entity.lastUpdated)}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></th>
@@ -334,6 +430,10 @@ class EntityDetail extends Component {
                 <div className="card-block">
                   <table className="table table-striped mb-0">
                     <tbody>
+                    <tr>
+                      <th><FormattedMessage id="last_pricing_update" defaultMessage={`Last update`} /></th>
+                      <td>{formatDateStr(entity.lastPricingUpdate)}</td>
+                    </tr>
                     <tr>
                       <th><FormattedMessage id="normal_price" defaultMessage={`Normal price`} /></th>
                       <td>
@@ -433,6 +533,14 @@ class EntityDetail extends Component {
                       <th><FormattedMessage id="discovery_url" defaultMessage={`Discovery URL`} /></th>
                       <td className="overflowed-table-cell"><a href={entity.discoveryUrl} target="_blank">{entity.discoveryUrl}</a></td>
                     </tr>
+                    <tr>
+                      <th><FormattedMessage id="last_association_date" defaultMessage={`Last association date`} /></th>
+                      <td>{entity.lastAssociationDate ? formatDateStr(entity.lastAssociationDate) : <em>N/A</em>}</td>
+                    </tr>
+                    <tr>
+                      <th><FormattedMessage id="last_association_user" defaultMessage={`Last association user`} /></th>
+                      <td>{entity.lastAssociationUserUrl ? 'Some user' : <em>N/A</em>}</td>
+                    </tr>
                     </tbody>
                   </table>
                 </div>
@@ -468,7 +576,9 @@ class EntityDetail extends Component {
 function mapStateToProps(state) {
   return {
     preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format]
+    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format],
+    user: state.apiResources[settings.ownUserUrl],
+    entityStates: filterApiResourcesByType(state.apiResources, 'entity_states')
   }
 }
 

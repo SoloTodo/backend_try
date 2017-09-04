@@ -4,7 +4,6 @@ import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils, filterApiResourcesByType
 } from "../../ApiResource";
-import { polyfill } from 'smoothscroll-polyfill'
 import {Line} from 'react-chartjs-2';
 import {
   UncontrolledTooltip
@@ -37,7 +36,6 @@ const displayOptions = [
 class EntityDetailPriceHistory extends Component {
   constructor(props) {
     super(props);
-    polyfill();
 
     this.entity = this.props.ApiResource(this.props.resourceObject);
 

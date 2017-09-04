@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import omit from 'lodash/omit';
+import { polyfill } from 'smoothscroll-polyfill'
 import PrivateRoute from './auth/PrivateRoute';
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
@@ -20,6 +21,7 @@ import ApiResource from "./ApiResource";
 import Page404 from "./views/Pages/Page404/Page404";
 
 import 'react-select/dist/react-select.css';
+import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
 
 
 
@@ -105,12 +107,16 @@ class App extends Component {
     this.store = createStore(combineReducers({
       authToken: this.authTokenReducer,
       apiResources: this.apiResourcesReducer,
-      loadedResources: this.loadedResourcesReducer
+      loadedResources: this.loadedResourcesReducer,
+      breakpoint: breakpointReducer
     }));
+
+    syncBreakpointWithStore(this.store);
+    polyfill();
   }
 
   componentDidMount() {
-    const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'number_formats'];
+    const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'number_formats', 'entity_states'];
 
     for (let resource of requiredResources) {
       fetchApiResource(resource, this.store.dispatch)

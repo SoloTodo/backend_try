@@ -1,5 +1,10 @@
 [
   {
+    "id": "permission_denied_toast",
+    "defaultMessage": "This resource does not exist or you don't have permission to access it.",
+    "filepath": "./src/auth/DetailPermissionRoute.js"
+  },
+  {
     "id": "header_signout_title",
     "defaultMessage": "Logout",
     "filepath": "./src/components/Header/Header.js"
@@ -37,11 +42,6 @@
   {
     "id": "warning_exclamation",
     "defaultMessage": "Warning!",
-    "filepath": "./src/messages.js"
-  },
-  {
-    "id": "store_update_requested_success",
-    "defaultMessage": "Store update requested successfully",
     "filepath": "./src/messages.js"
   },
   {
@@ -225,18 +225,8 @@
     "filepath": "./src/views/Dashboard/Dashboard.js"
   },
   {
-    "id": "entity_information_updated_successfully",
-    "defaultMessage": "Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff.",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
     "id": "entity_information_updated_error",
     "defaultMessage": "There was a problem updating the entity, it has been notified to our staff",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "entity_visibility_updated_successfully",
-    "defaultMessage": "Entity visibility updated!",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -245,13 +235,33 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "entity_category_changed_successfully",
-    "defaultMessage": "Entity category changed!",
+    "id": "changing_category_of_associated_entity_warning",
+    "defaultMessage": "Please deassociate the the entity before changing it's category",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "changing_category_of_associated_entity_warning",
-    "defaultMessage": "Please deassociate the the entity before changing it's category",
+    "id": "entity_staff_overlap_warning",
+    "defaultMessage": "Someone has been working here recently. Be mindful!",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_information_updated_successfully",
+    "defaultMessage": "Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff.",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_pricing_information_updated_by_another_user",
+    "defaultMessage": "Another user has just updated the pricing information of this entity",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_updated_successfully",
+    "defaultMessage": "Entity updated",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_staff_someone_editing_warning",
+    "defaultMessage": "Someone else is editing this entity",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -310,6 +320,11 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "state",
+    "defaultMessage": "State",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "product",
     "defaultMessage": "Product",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -335,11 +350,6 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "last_update",
-    "defaultMessage": "Last update",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
     "id": "is_visible_question",
     "defaultMessage": "Visible?",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -347,6 +357,11 @@
   {
     "id": "pricing_information",
     "defaultMessage": "Pricing Information",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "last_pricing_update",
+    "defaultMessage": "Last update",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -397,6 +412,16 @@
   {
     "id": "discovery_url",
     "defaultMessage": "Discovery URL",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "last_association_date",
+    "defaultMessage": "Last association date",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "last_association_user",
+    "defaultMessage": "Last association user",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -815,6 +840,11 @@
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
+    "id": "store_update_requested_success",
+    "defaultMessage": "Store update requested successfully.",
+    "filepath": "./src/views/Store/StoreDetailUpdate.js"
+  },
+  {
     "id": "warning_exclamation",
     "defaultMessage": "Warning!",
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
@@ -842,11 +872,6 @@
   {
     "id": "product_scraping_concurrency",
     "defaultMessage": "Product scraping concurrency",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "queue",
-    "defaultMessage": "Queue",
     "filepath": "./src/views/Store/StoreDetailUpdate.js"
   },
   {

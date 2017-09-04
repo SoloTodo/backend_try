@@ -45,8 +45,7 @@ class EntityList extends Component {
 
     this.state = {
       formData: this.parseUrlArgs(window.location),
-      entities: undefined,
-      size: this.getViewportSize()
+      entities: undefined
     };
   }
 
@@ -92,28 +91,12 @@ class EntityList extends Component {
 
   componentDidMount() {
     this.updateSearchResults();
-    window.onresize = this.onResize;
     this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
   }
 
   componentWillUnmount() {
     this.unlistenHistory();
   }
-
-  onResize = () => {
-    const size = this.getViewportSize();
-
-    if (size !== this.state.size) {
-      this.setState({
-        size
-      })
-    }
-  };
-
-  getViewportSize = () => {
-    const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    return viewportWidth < 576 ? 'xs' : 'normal';
-  };
 
   handleValueChange = (name, value, callback=() => {}) => {
     this.setState({
@@ -192,7 +175,11 @@ class EntityList extends Component {
       this.setState({
         entities: json
       })
-    })
+    });
+
+    if (pushLocation && this.props.breakpoint.isExtraSmall) {
+      document.getElementById('results-container').scrollIntoView({behavior: 'smooth'})
+    }
   };
 
   render() {
@@ -222,7 +209,7 @@ class EntityList extends Component {
     } else {
       let pageRangeDisplayed = 3;
       let marginPagesDisplayed= 2;
-      if (this.state.size === 'xs') {
+      if (this.props.breakpoint.isExtraSmall) {
         pageRangeDisplayed = 1;
         marginPagesDisplayed = 1;
       }
@@ -444,6 +431,7 @@ class EntityList extends Component {
                           onChange={val => this.handleValueChange('stores', val)}
                           multi={true}
                           placeholder={<FormattedMessage id="all_feminine" defaultMessage={`All`} />}
+                          searchable={!this.props.breakpoint.isExtraSmall}
                       />
                     </div>
                     <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -456,6 +444,7 @@ class EntityList extends Component {
                           onChange={val => this.handleValueChange('categories', val)}
                           multi={true}
                           placeholder={<FormattedMessage id="all_masculine" defaultMessage={`All`} />}
+                          searchable={!this.props.breakpoint.isExtraSmall}
                       />
                     </div>
                     <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
@@ -540,7 +529,7 @@ class EntityList extends Component {
                 <div className="card-header">
                   <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="entities" defaultMessage={`Entities`} />
                 </div>
-                <div className="card-block">
+                <div className="card-block" id="results-container">
                   {cardContent}
                 </div>
               </div>
@@ -554,7 +543,8 @@ class EntityList extends Component {
 function mapStateToProps(state) {
   return {
     preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format]
+    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format],
+    breakpoint: state.breakpoint
   }
 }
 

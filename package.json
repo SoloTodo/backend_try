@@ -10,6 +10,7 @@
     "gulp-sass": "^3.1.0",
     "history": "^4.6.3",
     "moment": "^2.18.1",
+    "pubnub": "^4.15.1",
     "query-string": "^5.0.0",
     "react": "^15.6.1",
     "react-chartjs-2": "^2.6.1",
@@ -28,6 +29,7 @@
     "react-transition-group": "^1.2.0",
     "reactstrap": "^4.8.0",
     "redux": "^3.7.2",
+    "redux-breakpoint": "^3.0.6",
     "route-parser": "0.0.5",
     "smoothscroll-polyfill": "^0.3.6",
     "uuid": "^3.1.0"

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { toast } from 'react-toastify';
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
@@ -9,6 +10,7 @@ import {settings} from "../settings";
 import Loading from "../components/Loading";
 import RequiredResourcesContainer from "../RequiredResourcesContainer";
 import Page404 from "../views/Pages/Page404/Page404";
+import {FormattedMessage} from "react-intl";
 
 class DetailPermissionRoute extends Component {
   constructor(props) {
@@ -51,6 +53,12 @@ class DetailPermissionRoute extends Component {
     } else if (!resourceObject && resolved) {
       // Object does not exist or the user has no permission over the objet at API level
       const redirectPath = this.props.redirectPath;
+
+      toast.error(<FormattedMessage
+          id="permission_denied_toast"
+          defaultMessage="This resource does not exist or you don't have permission to access it." />, {
+        autoClose: false
+      });
 
       if (redirectPath) {
         return <Redirect to={{

@@ -7,6 +7,7 @@ import {
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
 import {Redirect} from "react-router-dom";
+import { toast } from 'react-toastify';
 import Loading from "../../components/Loading";
 
 
@@ -79,6 +80,12 @@ class StoreDetailUpdate extends Component {
     const store = this.props.ApiResource(this.props.resourceObject);
 
     if (this.state.updateTaskId) {
+      toast.success(<FormattedMessage
+          id="store_update_requested_success"
+          defaultMessage="Store update requested successfully." />, {
+        autoClose: false
+      });
+
       return (
           <Redirect to={{
             pathname: `/stores/${store.id}/update_logs`,
@@ -154,14 +161,6 @@ class StoreDetailUpdate extends Component {
                         <div className="form-group">
                           <label htmlFor="products_for_url_concurrency"><FormattedMessage id="product_scraping_concurrency" defaultMessage={`Product scraping concurrency`} /></label>
                           <input type="number" onChange={this.handleInputChange} value={formData.products_for_url_concurrency} className="form-control" id="products_for_url_concurrency" name="products_for_url_concurrency" step="1" min="1" />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="queue"><FormattedMessage id="queue" defaultMessage={`Queue`} /></label>
-                          <select className="form-control" id="queue" name="queue"
-                                  value={formData.queue} onChange={this.handleInputChange}>
-                            <option value='us'>United States</option>
-                            <option value='cl'>Chile</option>
-                          </select>
                         </div>
                         <div className="form-group">
                           <label htmlFor="categories"><FormattedMessage id="categories" defaultMessage={`Categories`} /></label>
