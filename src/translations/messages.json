@@ -570,6 +570,11 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
+    "id": "entity_list_changes_detected",
+    "defaultMessage": "Entity changes detected, updating search results",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
     "id": "normal_price_short",
     "defaultMessage": "Normal",
     "filepath": "./src/views/Entity/EntityList.js"

@@ -42,6 +42,7 @@
   "entity_is_available_label_yes": "The entity is available for purchase",
   "entity_is_visible_label_no": "The entity has been flagged by our staff as non-relevant",
   "entity_is_visible_label_yes": "Defaut state of an entity",
+  "entity_list_changes_detected": "Entity changes detected, updating search results",
   "entity_price_history_currency": "The price points are converted to this currency. The values are calculated using standard exchange rates",
   "entity_price_history_display_all": "All price points are displayed, whether the entity was available for purchase at the time or not",
   "entity_price_history_display_available_only": "Only show a particular price point if the entity was available for purchase at that time",

@@ -4,9 +4,10 @@ import {FormattedMessage} from "react-intl";
 import ReactPaginate from 'react-paginate';
 import Select from 'react-select';
 import queryString from 'query-string';
+import { toast } from 'react-toastify';
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
+  addApiResourceStateToPropsUtils, filterApiResourcesByType
 } from "../../ApiResource";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
@@ -16,6 +17,7 @@ import {formatCurrency} from "../../utils";
 import {UncontrolledTooltip} from "reactstrap";
 import messages from "../../messages";
 import {createOption, createOptions} from "../../form_utils";
+import moment from "moment";
 
 const pageSize = 50;
 
@@ -49,10 +51,54 @@ class EntityList extends Component {
     };
   }
 
+  componentDidMount() {
+    this.updateSearchResults();
+    this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
+  }
+
+  componentWillUnmount() {
+    this.unlistenHistory();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.entities) {
+      return
+    }
+
+    const currentEntitiesDict = this.props.entities.reduce((acum, entity) => ({...acum, [entity.url]: entity}), {});
+    const nextEntitiesDict = nextProps.entities.reduce((acum, entity) => ({...acum, [entity.url]: entity}), {});
+
+    let updateSearchResults = false;
+
+    for (const entityUrl of this.state.entities.urls) {
+      // If one of the entities currnetly displayed has changed, re-execute search
+      const currentEntity = currentEntitiesDict[entityUrl];
+      const nextEntity = nextEntitiesDict[entityUrl];
+
+      if (!nextEntity) {
+        updateSearchResults = true;
+        break
+      }
+
+      const currentEntityLastUpdated = moment(currentEntity.last_updated);
+      const nextEntityLastUpdated = moment(nextEntity.last_updated);
+
+      if (currentEntityLastUpdated.isBefore(nextEntityLastUpdated)) {
+        updateSearchResults = true;
+        break
+      }
+    }
+
+    if (updateSearchResults) {
+      toast.info(<FormattedMessage id="entity_list_changes_detected" defaultMessage="Entity changes detected, updating search results" />);
+      this.updateSearchResults();
+    }
+  }
+
   parseUrlArgs = (location) => {
     const parameters = queryString.parse(location.search);
 
-    const result = [];
+    const result = {};
 
     for (const resource of ['stores', 'categories']) {
       let resourceObjects = parameters[resource];
@@ -88,15 +134,6 @@ class EntityList extends Component {
       formData: this.parseUrlArgs(location)
     }, this.updateSearchResults)
   };
-
-  componentDidMount() {
-    this.updateSearchResults();
-    this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
-  }
-
-  componentWillUnmount() {
-    this.unlistenHistory();
-  }
 
   handleValueChange = (name, value, callback=() => {}) => {
     this.setState({
@@ -169,12 +206,25 @@ class EntityList extends Component {
       this.props.history.push(newRoute)
     }
 
-    const endpoint = settings.resourceEndpoints.entities + search + `&page_size=${pageSize}`;
+    const endpoint = settings.resourceEndpoints.entities + search + `&page_size=${pageSize}&ordering=name`;
 
     this.props.fetchAuth(endpoint).then(json => {
-      this.setState({
-        entities: json
-      })
+      if (json.detail) {
+
+      } else {
+        this.props.dispatch({
+          type: 'addApiResources',
+          apiResources: json.results,
+          resourceType: 'entities'
+        });
+
+        this.setState({
+          entities: {
+            urls: json.results.map(entity => entity.url),
+            count: json.count
+          }
+        })
+      }
     });
 
     if (pushLocation && this.props.breakpoint.isExtraSmall) {
@@ -202,10 +252,8 @@ class EntityList extends Component {
 
     let cardContent = undefined;
 
-    if (typeof this.state.entities === 'undefined') {
+    if (!this.state.entities) {
       cardContent = <Loading />;
-    } else if (this.state.entities.detail) {
-      cardContent = <span><strong>Error:</strong> {this.state.entities.detail}</span>
     } else {
       let pageRangeDisplayed = 3;
       let marginPagesDisplayed= 2;
@@ -213,7 +261,9 @@ class EntityList extends Component {
         pageRangeDisplayed = 1;
         marginPagesDisplayed = 1;
       }
-      const entities = this.state.entities.results.map(entity => this.props.ApiResource(entity));
+
+      const entitiesDict = this.props.entities.reduce((acum, entity) => ({...acum, [entity.url]: entity}), {});
+      const entities = this.state.entities.urls.map(entityUrl => this.props.ApiResource(entitiesDict[entityUrl]));
       const convertCurrencies = entities.some(entity => entity.currencyUrl !== preferredCurrency.url);
       const displayCellPlanColumn = entities.some(entity => entity.cellPlanName !== null);
       const pageCount = Math.ceil(this.state.entities.count / pageSize);
@@ -544,6 +594,7 @@ function mapStateToProps(state) {
   return {
     preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
     preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format],
+    entities: filterApiResourcesByType(state.apiResources, 'entities'),
     breakpoint: state.breakpoint
   }
 }

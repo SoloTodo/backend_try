@@ -18,7 +18,7 @@ export function fetchApiResource(resource, dispatch, authToken=null) {
 
   return resourceRequest.then(json => {
     dispatch({
-      type: 'addApiResources',
+      type: 'addCompleteApiResources',
       apiResources: json,
       resourceType: resource
     });

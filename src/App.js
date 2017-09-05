@@ -144,7 +144,7 @@ class App extends Component {
   }
 
   apiResourcesReducer = (state={}, action) => {
-    if (action.type === 'addApiResources') {
+    if (action.type === 'addApiResources' || action.type === 'addCompleteApiResources') {
       let newApiResources = {};
       for (let newApiResource of action.apiResources) {
         newApiResources[newApiResource.url] = {
@@ -210,7 +210,7 @@ class App extends Component {
   };
 
   loadedResourcesReducer = (state=[], action) => {
-    if (action.type === 'addApiResources') {
+    if (action.type === 'addCompleteApiResources') {
       return [...state, action.resourceType]
     }
 

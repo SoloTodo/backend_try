@@ -42,6 +42,7 @@
   "entity_is_available_label_yes": "La entidad está disponible para compra",
   "entity_is_visible_label_no": "La entidad ha sido marcada por nuestro staff como no relevante",
   "entity_is_visible_label_yes": "Estado normal de una entidad",
+  "entity_list_changes_detected": "Se detectaron cambios en los resultados, actualizando información.",
   "entity_price_history_currency": "Los datos de precio son convertidos a esta moneda usando tasas de cambio estándar",
   "entity_price_history_display_all": "Todos los datos de precio son mostrados, independiente de si la entidad estuvo disponible para compra en cada punto",
   "entity_price_history_display_available_only": "Sólo se muestran los datos de precio para las fechas en que la entidad estuvo disponible para compra",
