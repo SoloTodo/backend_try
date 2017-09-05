@@ -8,7 +8,7 @@ import StoreDetailMenu from "./StoreDetailMenu";
 
 class StoreDetail extends Component {
   render() {
-    const store = this.props.ApiResourceObject(this.props.resourceObject);
+    const store = this.props.ApiResourceObject(this.props.apiResourceObject);
 
     return (
         <div className="animated fadeIn">

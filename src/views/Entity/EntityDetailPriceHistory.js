@@ -11,6 +11,7 @@ import {
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
 import {withRouter} from "react-router-dom";
+import { toast } from 'react-toastify';
 import Loading from "../../components/Loading";
 import {camelize, convertToDecimal, formatCurrency} from "../../utils";
 import './EntityDetailPriceHistory.css'
@@ -36,14 +37,13 @@ const displayOptions = [
 class EntityDetailPriceHistory extends Component {
   constructor(props) {
     super(props);
-
-    this.entity = this.props.ApiResourceObject(this.props.resourceObject);
+    const entity = this.props.ApiResourceObject(this.props.apiResourceObject)
 
     const sortedCurrencies = this.props.currencies.map(currency => {
       let priority = 3;
       let name = currency.name;
 
-      if (currency.id === this.entity.currency.id) {
+      if (currency.id === entity.currency.id) {
         priority = 1;
         name += ` (${this.props.intl.formatMessage({id: 'default_text'})})`
       } else if (currency.id === this.props.preferredCurrency.id) {
@@ -72,11 +72,21 @@ class EntityDetailPriceHistory extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const currentEntity = this.props.apiResourceObject;
+    const nextEntity = nextProps.apiResourceObject;
+
+    if (moment(currentEntity.last_pricing_update).isBefore(moment(nextEntity.last_pricing_update))) {
+      toast.info('Entity pricing updated, reloading chart');
+      this.updateChartData();
+    }
+  }
+
   parseUrlArgs = (location) => {
     const parameters = queryString.parse(location.search);
 
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    const entityCreationDate = moment(this.entity.creationDate).startOf('day');
+    const entityCreationDate = moment(this.props.apiResourceObject.creation_date).startOf('day');
     const today = moment().startOf('day');
     const todayMinus30Days = moment().subtract(30, 'days').startOf('day');
 
@@ -164,15 +174,16 @@ class EntityDetailPriceHistory extends Component {
     const startDate = formData.startDate;
     const endDate = formData.endDate;
     const display = formData.display;
+    const entity = this.props.apiResourceObject;
 
     if (pushLocation) {
       const historySearch = this.props.history.location.pathname + `?display=${display.value}&currency=${formData.currency.value}&start_date=${startDate.format('YYYY-MM-DD')}&end_date=${endDate.format('YYYY-MM-DD')}`;
       this.props.history.push(historySearch)
     }
 
-    const offsetEndDate = endDate.clone().add(1, 'days')
+    const offsetEndDate = endDate.clone().add(1, 'days');
 
-    const endpoint = settings.apiResourceEndpoints.entity_histories + `?date_0=${startDate.format('YYYY-MM-DD')}&date_1=${offsetEndDate.format('YYYY-MM-DD')}&entities=${this.entity.id}&available_only=${display.apiValue}`;
+    const endpoint = settings.apiResourceEndpoints.entity_histories + `?date_0=${startDate.format('YYYY-MM-DD')}&date_1=${offsetEndDate.format('YYYY-MM-DD')}&entities=${entity.id}&available_only=${display.apiValue}`;
 
     const currency = this.props.currencies.filter(currency => currency.id === formData.currency.value)[0];
 
@@ -226,10 +237,11 @@ class EntityDetailPriceHistory extends Component {
   };
 
   preparePriceHistoryChartData() {
+    const entity =this.props.ApiResourceObject(this.props.apiResourceObject);
     const targetCurrency = this.state.chart.currency;
     const exchangeRate =
         targetCurrency.exchange_rate /
-        this.entity.currency.exchangeRate;
+        entity.currency.exchangeRate;
 
     const datapoints = [
       this.makeEmptyDatapoint(this.state.chart.startDate),
@@ -278,6 +290,7 @@ class EntityDetailPriceHistory extends Component {
   }
 
   render() {
+    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     let chart = <Loading />;
 
     if (this.state.chart.data) {
@@ -293,7 +306,7 @@ class EntityDetailPriceHistory extends Component {
       const chartOptions = {
         title: {
           display: true,
-          text: `${this.entity.name} - ${this.entity.store.name}`
+          text: `${entity.name} - ${entity.store.name}`
         },
         scales: {
           xAxes: [{
@@ -376,12 +389,12 @@ class EntityDetailPriceHistory extends Component {
       chart = <div id="chart-container" className="flex-grow"><Line data={chartData} options={chartOptions} /></div>
     }
 
-    const entityCreationDate = moment(this.entity.creationDate).startOf('day');
+    const entityCreationDate = moment(entity.creationDate).startOf('day');
 
     return (
         <div className="animated fadeIn d-flex flex-column">
           <UncontrolledTooltip placement="top" target="start_date_label">
-            <FormattedMessage id="entity_price_history_start_date" defaultMessage="Starting date for the chart. The minimum value is the entity's detection date" /> ({moment(this.entity.creationDate).format('ll')})
+            <FormattedMessage id="entity_price_history_start_date" defaultMessage="Starting date for the chart. The minimum value is the entity's detection date" /> ({moment(entity.creationDate).format('ll')})
           </UncontrolledTooltip>
 
           <UncontrolledTooltip placement="top" target="end_date_label">

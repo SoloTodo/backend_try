@@ -40,7 +40,7 @@ class EntityList extends Component {
   constructor(props) {
     super(props);
 
-    this.resourceObjectsWithPermission = {
+    this.apiResourceObjectsWithPermission = {
       stores: this.props.stores.filter(store => store.permissions.includes('view_store_entities')),
       categories: this.props.categories.filter(category => category.permissions.includes('view_category_entities')),
     };
@@ -101,14 +101,14 @@ class EntityList extends Component {
     const result = {};
 
     for (const resource of ['stores', 'categories']) {
-      let resourceObjects = parameters[resource];
-      if (!Array.isArray(resourceObjects)) {
-        resourceObjects = [resourceObjects]
+      let apiResourceObjects = parameters[resource];
+      if (!Array.isArray(apiResourceObjects)) {
+        apiResourceObjects = [apiResourceObjects]
       }
-      resourceObjects = this.resourceObjectsWithPermission[resource]
-          .filter(resourceObject => resourceObjects.includes(resourceObject.id.toString()))
+      apiResourceObjects = this.apiResourceObjectsWithPermission[resource]
+          .filter(apiResourceObject => apiResourceObjects.includes(apiResourceObject.id.toString()))
           .map(createOption);
-      result[resource] = resourceObjects;
+      result[resource] = apiResourceObjects;
     }
 
     for (const field of ['is_available', 'is_active', 'is_visible', 'is_associated']) {
@@ -190,8 +190,8 @@ class EntityList extends Component {
     const formData = this.state.formData;
 
     for (const resource of ['stores', 'categories']) {
-      for (let resourceObject of formData[resource]) {
-        search += `${resource}=${resourceObject.value}&`
+      for (const apiResourceObject of formData[resource]) {
+        search += `${resource}=${apiResourceObject.value}&`
       }
     }
 
@@ -233,8 +233,8 @@ class EntityList extends Component {
   };
 
   render() {
-    const storeOptions = createOptions(this.resourceObjectsWithPermission.stores);
-    const categoryOptions = createOptions(this.resourceObjectsWithPermission.categories);
+    const storeOptions = createOptions(this.apiResourceObjectsWithPermission.stores);
+    const categoryOptions = createOptions(this.apiResourceObjectsWithPermission.categories);
 
     const preferredCurrency = this.props.ApiResourceObject(this.props.preferredCurrency);
 

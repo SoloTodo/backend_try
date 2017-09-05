@@ -23,7 +23,7 @@ class EntityDetailEvents extends Component {
   }
 
   componentDidMount() {
-    const entity = this.props.resourceObject;
+    const entity = this.props.apiResourceObject;
 
     this.props.fetchAuth(`${entity.url}events/`).then(
         json => this.setState({events: json})

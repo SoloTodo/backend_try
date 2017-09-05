@@ -38,7 +38,7 @@ export function initialUserLoad(authToken, languages, countries, currencies, num
 
         dispatch({
           type: 'updateApiResourceObject',
-          payload: rawUser
+          apiResourceObject: rawUser
         });
 
         let apiResourceObjects = {};
@@ -161,10 +161,10 @@ class App extends Component {
     }
 
     if (action.type === 'updateApiResourceObject') {
-      const previousValue = state[action.payload.url];
-      const newValue = {...previousValue, ...action.payload};
+      const previousValue = state[action.apiResourceObject.url];
+      const newValue = {...previousValue, ...action.apiResourceObject};
 
-      return {...state, ...{[action.payload.url]: newValue}}
+      return {...state, ...{[action.apiResourceObject.url]: newValue}}
     }
 
     if (action.type === 'setAuthToken') {

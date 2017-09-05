@@ -35,15 +35,15 @@ class EntityDetail extends Component {
   }
 
   componentDidMount() {
-    const entity = this.props.resourceObject;
+    const entity = this.props.apiResourceObject;
 
     // If the user is staff:
     // if some other staff has been editing this entity in the last 10 minutes, show a warning
     // Othjerwise register the staff entry
     if (this.userHasStaffPermissions()) {
-      if (entity.last_staff_access_date) {
-        const lastStaffAccessDate = moment(entity.last_staff_access_date);
-        const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccessDate));
+      if (entity.last_staff_access) {
+        const lastStaffAccess = moment(entity.last_staff_access);
+        const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccess));
         if (durationSinceLastStaffAccess.asMinutes() < 10) {
           if (entity.last_staff_access_user !== this.props.user.detail_url) {
             toast.warn(<FormattedMessage
@@ -61,8 +61,8 @@ class EntityDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentEntity = this.props.ApiResourceObject(this.props.resourceObject);
-    const nextEntity = this.props.ApiResourceObject(nextProps.resourceObject);
+    const currentEntity = this.props.ApiResourceObject(this.props.apiResourceObject);
+    const nextEntity = this.props.ApiResourceObject(nextProps.apiResourceObject);
 
     // Pricing update notification
     const currentLastPricingUpdate = moment(currentEntity.lastPricingUpdate);
@@ -102,7 +102,7 @@ class EntityDetail extends Component {
   saveEntityChanges = (changedEntity) => {
     this.props.dispatch({
       type: 'updateApiResource',
-      payload: changedEntity
+      apiResourceObject: changedEntity
     });
   };
 
@@ -111,7 +111,7 @@ class EntityDetail extends Component {
       updatingPricing: true
     });
 
-    this.props.fetchAuth(`${this.props.resourceObject.url}update_pricing/`, {
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}update_pricing/`, {
       method: 'POST'
     }).then(json => {
       this.setState({
@@ -132,7 +132,7 @@ class EntityDetail extends Component {
     this.setState({
       changingVisibility: true
     }, () => {
-      this.props.fetchAuth(`${this.props.resourceObject.url}toggle_visibility/`, {
+      this.props.fetchAuth(`${this.props.apiResourceObject.url}toggle_visibility/`, {
         method: 'POST'
       }).then(json => {
         this.saveEntityChanges(json);
@@ -144,7 +144,7 @@ class EntityDetail extends Component {
   };
 
   handleVisibilityToggleClick = (event) => {
-    if (this.props.resourceObject.product) {
+    if (this.props.apiResourceObject.product) {
       toast.warn(<FormattedMessage id="hiding_associated_entity_warning" defaultMessage="Please deassociate the the entity before hiding it" />, {
         autoClose: false
       });
@@ -154,7 +154,7 @@ class EntityDetail extends Component {
   changeCategory = () => {
     const requestBody = JSON.stringify({category: this.state.categoryForChange.id});
 
-    this.props.fetchAuth(`${this.props.resourceObject.url}change_category/`, {
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}change_category/`, {
       method: 'POST',
       body: requestBody
     }).then(json => {
@@ -172,7 +172,7 @@ class EntityDetail extends Component {
   changeState = () => {
     const requestBody = JSON.stringify({entity_state: this.state.stateForChange.id});
 
-    this.props.fetchAuth(`${this.props.resourceObject.url}change_state/`, {
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}change_state/`, {
       method: 'POST',
       body: requestBody
     }).then(json => {
@@ -206,7 +206,7 @@ class EntityDetail extends Component {
   };
 
   handleChangeCategoryClick = (event) => {
-    if (this.props.resourceObject.product) {
+    if (this.props.apiResourceObject.product) {
       toast.warn(<FormattedMessage id="changing_category_of_associated_entity_warning" defaultMessage="Please deassociate the the entity before changing it's category" />, {
         autoClose: false
       });
@@ -220,7 +220,7 @@ class EntityDetail extends Component {
   };
 
   userHasStaffPermissions = () => {
-    const entity = this.props.ApiResourceObject(this.props.resourceObject);
+    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     return entity.category.permissions.includes('category_entities_staff') &&
         entity.store.permissions.includes('store_entities_staff');
   };
@@ -232,7 +232,7 @@ class EntityDetail extends Component {
           this.props.preferredNumberFormat.decimal_separator)
     };
 
-    const entity = this.props.ApiResourceObject(this.props.resourceObject);
+    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
 
     let stock = 0;
     if (entity.activeRegistry) {
@@ -373,7 +373,12 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="product" defaultMessage={`Product`} /></th>
-                      <td>{entity.product ? <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink> : <em>N/A</em>}</td>
+                      <td>{entity.product ?
+                          <span>
+                            <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink>
+                            {hasStaffPermissions && <button className="btn btn-sm btn-danger ml-3">Disassociate</button> }
+                          </span> :
+                          <em>N/A</em>}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="cell_plan" defaultMessage={`Cell Plan`} /></th>
@@ -535,7 +540,7 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="last_association_date" defaultMessage={`Last association date`} /></th>
-                      <td>{entity.lastAssociationDate ? formatDateStr(entity.lastAssociationDate) : <em>N/A</em>}</td>
+                      <td>{entity.lastAssociation ? formatDateStr(entity.lastAssociation) : <em>N/A</em>}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="last_association_user" defaultMessage={`Last association user`} /></th>

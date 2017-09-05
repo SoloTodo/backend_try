@@ -24,7 +24,7 @@ class StoreDetailUpdate extends Component {
   }
 
   componentDidMount() {
-    const store = this.props.ApiResourceObject(this.props.resourceObject);
+    const store = this.props.ApiResourceObject(this.props.apiResourceObject);
 
     this.props.fetchAuth(`${store.url}scraper/`).then(formData => {
       this.setState({
@@ -59,7 +59,7 @@ class StoreDetailUpdate extends Component {
   handleFormSubmit = (event) => {
     event.preventDefault();
 
-    this.props.fetchAuth(`${this.props.resourceObject.url}update_pricing/`, {
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}update_pricing/`, {
       method: 'POST',
       body: JSON.stringify(this.state.formData)
     }).then(json => {
@@ -73,7 +73,7 @@ class StoreDetailUpdate extends Component {
   };
 
   render() {
-    const store = this.props.ApiResourceObject(this.props.resourceObject);
+    const store = this.props.ApiResourceObject(this.props.apiResourceObject);
 
     if (this.state.updateTaskId) {
       toast.success(<FormattedMessage

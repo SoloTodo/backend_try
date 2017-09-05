@@ -34,7 +34,7 @@ class StoreDetailUpdateLogs extends Component {
   }
 
   updatePage(page) {
-    const store = this.props.resourceObject;
+    const store = this.props.apiResourceObject;
     const url = `${settings.apiResourceEndpoints.store_update_logs}?store=${store.id}&page=${page}&page_size=${pageSize}`;
     return this.props.fetchAuth(url)
         .then(json => {

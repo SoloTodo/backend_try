@@ -41,12 +41,12 @@ class Full extends Component {
         const message = m.message;
 
         if (message.type === 'updateApiResourceObject') {
-          const newResourceObject = message.resourceObject;
-          const existingResourceObject = this.props.apiResourceObjects[newResourceObject.url];
+          const newApiResourceObject = message.apiResourceObject;
+          const existingResourceObject = this.props.apiResourceObjects[newApiResourceObject.url];
 
           if (existingResourceObject) {
             const existingObjectLastUpdate = moment(existingResourceObject.last_updated);
-            const newObjectLastUpdate = moment(newResourceObject.last_updated);
+            const newObjectLastUpdate = moment(newApiResourceObject.last_updated);
 
             if (existingObjectLastUpdate.isBefore(newObjectLastUpdate)) {
               this.props.fetchApiResourceObject(message.resource, message.id, this.props.dispatch)
