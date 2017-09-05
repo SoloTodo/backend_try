@@ -34,7 +34,7 @@ class StoreUpdate extends Component {
         availableStores: null
       });
 
-      this.props.fetchAuth(`${settings.resourceEndpoints.store_update_logs}latest/`)
+      this.props.fetchAuth(`${settings.apiResourceEndpoints.store_update_logs}latest/`)
           .then((latestUpdateLogs) => {
             const storesForUpdate = this.props.stores
                 .filter(store => store.permissions.includes('update_store_pricing')
@@ -159,11 +159,11 @@ class StoreUpdate extends Component {
       let newLatestUpdateLog = storeEntry.latestUpdateLog;
 
       if (newLatestUpdateLog) {
-        newLatestUpdateLog = this.props.ApiResource(newLatestUpdateLog)
+        newLatestUpdateLog = this.props.ApiResourceObject(newLatestUpdateLog)
       }
 
       return {
-        store: this.props.ApiResource(storeEntry.store),
+        store: this.props.ApiResourceObject(storeEntry.store),
         latestUpdateLog: newLatestUpdateLog
       }});
 

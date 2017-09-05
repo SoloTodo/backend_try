@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourcesByType
+  addApiResourceStateToPropsUtils
 } from "./ApiResource";
 import Loading from "./components/Loading";
 
@@ -25,7 +25,7 @@ class RequiredResourcesContainer extends Component {
         return <Loading />
       }
 
-      rest[requiredResource] = filterApiResourcesByType(this.props.apiResources, requiredResource)
+      rest[requiredResource] = this.props.filterApiResourceObjectsByType(requiredResource)
     }
 
     return <MyComponent {...rest} />
@@ -35,7 +35,6 @@ class RequiredResourcesContainer extends Component {
 let mapStateToProps = (state) => {
   return {
     loadedResources: state.loadedResources,
-    apiResources: state.apiResources
   }
 };
 

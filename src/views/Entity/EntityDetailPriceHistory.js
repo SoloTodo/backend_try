@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourcesByType
+  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
 } from "../../ApiResource";
 import {Line} from 'react-chartjs-2';
 import {
@@ -37,7 +37,7 @@ class EntityDetailPriceHistory extends Component {
   constructor(props) {
     super(props);
 
-    this.entity = this.props.ApiResource(this.props.resourceObject);
+    this.entity = this.props.ApiResourceObject(this.props.resourceObject);
 
     const sortedCurrencies = this.props.currencies.map(currency => {
       let priority = 3;
@@ -172,7 +172,7 @@ class EntityDetailPriceHistory extends Component {
 
     const offsetEndDate = endDate.clone().add(1, 'days')
 
-    const endpoint = settings.resourceEndpoints.entity_histories + `?date_0=${startDate.format('YYYY-MM-DD')}&date_1=${offsetEndDate.format('YYYY-MM-DD')}&entities=${this.entity.id}&available_only=${display.apiValue}`;
+    const endpoint = settings.apiResourceEndpoints.entity_histories + `?date_0=${startDate.format('YYYY-MM-DD')}&date_1=${offsetEndDate.format('YYYY-MM-DD')}&entities=${this.entity.id}&available_only=${display.apiValue}`;
 
     const currency = this.props.currencies.filter(currency => currency.id === formData.currency.value)[0];
 
@@ -287,7 +287,7 @@ class EntityDetailPriceHistory extends Component {
         return Math.max(acum, datapoint.normalPrice || 0, datapoint.offerPrice || 0, datapoint.cellMonthlyPayment || 0)
       }, 0);
 
-      const currency = this.props.ApiResource(this.state.chart.currency);
+      const currency = this.props.ApiResourceObject(this.state.chart.currency);
       const preferredNumberFormat = this.props.preferredNumberFormat;
 
       const chartOptions = {
@@ -495,9 +495,9 @@ class EntityDetailPriceHistory extends Component {
 
 function mapStateToProps(state) {
   return {
-    currencies: filterApiResourcesByType(state.apiResources, 'currencies'),
-    preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format]
+    currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
+    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
+    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format]
   }
 }
 

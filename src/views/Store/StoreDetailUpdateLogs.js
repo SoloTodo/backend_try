@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils,
-  filterApiResourcesByType
+  filterApiResourceObjectsByType
 } from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
@@ -25,10 +25,6 @@ class StoreDetailUpdateLogs extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.categories) {
-      this.props.fetchApiResource('categories', this.props.dispatch)
-    }
-
     this.updatePage(1)
         .then(json => {
           this.setState({
@@ -39,7 +35,7 @@ class StoreDetailUpdateLogs extends Component {
 
   updatePage(page) {
     const store = this.props.resourceObject;
-    const url = `${settings.resourceEndpoints.store_update_logs}?store=${store.id}&page=${page}&page_size=${pageSize}`;
+    const url = `${settings.apiResourceEndpoints.store_update_logs}?store=${store.id}&page=${page}&page_size=${pageSize}`;
     return this.props.fetchAuth(url)
         .then(json => {
           const newUpdateLogs = {
@@ -61,15 +57,15 @@ class StoreDetailUpdateLogs extends Component {
   };
 
   render() {
-    if (typeof this.state.resultCount === 'undefined' || !this.props.categories) {
+    if (typeof this.state.resultCount === 'undefined') {
       return <Loading />
     }
 
     const rawPageLogs = this.state.updateLogs[this.state.page];
 
     const pageLogs = rawPageLogs.map(rawPageLog => {
-      const pageLog = this.props.ApiResource(rawPageLog);
-      pageLog.apiResourcecategories = pageLog.categories.map(pt => this.props.ApiResource(this.props.apiResources[pt]));
+      const pageLog = this.props.ApiResourceObject(rawPageLog);
+      pageLog.apiResourceCategories = pageLog.categories.map(pt => this.props.ApiResourceObject(this.props.apiResourceObjects[pt]));
       return pageLog
     });
 
@@ -145,7 +141,7 @@ class StoreDetailUpdateLogs extends Component {
                               <td>{formatDateStr(log.lastUpdated)}</td>
                               <td className="hidden-xs-down">
                                 <ul>
-                                  {log.apiResourcecategories.map(pt => (
+                                  {log.apiResourceCategories.map(pt => (
                                       <li key={pt.url}>{pt.name}</li>
                                   ))}
                                 </ul>
@@ -184,12 +180,8 @@ class StoreDetailUpdateLogs extends Component {
 }
 
 function mapStateToProps(state) {
-  let categories = undefined;
-  if (state.loadedResources.includes('categories')) {
-    categories = filterApiResourcesByType(state.apiResources, 'categories')
-  }
   return {
-    categories: categories
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
   }
 }
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourcesByType
+  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
 } from "../../ApiResource";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
@@ -61,8 +61,8 @@ class EntityDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentEntity = this.props.ApiResource(this.props.resourceObject);
-    const nextEntity = this.props.ApiResource(nextProps.resourceObject);
+    const currentEntity = this.props.ApiResourceObject(this.props.resourceObject);
+    const nextEntity = this.props.ApiResourceObject(nextProps.resourceObject);
 
     // Pricing update notification
     const currentLastPricingUpdate = moment(currentEntity.lastPricingUpdate);
@@ -220,7 +220,7 @@ class EntityDetail extends Component {
   };
 
   userHasStaffPermissions = () => {
-    const entity = this.props.ApiResource(this.props.resourceObject);
+    const entity = this.props.ApiResourceObject(this.props.resourceObject);
     return entity.category.permissions.includes('category_entities_staff') &&
         entity.store.permissions.includes('store_entities_staff');
   };
@@ -232,7 +232,7 @@ class EntityDetail extends Component {
           this.props.preferredNumberFormat.decimal_separator)
     };
 
-    const entity = this.props.ApiResource(this.props.resourceObject);
+    const entity = this.props.ApiResourceObject(this.props.resourceObject);
 
     let stock = 0;
     if (entity.activeRegistry) {
@@ -251,7 +251,7 @@ class EntityDetail extends Component {
         hasStaffPermissions ||
         entity.category.permissions.includes('update_category_entities_pricing');
 
-    const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
+    const preferredCurrency = this.props.ApiResourceObject(this.props.preferredCurrency);
     const visibilitySwitchEnabled = !this.state.changingVisibility && !entity.product;
     const categorySelectEnabled = !this.state.categoryForChange && !entity.product;
     const categoryOptions = createOptions(this.props.categories);
@@ -575,10 +575,10 @@ class EntityDetail extends Component {
 
 function mapStateToProps(state) {
   return {
-    preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format],
-    user: state.apiResources[settings.ownUserUrl],
-    entityStates: filterApiResourcesByType(state.apiResources, 'entity_states')
+    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
+    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
+    user: state.apiResourceObjects[settings.ownUserUrl],
+    entityStates: filterApiResourceObjectsByType(state.apiResourceObjects, 'entity_states')
   }
 }
 

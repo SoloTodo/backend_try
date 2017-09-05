@@ -15,9 +15,9 @@ import {
   setLocale
 } from './utils';
 import {
-  fetchApiResource, filterApiResourcesByType
+  fetchApiResource, filterApiResourceObjectsByType
 } from './ApiResource';
-import ApiResource from "./ApiResource";
+import ApiResourceObject from "./ApiResource";
 import Page404 from "./views/Pages/Page404/Page404";
 
 import 'react-select/dist/react-select.css';
@@ -37,19 +37,19 @@ export function initialUserLoad(authToken, languages, countries, currencies, num
         }
 
         dispatch({
-          type: 'updateApiResource',
+          type: 'updateApiResourceObject',
           payload: rawUser
         });
 
-        let apiResources = {};
+        let apiResourceObjects = {};
 
         for (let resource of [languages, countries, currencies, numberFormats]) {
           for (let obj of resource) {
-            apiResources[obj.url] = obj;
+            apiResourceObjects[obj.url] = obj;
           }
         }
 
-        const user = new ApiResource(rawUser, apiResources);
+        const user = new ApiResourceObject(rawUser, apiResourceObjects);
 
         // Set language
         let preferredLanguage = user.preferredLanguage;
@@ -78,14 +78,14 @@ export function initialUserLoad(authToken, languages, countries, currencies, num
               .then(res => res.json())
               .then(json => {
                 let userCountry = json['url'] ?
-                    json : apiResources[defaultProperty('countries')];
+                    json : apiResourceObjects[defaultProperty('countries')];
 
                 if (!user.preferredCurrency) {
-                  user.preferredCurrency = new ApiResource(apiResources[userCountry.currency])
+                  user.preferredCurrency = new ApiResourceObject(apiResourceObjects[userCountry.currency])
                 }
 
                 if (!user.preferredNumberFormat) {
-                  user.preferredNumberFormat = new ApiResource(apiResources[userCountry.number_format]);
+                  user.preferredNumberFormat = new ApiResourceObject(apiResourceObjects[userCountry.number_format]);
                 }
 
                 user.save(authToken, dispatch);
@@ -106,7 +106,7 @@ class App extends Component {
 
     this.store = createStore(combineReducers({
       authToken: this.authTokenReducer,
-      apiResources: this.apiResourcesReducer,
+      apiResourceObjects: this.apiResourceObjectsReducer,
       loadedResources: this.loadedResourcesReducer,
       breakpoint: breakpointReducer
     }));
@@ -122,12 +122,12 @@ class App extends Component {
       fetchApiResource(resource, this.store.dispatch)
           .then(() => {
             const state = this.store.getState();
-            const apiResources = state.apiResources;
+            const apiResourceObjects = state.apiResourceObjects;
 
-            const groupedApiResources = requiredResources.reduce((ongoing, resource) => {
-              ongoing[resource] = filterApiResourcesByType(apiResources, resource);
-              return ongoing
-            }, {});
+            const groupedApiResources = requiredResources.reduce((ongoing, resource) => ({
+              ...ongoing,
+              [resource]: filterApiResourceObjectsByType(apiResourceObjects, resource)
+            }), {});
 
             if (state.authToken && requiredResources.every(resource => groupedApiResources[resource].length > 0)) {
               initialUserLoad(
@@ -143,30 +143,24 @@ class App extends Component {
 
   }
 
-  apiResourcesReducer = (state={}, action) => {
-    if (action.type === 'addApiResources' || action.type === 'addCompleteApiResources') {
-      let newApiResources = {};
-      for (let newApiResource of action.apiResources) {
-        newApiResources[newApiResource.url] = {
-          ...newApiResource,
-          resourceType: action.resourceType
-        };
+  apiResourceObjectsReducer = (state={}, action) => {
+    if (action.type === 'addApiResourceObjects' || action.type === 'addApiResource') {
+      let newApiResourceObjects = {};
+      for (const newApiResourceObject of action.apiResourceObjects) {
+        newApiResourceObjects[newApiResourceObject.url] = newApiResourceObject
       }
 
-      return {...state, ...newApiResources}
+      return {...state, ...newApiResourceObjects}
     }
 
-    if (action.type === 'addApiResource') {
+    if (action.type === 'addApiResourceObject') {
       return {
         ...state,
-        [action.apiResource.url]: {
-          ...action.apiResource,
-          resourceType: action.resourceType
-        }
+        [action.apiResource.url]: action.apiResource
       }
     }
 
-    if (action.type === 'updateApiResource') {
+    if (action.type === 'updateApiResourceObject') {
       const previousValue = state[action.payload.url];
       const newValue = {...previousValue, ...action.payload};
 
@@ -183,7 +177,7 @@ class App extends Component {
       return filteredResources
     }
 
-    if (action.type === 'deleteApiResource') {
+    if (action.type === 'deleteApiResourceObject') {
       return omit(state, [action.url])
     }
 
@@ -210,8 +204,8 @@ class App extends Component {
   };
 
   loadedResourcesReducer = (state=[], action) => {
-    if (action.type === 'addCompleteApiResources') {
-      return [...state, action.resourceType]
+    if (action.type === 'addApiResource') {
+      return [...state, action.resource]
     }
 
     return state

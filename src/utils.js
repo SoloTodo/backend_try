@@ -32,8 +32,8 @@ export function navigatorLanguage() {
   return language.toLowerCase().split(/[_-]+/)[0];
 }
 
-export function defaultProperty(property) {
-  return `${settings.resourceEndpoints[property]}${settings.defaults[property]}/`;
+export function defaultProperty(resource) {
+  return `${settings.apiResourceEndpoints[resource]}${settings.defaults[resource]}/`;
 }
 
 export function formatDateStr(timestampStr) {

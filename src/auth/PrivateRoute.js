@@ -28,7 +28,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 let mapStateToProps = (state) => {
   return {
     authToken: state.authToken,
-    user: state.apiResources[settings.ownUserUrl]
+    user: state.apiResourceObjects[settings.ownUserUrl]
   }
 };
 

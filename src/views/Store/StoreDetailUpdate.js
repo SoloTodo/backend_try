@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourcesByType
+  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
 } from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
@@ -24,11 +24,7 @@ class StoreDetailUpdate extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.categories) {
-      this.props.fetchApiResource('categories', this.props.dispatch)
-    }
-
-    const store = this.props.ApiResource(this.props.resourceObject);
+    const store = this.props.ApiResourceObject(this.props.resourceObject);
 
     this.props.fetchAuth(`${store.url}scraper/`).then(formData => {
       this.setState({
@@ -77,7 +73,7 @@ class StoreDetailUpdate extends Component {
   };
 
   render() {
-    const store = this.props.ApiResource(this.props.resourceObject);
+    const store = this.props.ApiResourceObject(this.props.resourceObject);
 
     if (this.state.updateTaskId) {
       toast.success(<FormattedMessage
@@ -102,7 +98,7 @@ class StoreDetailUpdate extends Component {
 
     const formData = this.state.formData;
 
-    if (!formData || !this.props.categories) {
+    if (!formData) {
       return <Loading />
     }
 
@@ -122,7 +118,7 @@ class StoreDetailUpdate extends Component {
     }
 
     const categoryChoices = this.state.categoryChoices.map(
-        x => this.props.ApiResource(this.props.apiResources[x]));
+        x => this.props.ApiResourceObject(this.props.apiResourceObjects[x]));
 
     return (
         <div className="animated fadeIn">
@@ -188,12 +184,8 @@ class StoreDetailUpdate extends Component {
 }
 
 function mapStateToProps(state) {
-  let categories = undefined;
-  if (state.loadedResources.includes('categories')) {
-    categories = filterApiResourcesByType(state.apiResources, 'categories')
-  }
   return {
-    categories
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
   }
 }
 

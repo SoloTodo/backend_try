@@ -7,7 +7,7 @@ import queryString from 'query-string';
 import { toast } from 'react-toastify';
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourcesByType
+  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
 } from "../../ApiResource";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
@@ -206,15 +206,15 @@ class EntityList extends Component {
       this.props.history.push(newRoute)
     }
 
-    const endpoint = settings.resourceEndpoints.entities + search + `&page_size=${pageSize}&ordering=name`;
+    const endpoint = settings.apiResourceEndpoints.entities + search + `&page_size=${pageSize}&ordering=name`;
 
     this.props.fetchAuth(endpoint).then(json => {
       if (json.detail) {
 
       } else {
         this.props.dispatch({
-          type: 'addApiResources',
-          apiResources: json.results,
+          type: 'addApiResourceObjects',
+          apiResourceObjects: json.results,
           resourceType: 'entities'
         });
 
@@ -236,7 +236,7 @@ class EntityList extends Component {
     const storeOptions = createOptions(this.resourceObjectsWithPermission.stores);
     const categoryOptions = createOptions(this.resourceObjectsWithPermission.categories);
 
-    const preferredCurrency = this.props.ApiResource(this.props.preferredCurrency);
+    const preferredCurrency = this.props.ApiResourceObject(this.props.preferredCurrency);
 
     const labels = {
       normalPrice: <FormattedMessage id="normal_price_short" defaultMessage={`Normal`} />,
@@ -263,7 +263,7 @@ class EntityList extends Component {
       }
 
       const entitiesDict = this.props.entities.reduce((acum, entity) => ({...acum, [entity.url]: entity}), {});
-      const entities = this.state.entities.urls.map(entityUrl => this.props.ApiResource(entitiesDict[entityUrl]));
+      const entities = this.state.entities.urls.map(entityUrl => this.props.ApiResourceObject(entitiesDict[entityUrl]));
       const convertCurrencies = entities.some(entity => entity.currencyUrl !== preferredCurrency.url);
       const displayCellPlanColumn = entities.some(entity => entity.cellPlanName !== null);
       const pageCount = Math.ceil(this.state.entities.count / pageSize);
@@ -592,9 +592,9 @@ class EntityList extends Component {
 
 function mapStateToProps(state) {
   return {
-    preferredCurrency: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResources[state.apiResources[settings.ownUserUrl].preferred_number_format],
-    entities: filterApiResourcesByType(state.apiResources, 'entities'),
+    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
+    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
+    entities: filterApiResourceObjectsByType(state.apiResourceObjects, 'entities'),
     breakpoint: state.breakpoint
   }
 }

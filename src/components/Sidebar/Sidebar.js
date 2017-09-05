@@ -5,8 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { sidebarLayout } from '../../TopLevelRoutes';
 import {
   addApiResourceStateToPropsUtils,
-  apiResourceForeignKey,
-  filterApiResourcesByType
+  apiResourceObjectForeignKey,
+  filterApiResourceObjectsByType
 } from '../../ApiResource';
 import './sidebar.css';
 import {settings} from "../../settings";
@@ -24,7 +24,7 @@ class Sidebar extends Component {
     const selectedCurrency = this.props.currency;
     const selectedNumberFormat = this.props.numberFormat;
 
-    const user = this.props.ApiResource(this.props.user);
+    const user = this.props.ApiResourceObject(this.props.user);
 
     let layout = [];
 
@@ -103,18 +103,17 @@ class Sidebar extends Component {
 }
 
 let mapStateToProps = (state) => {
-  const user = state.apiResources[settings.ownUserUrl] || {};
-  const apiResources = state.apiResources;
+  const user = state.apiResourceObjects[settings.ownUserUrl] || {};
+  const apiResourceObjects = state.apiResourceObjects;
   return {
-    languages: filterApiResourcesByType(apiResources, 'languages'),
-    language: apiResourceForeignKey(user, 'preferred_language', state),
-    currencies: filterApiResourcesByType(apiResources, 'currencies'),
-    currency: apiResourceForeignKey(user, 'preferred_currency', state),
-    numberFormats: filterApiResourcesByType(apiResources, 'number_formats'),
-    numberFormat: apiResourceForeignKey(user, 'preferred_number_format', state),
+    languages: filterApiResourceObjectsByType(apiResourceObjects, 'languages'),
+    language: apiResourceObjectForeignKey(user, 'preferred_language', state),
+    currencies: filterApiResourceObjectsByType(apiResourceObjects, 'currencies'),
+    currency: apiResourceObjectForeignKey(user, 'preferred_currency', state),
+    numberFormats: filterApiResourceObjectsByType(apiResourceObjects, 'number_formats'),
+    numberFormat: apiResourceObjectForeignKey(user, 'preferred_number_format', state),
     authToken: state.authToken,
-    user: user,
-    apiResources: apiResources
+    user: user
   };
 };
 

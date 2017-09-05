@@ -78,7 +78,7 @@ class Header extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    user: state.apiResources[settings.ownUserUrl] || {}
+    user: state.apiResourceObjects[settings.ownUserUrl] || {}
   };
 };
 

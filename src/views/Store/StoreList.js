@@ -14,7 +14,7 @@ class StoreList extends Component {
 
     stores = stores
         .filter(store => store.permissions.includes('backend_view_store'))
-        .map(x => this.props.ApiResource(x));
+        .map(x => this.props.ApiResourceObject(x));
 
     return <div className="animated fadeIn">
       <div className="row">

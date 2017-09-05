@@ -24,8 +24,8 @@ class DetailPermissionRoute extends Component {
   componentDidMount() {
     document.body.classList.add('sidebar-hidden');
     const id = this.props.computedMatch.params.id;
-    const objUrl = `${settings.resourceEndpoints[this.props.resource]}${id}/`;
-    const resourceObject = this.props.apiResources[objUrl];
+    const resourceObjectUrl = `${settings.apiResourceEndpoints[this.props.resource]}${id}/`;
+    const resourceObject = this.props.apiResourceObjects[resourceObjectUrl];
 
     if (resourceObject) {
       this.setState({resolved: true})
@@ -43,8 +43,8 @@ class DetailPermissionRoute extends Component {
     const MyComponent = this.props['component'];
 
     const id = this.props.computedMatch.params.id;
-    const objUrl = `${settings.resourceEndpoints[this.props.resource]}${id}/`;
-    const resourceObject = this.props.apiResources[objUrl];
+    const resourceObjectUrl = `${settings.apiResourceEndpoints[this.props.resource]}${id}/`;
+    const resourceObject = this.props.apiResourceObjects[resourceObjectUrl];
     const resolved = this.state.resolved;
 
     if (!resourceObject && !resolved) {
@@ -86,7 +86,7 @@ class DetailPermissionRoute extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    apiResources: state.apiResources,
+    apiResourceObjects: state.apiResourceObjects,
   }
 };
 

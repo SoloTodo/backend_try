@@ -1,12 +1,13 @@
 import { settings } from "./settings"
 import { camelize, fetchAuth } from './utils';
 
-export function filterApiResourcesByType(apiResources, resourceType) {
-  return Object.values(apiResources).filter(x => x.resourceType === resourceType)
+export function filterApiResourceObjectsByType(apiResourceObjects, resource) {
+  const apiResourceEndpoint = settings.apiResourceEndpoints[resource];
+  return Object.values(apiResourceObjects).filter(x => x.url.startsWith(apiResourceEndpoint))
 }
 
 export function fetchApiResource(resource, dispatch, authToken=null) {
-  const resourceUrl = settings.resourceEndpoints[resource];
+  const resourceUrl = settings.apiResourceEndpoints[resource];
 
   let resourceRequest = null;
 
@@ -18,36 +19,35 @@ export function fetchApiResource(resource, dispatch, authToken=null) {
 
   return resourceRequest.then(json => {
     dispatch({
-      type: 'addCompleteApiResources',
-      apiResources: json,
-      resourceType: resource
+      type: 'addApiResource',
+      apiResourceObjects: json,
+      resource: resource,
     });
     return json;
   })
 }
 
 export function fetchApiResourceObject(resource, id, dispatch, authToken) {
-  const resourceObjectUrl = `${settings.resourceEndpoints[resource]}${id}/`;
+  const apiResourceObjectUrl = `${settings.apiResourceEndpoints[resource]}${id}/`;
 
-  return fetchAuth(authToken, resourceObjectUrl).then(json => {
+  return fetchAuth(authToken, apiResourceObjectUrl).then(json => {
     if (json.url) {
       dispatch({
-        type: 'addApiResource',
-        apiResource: json,
-        resourceType: resource
+        type: 'addApiResourceObject',
+        apiResource: json
       });
     } else {
       dispatch({
-        type: 'deleteApiResource',
-        url: resourceObjectUrl
+        type: 'deleteApiResourceObject',
+        url: apiResourceObjectUrl
       })
     }
     return json;
   })
 }
 
-export function apiResourceForeignKey(rawApiResource, field, state) {
-  return state.apiResources[rawApiResource[field]]
+export function apiResourceObjectForeignKey(rawApiResource, field, state) {
+  return state.apiResourceObjects[rawApiResource[field]]
 }
 
 export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
@@ -58,8 +58,8 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
     }
 
     return {
-      ApiResource: (jsonData) => {
-        return new ApiResource(jsonData, state.apiResources)
+      ApiResourceObject: (jsonData) => {
+        return new ApiResourceObject(jsonData, state.apiResourceObjects)
       },
       fetchAuth: (input, init={}) => {
         return fetchAuth(state.authToken, input, init);
@@ -69,6 +69,9 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
       },
       fetchApiResourceObject: (resource, id, dispatch) => {
         return fetchApiResourceObject(resource, id, dispatch, state.authToken)
+      },
+      filterApiResourceObjectsByType: resource => {
+        return filterApiResourceObjectsByType(state.apiResourceObjects, resource)
       },
       ...originalMapStateToPropsResult
     };
@@ -89,9 +92,9 @@ export function addApiResourceDispatchToPropsUtils(mapDispatchToProps=null) {
   }
 }
 
-class ApiResource {
-  constructor(jsonData, apiResources) {
-    this.apiResources = apiResources;
+class ApiResourceObject {
+  constructor(jsonData, apiResourceObjects) {
+    this.apiResourceObjects = apiResourceObjects;
     this.dirtyFields = [];
 
     let properties = {};
@@ -137,7 +140,7 @@ class ApiResource {
 
     return {
       get: () => {
-        const foreignKeyValue = this.apiResources[this[camelizedEntry + 'Url']];
+        const foreignKeyValue = this.apiResourceObjects[this[camelizedEntry + 'Url']];
         if (this[camelizedEntry + 'Url'] && !foreignKeyValue) {
           throw Object({
             name: 'Invalid ApiResourceLookup',
@@ -145,7 +148,7 @@ class ApiResource {
             field: camelizedEntry
           })
         }
-        return new ApiResource(foreignKeyValue, this.apiResources);
+        return new ApiResourceObject(foreignKeyValue, this.apiResourceObjects);
       },
       set: (value) => {
         this.dirtyFields.push(entry);
@@ -187,4 +190,4 @@ class ApiResource {
   }
 }
 
-export default ApiResource;
+export default ApiResourceObject;

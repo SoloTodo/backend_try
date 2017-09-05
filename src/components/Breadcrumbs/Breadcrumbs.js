@@ -37,7 +37,7 @@ function getRouteMatch(path) {
       .filter(item => item.didMatch)[0];
 }
 
-function getBreadcrumbs({ location, apiResources }) {
+function getBreadcrumbs({ location, apiResourceObjects }) {
   const pathTokens = getPathTokens(location.pathname);
   return pathTokens.map((path, i) => {
     const routeMatch = getRouteMatch(path);
@@ -48,11 +48,11 @@ function getBreadcrumbs({ location, apiResources }) {
     let name = '';
 
     if (isFunction(routeValue)) {
-      const {resourceType, resourceId} = routeValue(routeMatch.params);
-      const resourceUrl = `${settings.resourceEndpoints[resourceType]}${resourceId}/`;
-      const resource = apiResources[resourceUrl];
-      if (resource) {
-        name = resource.name;
+      const {apiResource, apiResourceObjectId} = routeValue(routeMatch.params);
+      const apiResourceObjectUrl = `${settings.apiResourceEndpoints[apiResource]}${apiResourceObjectId}/`;
+      const apiResourceObject = apiResourceObjects[apiResourceObjectUrl];
+      if (apiResourceObject) {
+        name = apiResourceObject.name;
       }
     } else {
       name = routeValue
@@ -62,8 +62,8 @@ function getBreadcrumbs({ location, apiResources }) {
   }).filter(x => x !== null);
 }
 
-function Breadcrumbs({ location, apiResources }) {
-  const breadcrumbs = getBreadcrumbs({ location, apiResources });
+function Breadcrumbs({ location, apiResourceObjects }) {
+  const breadcrumbs = getBreadcrumbs({ location, apiResourceObjects });
 
   return (
       <div>
@@ -82,7 +82,7 @@ function Breadcrumbs({ location, apiResources }) {
 
 function mapStateToProps(state) {
   return {
-    apiResources: state.apiResources
+    apiResourceObjects: state.apiResourceObjects
   }
 }
 

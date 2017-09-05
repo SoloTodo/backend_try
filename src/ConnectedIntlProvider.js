@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 
 import { localeData } from './translations/locales/index';
 import { settings } from './settings';
-import {apiResourceForeignKey} from "./ApiResource";
+import {apiResourceObjectForeignKey} from "./ApiResource";
 
 // REF https://github.com/yahoo/react-intl/issues/243
 
@@ -19,8 +19,8 @@ class ConnectedIntlProvider extends Component {
 }
 
 function mapStateToProps(state) {
-  const user = state.apiResources[settings.ownUserUrl] || {};
-  const language = apiResourceForeignKey(user, 'preferred_language', state);
+  const user = state.apiResourceObjects[settings.ownUserUrl] || {};
+  const language = apiResourceObjectForeignKey(user, 'preferred_language', state);
 
   let languageCode = settings.defaultLanguageCode;
   if (language) {

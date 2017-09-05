@@ -4,7 +4,7 @@ let endpoint = 'http://localhost:8000/api/';
 
 export const settings = {
   endpoint,
-  resourceEndpoints: {
+  apiResourceEndpoints: {
     stores: endpoint + 'stores/',
     languages: endpoint + 'languages/',
     store_types: endpoint + 'store_types/',

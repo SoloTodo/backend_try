@@ -34,7 +34,7 @@ class PermissionRoute extends Component {
 }
 
 let mapStateToProps = (state) => {
-  const user = state.apiResources[settings.ownUserUrl] || {};
+  const user = state.apiResourceObjects[settings.ownUserUrl] || {};
   return {
     permissions: user.permissions,
     loadedResources: state.loadedResources

@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { settings } from '../../../settings'
-import {filterApiResourcesByType} from "../../../ApiResource";
+import {filterApiResourceObjectsByType} from "../../../ApiResource";
 import {initialUserLoad} from "../../../App";
 
 class Login extends Component {
@@ -166,13 +166,13 @@ class Login extends Component {
 }
 
 let mapStateToProps = (state) => {
-  const apiResources = state.apiResources;
+  const apiResourceObjects = state.apiResourceObjects;
   return {
     isLoggedIn: Boolean(state.authToken),
-    languages: filterApiResourcesByType(apiResources, 'languages'),
-    currencies: filterApiResourcesByType(apiResources, 'currencies'),
-    countries: filterApiResourcesByType(apiResources, 'countries'),
-    number_formats: filterApiResourcesByType(apiResources, 'number_formats')
+    languages: filterApiResourceObjectsByType(apiResourceObjects, 'languages'),
+    currencies: filterApiResourceObjectsByType(apiResourceObjects, 'currencies'),
+    countries: filterApiResourceObjectsByType(apiResourceObjects, 'countries'),
+    number_formats: filterApiResourceObjectsByType(apiResourceObjects, 'number_formats')
   }
 };
 
