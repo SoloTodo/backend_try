@@ -37,7 +37,7 @@ class Full extends Component {
     });
 
     pubnub.addListener({
-      message: m => {
+      message: (m) => {
         const message = m.message;
 
         if (message.type === 'updateApiResourceObject') {

@@ -165,6 +165,11 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "entity_dissociation_reason_placeholder",
+    "defaultMessage": "Dissociation reason (optional)",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "home",
     "defaultMessage": "Home",
     "filepath": "./src/routes.js"
@@ -330,6 +335,11 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "dissociate",
+    "defaultMessage": "Dissociate",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "cell_plan",
     "defaultMessage": "Cell Plan",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -447,6 +457,26 @@
   {
     "id": "cancel",
     "defaultMessage": "Cancel",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_dissociation_title",
+    "defaultMessage": "Confirm entity dissociation",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_dissociation_body",
+    "defaultMessage": "Please confirm the dissociation of the entity",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_dissociation_different_user",
+    "defaultMessage": "This entity was associated by a different user. If possible please leave a message for him/her about the reason for the dissociation",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "dissociating",
+    "defaultMessage": "Dissociating",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {

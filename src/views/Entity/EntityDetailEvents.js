@@ -31,7 +31,7 @@ class EntityDetailEvents extends Component {
   }
 
   fieldValueToComponent(field, value) {
-    if (['categories', 'scraped_category', 'currency'].includes(field)) {
+    if (['category', 'scraped_category', 'currency', 'state'].includes(field)) {
       return value.name
     } else if (['product', 'cell_plan'].includes(field)) {
       return value ? <NavLink to={`/products/${value.id}`}>{value.name}</NavLink> : <em>N/A</em>

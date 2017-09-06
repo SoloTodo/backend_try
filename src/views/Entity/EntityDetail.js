@@ -11,6 +11,7 @@ import ReactMarkdown from 'react-markdown';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
+import trim from 'lodash/trim';
 import {settings} from "../../settings";
 import {formatCurrency, formatDateStr} from "../../utils";
 import EntityDetailMenu from "./EntityDetailMenu";
@@ -21,6 +22,11 @@ import {createOption, createOptions} from "../../form_utils";
 import LoadingInline from "../../components/LoadingInline";
 import moment from "moment";
 
+const DISSOCIATING_STATES = {
+  STAND_BY: 1,
+  CONFIRMING: 2,
+  EXECUTING: 3,
+};
 
 class EntityDetail extends Component {
   constructor(props) {
@@ -31,6 +37,8 @@ class EntityDetail extends Component {
       changingVisibility: false,
       categoryForChange: null,
       stateForChange: null,
+      dissociatingState: DISSOCIATING_STATES.STAND_BY,
+      dissociationReason: ''
     }
   }
 
@@ -40,6 +48,7 @@ class EntityDetail extends Component {
     // If the user is staff:
     // if some other staff has been editing this entity in the last 10 minutes, show a warning
     // Othjerwise register the staff entry
+    let registerStaffAccess = false;
     if (this.userHasStaffPermissions()) {
       if (entity.last_staff_access) {
         const lastStaffAccess = moment(entity.last_staff_access);
@@ -51,12 +60,18 @@ class EntityDetail extends Component {
                 defaultMessage="Someone has been working here recently. Be mindful!"/>, {autoClose: false})
           }
         } else {
-          this.props.fetchAuth(`${entity.url}register_staff_access/`, {method: 'POST'})
-              .then(json => {
-                this.saveEntityChanges(json)
-              })
+          registerStaffAccess = true;
         }
+      } else {
+        registerStaffAccess = true;
       }
+    }
+
+    if (registerStaffAccess) {
+      this.props.fetchAuth(`${entity.url}register_staff_access/`, {method: 'POST'})
+          .then(json => {
+            this.saveEntityChanges(json)
+          })
     }
   }
 
@@ -183,6 +198,30 @@ class EntityDetail extends Component {
     });
   };
 
+  dissociate = () => {
+    this.setState({
+      dissociatingState: DISSOCIATING_STATES.EXECUTING
+    });
+
+    const requestBody = {};
+    const reason = trim(this.state.dissociationReason);
+
+    if (reason) {
+      requestBody.reason = reason
+    }
+
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}association/`, {
+      method: 'DELETE',
+      body: JSON.stringify(requestBody)
+    }).then(json => {
+      this.saveEntityChanges(json);
+      this.setState({
+        dissociatingState: DISSOCIATING_STATES.STAND_BY,
+        dissociationReason: ''
+      });
+    });
+  };
+
   userHasStaffPermissionOverSelectedCategory = () => {
     return this.state.categoryForChange.permissions.includes('category_entities_staff')
   };
@@ -213,9 +252,21 @@ class EntityDetail extends Component {
     }
   };
 
+  handleDissociateClick = (event) => {
+    this.setState({
+      dissociatingState: DISSOCIATING_STATES.CONFIRMING
+    });
+  };
+
   resetCategoryForChange = () => {
     this.setState({
       categoryForChange: null
+    })
+  };
+
+  resetdissociating = () => {
+    this.setState({
+      dissociatingState: DISSOCIATING_STATES.STAND_BY
     })
   };
 
@@ -263,7 +314,7 @@ class EntityDetail extends Component {
           <div className="row">
             <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="picture" defaultMessage={`Picture`}/></strong></div>
+                <div className="card-header"><strong><FormattedMessage id="picture" defaultMessage='Picture'/></strong></div>
                 <div className="card-block center-aligned">
                   <img src={entity.pictureUrl || imageNotAvailable} className="img-fluid" alt={entity.name} />
                 </div>
@@ -275,11 +326,11 @@ class EntityDetail extends Component {
               <div className="card">
                 <div className="card-header"><strong><FormattedMessage
                     id="update_information"
-                    defaultMessage={`Update information`}/></strong></div>
+                    defaultMessage='Update information'/></strong></div>
                 <div className="card-block">
                   <p>
                     <FormattedMessage id="update_entity_description"
-                                      defaultMessage={`Updates the entity information from the store website`}/>
+                                      defaultMessage='Updates the entity information from the store website'/>
                   </p>
                   <LaddaButton
                       loading={this.state.updatingPricing}
@@ -293,9 +344,9 @@ class EntityDetail extends Component {
                       className="btn btn-primary mb-3">
                     {this.state.updatingPricing ?
                         <FormattedMessage id="updating"
-                                          defaultMessage={`Updating`}/> :
+                                          defaultMessage='Updating'/> :
                         <FormattedMessage id="update_information"
-                                          defaultMessage={`Update information`}/>
+                                          defaultMessage='Update information'/>
                     }
                   </LaddaButton>
                 </div>
@@ -306,20 +357,20 @@ class EntityDetail extends Component {
           <div className="row">
             <div className="col-12 col-md-6">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="general_information" defaultMessage={`General Information`}/></strong></div>
+                <div className="card-header"><strong><FormattedMessage id="general_information" defaultMessage='General Information'/></strong></div>
                 <div className="card-block">
                   <table className="table table-striped mb-0">
                     <tbody>
                     <tr>
-                      <th><FormattedMessage id="name" defaultMessage={`Name`} /></th>
+                      <th><FormattedMessage id="name" defaultMessage='Name' /></th>
                       <td>{entity.name}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan name`} /></th>
+                      <th><FormattedMessage id="cell_plan_name" defaultMessage='Cell plan name' /></th>
                       <td>{entity.cellPlanName || <em>N/A</em>}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="store" defaultMessage={`Store`} /></th>
+                      <th><FormattedMessage id="store" defaultMessage='Store' /></th>
                       <td>
                         {entity.store.permissions.includes('backend_view_store') ?
                             <NavLink to={'/stores/' + entity.store.id}>{entity.store.name}</NavLink> :
@@ -328,11 +379,11 @@ class EntityDetail extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="url" defaultMessage={`URL`} /></th>
+                      <th><FormattedMessage id="url" defaultMessage='URL' /></th>
                       <td className="overflowed-table-cell"><a href={entity.externalUrl} target="_blank">{entity.externalUrl}</a></td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="category" defaultMessage={`Category`} /></th>
+                      <th><FormattedMessage id="category" defaultMessage='Category' /></th>
                       <td>
                         {hasStaffPermissions ?
                             <div onClick={this.handleChangeCategoryClick}>
@@ -372,32 +423,34 @@ class EntityDetail extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="product" defaultMessage={`Product`} /></th>
+                      <th><FormattedMessage id="product" defaultMessage='Product' /></th>
                       <td>{entity.product ?
-                          <span>
-                            <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink>
-                            {hasStaffPermissions && <button className="btn btn-sm btn-danger ml-3">Disassociate</button> }
-                          </span> :
+                          <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink> :
                           <em>N/A</em>}</td>
                     </tr>
+                    {hasStaffPermissions && entity.product && <tr>
+                      <th>&nbsp;</th>
+                      <td><button className="btn btn-danger" onClick={this.handleDissociateClick} disabled={this.state.dissociatingState !== DISSOCIATING_STATES.STAND_BY}><FormattedMessage id="dissociate" defaultMessage='Dissociate' /></button></td>
+                    </tr>
+                    }
                     <tr>
-                      <th><FormattedMessage id="cell_plan" defaultMessage={`Cell Plan`} /></th>
+                      <th><FormattedMessage id="cell_plan" defaultMessage='Cell Plan' /></th>
                       <td>{entity.cellPlan ? <NavLink to={'/products/' + entity.cellPlan.id}>{entity.cellPlan.name}</NavLink> : <em>N/A</em>}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="part_number" defaultMessage={`Part Number`} /></th>
+                      <th><FormattedMessage id="part_number" defaultMessage='Part Number' /></th>
                       <td>{entity.partNumber || <em>N/A</em>}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="sku" defaultMessage={`SKU`} /></th>
+                      <th><FormattedMessage id="sku" defaultMessage='SKU' /></th>
                       <td>{entity.sku || <em>N/A</em>}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="detection_date" defaultMessage={`Detection date`} /></th>
+                      <th><FormattedMessage id="detection_date" defaultMessage='Detection date' /></th>
                       <td>{formatDateStr(entity.creationDate)}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></th>
+                      <th><FormattedMessage id="is_visible_question" defaultMessage='Visible?' /></th>
                       <td>
                         {hasStaffPermissions ?
                             <div>
@@ -431,16 +484,16 @@ class EntityDetail extends Component {
             </div>
             <div className="col-12 col-md-6">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="pricing_information" defaultMessage={`Pricing Information`}/></strong></div>
+                <div className="card-header"><strong><FormattedMessage id="pricing_information" defaultMessage='Pricing Information'/></strong></div>
                 <div className="card-block">
                   <table className="table table-striped mb-0">
                     <tbody>
                     <tr>
-                      <th><FormattedMessage id="last_pricing_update" defaultMessage={`Last update`} /></th>
+                      <th><FormattedMessage id="last_pricing_update" defaultMessage='Last update' /></th>
                       <td>{formatDateStr(entity.lastPricingUpdate)}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="normal_price" defaultMessage={`Normal price`} /></th>
+                      <th><FormattedMessage id="normal_price" defaultMessage='Normal price' /></th>
                       <td>
                         {entity.activeRegistry ?
                             <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency)}</span> :
@@ -449,7 +502,7 @@ class EntityDetail extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="offer_price" defaultMessage={`Offer price`} /></th>
+                      <th><FormattedMessage id="offer_price" defaultMessage='Offer price' /></th>
                       <td>
                         {entity.activeRegistry ?
                             <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency)}</span> :
@@ -459,14 +512,14 @@ class EntityDetail extends Component {
                     </tr>
 
                     <tr>
-                      <th><FormattedMessage id="currency" defaultMessage={`Currency`} /></th>
+                      <th><FormattedMessage id="currency" defaultMessage='Currency' /></th>
                       <td>{entity.currency.isoCode}</td>
                     </tr>
 
                     {preferredCurrency.url !== entity.currency.url &&
                     <tr>
                       <th>
-                        <FormattedMessage id="normal_price" defaultMessage={`Normal price`} />
+                        <FormattedMessage id="normal_price" defaultMessage='Normal price' />
                         <span>&nbsp;({preferredCurrency.isoCode})</span>
                       </th>
                       <td>
@@ -481,7 +534,7 @@ class EntityDetail extends Component {
                     {preferredCurrency.url !== entity.currency.url &&
                     <tr>
                       <th>
-                        <FormattedMessage id="offer_price" defaultMessage={`Offer price`} />
+                        <FormattedMessage id="offer_price" defaultMessage='Offer price' />
                         <span>&nbsp;({preferredCurrency.isoCode})</span>
                       </th>
                       <td>
@@ -494,7 +547,7 @@ class EntityDetail extends Component {
                     }
 
                     <tr>
-                      <th><FormattedMessage id="is_active_question" defaultMessage={`Is active?`} /></th>
+                      <th><FormattedMessage id="is_active_question" defaultMessage='Is active?' /></th>
                       <td><i className={entity.activeRegistry ?
                           'glyphicons glyphicons-check' :
                           'glyphicons glyphicons-unchecked'}/>
@@ -502,7 +555,7 @@ class EntityDetail extends Component {
                     </tr>
 
                     <tr>
-                      <th><FormattedMessage id="is_available_question" defaultMessage={`Is available?`} /></th>
+                      <th><FormattedMessage id="is_available_question" defaultMessage='Is available?' /></th>
                       <td><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
                           'glyphicons glyphicons-check' :
                           'glyphicons glyphicons-unchecked'}/>
@@ -510,7 +563,7 @@ class EntityDetail extends Component {
                     </tr>
 
                     <tr>
-                      <th><FormattedMessage id="stock" defaultMessage={`Stock`} /></th>
+                      <th><FormattedMessage id="stock" defaultMessage='Stock' /></th>
                       <td>
                         {stock}
                       </td>
@@ -522,29 +575,29 @@ class EntityDetail extends Component {
               </div>
 
               {entity.store.permissions.includes('store_entities_staff') && entity.category.permissions.includes('category_entities_staff') && <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="staff_information" defaultMessage={`Staff Information`}/></strong></div>
+                <div className="card-header"><strong><FormattedMessage id="staff_information" defaultMessage='Staff Information'/></strong></div>
                 <div className="card-block">
                   <table className="table table-striped">
                     <tbody>
                     <tr>
-                      <th><FormattedMessage id="key" defaultMessage={`Key`} /></th>
+                      <th><FormattedMessage id="key" defaultMessage='Key' /></th>
                       <td>{entity.key}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="original_category" defaultMessage={`Original category`} /></th>
+                      <th><FormattedMessage id="original_category" defaultMessage='Original category' /></th>
                       <td>{entity.scrapedCategory.name}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="discovery_url" defaultMessage={`Discovery URL`} /></th>
+                      <th><FormattedMessage id="discovery_url" defaultMessage='Discovery URL' /></th>
                       <td className="overflowed-table-cell"><a href={entity.discoveryUrl} target="_blank">{entity.discoveryUrl}</a></td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="last_association_date" defaultMessage={`Last association date`} /></th>
+                      <th><FormattedMessage id="last_association_date" defaultMessage='Last association date' /></th>
                       <td>{entity.lastAssociation ? formatDateStr(entity.lastAssociation) : <em>N/A</em>}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="last_association_user" defaultMessage={`Last association user`} /></th>
-                      <td>{entity.lastAssociationUserUrl ? 'Some user' : <em>N/A</em>}</td>
+                      <th><FormattedMessage id="last_association_user" defaultMessage='Last association user' /></th>
+                      <td>{entity.lastAssociationUserUrl ? entity.lastAssociationUserUrl : <em>N/A</em>}</td>
                     </tr>
                     </tbody>
                   </table>
@@ -554,7 +607,7 @@ class EntityDetail extends Component {
 
             <div className="col-12">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="description" defaultMessage={`Description`}/></strong></div>
+                <div className="card-header"><strong><FormattedMessage id="description" defaultMessage='Description'/></strong></div>
                 <div className="card-block" id="description-container">
                   <ReactMarkdown source={entity.description} />
                 </div>
@@ -572,6 +625,50 @@ class EntityDetail extends Component {
             <ModalFooter>
               <Button color="primary" onClick={this.changeCategory}><FormattedMessage id="entity_irreversible_category_change_proceed" defaultMessage='OK, Proceed either way' /></Button>{' '}
               <Button color="secondary" onClick={this.resetCategoryForChange}><FormattedMessage id="cancel" defaultMessage='Cancel' /></Button>
+            </ModalFooter>
+          </Modal>
+
+          <Modal isOpen={this.state.dissociatingState !== DISSOCIATING_STATES.STAND_BY}>
+            <ModalHeader><FormattedMessage id="entity_dissociation_title" defaultMessage='Confirm entity dissociation' /></ModalHeader>
+            <ModalBody>
+              <p>
+                <FormattedMessage id="entity_dissociation_body" defaultMessage="Please confirm the dissociation of the entity" />
+              </p>
+              {this.props.apiResourceObject.last_association_user !== this.props.user.detail_url &&
+              <div>
+                <p>
+                  <FormattedMessage id="entity_dissociation_different_user" defaultMessage="This entity was associated by a different user. If possible please leave a message for him/her about the reason for the dissociation" />
+                </p>
+                <p>
+                  <textarea placeholder={this.props.intl.formatMessage({id: 'entity_dissociation_reason_placeholder'})}
+                            onChange={(event) => {this.setState({dissociationReason: event.target.value})}}
+                            value={this.state.dissociationReason}>
+                  </textarea>
+                </p>
+              </div>}
+            </ModalBody>
+            <ModalFooter>
+              <LaddaButton
+                  loading={this.state.dissociatingState === DISSOCIATING_STATES.EXECUTING}
+                  onClick={this.dissociate}
+                  data-color="#eee"
+                  data-size={XL}
+                  data-style={EXPAND_LEFT}
+                  data-spinner-size={30}
+                  data-spinner-color="#ddd"
+                  data-spinner-lines={12}
+                  className="btn btn-danger">
+                {this.state.dissociatingState === DISSOCIATING_STATES.EXECUTING ?
+                    <FormattedMessage id="dissociating" defaultMessage='Dissociating'/> :
+                    <FormattedMessage id="dissociate" defaultMessage='Dissociate' />
+                }
+              </LaddaButton>
+              {' '}
+              <Button color="secondary"
+                      onClick={this.resetdissociating}
+                      disabled={this.state.dissociatingState === DISSOCIATING_STATES.EXECUTING}>
+                <FormattedMessage id="cancel" defaultMessage='Cancel' />
+              </Button>
             </ModalFooter>
           </Modal>
         </div>)
