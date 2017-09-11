@@ -3,6 +3,10 @@ th {
     vertical-align: middle !important;
 }
 
+td {
+    vertical-align: middle !important;
+}
+
 #description-container img {
     max-width: 100%;
 }

@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import StoreList from './views/Store/StoreList';
 import StoreUpdate from "./views/Store/StoreUpdate";
 import EntityList from "./views/Entity/EntityList";
+import ProductList from "./views/Product/ProductList";
 
 export const sidebarLayout = [
   {
@@ -39,13 +40,30 @@ export const sidebarLayout = [
     entries: [
       {
         key: 1,
-        label: <FormattedMessage id='show_list' defaultMessage='Show all' />,
+        label: <FormattedMessage id='show_list_female' defaultMessage='Show all' />,
         path: '/entities',
         requiredPermission: 'solotodo.backend_list_entity',
         name: 'Entities',
         component: EntityList,
         requiredResources: ['stores', 'categories'],
         title: 'entities'
+      }
+    ]
+  },
+  {
+    key: 3,
+    title: <FormattedMessage id={'products'} defaultMessage='Products' />,
+    icon: 'glyphicons glyphicons-tags',
+    entries: [
+      {
+        key: 1,
+        label: <FormattedMessage id='show_list_male' defaultMessage='Show all' />,
+        path: '/products',
+        requiredPermission: 'solotodo.backend_list_product',
+        name: 'Products',
+        component: ProductList,
+        requiredResources: ['stores', 'categories'],
+        title: 'products'
       }
     ]
   }

@@ -1,5 +1,10 @@
 [
   {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/api_forms/ApiForm.js"
+  },
+  {
     "id": "permission_denied_toast",
     "defaultMessage": "This resource does not exist or you don't have permission to access it.",
     "filepath": "./src/auth/DetailPermissionRoute.js"
@@ -222,6 +227,21 @@
   {
     "id": "entities",
     "defaultMessage": "Entities",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "show_list_female",
+    "defaultMessage": "Show all",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "show_list_male",
+    "defaultMessage": "Show all",
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
@@ -833,6 +853,61 @@
     "id": "404_home_link",
     "defaultMessage": "Go back to homepage",
     "filepath": "./src/views/Pages/Page404/Page404.js"
+  },
+  {
+    "id": "id",
+    "defaultMessage": "ID",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "creation_date",
+    "defaultMessage": "Creation date",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "last_updated",
+    "defaultMessage": "Last updated",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "no_products_found",
+    "defaultMessage": "No products found",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "product_availability_countries_tooltip",
+    "defaultMessage": "Filter the products that are available for purchase in the selected countries",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Product/ProductList.js"
   },
   {
     "id": "name",

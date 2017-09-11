@@ -15,7 +15,9 @@ export const settings = {
     categories: endpoint + 'categories/',
     store_update_logs: endpoint + 'store_update_logs/',
     entities: endpoint + 'entities/',
-    entity_histories: endpoint + 'entity_histories/'
+    entity_histories: endpoint + 'entity_histories/',
+    users_with_staff_actions: endpoint + 'users/with_staff_actions/',
+    products: endpoint + 'products/',
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA

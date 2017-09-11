@@ -214,8 +214,7 @@ class EntityList extends Component {
       } else {
         this.props.dispatch({
           type: 'addApiResourceObjects',
-          apiResourceObjects: json.results,
-          resourceType: 'entities'
+          apiResourceObjects: json.results
         });
 
         this.setState({

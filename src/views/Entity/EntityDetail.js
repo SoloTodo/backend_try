@@ -43,6 +43,7 @@ class EntityDetail extends Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
     const entity = this.props.apiResourceObject;
 
     // If the user is staff:
@@ -98,18 +99,18 @@ class EntityDetail extends Component {
     }
 
     // Staff change notification
-    // const staffChangingSomething = this.state.updatingPricing || this.state.changingVisibility || this.state.categoryForChange || this.state.stateForChange;
-    const now = moment();
-    const currentLastStaffChange = currentEntity.lastStaffChange ? moment(currentEntity.lastStaffChange) : now;
-    const nextLastStaffChange = nextEntity.lastStaffChange ? moment(nextEntity.lastStaffChange) : now;
+    const currentLastStaffChange = currentEntity.lastStaffChange ? moment(currentEntity.lastStaffChange) : null;
+    const nextLastStaffChange = nextEntity.lastStaffChange ? moment(nextEntity.lastStaffChange) : null;
 
-    if (currentLastStaffChange.isBefore(nextLastStaffChange)) {
-      if (nextEntity.lastStaffChangeUserUrl === this.props.user.detail_url) {
-        toast.success(<FormattedMessage id="entity_updated_successfully" defaultMessage="Entity updated" />, {autoClose: 2000});
-      } else {
-        toast.warn(<FormattedMessage
-            id="entity_staff_someone_editing_warning"
-            defaultMessage="Someone else is editing this entity" />, {autoClose: false});
+    if (nextLastStaffChange) {
+      if (!currentLastStaffChange || currentLastStaffChange.isBefore(nextLastStaffChange)) {
+        if (nextEntity.lastStaffChangeUserUrl === this.props.user.detail_url) {
+          toast.success(<FormattedMessage id="entity_updated_successfully" defaultMessage="Entity updated" />, {autoClose: 2000});
+        } else {
+          toast.warn(<FormattedMessage
+              id="entity_staff_someone_editing_warning"
+              defaultMessage="Someone else is editing this entity" />, {autoClose: false});
+        }
       }
     }
   }
@@ -597,7 +598,7 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="last_association_user" defaultMessage='Last association user' /></th>
-                      <td>{entity.lastAssociationUserUrl ? entity.lastAssociationUserUrl : <em>N/A</em>}</td>
+                      <td>{entity.lastAssociationUserUrl ? `${entity.lastAssociationUser.firstName} ${entity.lastAssociationUser.lastName}` : <em>N/A</em>}</td>
                     </tr>
                     </tbody>
                   </table>
