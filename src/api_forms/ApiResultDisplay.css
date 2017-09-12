@@ -1,0 +1,7 @@
+.header-link {
+    color: #374767;
+}
+
+.header-link:hover {
+    text-decoration: none;
+}

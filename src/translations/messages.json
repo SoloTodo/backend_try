@@ -890,6 +890,16 @@
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
+    "id": "product_availability_stores_tooltip",
+    "defaultMessage": "Filter the products that are available for purchase in the selected stores",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "creation_date_tooltip",
+    "defaultMessage": "Filter the products were created between the given dates",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
     "id": "filters",
     "defaultMessage": "Filters",
     "filepath": "./src/views/Product/ProductList.js"
@@ -902,6 +912,21 @@
   {
     "id": "all_feminine",
     "defaultMessage": "All",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "availability_countries",
+    "defaultMessage": "Availability countries",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "do_not_apply",
+    "defaultMessage": "Do not apply",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "availability_stores",
+    "defaultMessage": "Availability stores",
     "filepath": "./src/views/Product/ProductList.js"
   },
   {

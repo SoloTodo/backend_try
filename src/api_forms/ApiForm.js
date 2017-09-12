@@ -1,44 +1,96 @@
 import React, {Component} from 'react'
-import queryString from 'query-string';
 import {FormattedMessage} from "react-intl";
 import './ApiForm.css'
+import {withRouter} from "react-router-dom";
 
 class ApiForm extends Component {
   constructor(props) {
     super(props);
 
+    const params = this.defaultParams();
+
     this.state = {
-      formData: this.parseUrlArgs(window.location),
+      apiParams: params,
+      urlParams: params
     }
   }
 
-  parseUrlArgs = (location) => {
-    const parameters = queryString.parse(location.search);
+  componentDidMount() {
+    this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
+  }
 
-    return Object.keys(parameters).reduce((acum, fieldName) => ({
-      ...acum,
-      [fieldName]: {
-        value: parameters[fieldName],
-        apiParams: null,
+  componentWillUnmount() {
+    this.unlistenHistory();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const fields = ['page', 'pageSize', 'ordering'];
+
+    for (const field of fields) {
+      if (this.props[field] !== nextProps[field]) {
+        this.updateSearchResults(true, nextProps);
+        break;
       }
-    }), {});
+    }
+  }
+
+  defaultParams = () => {
+    let params = {};
+
+    React.Children.map(this.props.children, child => {
+      params[child.props.name] = undefined
+    });
+
+    return params;
   };
 
-  handleValueChange = (fieldName, fieldValue, apiParams) => {
+  resetState = () => {
+    const params = this.defaultParams();
+
     this.setState({
-      formData: {
-        ...this.state.formData,
-        [fieldName]: {
-          value: fieldValue,
-          apiParams: apiParams
+      apiParams: params,
+      urlParams: params
+    })
+  };
+
+  onHistoryChange = (location, action) => {
+    if (action !== 'POP') {
+      return
+    }
+
+    this.resetState();
+  };
+
+
+  isFormValid = (state=null) => {
+    state = state ? state: this.state;
+
+    return Object.values(state.apiParams).every(
+        param => {
+          return typeof(param) !== 'undefined'
+        });
+  };
+
+  handleApiParamChange = (fieldName, params) => {
+    let wasValid = undefined;
+    let isValid = undefined;
+    this.setState(state => {
+      wasValid = this.isFormValid(state);
+      const newState = {
+        apiParams: {
+          ...state.apiParams,
+          [fieldName]: params.apiParams
+        },
+        urlParams: {
+          ...state.urlParams,
+          [fieldName]: params.urlParams
         }
-      }
+      };
+
+      isValid = this.isFormValid(newState);
+      return newState
     }, () => {
-      const shouldUpdateResults = Object.values(this.state.formData).every(
-          entryFormData => {
-            return Boolean(entryFormData.apiParams)
-          });
-      if (shouldUpdateResults) {
+      if (!wasValid && isValid) {
         this.updateSearchResults();
       }
     });
@@ -46,62 +98,79 @@ class ApiForm extends Component {
 
   handleFormSubmit = (event) => {
     event && event.preventDefault();
-    this.updateSearchResults(true)
+
+    if (this.props.page === 1) {
+      this.updateSearchResults(true)
+    } else {
+      // Changing the page on our container will call componentWillReceiveProps
+      // updating the results either way.
+      this.props.onPageChange(1);
+    }
   };
 
-  updateSearchResults = (pushLocation=false) => {
-    let search = '?';
+  updateSearchResults = (pushLocation=false, props=null) => {
+    props = props ? props : this.props;
 
-    const formData = this.state.formData;
+    this.props.onResultsChange(null);
 
-    for (const apiParamsDict of Object.values(formData)) {
-      for (const apiParamKey of Object.keys(apiParamsDict.apiParams)) {
-        for (const apiParamValue of apiParamsDict.apiParams[apiParamKey]) {
-          search += `${apiParamKey}=${apiParamValue}&`
+    let apiSearch = '?';
+
+    for (const apiParamsDict of Object.values(this.state.apiParams)) {
+      for (const apiParamKey of Object.keys(apiParamsDict)) {
+        for (const apiParamValue of apiParamsDict[apiParamKey]) {
+          apiSearch += `${apiParamKey}=${apiParamValue}&`
         }
       }
     }
 
-    const endpoint = this.props.endpoint + search;
+    const endpoint = props.endpoint + apiSearch + `ordering=${props.ordering}&page=${props.page}&page_size=${props.pageSize}`;
 
-    this.props.fetchAuth(endpoint).then(json => {
-      if (json.detail) {
-        // An error happened
+    props.fetchAuth(endpoint).then(json => {
+      if (json.results) {
+        props.onResultsChange(json);
       } else {
-        this.props.onResultsChange(json.results);
+        // an error happened
       }
     });
 
-    console.log(search);
+    if (pushLocation) {
+      let urlSearch = '?';
 
-    // if (pushLocation) {
-    //   const newRoute = this.props.history.location.pathname + search;
-    //   this.props.history.push(newRoute)
-    // }
+      for (const urlParamsDict of Object.values(this.state.urlParams)) {
+        for (const urlParamKey of Object.keys(urlParamsDict)) {
+          for (const urlParamValue of urlParamsDict[urlParamKey]) {
+            urlSearch += `${urlParamKey}=${urlParamValue}&`
+          }
+        }
+      }
+
+      const newRoute = props.history.location.pathname + urlSearch + `ordering=${props.ordering}&page=${props.page}&page_size=${props.pageSize}`;
+      props.history.push(newRoute)
+    }
 
   };
 
   render() {
     const childrenElems = React.Children.map(this.props.children, child => {
-      const childrenFormData = this.state.formData[child.props.name];
-
+      const paramName = child ? child.props.name : '';
       return React.cloneElement(child, {
-        onValueChange: this.handleValueChange,
-        value: childrenFormData && childrenFormData.value,
-        validated: Boolean(childrenFormData && childrenFormData.apiParams)
+        onApiParamChange: params => this.handleApiParamChange(paramName, params),
+        urlParams: window.location.search
       })
     });
 
     return <form>
-      {childrenElems}
-      <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12">
-        <label htmlFor="submit">&nbsp;</label>
-        <button name="submit" id="submit" type="submit" className="btn btn-primary" onClick={this.handleFormSubmit}>
-          <FormattedMessage id="search" defaultMessage={`Search`} />
-        </button>
+      <div className="row" id="form-row">
+        {childrenElems}
+        <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12">
+          <label htmlFor="submit">&nbsp;</label>
+          <button name="submit" id="submit" type="submit" className="btn btn-primary" onClick={this.handleFormSubmit}>
+            <FormattedMessage id="search" defaultMessage={`Search`} />
+          </button>
+        </div>
       </div>
     </form>
   }
 }
 
-export default ApiForm;
+export default withRouter(ApiForm);
