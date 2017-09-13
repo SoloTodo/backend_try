@@ -13,13 +13,13 @@ import {FormattedMessage, injectIntl} from "react-intl";
 import {withRouter} from "react-router-dom";
 import { toast } from 'react-toastify';
 import Loading from "../../components/Loading";
-import {camelize, convertToDecimal, formatCurrency} from "../../utils";
+import {convertToDecimal, formatCurrency} from "../../utils";
 import './EntityDetailPriceHistory.css'
-import {createOption, createOptions} from "../../form_utils";
-import Select from "react-select";
-import queryString from 'query-string';
 import {settings} from "../../settings";
 import {chartColors, lightenDarkenColor} from "../../colors"
+import ApiForm from "../../api_forms/ApiForm";
+import DateRangeField from "../../api_forms/DateRangeField";
+import ChoiceField from "../../api_forms/ChoiceField";
 
 const displayOptions = [
   {
@@ -58,186 +58,40 @@ class EntityDetailPriceHistory extends Component {
     });
 
     sortedCurrencies.sort((a, b) => a.priority - b.priority);
-    this.currencyOptions = createOptions(sortedCurrencies);
+    this.currencyOptions = sortedCurrencies;
 
     this.state = {
-      chart: {
-        data: undefined,
-        startDate: undefined,
-        endDate: undefined,
-        currency: undefined
-      },
-      formData: this.parseUrlArgs(window.location),
-      modal: false
+      chart: null,
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentEntity = this.props.apiResourceObject;
-    const nextEntity = nextProps.apiResourceObject;
-
-    if (moment(currentEntity.last_pricing_update).isBefore(moment(nextEntity.last_pricing_update))) {
-      toast.info('Entity pricing updated, reloading chart');
-      this.updateChartData();
-    }
-  }
-
-  parseUrlArgs = (location) => {
-    const parameters = queryString.parse(location.search);
-
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    const entityCreationDate = moment(this.props.apiResourceObject.creation_date).startOf('day');
-    const today = moment().startOf('day');
-    const todayMinus30Days = moment().subtract(30, 'days').startOf('day');
-
-    const suggestedStartDate = entityCreationDate.isAfter(todayMinus30Days) ? entityCreationDate : todayMinus30Days;
-
-    // Start date
-    let startDate = parameters['start_date'];
-
-    if (dateRegex.test(startDate)) {
-      startDate = moment(startDate)
-    } else  {
-      startDate = suggestedStartDate
+  setChartData = (bundle) => {
+    if (!bundle) {
+      this.setState({
+        chart: null
+      });
+      return;
     }
 
-    // End date
-    let endDate = parameters['end_date'];
-
-    if (dateRegex.test(endDate)) {
-      endDate = moment(endDate)
-    } else {
-      endDate = today
-    }
-
-    // Validation of date combination
-
-    if (startDate.isBefore(entityCreationDate) || endDate.isBefore(startDate) || today.isBefore(endDate)) {
-      startDate = suggestedStartDate;
-      endDate = today;
-    }
-
-    // Display
-    let display = parameters['display'];
-
-    display = displayOptions.filter(option => option.value === display)[0];
-    if (!display) {
-      display = displayOptions[0]
-    }
-
-    // Currency
-    let currency = parseInt(parameters['currency'], 10);
-
-    currency = this.currencyOptions.filter(option => option.value === currency)[0];
-    if (!currency) {
-      currency = createOption(this.currencyOptions[0])
-    }
-
-    return {
-      startDate,
-      endDate,
-      display,
-      currency
-    };
-  };
-
-  handleDateChange = event => {
-    const field = camelize((event.target.getAttribute('name')));
-    const newDate = moment(event.target.value);
-
-    this.setState({
-      formData: {
-        ...this.state.formData,
-        [field]: newDate
-      }
-    })
-  };
-
-  handleValueChange = (field, val) => {
-    this.setState({
-      formData: {
-        ...this.state.formData,
-        [field]: val
-      }
-    })
-  };
-
-  updateChartData = (pushLocation=false) => {
-    this.setState({
-      chart: {
-        ...this.state.chart,
-        data: undefined,
-      }
-    });
-
-    const formData = this.state.formData;
-    const startDate = formData.startDate;
-    const endDate = formData.endDate;
-    const display = formData.display;
-    const entity = this.props.apiResourceObject;
-
-    if (pushLocation) {
-      const historySearch = this.props.history.location.pathname + `?display=${display.value}&currency=${formData.currency.value}&start_date=${startDate.format('YYYY-MM-DD')}&end_date=${endDate.format('YYYY-MM-DD')}`;
-      this.props.history.push(historySearch)
-    }
-
-    const offsetEndDate = endDate.clone().add(1, 'days');
-
-    const endpoint = settings.apiResourceEndpoints.entity_histories + `?date_0=${startDate.format('YYYY-MM-DD')}&date_1=${offsetEndDate.format('YYYY-MM-DD')}&entities=${entity.id}&available_only=${display.apiValue}`;
-
-    const currency = this.props.currencies.filter(currency => currency.id === formData.currency.value)[0];
-
-    this.props.fetchAuth(endpoint).then(json => {
-      const chartData = json['results'].map(entityHistory => ({
+    const convertedData = bundle.payload.results.map(entityHistory => ({
         timestamp: moment(entityHistory.timestamp),
         normalPrice: convertToDecimal(entityHistory.normal_price),
         offerPrice: convertToDecimal(entityHistory.offer_price),
         cellMonthlyPayment: convertToDecimal(entityHistory.cell_monthly_payment),
       }));
 
-      this.setState({
-        chart: {
-          startDate,
-          endDate: offsetEndDate,
-          currency,
-          data: chartData
-        }
-      });
-
-      if (pushLocation) {
-        // Only scroll to the chart when the actual form is submitted, not
-        // when the page first loads
-        document.getElementById('chart-container').scrollIntoView({behavior: 'smooth'})
-      }
-    })
-  };
-
-  componentDidMount() {
-    this.updateChartData();
-    this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
-  }
-
-  componentWillUnmount() {
-    this.unlistenHistory();
-  }
-
-  onHistoryChange = (location, action) => {
-    if (action !== 'POP') {
-      return
-    }
-
     this.setState({
-      formData: this.parseUrlArgs(location)
-    }, this.updateChartData)
-  };
-
-  handleFormSubmit = (event) => {
-    event.preventDefault();
-    this.updateChartData(true);
+      chart: {
+        startDate: bundle.fieldValues.timestamp.startDate,
+        endDate: bundle.fieldValues.timestamp.endDate,
+        currency: bundle.fieldValues.currency,
+        data: convertedData
+      }
+    });
   };
 
   preparePriceHistoryChartData() {
-    const entity =this.props.ApiResourceObject(this.props.apiResourceObject);
+    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     const targetCurrency = this.state.chart.currency;
     const exchangeRate =
         targetCurrency.exchange_rate /
@@ -293,7 +147,7 @@ class EntityDetailPriceHistory extends Component {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     let chart = <Loading />;
 
-    if (this.state.chart.data) {
+    if (this.state.chart) {
       const filledChartData = this.preparePriceHistoryChartData();
 
       const maxValue = filledChartData.reduce((acum, datapoint) => {
@@ -391,108 +245,37 @@ class EntityDetailPriceHistory extends Component {
 
     const entityCreationDate = moment(entity.creationDate).startOf('day');
 
+    const endpoint = `${settings.apiResourceEndpoints.entity_histories}?entities=${entity.id}`;
+
     return (
         <div className="animated fadeIn d-flex flex-column">
-          <UncontrolledTooltip placement="top" target="start_date_label">
-            <FormattedMessage id="entity_price_history_start_date" defaultMessage="Starting date for the chart. The minimum value is the entity's detection date" /> ({moment(entity.creationDate).format('ll')})
-          </UncontrolledTooltip>
-
-          <UncontrolledTooltip placement="top" target="end_date_label">
-            <FormattedMessage id="entity_price_history_end_date" defaultMessage="Ending date for the chart. The maximum value is today" />
-          </UncontrolledTooltip>
-
-          <UncontrolledTooltip placement="top" target="currency_label">
-            <FormattedMessage id="entity_price_history_currency" defaultMessage="The price points are converted to this currency. The values are calculated using standard exchange rates" />
-          </UncontrolledTooltip>
-
-          <UncontrolledTooltip placement="top" target="display_label">
-            <dl>
-              <dt><FormattedMessage id="all_masculine" defaultMessage="All" /></dt>
-              <dd>
-                <FormattedMessage id="entity_price_history_display_all" defaultMessage="All price points are displayed, whether the entity was available for purchase at the time or not" />
-              </dd>
-              <dt><FormattedMessage id="available_only" defaultMessage="Only when available" /></dt>
-              <dd>
-                <FormattedMessage id="entity_price_history_display_available_only" defaultMessage="Only show a particular price point if the entity was available for purchase at that time" />
-              </dd>
-            </dl>
-          </UncontrolledTooltip>
-
           <div className="card">
             <div className="card-header"><strong><FormattedMessage id="filters" defaultMessage={`Filters`} /></strong></div>
             <div className="card-block">
-              <form onSubmit={this.handleFormSubmit}>
-                <div className="row">
-                  <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div className="form-group">
-                      <label id="start_date_label" className="dashed">
-                        <FormattedMessage id="start_date" defaultMessage="Start date" />
-                      </label>
-                      <input type="date" className="form-control"
-                             name="start_date" id="start_date"
-                             required={true}
-                             min={entityCreationDate.format('YYYY-MM-DD')}
-                             max={this.state.formData.endDate.format('YYYY-MM-DD')}
-                             value={this.state.formData.startDate.format('YYYY-MM-DD')}
-                             onChange={this.handleDateChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div className="form-group">
-                      <label id="end_date_label" className="dashed">
-                        <FormattedMessage id="end_date" defaultMessage="End date" />
-                      </label>
-                      <input type="date" className="form-control"
-                             name="end_date"
-                             id="end_date"
-                             min={this.state.formData.startDate.format('YYYY-MM-DD')}
-                             max={moment().startOf('day').format('YYYY-MM-DD')}
-                             required={true}
-                             value={this.state.formData.endDate.format('YYYY-MM-DD')}
-                             onChange={this.handleDateChange} />
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                    <div className="form-group">
-                      <label htmlFor="currency" className="dashed" id="currency_label">
-                        <FormattedMessage id="currency" defaultMessage="Currency" />
-                      </label>
-                      <Select
-                          id="currency"
-                          options={this.currencyOptions}
-                          value={this.state.formData.currency}
-                          onChange={val => this.handleValueChange('currency', val)}
-                          clearable={false}
-                          searchable={false}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                    <div className="form-group">
-                      <label htmlFor="display" id="display_label" className="dashed">
-                        <FormattedMessage id="display" defaultMessage="Display" />
-                      </label>
-                      <Select
-                          id="display"
-                          options={displayOptions}
-                          value={this.state.formData.display}
-                          onChange={val => this.handleValueChange('display', val)}
-                          clearable={false}
-                          searchable={false}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-12 col-sm-4 col-xl-2">
-                    <div className="form-group">
-                      <label className="hidden-sm-down">&nbsp;</label>
-                      <button type="submit" id="update-button" className="btn btn-primary">
-                        <FormattedMessage id="update" defaultMessage="Update" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
+              <ApiForm
+                  endpoint={endpoint}
+                  onResultsChange={this.setChartData}
+                  fetchAuth={this.props.fetchAuth}
+                  page={1}
+                  pageSize={100}
+                  ordering='timestamp'
+                  onPageChange={() => {}}>
+                <DateRangeField
+                    name="timestamp"
+                    label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
+                    classNames="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
+                    min={entityCreationDate}
+                    // tooltipContent={lastUpdatedTooltipContent}
+                    // nullable={true}
+                />
+                <ChoiceField
+                    name="currency"
+                    label={<FormattedMessage id="currency" defaultMessage={`Currency`} />}
+                    classNames="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                    choices={this.currencyOptions}
+                    searchable={false}
+                />
+              </ApiForm>
             </div>
           </div>
           <div className="card d-flex flex-column flex-grow">

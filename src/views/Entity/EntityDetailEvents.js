@@ -35,7 +35,7 @@ class EntityDetailEvents extends Component {
       return value.name
     } else if (['product', 'cell_plan'].includes(field)) {
       return value ? <NavLink to={`/products/${value.id}`}>{value.name}</NavLink> : <em>N/A</em>
-    } else if (['url', 'discovery_url', 'picture_url'].includes(field)) {
+    } else if (['url', 'discovery_url'].includes(field)) {
       return <a className="url-link" href={value} target="_blank">{value || <em>N/A</em>}</a>
     } else if (field === 'description') {
       return <div className="description-container"><ReactMarkdown source={value} /></div>

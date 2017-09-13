@@ -38,3 +38,7 @@ textarea {
     padding: 5px;
     font-size: 12px;
 }
+
+#entity-pictures-carousel-card {
+    max-width: 600px;
+}

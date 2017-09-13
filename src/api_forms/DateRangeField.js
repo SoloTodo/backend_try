@@ -108,7 +108,14 @@ class DateRangeField extends Component {
       urlParams[base_field_name + '_end'] = [this.state.endDate.format('YYYY-MM-DD')]
     }
 
-    this.props.onApiParamChange({apiParams, urlParams})
+    this.props.onApiParamChange({
+      apiParams,
+      urlParams,
+      fieldValues: {
+        startDate: this.state.startDate,
+        endDate: this.state.endDate
+      }
+    })
   }
 
   handleDateChange = (event, field) => {

@@ -16,6 +16,7 @@
     "react": "^15.6.1",
     "react-chartjs-2": "^2.6.1",
     "react-dom": "^15.6.1",
+    "react-image-gallery": "^0.8.3",
     "react-intl": "^2.3.0",
     "react-intl-cra": "^0.2.7",
     "react-ladda": "^5.0.7",

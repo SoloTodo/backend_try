@@ -12,6 +12,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import trim from 'lodash/trim';
+import ImageGallery from 'react-image-gallery';
 import {settings} from "../../settings";
 import {formatCurrency, formatDateStr} from "../../utils";
 import EntityDetailMenu from "./EntityDetailMenu";
@@ -21,6 +22,7 @@ import './EntityDetail.css'
 import {createOption, createOptions} from "../../form_utils";
 import LoadingInline from "../../components/LoadingInline";
 import moment from "moment";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -310,14 +312,30 @@ class EntityDetail extends Component {
     const stateOptions = createOptions(this.props.entityStates);
     const isModalOpen = Boolean(this.state.categoryForChange) && !this.userHasStaffPermissionOverSelectedCategory();
 
+    let images = null;
+
+    if (entity.pictureUrls && entity.pictureUrls.length) {
+      images = entity.pictureUrls.map(pictureUrl => ({
+        original: pictureUrl,
+        thumbnail: pictureUrl
+      }))
+    }
+
     return (
         <div className="animated fadeIn">
           <div className="row">
-            <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5">
+            <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5" id="entity-pictures-carousel-card">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="picture" defaultMessage='Picture'/></strong></div>
+                <div className="card-header"><strong><FormattedMessage id="pictures" defaultMessage='Pictures'/></strong></div>
                 <div className="card-block center-aligned">
-                  <img src={entity.pictureUrl || imageNotAvailable} className="img-fluid" alt={entity.name} />
+                  {images ?
+                      <ImageGallery
+                          items={images}
+                          showFullscreenButton={false}
+                          showPlayButton={false}
+                      />
+                      : <img src={imageNotAvailable} className="img-fluid" alt={entity.name} />
+                  }
                 </div>
               </div>
             </div>

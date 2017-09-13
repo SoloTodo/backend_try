@@ -135,8 +135,8 @@
     "filepath": "./src/messages.js"
   },
   {
-    "id": "picture_url",
-    "defaultMessage": "Picture URL",
+    "id": "picture_urls",
+    "defaultMessage": "Picture URLs",
     "filepath": "./src/messages.js"
   },
   {

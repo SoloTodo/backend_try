@@ -11,7 +11,8 @@ class ApiForm extends Component {
 
     this.state = {
       apiParams: params,
-      urlParams: params
+      urlParams: params,
+      fieldValues: params
     }
   }
 
@@ -49,7 +50,8 @@ class ApiForm extends Component {
 
     this.setState({
       apiParams: params,
-      urlParams: params
+      urlParams: params,
+      fieldValues: params
     })
   };
 
@@ -63,7 +65,7 @@ class ApiForm extends Component {
 
 
   isFormValid = (state=null) => {
-    state = state ? state: this.state;
+    state = state ? state : this.state;
 
     return Object.values(state.apiParams).every(
         param => {
@@ -84,7 +86,11 @@ class ApiForm extends Component {
         urlParams: {
           ...state.urlParams,
           [fieldName]: params.urlParams
-        }
+        },
+        fieldValues: {
+          ...state.fieldValues,
+          [fieldName]: params.fieldValues
+        },
       };
 
       isValid = this.isFormValid(newState);
@@ -114,6 +120,9 @@ class ApiForm extends Component {
     this.props.onResultsChange(null);
 
     let apiSearch = '?';
+    if (this.props.endpoint.indexOf('?') !== -1) {
+      apiSearch = '&'
+    }
 
     for (const apiParamsDict of Object.values(this.state.apiParams)) {
       for (const apiParamKey of Object.keys(apiParamsDict)) {
@@ -127,7 +136,10 @@ class ApiForm extends Component {
 
     props.fetchAuth(endpoint).then(json => {
       if (json.results) {
-        props.onResultsChange(json);
+        props.onResultsChange({
+          payload: json,
+          fieldValues: this.state.fieldValues
+        });
       } else {
         // an error happened
       }

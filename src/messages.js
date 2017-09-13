@@ -21,7 +21,7 @@ const messages = {
   sku: <FormattedMessage id="sku" defaultMessage={`SKU`} />,
   url: <FormattedMessage id="url" defaultMessage={`URL`} />,
   discovery_url: <FormattedMessage id="discovery_url" defaultMessage={`Discovery URL`} />,
-  picture_url: <FormattedMessage id="picture_url" defaultMessage={`Picture URL`} />,
+  picture_urls: <FormattedMessage id="picture_urls" defaultMessage={`Picture URLs`} />,
   description: <FormattedMessage id="description" defaultMessage={`Description`} />,
   is_visible: <FormattedMessage id="is_visible" defaultMessage={`Is visible`} />,
   normal_price: <FormattedMessage id="normal_price" defaultMessage={`Normal price`} />,
