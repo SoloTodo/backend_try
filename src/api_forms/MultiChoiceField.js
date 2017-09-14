@@ -69,7 +69,7 @@ class MultiChoiceField extends Component {
       <UncontrolledTooltip placement="top" target={this.props.name}>
         {this.props.tooltipContent}
       </UncontrolledTooltip>}
-      <label htmlFor={this.props.name} id={this.props.name}>
+      <label htmlFor={this.props.name} id={this.props.name} className={this.props.tooltipContent ? 'dashed' : ''}>
         {this.props.label}
       </label>
       <Select

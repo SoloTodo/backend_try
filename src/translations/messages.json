@@ -5,6 +5,11 @@
     "filepath": "./src/api_forms/ApiForm.js"
   },
   {
+    "id": "no_products_found",
+    "defaultMessage": "No products found",
+    "filepath": "./src/api_forms/ApiResultDisplay.js"
+  },
+  {
     "id": "permission_denied_toast",
     "defaultMessage": "This resource does not exist or you don't have permission to access it.",
     "filepath": "./src/auth/DetailPermissionRoute.js"
@@ -77,6 +82,11 @@
   {
     "id": "update_stores",
     "defaultMessage": "Update Stores",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
     "filepath": "./src/messages.js"
   },
   {
@@ -295,8 +305,8 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "picture",
-    "defaultMessage": "Picture",
+    "id": "pictures",
+    "defaultMessage": "Pictures",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -545,6 +555,11 @@
     "filepath": "./src/views/Entity/EntityDetailMenu.js"
   },
   {
+    "id": "entity_price_history_auto_updated",
+    "defaultMessage": "The pricing information of this entity has just been updated, refreshing chart.",
+    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+  },
+  {
     "id": "all_masculine",
     "defaultMessage": "All",
     "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
@@ -555,13 +570,8 @@
     "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
   },
   {
-    "id": "entity_price_history_start_date",
-    "defaultMessage": "Starting date for the chart. The minimum value is the entity's detection date",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
-  },
-  {
-    "id": "entity_price_history_end_date",
-    "defaultMessage": "Ending date for the chart. The maximum value is today",
+    "id": "entity_price_history_date_rage",
+    "defaultMessage": "Date range for the chart. The minimum value is the entity's detection date",
     "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
   },
   {
@@ -585,13 +595,8 @@
     "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
   },
   {
-    "id": "start_date",
-    "defaultMessage": "Start date",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
-  },
-  {
-    "id": "end_date",
-    "defaultMessage": "End date",
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
     "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
   },
   {
@@ -602,11 +607,6 @@
   {
     "id": "display",
     "defaultMessage": "Display",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
-  },
-  {
-    "id": "update",
-    "defaultMessage": "Update",
     "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
   },
   {
@@ -855,6 +855,26 @@
     "filepath": "./src/views/Pages/Page404/Page404.js"
   },
   {
+    "id": "product_availability_countries_tooltip",
+    "defaultMessage": "Filter the products that are available for purchase in the selected countries",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "product_availability_stores_tooltip",
+    "defaultMessage": "Filter the products that are available for purchase in the selected stores",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "creation_date_tooltip",
+    "defaultMessage": "Filter the products that were created between the given dates",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "last_updated_tooltip",
+    "defaultMessage": "Filter the products that were last updated between the given dates",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
     "id": "id",
     "defaultMessage": "ID",
     "filepath": "./src/views/Product/ProductList.js"
@@ -877,26 +897,6 @@
   {
     "id": "last_updated",
     "defaultMessage": "Last updated",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "no_products_found",
-    "defaultMessage": "No products found",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "product_availability_countries_tooltip",
-    "defaultMessage": "Filter the products that are available for purchase in the selected countries",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "product_availability_stores_tooltip",
-    "defaultMessage": "Filter the products that are available for purchase in the selected stores",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "creation_date_tooltip",
-    "defaultMessage": "Filter the products were created between the given dates",
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
@@ -927,6 +927,21 @@
   {
     "id": "availability_stores",
     "defaultMessage": "Availability stores",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "keyword",
+    "defaultMessage": "Keywords",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "creation_date_from_to",
+    "defaultMessage": "Creation date (from / to)",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "last_updated_from_to",
+    "defaultMessage": "Last updated (from / to)",
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
@@ -965,54 +980,14 @@
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
-    "id": "update",
-    "defaultMessage": "Update",
+    "id": "update_pricing",
+    "defaultMessage": "Update pricing",
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
     "id": "update_logs",
     "defaultMessage": "Update logs",
     "filepath": "./src/views/Store/StoreDetailMenu.js"
-  },
-  {
-    "id": "store_update_requested_success",
-    "defaultMessage": "Store update requested successfully.",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "warning_exclamation",
-    "defaultMessage": "Warning!",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "store_inactive_warning",
-    "defaultMessage": "This store is inactive, it has to be set as active to update its prices",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "use_async_question",
-    "defaultMessage": "Use async?",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "url_discovery_concurrency",
-    "defaultMessage": "URL discovery concurrency",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "product_scraping_concurrency",
-    "defaultMessage": "Product scraping concurrency",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
-  },
-  {
-    "id": "categories",
-    "defaultMessage": "Categories",
-    "filepath": "./src/views/Store/StoreDetailUpdate.js"
   },
   {
     "id": "pending",
@@ -1088,6 +1063,51 @@
     "id": "unavailable",
     "defaultMessage": "Unavailable",
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
+    "id": "store_update_requested_success",
+    "defaultMessage": "Store update requested successfully.",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "store_without_scraper_warning",
+    "defaultMessage": "The store does not have a valid scraper.",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "warning_exclamation",
+    "defaultMessage": "Warning!",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "store_inactive_warning",
+    "defaultMessage": "This store is inactive, it has to be set as active to update its prices",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "use_async_question",
+    "defaultMessage": "Use async?",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "url_discovery_concurrency",
+    "defaultMessage": "URL discovery concurrency",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "product_scraping_concurrency",
+    "defaultMessage": "Product scraping concurrency",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
   },
   {
     "id": "stores",

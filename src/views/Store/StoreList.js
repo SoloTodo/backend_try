@@ -10,11 +10,7 @@ import NavLink from "react-router-dom/es/NavLink";
 
 class StoreList extends Component {
   render() {
-    let stores = this.props.stores;
-
-    stores = stores
-        .filter(store => store.permissions.includes('backend_view_store'))
-        .map(x => this.props.ApiResourceObject(x));
+    const stores = this.props.stores.map(x => this.props.ApiResourceObject(x));
 
     return <div className="animated fadeIn">
       <div className="row">

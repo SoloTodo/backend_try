@@ -41,8 +41,8 @@ class EntityList extends Component {
     super(props);
 
     this.apiResourceObjectsWithPermission = {
-      stores: this.props.stores.filter(store => store.permissions.includes('view_store_entities')),
-      categories: this.props.categories.filter(category => category.permissions.includes('view_category_entities')),
+      stores: this.props.stores.filter(store => store.permissions.includes('view_store')),
+      categories: this.props.categories.filter(category => category.permissions.includes('view_category')),
     };
 
     this.state = {

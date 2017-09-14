@@ -12,7 +12,7 @@ import Dashboard from '../../views/Dashboard/';
 import PermissionRoute from '../../auth/PermissionRoute';
 import { routes } from '../../TopLevelRoutes';
 import StoreDetail from "../../views/Store/StoreDetail";
-import StoreDetailUpdate from "../../views/Store/StoreDetailUpdate";
+import StoreDetailUpdatePricing from "../../views/Store/StoreDetailUpdatePricing";
 import DetailPermissionRoute from "../../auth/DetailPermissionRoute";
 import StoreDetailUpdateLogs from "../../views/Store/StoreDetailUpdateLogs";
 import EntityDetail from "../../views/Entity/EntityDetail";
@@ -81,8 +81,8 @@ class Full extends Component {
                       <PermissionRoute exact key={route.path} path={route.path} name={route.name} requiredPermission={route.requiredPermission} component={route.component} requiredResources={route.requiredResources} title={route.title} />
                   )}
                   <DetailPermissionRoute key="1" exact path="/stores/:id/update_logs" resource="stores" permission="view_store_update_logs" requiredResources={['categories']} name="StoreDetailUpdateLogs" component={StoreDetailUpdateLogs} />
-                  <DetailPermissionRoute key="2" exact path="/stores/:id/update" resource="stores" permission="update_store_pricing" requiredResources={['categories']} name="StoreDetailUpdate" component={StoreDetailUpdate} />
-                  <DetailPermissionRoute key="3" exact path="/stores/:id" resource="stores" permission="backend_view_store" name="StoresDetail" component={StoreDetail}/>
+                  <DetailPermissionRoute key="2" exact path="/stores/:id/update_pricing" resource="stores" permission="update_store_pricing" requiredResources={['categories']} name="StoreDetailUpdatePricing" component={StoreDetailUpdatePricing} />
+                  <DetailPermissionRoute key="3" exact path="/stores/:id" resource="stores" permission="view_store" name="StoresDetail" component={StoreDetail}/>
                   <DetailPermissionRoute key="4" exact path="/entities/:id" resource="entities" name="EntityDetail" requiredResources={['stores', 'categories', 'users_with_staff_actions']} component={EntityDetail} redirectPath="/entities/" />
                   <DetailPermissionRoute key="5" exact path="/entities/:id/events" resource="entities" name="EntityDetailEvents" component={EntityDetailEvents} />
                   <DetailPermissionRoute key="6" exact path="/entities/:id/price_history" resource="entities" name="EntityDetailPriceHistory" requiredResources={['stores']} component={EntityDetailPriceHistory} />

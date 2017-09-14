@@ -98,3 +98,13 @@ function _formatCurrency(value, n, x, s, c) {
 
   return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
 }
+
+export function listToObject(list, key) {
+  const result = {};
+
+  for (const item of list) {
+    result[item[key]] = item
+  }
+
+  return result
+}

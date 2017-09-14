@@ -63,11 +63,7 @@ class StoreDetailUpdateLogs extends Component {
 
     const rawPageLogs = this.state.updateLogs[this.state.page];
 
-    const pageLogs = rawPageLogs.map(rawPageLog => {
-      const pageLog = this.props.ApiResourceObject(rawPageLog);
-      pageLog.apiResourceCategories = pageLog.categories.map(pt => this.props.ApiResourceObject(this.props.apiResourceObjects[pt]));
-      return pageLog
-    });
+    const pageLogs = rawPageLogs.map(rawPageLog => this.props.ApiResourceObject(rawPageLog));
 
     const statusDict = {
       1: <FormattedMessage id="pending" defaultMessage={`Pending`} />,
@@ -141,7 +137,7 @@ class StoreDetailUpdateLogs extends Component {
                               <td>{formatDateStr(log.lastUpdated)}</td>
                               <td className="hidden-xs-down">
                                 <ul>
-                                  {log.apiResourceCategories.map(pt => (
+                                  {log.categories.map(pt => (
                                       <li key={pt.url}>{pt.name}</li>
                                   ))}
                                 </ul>

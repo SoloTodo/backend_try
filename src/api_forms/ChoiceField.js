@@ -38,7 +38,7 @@ class ChoiceField extends Component {
       choiceId = choiceId[0]
     }
 
-    let value = this.props.choices.filter(choice => choice.id === choiceId)[0];
+    let value = this.props.choices.filter(choice => choice.id.toString() === choiceId)[0];
 
     if (!value) {
       value = this.props.choices[0]
@@ -73,7 +73,7 @@ class ChoiceField extends Component {
       <UncontrolledTooltip placement="top" target={this.props.name}>
         {this.props.tooltipContent}
       </UncontrolledTooltip>}
-      <label htmlFor={this.props.name} id={this.props.name}>
+      <label htmlFor={this.props.name} id={this.props.name} className={this.props.tooltipContent ? 'dashed' : ''}>
         {this.props.label}
       </label>
       <Select
@@ -85,6 +85,7 @@ class ChoiceField extends Component {
           multi={false}
           placeholder={this.props.placeholder}
           searchable={this.props.searchable}
+          clearable={false}
       />
     </div>
   }

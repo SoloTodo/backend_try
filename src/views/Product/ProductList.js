@@ -59,8 +59,8 @@ class ProductList extends Component {
   };
 
   render() {
-    const stores = this.props.stores.filter(store => store.permissions.includes('backend_view_store'));
-    const categories = this.props.categories.filter(store => store.permissions.includes('backend_view_category'));
+    const stores = this.props.stores;
+    const categories = this.props.categories;
 
     const availabilityCountriesTooltipContent = <p>
       <FormattedMessage id="product_availability_countries_tooltip" defaultMessage='Filter the products that are available for purchase in the selected countries' />

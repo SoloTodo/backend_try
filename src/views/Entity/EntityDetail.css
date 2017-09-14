@@ -39,6 +39,8 @@ textarea {
     font-size: 12px;
 }
 
-#entity-pictures-carousel-card {
-    max-width: 600px;
+@media(min-width: 1200px) {
+    #entity-pictures-carousel-card {
+        max-width: 600px;
+    }
 }

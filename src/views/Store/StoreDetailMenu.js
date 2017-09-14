@@ -20,9 +20,9 @@ export default function StoreDetailMenu(props) {
           }
           {store.permissions.includes('update_store_pricing') &&
           <li>
-            <NavLink to={'/stores/' + store.id + '/update'}>
+            <NavLink to={'/stores/' + store.id + '/update_pricing'}>
               <button type="button" className="btn btn-link">
-                <FormattedMessage id="update" defaultMessage={`Update`} />
+                <FormattedMessage id="update_pricing" defaultMessage={`Update pricing`} />
               </button>
             </NavLink></li>
           }

@@ -276,7 +276,7 @@ class EntityDetail extends Component {
   userHasStaffPermissions = () => {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     return entity.category.permissions.includes('category_entities_staff') &&
-        entity.store.permissions.includes('store_entities_staff');
+        entity.store.permissions.includes('is_store_staff');
   };
 
   render() {
@@ -339,7 +339,7 @@ class EntityDetail extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-6">
+            <div className="col-sm-12 col-md-4 col-lg-6 col-xl-5">
               <EntityDetailMenu entity={entity}/>
               {canUpdatePricing &&
               <div className="card">
@@ -391,10 +391,7 @@ class EntityDetail extends Component {
                     <tr>
                       <th><FormattedMessage id="store" defaultMessage='Store' /></th>
                       <td>
-                        {entity.store.permissions.includes('backend_view_store') ?
-                            <NavLink to={'/stores/' + entity.store.id}>{entity.store.name}</NavLink> :
-                            entity.store.name
-                        }
+                          <NavLink to={'/stores/' + entity.store.id}>{entity.store.name}</NavLink>
                       </td>
                     </tr>
                     <tr>

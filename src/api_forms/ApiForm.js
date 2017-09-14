@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import {FormattedMessage} from "react-intl";
 import './ApiForm.css'
 import {withRouter} from "react-router-dom";
+import {listToObject} from "../utils";
+import {addApiResourceStateToPropsUtils} from "../ApiResource";
+import {connect} from "react-redux";
 
 class ApiForm extends Component {
   constructor(props) {
@@ -32,6 +35,32 @@ class ApiForm extends Component {
         this.updateSearchResults(true, nextProps);
         break;
       }
+    }
+
+    const currentObservedObjectsDict = listToObject(this.props.observedObjects, 'id');
+    const nextObservedObjectsDict = listToObject(nextProps.observedObjects, 'id');
+
+    const commonObservedObjectIds = this.props.observedObjects
+        .filter(object => currentObservedObjectsDict[object.id] && nextObservedObjectsDict[object.id])
+        .map(object => object.id);
+
+    const changedObjects = [];
+
+    for (const commonObservedObjectId of commonObservedObjectIds) {
+      const currentObject = currentObservedObjectsDict[commonObservedObjectId];
+      const nextObject = nextObservedObjectsDict[commonObservedObjectId];
+
+      if (currentObject[this.props.observedObjectsField] !== nextObject[this.props.observedObjectsField]) {
+        changedObjects.push({
+          currentObject: currentObject,
+          nextObject: nextObject
+        });
+      }
+    }
+
+    if (changedObjects.length) {
+      this.props.onObservedObjectChange(changedObjects);
+      this.updateSearchResults();
     }
   }
 
@@ -105,19 +134,33 @@ class ApiForm extends Component {
   handleFormSubmit = (event) => {
     event && event.preventDefault();
 
-    if (this.props.page === 1) {
+    if (this.props.page === 1 || !this.props.page) {
       this.updateSearchResults(true)
     } else {
       // Changing the page on our container will call componentWillReceiveProps
       // updating the results either way.
-      this.props.onPageChange(1);
+      this.props.onPageChange && this.props.onPageChange(1);
     }
   };
 
   updateSearchResults = (pushLocation=false, props=null) => {
     props = props ? props : this.props;
 
-    this.props.onResultsChange(null);
+    props.onResultsChange(null);
+
+    let pageAndOrderingParams = '';
+
+    if (props.page) {
+      pageAndOrderingParams += `page=${props.page}&`
+    }
+
+    if (props.pageSize) {
+      pageAndOrderingParams += `page_size=${props.pageSize}&`;
+    }
+
+    if (props.ordering) {
+      pageAndOrderingParams += `ordering=${props.ordering}&`;
+    }
 
     let apiSearch = '?';
     if (this.props.endpoint.indexOf('?') !== -1) {
@@ -132,7 +175,7 @@ class ApiForm extends Component {
       }
     }
 
-    const endpoint = props.endpoint + apiSearch + `ordering=${props.ordering}&page=${props.page}&page_size=${props.pageSize}`;
+    const endpoint = props.endpoint + apiSearch + pageAndOrderingParams;
 
     props.fetchAuth(endpoint).then(json => {
       if (json.results) {
@@ -156,7 +199,7 @@ class ApiForm extends Component {
         }
       }
 
-      const newRoute = props.history.location.pathname + urlSearch + `ordering=${props.ordering}&page=${props.page}&page_size=${props.pageSize}`;
+      const newRoute = props.history.location.pathname + urlSearch + pageAndOrderingParams;
       props.history.push(newRoute)
     }
 
@@ -174,7 +217,7 @@ class ApiForm extends Component {
     return <form>
       <div className="row" id="form-row">
         {childrenElems}
-        <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12">
+        <div className="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-2">
           <label htmlFor="submit">&nbsp;</label>
           <button name="submit" id="submit" type="submit" className="btn btn-primary" onClick={this.handleFormSubmit}>
             <FormattedMessage id="search" defaultMessage={`Search`} />
@@ -185,4 +228,4 @@ class ApiForm extends Component {
   }
 }
 
-export default withRouter(ApiForm);
+export default withRouter(connect(addApiResourceStateToPropsUtils())(ApiForm));

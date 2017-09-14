@@ -12,7 +12,7 @@ import Loading from "../../components/Loading";
 
 
 
-class StoreDetailUpdate extends Component {
+class StoreDetailUpdatePricing extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,13 +85,6 @@ class StoreDetailUpdate extends Component {
       return (
           <Redirect to={{
             pathname: `/stores/${store.id}/update_logs`,
-            state: {
-              alert: {
-                type: 'success',
-                labelId: 'success_exclamation',
-                messageId: 'store_update_requested_success'
-              }
-            }
           }} />
       )
     }
@@ -103,16 +96,15 @@ class StoreDetailUpdate extends Component {
     }
 
     if (formData.detail) {
+      toast.warning(<FormattedMessage
+          id="store_without_scraper_warning"
+          defaultMessage="The store does not have a valid scraper." />, {
+        autoClose: false
+      });
+
       return (
           <Redirect to={{
             pathname: `/stores/${store.id}/`,
-            state: {
-              alert: {
-                type: 'warning',
-                labelId: 'warning_exclamation',
-                messageId: 'store_no_scraper_warning'
-              }
-            }
           }} />
       )
     }
@@ -152,18 +144,36 @@ class StoreDetailUpdate extends Component {
                         </div>
                         <div className="form-group">
                           <label htmlFor="discover_urls_concurrency"><FormattedMessage id="url_discovery_concurrency" defaultMessage={`URL discovery concurrency`} /></label>
-                          <input type="number" onChange={this.handleInputChange} value={formData.discover_urls_concurrency} className="form-control" id="discover_urls_concurrency" name="discover_urls_concurrency" step="1" min="1" />
+                          <input type="number"
+                                 onChange={this.handleInputChange}
+                                 value={formData.discover_urls_concurrency}
+                                 className="form-control"
+                                 id="discover_urls_concurrency"
+                                 name="discover_urls_concurrency"
+                                 step="1"
+                                 min="1"
+                                 max="10"
+                          />
                         </div>
                         <div className="form-group">
                           <label htmlFor="products_for_url_concurrency"><FormattedMessage id="product_scraping_concurrency" defaultMessage={`Product scraping concurrency`} /></label>
-                          <input type="number" onChange={this.handleInputChange} value={formData.products_for_url_concurrency} className="form-control" id="products_for_url_concurrency" name="products_for_url_concurrency" step="1" min="1" />
+                          <input type="number"
+                                 onChange={this.handleInputChange}
+                                 value={formData.products_for_url_concurrency}
+                                 className="form-control"
+                                 id="products_for_url_concurrency"
+                                 name="products_for_url_concurrency"
+                                 step="1"
+                                 min="1"
+                                 max="20"
+                          />
                         </div>
                         <div className="form-group">
                           <label htmlFor="categories"><FormattedMessage id="categories" defaultMessage={`Categories`} /></label>
                           <select className="form-control" id="categories" name="categories" multiple="multiple" size="8"
                                   value={formData.categories} onChange={this.handleInputChange}>
                             {categoryChoices.map(category => (
-                                <option key={category.url} value={category.url}>{category.name}</option>
+                                <option key={category.id} value={category.id}>{category.name}</option>
                             ))}
                           </select>
                         </div>
@@ -191,4 +201,4 @@ function mapStateToProps(state) {
 
 export default connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(StoreDetailUpdate);
+    addApiResourceDispatchToPropsUtils())(StoreDetailUpdatePricing);

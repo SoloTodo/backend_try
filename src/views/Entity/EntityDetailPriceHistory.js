@@ -5,13 +5,9 @@ import {
   addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
 } from "../../ApiResource";
 import {Line} from 'react-chartjs-2';
-import {
-  UncontrolledTooltip
-} from 'reactstrap';
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
 import {withRouter} from "react-router-dom";
-import { toast } from 'react-toastify';
 import Loading from "../../components/Loading";
 import {convertToDecimal, formatCurrency} from "../../utils";
 import './EntityDetailPriceHistory.css'
@@ -20,19 +16,7 @@ import {chartColors, lightenDarkenColor} from "../../colors"
 import ApiForm from "../../api_forms/ApiForm";
 import DateRangeField from "../../api_forms/DateRangeField";
 import ChoiceField from "../../api_forms/ChoiceField";
-
-const displayOptions = [
-  {
-    value: 'all',
-    label: <FormattedMessage id="all_masculine" defaultMessage={`All`} />,
-    apiValue: 0,
-  },
-  {
-    value: 'available_only',
-    label: <FormattedMessage id="available_only" defaultMessage={`Only when available`} />,
-    apiValue: 1
-  },
-];
+import { toast } from 'react-toastify';
 
 class EntityDetailPriceHistory extends Component {
   constructor(props) {
@@ -74,11 +58,11 @@ class EntityDetailPriceHistory extends Component {
     }
 
     const convertedData = bundle.payload.results.map(entityHistory => ({
-        timestamp: moment(entityHistory.timestamp),
-        normalPrice: convertToDecimal(entityHistory.normal_price),
-        offerPrice: convertToDecimal(entityHistory.offer_price),
-        cellMonthlyPayment: convertToDecimal(entityHistory.cell_monthly_payment),
-      }));
+      timestamp: moment(entityHistory.timestamp),
+      normalPrice: convertToDecimal(entityHistory.normal_price),
+      offerPrice: convertToDecimal(entityHistory.offer_price),
+      cellMonthlyPayment: convertToDecimal(entityHistory.cell_monthly_payment),
+    }));
 
     this.setState({
       chart: {
@@ -142,6 +126,13 @@ class EntityDetailPriceHistory extends Component {
 
     return result;
   }
+
+  handleObservedObjectChange = changes => {
+    toast.info(<FormattedMessage
+            id="entity_price_history_auto_updated"
+            defaultMessage="The pricing information of this entity has just been updated, refreshing chart."/>,
+        {autoClose: false});
+  };
 
   render() {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
@@ -213,14 +204,16 @@ class EntityDetailPriceHistory extends Component {
           data: filledChartData.map(datapoint => datapoint.normalPrice),
           fill: false,
           borderColor: chartColors[0],
-          backgroundColor: lightenDarkenColor(chartColors[0], 40)
+          backgroundColor: lightenDarkenColor(chartColors[0], 40),
+          lineTension: 0
         },
         {
           label: this.props.intl.formatMessage({id: 'offer_price'}),
           data: filledChartData.map(datapoint => datapoint.offerPrice),
           fill: false,
           borderColor: chartColors[1],
-          backgroundColor: lightenDarkenColor(chartColors[1], 40)
+          backgroundColor: lightenDarkenColor(chartColors[1], 40),
+          lineTension: 0
         }];
 
       const cellMonthlyPaymentData = filledChartData.map(datapoint => datapoint.cellMonthlyPayment);
@@ -231,7 +224,8 @@ class EntityDetailPriceHistory extends Component {
           data: cellMonthlyPaymentData,
           fill: false,
           borderColor: chartColors[2],
-          backgroundColor: lightenDarkenColor(chartColors[2], 40)
+          backgroundColor: lightenDarkenColor(chartColors[2], 40),
+          lineTension: 0
         })
       }
 
@@ -244,8 +238,44 @@ class EntityDetailPriceHistory extends Component {
     }
 
     const entityCreationDate = moment(entity.creationDate).startOf('day');
+    const todayMinus30Days = moment().startOf('day').subtract(30, 'days');
+
+    let dateRangeInitialMin = entityCreationDate;
+    if (entityCreationDate.isBefore(todayMinus30Days)) {
+      dateRangeInitialMin = todayMinus30Days;
+    }
+
+    const dateRangeInitialMax = moment().startOf('day')
 
     const endpoint = `${settings.apiResourceEndpoints.entity_histories}?entities=${entity.id}`;
+    const displayOptions = [
+      {
+        id: 0,
+        name: <FormattedMessage id="all_masculine" defaultMessage={`All`} />,
+      },
+      {
+        id: 1,
+        name: <FormattedMessage id="available_only" defaultMessage={`Only when available`} />,
+      },
+    ];
+
+    const dateRangeTooltip = <div>
+      <FormattedMessage id="entity_price_history_date_rage" defaultMessage="Date range for the chart. The minimum value is the entity's detection date" /> ({moment(entity.creationDate).format('ll')})
+    </div>;
+
+    const currencyTooltip = <FormattedMessage id="entity_price_history_currency" defaultMessage="The price points are converted to this currency. The values are calculated using standard exchange rates" />;
+
+    const displayTooltip =
+        <dl>
+          <dt><FormattedMessage id="all_masculine" defaultMessage="All" /></dt>
+          <dd>
+            <FormattedMessage id="entity_price_history_display_all" defaultMessage="All price points are displayed, whether the entity was available for purchase at the time or not" />
+          </dd>
+          <dt><FormattedMessage id="available_only" defaultMessage="Only when available" /></dt>
+          <dd>
+            <FormattedMessage id="entity_price_history_display_available_only" defaultMessage="Only show a particular price point if the entity was available for purchase at that time" />
+          </dd>
+        </dl>;
 
     return (
         <div className="animated fadeIn d-flex flex-column">
@@ -255,25 +285,33 @@ class EntityDetailPriceHistory extends Component {
               <ApiForm
                   endpoint={endpoint}
                   onResultsChange={this.setChartData}
-                  fetchAuth={this.props.fetchAuth}
-                  page={1}
-                  pageSize={100}
-                  ordering='timestamp'
-                  onPageChange={() => {}}>
+                  observedObjects={[this.props.apiResourceObject]}
+                  observedObjectsField="last_pricing_update"
+                  onObservedObjectChange={this.handleObservedObjectChange}
+              >
                 <DateRangeField
                     name="timestamp"
                     label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
-                    classNames="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
+                    classNames="col-12 col-sm-12 col-md-10 col-lg-5 col-xl-4"
                     min={entityCreationDate}
-                    // tooltipContent={lastUpdatedTooltipContent}
-                    // nullable={true}
+                    tooltipContent={dateRangeTooltip}
+                    initial={[dateRangeInitialMin, dateRangeInitialMax]}
                 />
                 <ChoiceField
                     name="currency"
                     label={<FormattedMessage id="currency" defaultMessage={`Currency`} />}
-                    classNames="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                    classNames="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3"
                     choices={this.currencyOptions}
                     searchable={false}
+                    tooltipContent={currencyTooltip}
+                />
+                <ChoiceField
+                    name="availableOnly"
+                    label={<FormattedMessage id="display" defaultMessage={`Display`} />}
+                    classNames="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3"
+                    choices={displayOptions}
+                    searchable={false}
+                    tooltipContent={displayTooltip}
                 />
               </ApiForm>
             </div>

@@ -10,6 +10,7 @@ const messages = {
   previous: <FormattedMessage id="previous" defaultMessage={`Previous`} />,
   next: <FormattedMessage id="next" defaultMessage={`Next`} />,
   update_stores: <FormattedMessage id="update_stores" defaultMessage={`Update Stores`} />,
+  stores: <FormattedMessage id="stores" defaultMessage={`Stores`} />,
   category: <FormattedMessage id="category" defaultMessage={`Category`} />,
   scraped_category: <FormattedMessage id="scraped_category" defaultMessage={`Scraped category`} />,
   currency: <FormattedMessage id="currency" defaultMessage={`Currency`} />,

@@ -15,7 +15,7 @@ export const sidebarLayout = [
         key: 1,
         label: <FormattedMessage id='show_list' defaultMessage='Show all' />,
         path: '/stores',
-        requiredPermission: 'solotodo.backend_view_store',
+        requiredPermission: 'solotodo.backend_list_stores',
         name: 'Stores',
         component: StoreList,
         requiredResources: ['stores'],
