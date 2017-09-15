@@ -21,8 +21,9 @@ import ApiResourceObject from "./ApiResource";
 import Page404 from "./views/Pages/Page404/Page404";
 
 import 'react-select/dist/react-select.css';
+import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-image-gallery/styles/css/image-gallery.css';
 import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
-
 
 
 export function initialUserLoad(authToken, languages, countries, currencies, numberFormats, dispatch) {

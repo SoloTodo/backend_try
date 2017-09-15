@@ -17,7 +17,7 @@ import DetailPermissionRoute from "../../auth/DetailPermissionRoute";
 import StoreDetailUpdateLogs from "../../views/Store/StoreDetailUpdateLogs";
 import EntityDetail from "../../views/Entity/EntityDetail";
 import EntityDetailEvents from "../../views/Entity/EntityDetailEvents";
-import EntityDetailPriceHistory from "../../views/Entity/EntityDetailPriceHistory";
+import EntityDetailPricingHistory from "../../views/Entity/EntityDetailPricingHistory";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
@@ -85,7 +85,7 @@ class Full extends Component {
                   <DetailPermissionRoute key="3" exact path="/stores/:id" resource="stores" permission="view_store" name="StoresDetail" component={StoreDetail}/>
                   <DetailPermissionRoute key="4" exact path="/entities/:id" resource="entities" name="EntityDetail" requiredResources={['stores', 'categories', 'users_with_staff_actions']} component={EntityDetail} redirectPath="/entities/" />
                   <DetailPermissionRoute key="5" exact path="/entities/:id/events" resource="entities" name="EntityDetailEvents" component={EntityDetailEvents} />
-                  <DetailPermissionRoute key="6" exact path="/entities/:id/price_history" resource="entities" name="EntityDetailPriceHistory" requiredResources={['stores']} component={EntityDetailPriceHistory} />
+                  <DetailPermissionRoute key="6" exact path="/entities/:id/pricing_history" resource="entities" name="EntityDetailPricingHistory" requiredResources={['stores']} component={EntityDetailPricingHistory} />
                   <Redirect from="/" to="/dashboard"/>
                 </Switch>
               </div>

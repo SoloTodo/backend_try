@@ -15,14 +15,11 @@ import trim from 'lodash/trim';
 import ImageGallery from 'react-image-gallery';
 import {settings} from "../../settings";
 import {formatCurrency, formatDateStr} from "../../utils";
-import EntityDetailMenu from "./EntityDetailMenu";
 import imageNotAvailable from '../../images/image-not-available.svg';
-import 'react-toastify/dist/ReactToastify.min.css';
 import './EntityDetail.css'
 import {createOption, createOptions} from "../../form_utils";
 import LoadingInline from "../../components/LoadingInline";
 import moment from "moment";
-import "react-image-gallery/styles/css/image-gallery.css";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -340,7 +337,29 @@ class EntityDetail extends Component {
               </div>
             </div>
             <div className="col-sm-12 col-md-4 col-lg-6 col-xl-5">
-              <EntityDetailMenu entity={entity}/>
+              <div className="card">
+                <div className="card-header"><strong><FormattedMessage id="options" defaultMessage={`Options`} /></strong></div>
+                <div className="card-block">
+                  <ul className="list-without-decoration subnavigation-links">
+                    <li><NavLink to={`/entities/${entity.id}/events`}>
+                      <button type="button" className="btn btn-link">
+                        <FormattedMessage id="events" defaultMessage={`Events`} />
+                      </button>
+                    </NavLink></li>
+                    <li><NavLink to={`/entities/${entity.id}/pricing_history`}>
+                      <button type="button" className="btn btn-link">
+                        <FormattedMessage id="pricing_history" defaultMessage={`Pricing history`} />
+                      </button>
+                    </NavLink></li>
+
+                    <li><NavLink to={'/entities/' + entity.id}>
+                      <button type="button" className="btn btn-link">
+                        <FormattedMessage id="associate_to_prduct" defaultMessage={`Associate`} />
+                      </button>
+                    </NavLink></li>
+                  </ul>
+                </div>
+              </div>
               {canUpdatePricing &&
               <div className="card">
                 <div className="card-header"><strong><FormattedMessage
@@ -391,7 +410,7 @@ class EntityDetail extends Component {
                     <tr>
                       <th><FormattedMessage id="store" defaultMessage='Store' /></th>
                       <td>
-                          <NavLink to={'/stores/' + entity.store.id}>{entity.store.name}</NavLink>
+                        <NavLink to={'/stores/' + entity.store.id}>{entity.store.name}</NavLink>
                       </td>
                     </tr>
                     <tr>

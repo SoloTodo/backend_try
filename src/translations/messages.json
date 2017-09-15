@@ -80,6 +80,16 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "available",
+    "defaultMessage": "Available",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "unavailable",
+    "defaultMessage": "Unavailable",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "update_stores",
     "defaultMessage": "Update Stores",
     "filepath": "./src/messages.js"
@@ -310,6 +320,31 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "options",
+    "defaultMessage": "Options",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "events",
+    "defaultMessage": "Events",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "price_history",
+    "defaultMessage": "Price history",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "stock_history",
+    "defaultMessage": "Stock history",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "associate_to_prduct",
+    "defaultMessage": "Associate",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "update_information",
     "defaultMessage": "Update information",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -535,84 +570,89 @@
     "filepath": "./src/views/Entity/EntityDetailEvents.js"
   },
   {
-    "id": "options",
-    "defaultMessage": "Options",
-    "filepath": "./src/views/Entity/EntityDetailMenu.js"
-  },
-  {
-    "id": "events",
-    "defaultMessage": "Events",
-    "filepath": "./src/views/Entity/EntityDetailMenu.js"
-  },
-  {
-    "id": "price_history",
-    "defaultMessage": "Price history",
-    "filepath": "./src/views/Entity/EntityDetailMenu.js"
-  },
-  {
-    "id": "associate_to_prduct",
-    "defaultMessage": "Associate",
-    "filepath": "./src/views/Entity/EntityDetailMenu.js"
-  },
-  {
     "id": "entity_price_history_auto_updated",
     "defaultMessage": "The pricing information of this entity has just been updated, refreshing chart.",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "all_masculine",
     "defaultMessage": "All",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "available_only",
     "defaultMessage": "Only when available",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "entity_price_history_date_rage",
     "defaultMessage": "Date range for the chart. The minimum value is the entity's detection date",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "entity_price_history_currency",
     "defaultMessage": "The price points are converted to this currency. The values are calculated using standard exchange rates",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "entity_price_history_display_all",
     "defaultMessage": "All price points are displayed, whether the entity was available for purchase at the time or not",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "entity_price_history_display_available_only",
     "defaultMessage": "Only show a particular price point if the entity was available for purchase at that time",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "filters",
     "defaultMessage": "Filters",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "date_range_from_to",
     "defaultMessage": "Date range (from / to)",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "currency",
     "defaultMessage": "Currency",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "display",
     "defaultMessage": "Display",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "result",
     "defaultMessage": "Result",
-    "filepath": "./src/views/Entity/EntityDetailPriceHistory.js"
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
+  },
+  {
+    "id": "entity_price_history_auto_updated",
+    "defaultMessage": "The pricing information of this entity has just been updated, refreshing chart.",
+    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
+  },
+  {
+    "id": "entity_price_history_date_rage",
+    "defaultMessage": "Date range for the chart. The minimum value is the entity's detection date",
+    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
+  },
+  {
+    "id": "result",
+    "defaultMessage": "Result",
+    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
   },
   {
     "id": "all",

@@ -163,7 +163,7 @@ class ApiForm extends Component {
     }
 
     let apiSearch = '?';
-    if (this.props.endpoint.indexOf('?') !== -1) {
+    if (props.endpoint.indexOf('?') !== -1) {
       apiSearch = '&'
     }
 
@@ -178,14 +178,10 @@ class ApiForm extends Component {
     const endpoint = props.endpoint + apiSearch + pageAndOrderingParams;
 
     props.fetchAuth(endpoint).then(json => {
-      if (json.results) {
-        props.onResultsChange({
-          payload: json,
-          fieldValues: this.state.fieldValues
-        });
-      } else {
-        // an error happened
-      }
+      props.onResultsChange({
+        payload: json,
+        fieldValues: this.state.fieldValues
+      });
     });
 
     if (pushLocation) {

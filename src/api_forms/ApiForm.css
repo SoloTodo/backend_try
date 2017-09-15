@@ -9,3 +9,16 @@ form {
 #form-row {
     margin-top: -10px;
 }
+
+#update-button {
+    display: block;
+}
+
+.dashed {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+label {
+    display: block;
+}

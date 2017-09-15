@@ -9,6 +9,8 @@ const messages = {
   no: <FormattedMessage id="no" defaultMessage='No' />,
   previous: <FormattedMessage id="previous" defaultMessage={`Previous`} />,
   next: <FormattedMessage id="next" defaultMessage={`Next`} />,
+  available: <FormattedMessage id="available" defaultMessage={`Available`} />,
+  unavailable: <FormattedMessage id="unavailable" defaultMessage={`Unavailable`} />,
   update_stores: <FormattedMessage id="update_stores" defaultMessage={`Update Stores`} />,
   stores: <FormattedMessage id="stores" defaultMessage={`Stores`} />,
   category: <FormattedMessage id="category" defaultMessage={`Category`} />,
