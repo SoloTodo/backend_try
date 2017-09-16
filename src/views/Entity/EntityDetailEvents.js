@@ -41,6 +41,16 @@ class EntityDetailEvents extends Component {
       return <div className="description-container"><ReactMarkdown source={value} /></div>
     } else if (field === 'is_visible') {
       return value ? messages.yes : messages.no
+    } else if (field === 'picture_urls') {
+      if (value) {
+        return <ul>
+          {JSON.parse(value).map(pictureUrl =>
+            <li key={pictureUrl}><a href={pictureUrl} target="_blank">{pictureUrl}</a></li>
+          )}
+        </ul>
+      } else {
+        return <em>N/A</em>
+      }
     }
 
     return value

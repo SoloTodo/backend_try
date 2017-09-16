@@ -7,7 +7,7 @@ import {
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
-import ReactMarkdown from 'react-markdown';
+import { Markdown } from 'react-showdown';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
@@ -644,7 +644,7 @@ class EntityDetail extends Component {
               <div className="card">
                 <div className="card-header"><strong><FormattedMessage id="description" defaultMessage='Description'/></strong></div>
                 <div className="card-block" id="description-container">
-                  <ReactMarkdown source={entity.description} />
+                  <Markdown markup={ entity.description } tables={true} />
                 </div>
               </div>
             </div>

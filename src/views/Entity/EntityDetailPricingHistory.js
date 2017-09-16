@@ -92,34 +92,11 @@ class EntityDetailPricingHistory extends Component {
 
     const dateRangeInitialMax = moment().startOf('day');
 
-    const displayOptions = [
-      {
-        id: 0,
-        name: <FormattedMessage id="all_masculine" defaultMessage={`All`} />,
-      },
-      {
-        id: 1,
-        name: <FormattedMessage id="available_only" defaultMessage={`Only when available`} />,
-      },
-    ];
-
     const dateRangeTooltip = <div>
       <FormattedMessage id="entity_price_history_date_rage" defaultMessage="Date range for the chart. The minimum value is the entity's detection date" /> ({moment(entity.creationDate).format('ll')})
     </div>;
 
     const currencyTooltip = <FormattedMessage id="entity_price_history_currency" defaultMessage="The price points are converted to this currency. The values are calculated using standard exchange rates" />;
-
-    const displayTooltip =
-        <dl>
-          <dt><FormattedMessage id="all_masculine" defaultMessage="All" /></dt>
-          <dd>
-            <FormattedMessage id="entity_price_history_display_all" defaultMessage="All price points are displayed, whether the entity was available for purchase at the time or not" />
-          </dd>
-          <dt><FormattedMessage id="available_only" defaultMessage="Only when available" /></dt>
-          <dd>
-            <FormattedMessage id="entity_price_history_display_available_only" defaultMessage="Only show a particular price point if the entity was available for purchase at that time" />
-          </dd>
-        </dl>;
 
     return (
         <div className="animated fadeIn d-flex flex-column">
@@ -135,7 +112,7 @@ class EntityDetailPricingHistory extends Component {
                 <DateRangeField
                     name="timestamp"
                     label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
-                    classNames="col-12 col-sm-12 col-md-10 col-lg-5 col-xl-4"
+                    classNames="col-12 col-sm-12 col-md-10 col-lg-6 col-xl-4"
                     min={entityCreationDate}
                     tooltipContent={dateRangeTooltip}
                     initial={[dateRangeInitialMin, dateRangeInitialMax]}
@@ -147,14 +124,6 @@ class EntityDetailPricingHistory extends Component {
                     choices={this.currencyOptions}
                     searchable={false}
                     tooltipContent={currencyTooltip}
-                />
-                <ChoiceField
-                    name="availableOnly"
-                    label={<FormattedMessage id="display" defaultMessage={`Display`} />}
-                    classNames="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3"
-                    choices={displayOptions}
-                    searchable={false}
-                    tooltipContent={displayTooltip}
                 />
               </ApiForm>
             </div>

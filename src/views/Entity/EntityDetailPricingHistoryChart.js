@@ -25,9 +25,12 @@ class EntityDetailPricingHistoryChart extends Component {
       includesStockInfo = typeof(this.props.chart.data[0].stock) !== 'undefined'
     }
 
+    const isCurrentlyAvailable = entity.activeRegistry && entity.activeRegistry.stock !== 0;
+
     const datapoints = [
       this.makeEmptyDatapoint(this.props.chart.startDate, initiallyAvailable, includesStockInfo),
       ...this.props.chart.data,
+      this.makeEmptyDatapoint(moment(entity.lastPricingUpdate), isCurrentlyAvailable, includesStockInfo),
       this.makeEmptyDatapoint(moment(this.props.chart.endDate).add(1, 'days'), initiallyAvailable, includesStockInfo),
     ];
 
@@ -253,25 +256,12 @@ class EntityDetailPricingHistoryChart extends Component {
     }
 
     datasets.push({
-      label: this.props.intl.formatMessage({id: 'available'}),
-      data: filledChartData.map(datapoint => datapoint.isAvailable),
-      yAxisID: 'availability-axis',
-      customId: 'availability',
-      fill: true,
-      borderColor: 'rgba(182, 217, 87, 0)',
-      backgroundColor:  'rgba(182, 217, 87, 0.15)',
-      lineTension: 0,
-      pointRadius: 0,
-      steppedLine: 'before'
-    });
-
-    datasets.push({
       label: this.props.intl.formatMessage({id: 'unavailable'}),
       data: filledChartData.map(datapoint => 1 - datapoint.isAvailable),
       yAxisID: 'availability-axis',
       fill: true,
-      borderColor: 'rgba(255, 0, 0, 0)',
-      backgroundColor:  'rgba(255, 0, 0, 0.1)',
+      borderColor: 'rgba(217, 83, 79, 0)',
+      backgroundColor:  'rgba(217, 83, 79, 0.15)',
       lineTension: 0,
       pointRadius: 0,
       steppedLine: 'before'
