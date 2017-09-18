@@ -51,13 +51,13 @@ export function apiResourceObjectForeignKey(rawApiResource, field, state) {
 }
 
 export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
-  return (state) => {
+  return (state, ownProps) => {
     let originalMapStateToPropsResult = {};
     if (mapStateToProps !== null) {
-      originalMapStateToPropsResult = mapStateToProps(state)
+      originalMapStateToPropsResult = mapStateToProps(state, ownProps)
     }
 
-    return {
+    const result = {
       ApiResourceObject: (jsonData) => {
         return new ApiResourceObject(jsonData, state.apiResourceObjects)
       },
@@ -75,6 +75,10 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
       },
       ...originalMapStateToPropsResult
     };
+
+    result.propsFromState = Object.keys(result).concat('propsFromState');
+
+    return result;
   }
 }
 

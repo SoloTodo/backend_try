@@ -14,7 +14,7 @@ class ChoiceField extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.notifyNewParams()
   }
 
@@ -24,6 +24,10 @@ class ChoiceField extends Component {
       this.setState({
         value
       }, this.notifyNewParams)
+    }
+
+    if (this.props.onApiParamChange !== nextProps.onApiParamChange) {
+      this.notifyNewParams(nextProps)
     }
   }
 
@@ -47,15 +51,25 @@ class ChoiceField extends Component {
     return value
   };
 
-  notifyNewParams() {
-    const fieldName = changeCase.snake(this.props.name);
+  notifyNewParams(props) {
+    props = props ? props : this.props;
+
+    if (!props.onApiParamChange) {
+      return;
+    }
+
+    const fieldName = changeCase.snake(props.name);
     const params = {[fieldName] : [this.state.value.id]};
 
-    this.props.onApiParamChange({
-      apiParams: params,
-      urlParams: params,
-      fieldValues: this.state.value
-    })
+    const result = {
+      [this.props.name]: {
+        apiParams: params,
+        urlParams: params,
+        fieldValues: this.state.value
+      }
+    };
+
+    props.onApiParamChange(result)
   }
 
   handleValueChange = (val) => {
@@ -68,26 +82,17 @@ class ChoiceField extends Component {
     const choices = createOptions(this.props.choices);
     const selectedValue = createOption(this.state.value);
 
-    return <div className={this.props.classNames}>
-      {this.props.tooltipContent &&
-      <UncontrolledTooltip placement="top" target={this.props.name}>
-        {this.props.tooltipContent}
-      </UncontrolledTooltip>}
-      <label htmlFor={this.props.name} id={this.props.name} className={this.props.tooltipContent ? 'dashed' : ''}>
-        {this.props.label}
-      </label>
-      <Select
-          name={this.props.name}
-          id={this.props.name}
-          options={choices}
-          value={selectedValue}
-          onChange={this.handleValueChange}
-          multi={false}
-          placeholder={this.props.placeholder}
-          searchable={this.props.searchable}
-          clearable={false}
-      />
-    </div>
+    return <Select
+        name={this.props.name}
+        id={this.props.name}
+        options={choices}
+        value={selectedValue}
+        onChange={this.handleValueChange}
+        multi={false}
+        placeholder={this.props.placeholder}
+        searchable={this.props.searchable}
+        clearable={false}
+    />
   }
 }
 

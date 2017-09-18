@@ -6,7 +6,7 @@ import {
 } from "../../ApiResource";
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
-import ReactMarkdown from 'react-markdown';
+import { Markdown } from 'react-showdown';
 import Loading from "../../components/Loading";
 import {formatDateStr} from "../../utils";
 import messages from "../../messages";
@@ -38,7 +38,7 @@ class EntityDetailEvents extends Component {
     } else if (['url', 'discovery_url'].includes(field)) {
       return <a className="url-link" href={value} target="_blank">{value || <em>N/A</em>}</a>
     } else if (field === 'description') {
-      return <div className="description-container"><ReactMarkdown source={value} /></div>
+      return <div className="description-container"><Markdown markup={ value } tables={true} /></div>
     } else if (field === 'is_visible') {
       return value ? messages.yes : messages.no
     } else if (field === 'picture_urls') {

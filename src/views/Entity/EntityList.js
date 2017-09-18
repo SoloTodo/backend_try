@@ -12,7 +12,7 @@ import {
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import './EntityList.css'
-import {NavLink, withRouter} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {formatCurrency} from "../../utils";
 import {UncontrolledTooltip} from "reactstrap";
 import messages from "../../messages";
@@ -598,6 +598,6 @@ function mapStateToProps(state) {
   }
 }
 
-export default withRouter(connect(
+export default connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(EntityList));
+    addApiResourceDispatchToPropsUtils())(EntityList);

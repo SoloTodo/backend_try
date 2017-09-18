@@ -10,11 +10,6 @@
     "filepath": "./src/api_forms/ApiResultDisplay.js"
   },
   {
-    "id": "permission_denied_toast",
-    "defaultMessage": "This resource does not exist or you don't have permission to access it.",
-    "filepath": "./src/auth/DetailPermissionRoute.js"
-  },
-  {
     "id": "header_signout_title",
     "defaultMessage": "Logout",
     "filepath": "./src/components/Header/Header.js"

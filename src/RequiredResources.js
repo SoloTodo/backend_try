@@ -6,9 +6,9 @@ import {
 } from "./ApiResource";
 import Loading from "./components/Loading";
 
-class RequiredResourcesContainer extends Component {
+class RequiredResources extends Component {
   componentDidMount() {
-    const requiredResources = this.props.requiredResources || [];
+    const requiredResources = this.props.resources || [];
     for (let requiredResource of requiredResources) {
       if (!this.props.loadedResources.includes(requiredResource)) {
         this.props.fetchApiResource(requiredResource, this.props.dispatch)
@@ -17,18 +17,21 @@ class RequiredResourcesContainer extends Component {
   }
 
   render() {
-    let {component:MyComponent, ...rest} = this.props;
+    const additionalChildProps = {};
 
-    const requiredResources = this.props.requiredResources || [];
+    const requiredResources = this.props.resources || [];
     for (let requiredResource of requiredResources) {
       if (!this.props.loadedResources.includes(requiredResource)) {
         return <Loading />
       }
 
-      rest[requiredResource] = this.props.filterApiResourceObjectsByType(requiredResource)
+      additionalChildProps[requiredResource] = this.props.filterApiResourceObjectsByType(requiredResource);
     }
 
-    return <MyComponent {...rest} />
+    // May or may not be, in the worst case it wil be "undefined"
+    additionalChildProps.apiResourceObject = this.props.apiResourceObject
+
+    return React.cloneElement(React.Children.only(this.props.children), {...additionalChildProps});
   }
 }
 
@@ -41,4 +44,4 @@ let mapStateToProps = (state) => {
 
 export default connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(RequiredResourcesContainer);
+    addApiResourceDispatchToPropsUtils())(RequiredResources);

@@ -1,5 +1,5 @@
 // let endpoint = 'http://192.168.90.111:8000/api/';
-let endpoint = 'http://192.168.1.101:8000/api/';
+let endpoint = 'http://192.168.1.100:8000/api/';
 // let endpoint = 'http://localhost:8000/api/';
 
 export const settings = {

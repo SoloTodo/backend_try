@@ -30,9 +30,15 @@ class EntityDetailPricingHistoryChart extends Component {
     const datapoints = [
       this.makeEmptyDatapoint(this.props.chart.startDate, initiallyAvailable, includesStockInfo),
       ...this.props.chart.data,
-      this.makeEmptyDatapoint(moment(entity.lastPricingUpdate), isCurrentlyAvailable, includesStockInfo),
-      this.makeEmptyDatapoint(moment(this.props.chart.endDate).add(1, 'days'), initiallyAvailable, includesStockInfo),
     ];
+
+    const lastPricingUpdate = moment(entity.lastPricingUpdate);
+
+    if (lastPricingUpdate.isBefore(this.props.chart.endDate)) {
+      datapoints.push(this.makeEmptyDatapoint(lastPricingUpdate, isCurrentlyAvailable, includesStockInfo))
+    }
+
+    datapoints.push(this.makeEmptyDatapoint(moment(this.props.chart.endDate).add(1, 'days'), initiallyAvailable, includesStockInfo));
 
     let lastPriceHistorySeen = undefined;
 
@@ -99,39 +105,66 @@ class EntityDetailPricingHistoryChart extends Component {
     const entity = this.props.ApiResourceObject(this.props.entity);
     const filledChartData = this.preparePricingHistoryChartData();
 
-    const maxValue = filledChartData.reduce((acum, datapoint) => {
+    const maxPriceValue = filledChartData.reduce((acum, datapoint) => {
       return Math.max(acum, datapoint.normalPrice || 0, datapoint.offerPrice || 0, datapoint.cellMonthlyPayment || 0)
     }, 0);
 
     const currency = this.props.ApiResourceObject(this.props.chart.currency);
     const preferredNumberFormat = this.props.preferredNumberFormat;
 
-    const includesStockInfo = this.props.chart.data.some(datapoint => Boolean(datapoint.stock));
-
     const yAxes = [
       {
         id: 'price-axis',
         ticks: {
           beginAtZero: true,
-          suggestedMax: maxValue * 1.1,
+          suggestedMax: maxPriceValue * 1.1,
           callback: function (value, index, values) {
             return formatCurrency(value, currency, null,
                 preferredNumberFormat.thousands_separator,
                 preferredNumberFormat.decimal_sepator)
           }
         }
+      }
+
+    ];
+
+    const datasets = [
+      {
+        label: this.props.intl.formatMessage({id: 'normal_price'}),
+        data: filledChartData.map(datapoint => datapoint.normalPrice),
+        yAxisID: 'price-axis',
+        fill: false,
+        borderColor: '#0e85bf',
+        backgroundColor: lightenDarkenColor('#0e85bf', 40),
+        lineTension: 0
       },
       {
-        id: 'availability-axis',
-        display: false,
-        ticks: {
-          beginAtZero: true,
-          max: 1,
-        }
+        label: this.props.intl.formatMessage({id: 'offer_price'}),
+        data: filledChartData.map(datapoint => datapoint.offerPrice),
+        yAxisID: 'price-axis',
+        fill: false,
+        borderColor: '#5CB9E6',
+        backgroundColor: lightenDarkenColor('#5CB9E6', 40),
+        lineTension: 0
       }
     ];
 
-    if (includesStockInfo) {
+    const cellMonthlyPaymentData = filledChartData.map(datapoint => datapoint.cellMonthlyPayment);
+    if (cellMonthlyPaymentData.some(x => Boolean(x))) {
+      datasets.push({
+        label: this.props.intl.formatMessage({id: 'cell_monthly_payment'}),
+        data: cellMonthlyPaymentData,
+        yAxisID: 'price-axis',
+        fill: false,
+        borderColor: chartColors[2],
+        backgroundColor: lightenDarkenColor(chartColors[2], 40),
+        lineTension: 0
+      })
+    }
+
+    const stockData = filledChartData
+            .map(datapoint => datapoint.stock > 0 ? datapoint.stock : NaN)
+    if (stockData.some(x => Boolean(x))) {
       const maxStock = filledChartData.reduce((acum, datapoint) => {
         return Math.max(acum, datapoint.stock || 0)
       }, 0);
@@ -152,7 +185,41 @@ class EntityDetailPricingHistoryChart extends Component {
               display: false
             }
           }
-      )
+      );
+
+      datasets.push({
+        label: this.props.intl.formatMessage({id: 'stock'}),
+        data: stockData,
+        yAxisID: 'stock-axis',
+        fill: false,
+        borderColor: chartColors[1],
+        backgroundColor: lightenDarkenColor(chartColors[1], 40),
+        lineTension: 0
+      })
+    }
+
+    const unavailabilityDataSetData = filledChartData.map(datapoint => 1 - datapoint.isAvailable);
+    if (unavailabilityDataSetData.some(x => Boolean(x))) {
+      yAxes.push({
+        id: 'availability-axis',
+        display: false,
+        ticks: {
+          beginAtZero: true,
+          max: 1,
+        }
+      });
+
+      datasets.push({
+        label: this.props.intl.formatMessage({id: 'unavailable'}),
+        data: filledChartData.map(datapoint => 1 - datapoint.isAvailable),
+        yAxisID: 'availability-axis',
+        fill: true,
+        borderColor: 'rgba(217, 83, 79, 0)',
+        backgroundColor:  'rgba(217, 83, 79, 0.15)',
+        lineTension: 0,
+        pointRadius: 0,
+        steppedLine: 'before'
+      })
     }
 
     const chartOptions = {
@@ -207,65 +274,6 @@ class EntityDetailPricingHistoryChart extends Component {
         position: 'nearest'
       }
     };
-
-    const datasets = [
-      {
-        label: this.props.intl.formatMessage({id: 'normal_price'}),
-        data: filledChartData.map(datapoint => datapoint.normalPrice),
-        yAxisID: 'price-axis',
-        fill: false,
-        borderColor: '#0e85bf',
-        backgroundColor: lightenDarkenColor('#0e85bf', 40),
-        lineTension: 0
-      },
-      {
-        label: this.props.intl.formatMessage({id: 'offer_price'}),
-        data: filledChartData.map(datapoint => datapoint.offerPrice),
-        yAxisID: 'price-axis',
-        fill: false,
-        borderColor: '#5CB9E6',
-        backgroundColor: lightenDarkenColor('#5CB9E6', 40),
-        lineTension: 0
-      }];
-
-    const cellMonthlyPaymentData = filledChartData.map(datapoint => datapoint.cellMonthlyPayment);
-
-    if (cellMonthlyPaymentData.some(x => x)) {
-      datasets.push({
-        label: this.props.intl.formatMessage({id: 'cell_monthly_payment'}),
-        data: cellMonthlyPaymentData,
-        yAxisID: 'price-axis',
-        fill: false,
-        borderColor: chartColors[2],
-        backgroundColor: lightenDarkenColor(chartColors[2], 40),
-        lineTension: 0
-      })
-    }
-
-    if (includesStockInfo) {
-      datasets.push({
-        label: this.props.intl.formatMessage({id: 'stock'}),
-        data: filledChartData
-            .map(datapoint => datapoint.stock > 0 ? datapoint.stock : NaN),
-        yAxisID: 'stock-axis',
-        fill: false,
-        borderColor: chartColors[1],
-        backgroundColor: lightenDarkenColor(chartColors[1], 40),
-        lineTension: 0
-      })
-    }
-
-    datasets.push({
-      label: this.props.intl.formatMessage({id: 'unavailable'}),
-      data: filledChartData.map(datapoint => 1 - datapoint.isAvailable),
-      yAxisID: 'availability-axis',
-      fill: true,
-      borderColor: 'rgba(217, 83, 79, 0)',
-      backgroundColor:  'rgba(217, 83, 79, 0.15)',
-      lineTension: 0,
-      pointRadius: 0,
-      steppedLine: 'before'
-    });
 
     const chartData = {
       labels: filledChartData.map(datapoint => datapoint.timestamp),

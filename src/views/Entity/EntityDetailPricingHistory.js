@@ -5,7 +5,6 @@ import {
 } from "../../ApiResource";
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {withRouter} from "react-router-dom";
 import {convertToDecimal} from "../../utils";
 import {settings} from "../../settings";
 import ApiForm from "../../api_forms/ApiForm";
@@ -13,37 +12,47 @@ import DateRangeField from "../../api_forms/DateRangeField";
 import ChoiceField from "../../api_forms/ChoiceField";
 import { toast } from 'react-toastify';
 import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
+import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 
 class EntityDetailPricingHistory extends Component {
   constructor(props) {
     super(props);
-    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
-
-    const sortedCurrencies = this.props.currencies.map(currency => {
-      let priority = 3;
-      let name = currency.name;
-
-      if (currency.id === entity.currency.id) {
-        priority = 1;
-        name += ` (${this.props.intl.formatMessage({id: 'default_text'})})`
-      } else if (currency.id === this.props.preferredCurrency.id) {
-        priority = 2
-      }
-
-      return {
-        ...currency,
-        name: name,
-        priority: priority
-      }
-    });
-
-    sortedCurrencies.sort((a, b) => a.priority - b.priority);
-    this.currencyOptions = sortedCurrencies;
 
     this.state = {
+      apiFormChangeHandler: undefined,
       chart: null,
     };
   }
+
+  componentWillReceiveProps(nextProps) {
+
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log('componentwillupdate');
+    
+    for (const myKey of Object.keys(this.props)) {
+      if (JSON.stringify(this.props[myKey]) !== JSON.stringify(nextProps[myKey])) {
+        console.log(myKey);
+        console.log(this.props[myKey]);
+        console.log(nextProps[myKey]);
+      }
+    }
+
+    for (const myKey of Object.keys(this.state)) {
+      if (this.state[myKey] !== nextState[myKey]) {
+        console.log(myKey);
+        console.log(this.state[myKey]);
+        console.log(nextState[myKey]);
+      }
+    }
+  }
+
+  setApiFormValueChangeHandler = apiFormChangeHandler => {
+    this.setState({
+      apiFormChangeHandler
+    })
+  };
 
   setChartData = (bundle) => {
     if (!bundle) {
@@ -98,45 +107,85 @@ class EntityDetailPricingHistory extends Component {
 
     const currencyTooltip = <FormattedMessage id="entity_price_history_currency" defaultMessage="The price points are converted to this currency. The values are calculated using standard exchange rates" />;
 
+    const currencyOptions = this.props.currencies.map(currency => {
+      let priority = 3;
+      let name = currency.name;
+
+      if (currency.id === entity.currency.id) {
+        priority = 1;
+        name += ` (${this.props.intl.formatMessage({id: 'default_text'})})`
+      } else if (currency.id === this.props.preferredCurrency.id) {
+        priority = 2
+      }
+
+      return {
+        ...currency,
+        name: name,
+        priority: priority
+      }
+    });
+
+    currencyOptions.sort((a, b) => a.priority - b.priority);
+
+    console.log('Rendering component');
+
     return (
         <div className="animated fadeIn d-flex flex-column">
-          <div className="card">
-            <div className="card-header"><strong><FormattedMessage id="filters" defaultMessage={`Filters`} /></strong></div>
-            <div className="card-block">
-              <ApiForm
-                  endpoint={entity.url + 'pricing_history'}
-                  onResultsChange={this.setChartData}
-                  observedObjects={[this.props.apiResourceObject]}
-                  observedObjectsField="last_pricing_update"
-                  onObservedObjectChange={this.handleObservedObjectChange}>
-                <DateRangeField
-                    name="timestamp"
-                    label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
-                    classNames="col-12 col-sm-12 col-md-10 col-lg-6 col-xl-4"
-                    min={entityCreationDate}
-                    tooltipContent={dateRangeTooltip}
-                    initial={[dateRangeInitialMin, dateRangeInitialMax]}
-                />
-                <ChoiceField
-                    name="currency"
-                    label={<FormattedMessage id="currency" defaultMessage={`Currency`} />}
-                    classNames="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3"
-                    choices={this.currencyOptions}
-                    searchable={false}
-                    tooltipContent={currencyTooltip}
-                />
-              </ApiForm>
+          <ApiForm
+              endpoint={entity.url + 'pricing_history/'}
+              fields={['timestamp', 'currency']}
+              onResultsChange={this.setChartData}
+              observedObjects={[this.props.apiResourceObject]}
+              observedObjectsField="last_pricing_update"
+              onObservedObjectChange={this.handleObservedObjectChange}
+              setValueChangeHandler={this.setApiFormValueChangeHandler}
+          >
+            <div className="card">
+              <div className="card-header"><strong><FormattedMessage id="filters" defaultMessage={`Filters`} /></strong></div>
+              <div className="card-block">
+                <div className="row">
+                  <DateRangeField
+                      name="timestamp"
+                      label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
+                      classNames="col-12 col-sm-12 col-md-10 col-lg-6 col-xl-4"
+                      min={entityCreationDate}
+                      tooltipContent={dateRangeTooltip}
+                      initial={[dateRangeInitialMin, dateRangeInitialMax]}
+                      onApiParamChange={this.state.apiFormChangeHandler}
+                      urlParams=''
+                  />
+                  <ChoiceField
+                      name="currency"
+                      label={<FormattedMessage id="currency" defaultMessage={`Currency`} />}
+                      classNames="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3"
+                      choices={currencyOptions}
+                      searchable={false}
+                      tooltipContent={currencyTooltip}
+                      onApiParamChange={this.state.apiFormChangeHandler}
+                      urlParams=''
+                  />
+                  <div className="col-12 col-sm-6 col-md-7 col-lg-3 col-xl-2">
+                    <label htmlFor="submit">&nbsp;</label>
+                    <ApiFormSubmitButton
+                        label={<FormattedMessage id="search" defaultMessage='Search' />}
+                        onApiParamChange={this.state.apiFormChangeHandler}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="card d-flex flex-column flex-grow">
-            <div className="card-header"><strong><FormattedMessage id="result" defaultMessage={`Result`} /></strong></div>
-            <div className="card-block d-flex flex-column">
-              <EntityDetailPricingHistoryChart
-                  entity={this.props.apiResourceObject}
-                  chart={this.state.chart}
-              />
+            <div className="card d-flex flex-column flex-grow">
+              <div className="card-header">
+                <strong><FormattedMessage id="result" defaultMessage={`Result`} /></strong>
+              </div>
+              <div className="card-block d-flex flex-column">
+                <EntityDetailPricingHistoryChart
+                    entity={this.props.apiResourceObject}
+                    chart={this.state.chart}
+                />
+              </div>
             </div>
-          </div>
+          </ApiForm>
         </div>
     )
   }
@@ -149,6 +198,6 @@ function mapStateToProps(state) {
   }
 }
 
-export default injectIntl(withRouter(connect(
+export default injectIntl(connect(
     addApiResourceStateToPropsUtils(mapStateToProps)
-)(EntityDetailPricingHistory)));
+)(EntityDetailPricingHistory));

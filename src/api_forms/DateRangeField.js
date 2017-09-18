@@ -17,7 +17,7 @@ class DateRangeField extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.notifyNewParams()
   }
 
@@ -28,6 +28,10 @@ class DateRangeField extends Component {
         startDate,
         endDate
       }, this.notifyNewParams)
+    }
+
+    if (this.props.onApiParamChange !== nextProps.onApiParamChange) {
+      this.notifyNewParams(nextProps)
     }
   }
 
@@ -95,10 +99,16 @@ class DateRangeField extends Component {
     }
   };
 
-  notifyNewParams() {
+  notifyNewParams(props) {
+    props = props ? props : this.props;
+
+    if (!props.onApiParamChange) {
+      return;
+    }
+
     const apiParams = {};
     const urlParams = {};
-    const base_field_name = changeCase.snake(this.props.name);
+    const base_field_name = changeCase.snake(props.name);
     if (this.state.startDate) {
       apiParams[base_field_name + '_0'] = [this.state.startDate.format('YYYY-MM-DD')];
       urlParams[base_field_name + '_start'] = [this.state.startDate.format('YYYY-MM-DD')]
@@ -108,14 +118,18 @@ class DateRangeField extends Component {
       urlParams[base_field_name + '_end'] = [this.state.endDate.format('YYYY-MM-DD')]
     }
 
-    this.props.onApiParamChange({
-      apiParams,
-      urlParams,
-      fieldValues: {
-        startDate: this.state.startDate,
-        endDate: this.state.endDate
+    const result = {
+      [this.props.name]: {
+        apiParams,
+        urlParams,
+        fieldValues: {
+          startDate: this.state.startDate,
+          endDate: this.state.endDate
+        }
       }
-    })
+    };
+
+    props.onApiParamChange(result)
   }
 
   handleDateChange = (event, field) => {

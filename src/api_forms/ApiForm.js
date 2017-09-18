@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {FormattedMessage} from "react-intl";
 import './ApiForm.css'
 import {withRouter} from "react-router-dom";
 import {listToObject} from "../utils";
@@ -10,13 +9,11 @@ class ApiForm extends Component {
   constructor(props) {
     super(props);
 
-    const params = this.defaultParams();
+    this.state = this.defaultState();
+  }
 
-    this.state = {
-      apiParams: params,
-      urlParams: params,
-      fieldValues: params
-    }
+  componentWillMount() {
+    this.props.setValueChangeHandler(this.handleApiParamChange);
   }
 
   componentDidMount() {
@@ -28,19 +25,12 @@ class ApiForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const fields = ['page', 'pageSize', 'ordering'];
+    const currentObservedObjects = this.props.observedObjects || [];
 
-    for (const field of fields) {
-      if (this.props[field] !== nextProps[field]) {
-        this.updateSearchResults(true, nextProps);
-        break;
-      }
-    }
+    const currentObservedObjectsDict = listToObject(currentObservedObjects, 'id');
+    const nextObservedObjectsDict = listToObject(nextProps.observedObjects || [], 'id');
 
-    const currentObservedObjectsDict = listToObject(this.props.observedObjects, 'id');
-    const nextObservedObjectsDict = listToObject(nextProps.observedObjects, 'id');
-
-    const commonObservedObjectIds = this.props.observedObjects
+    const commonObservedObjectIds = currentObservedObjects
         .filter(object => currentObservedObjectsDict[object.id] && nextObservedObjectsDict[object.id])
         .map(object => object.id);
 
@@ -64,24 +54,18 @@ class ApiForm extends Component {
     }
   }
 
-  defaultParams = () => {
+  defaultState = () => {
     let params = {};
 
-    React.Children.map(this.props.children, child => {
-      params[child.props.name] = undefined
-    });
+    for (const field of this.props.fields) {
+      params[field] = null
+    }
 
     return params;
   };
 
   resetState = () => {
-    const params = this.defaultParams();
-
-    this.setState({
-      apiParams: params,
-      urlParams: params,
-      fieldValues: params
-    })
+    this.setState(this.defaultState())
   };
 
   onHistoryChange = (location, action) => {
@@ -96,51 +80,33 @@ class ApiForm extends Component {
   isFormValid = (state=null) => {
     state = state ? state : this.state;
 
-    return Object.values(state.apiParams).every(
+    return Object.values(state).every(
         param => {
-          return typeof(param) !== 'undefined'
+          return Boolean(param)
         });
   };
 
-  handleApiParamChange = (fieldName, params) => {
+  handleApiParamChange = (updatedFieldsData={}, updateOnFinish=false) => {
     let wasValid = undefined;
     let isValid = undefined;
     this.setState(state => {
       wasValid = this.isFormValid(state);
+
       const newState = {
-        apiParams: {
-          ...state.apiParams,
-          [fieldName]: params.apiParams
-        },
-        urlParams: {
-          ...state.urlParams,
-          [fieldName]: params.urlParams
-        },
-        fieldValues: {
-          ...state.fieldValues,
-          [fieldName]: params.fieldValues
-        },
+        ...state,
+        ...updatedFieldsData
       };
 
       isValid = this.isFormValid(newState);
       return newState
     }, () => {
+
       if (!wasValid && isValid) {
         this.updateSearchResults();
+      } else if (isValid && updateOnFinish) {
+        this.updateSearchResults(true)
       }
     });
-  };
-
-  handleFormSubmit = (event) => {
-    event && event.preventDefault();
-
-    if (this.props.page === 1 || !this.props.page) {
-      this.updateSearchResults(true)
-    } else {
-      // Changing the page on our container will call componentWillReceiveProps
-      // updating the results either way.
-      this.props.onPageChange && this.props.onPageChange(1);
-    }
   };
 
   updateSearchResults = (pushLocation=false, props=null) => {
@@ -167,10 +133,18 @@ class ApiForm extends Component {
       apiSearch = '&'
     }
 
-    for (const apiParamsDict of Object.values(this.state.apiParams)) {
-      for (const apiParamKey of Object.keys(apiParamsDict)) {
-        for (const apiParamValue of apiParamsDict[apiParamKey]) {
+    let urlSearch = '?';
+
+    for (const fieldName of Object.keys(this.state)) {
+      for (const apiParamKey of Object.keys(this.state[fieldName].apiParams)) {
+        for (const apiParamValue of this.state[fieldName].apiParams[apiParamKey]) {
           apiSearch += `${apiParamKey}=${apiParamValue}&`
+        }
+      }
+
+      for (const urlParamKey of Object.keys(this.state[fieldName].urlParams)) {
+        for (const urlParamValue of this.state[fieldName].urlParams[urlParamKey]) {
+          urlSearch += `${urlParamKey}=${urlParamValue}&`
         }
       }
     }
@@ -178,23 +152,18 @@ class ApiForm extends Component {
     const endpoint = props.endpoint + apiSearch + pageAndOrderingParams;
 
     props.fetchAuth(endpoint).then(json => {
+      const fieldValues = {};
+      for (const fieldName of Object.keys(this.state)) {
+        fieldValues[fieldName] = this.state[fieldName].fieldValues
+      }
+
       props.onResultsChange({
         payload: json,
-        fieldValues: this.state.fieldValues
+        fieldValues
       });
     });
 
     if (pushLocation) {
-      let urlSearch = '?';
-
-      for (const urlParamsDict of Object.values(this.state.urlParams)) {
-        for (const urlParamKey of Object.keys(urlParamsDict)) {
-          for (const urlParamValue of urlParamsDict[urlParamKey]) {
-            urlSearch += `${urlParamKey}=${urlParamValue}&`
-          }
-        }
-      }
-
       const newRoute = props.history.location.pathname + urlSearch + pageAndOrderingParams;
       props.history.push(newRoute)
     }
@@ -202,24 +171,8 @@ class ApiForm extends Component {
   };
 
   render() {
-    const childrenElems = React.Children.map(this.props.children, child => {
-      const paramName = child ? child.props.name : '';
-      return React.cloneElement(child, {
-        onApiParamChange: params => this.handleApiParamChange(paramName, params),
-        urlParams: window.location.search
-      })
-    });
-
     return <form>
-      <div className="row" id="form-row">
-        {childrenElems}
-        <div className="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-2">
-          <label htmlFor="submit">&nbsp;</label>
-          <button name="submit" id="submit" type="submit" className="btn btn-primary" onClick={this.handleFormSubmit}>
-            <FormattedMessage id="search" defaultMessage={`Search`} />
-          </button>
-        </div>
-      </div>
+      {this.props.children}
     </form>
   }
 }

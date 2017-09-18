@@ -86,4 +86,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(withRouter(Breadcrumbs))
+export default connect(mapStateToProps)(Breadcrumbs)

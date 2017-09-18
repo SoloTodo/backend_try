@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {NavLink, withRouter} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
@@ -205,6 +205,6 @@ function mapStateToProps(state) {
   }
 }
 
-export default withRouter(connect(
+export default connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(ProductList));
+    addApiResourceDispatchToPropsUtils())(ProductList);

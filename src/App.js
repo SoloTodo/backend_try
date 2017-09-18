@@ -5,7 +5,6 @@ import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import omit from 'lodash/omit';
 import { polyfill } from 'smoothscroll-polyfill'
-import PrivateRoute from './auth/PrivateRoute';
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
 import Login from './views/Pages/Login/';
@@ -24,6 +23,8 @@ import 'react-select/dist/react-select.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
+import UserPermissionFilter from "./auth/UserPermissionFilter";
+import {ToastContainer} from "react-toastify";
 
 
 export function initialUserLoad(authToken, languages, countries, currencies, numberFormats, dispatch) {
@@ -217,14 +218,29 @@ class App extends Component {
     return (
         <Provider store={this.store}>
           <ConnectedIntlProvider>
-            <BrowserRouter history={history}>
-              <Switch>
-                <Route exact path="/login" name="Login Page"
-                       component={Login}/>
-                <Route exact path="/404" name="404" component={Page404}/>
-                <PrivateRoute path="/" name="Home" component={Full}/>
-              </Switch>
-            </BrowserRouter>
+            <div>
+              <ToastContainer
+                  position="top-right"
+                  type="default"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  pauseOnHover
+              />
+              <BrowserRouter history={history}>
+                <Switch>
+                  <Route exact path="/login" name="Login Page"
+                         component={Login}/>
+                  <Route exact path="/404" name="404" component={Page404}/>
+                  <Route path="/" render={props => (
+                      <UserPermissionFilter redirectPath="/login">
+                        <Full location={props.location}/>
+                      </UserPermissionFilter>
+                  )} />
+                </Switch>
+              </BrowserRouter>
+            </div>
           </ConnectedIntlProvider>
         </Provider>
     )
