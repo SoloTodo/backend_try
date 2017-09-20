@@ -2,6 +2,7 @@ import { settings } from './settings';
 import Big from 'big.js';
 import moment from 'moment';
 import locale_es from "moment/locale/es";
+import messages from "./messages";
 
 // REF: https://stackoverflow.com/questions/6660977/convert-hyphens-to-camel-case-camelcase
 export function camelize(str) {
@@ -108,3 +109,14 @@ export function listToObject(list, key) {
 
   return result
 }
+
+export const booleanChoices = [
+  {
+    id: 1,
+    name: messages.yes,
+  },
+  {
+    id: 0,
+    name: messages.no,
+  }
+];

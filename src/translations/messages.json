@@ -1,13 +1,23 @@
 [
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/api_forms/ApiForm.js"
-  },
-  {
     "id": "no_products_found",
     "defaultMessage": "No products found",
     "filepath": "./src/api_forms/ApiResultDisplay.js"
+  },
+  {
+    "id": "permission_denied_toast",
+    "defaultMessage": "This resource does not exist or you don't have permission to access it.",
+    "filepath": "./src/auth/ResourceObjectPermission.js"
+  },
+  {
+    "id": "login_required",
+    "defaultMessage": "Please login to access this page",
+    "filepath": "./src/auth/UserPermissionFilter.js"
+  },
+  {
+    "id": "page_access_denied",
+    "defaultMessage": "You don't have permission to access this page",
+    "filepath": "./src/auth/UserPermissionFilter.js"
   },
   {
     "id": "header_signout_title",
@@ -38,6 +48,16 @@
     "id": "header_language_title",
     "defaultMessage": "Language",
     "filepath": "./src/components/Sidebar/Sidebar.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/messages.js"
   },
   {
     "id": "success_exclamation",
@@ -325,13 +345,8 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "price_history",
-    "defaultMessage": "Price history",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "stock_history",
-    "defaultMessage": "Stock history",
+    "id": "pricing_history",
+    "defaultMessage": "Pricing history",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -570,16 +585,6 @@
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
-    "id": "all_masculine",
-    "defaultMessage": "All",
-    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
-  },
-  {
-    "id": "available_only",
-    "defaultMessage": "Only when available",
-    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
-  },
-  {
     "id": "entity_price_history_date_rage",
     "defaultMessage": "Date range for the chart. The minimum value is the entity's detection date",
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
@@ -587,16 +592,6 @@
   {
     "id": "entity_price_history_currency",
     "defaultMessage": "The price points are converted to this currency. The values are calculated using standard exchange rates",
-    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
-  },
-  {
-    "id": "entity_price_history_display_all",
-    "defaultMessage": "All price points are displayed, whether the entity was available for purchase at the time or not",
-    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
-  },
-  {
-    "id": "entity_price_history_display_available_only",
-    "defaultMessage": "Only show a particular price point if the entity was available for purchase at that time",
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
@@ -615,39 +610,14 @@
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
-    "id": "display",
-    "defaultMessage": "Display",
+    "id": "search",
+    "defaultMessage": "Search",
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "result",
     "defaultMessage": "Result",
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
-  },
-  {
-    "id": "entity_price_history_auto_updated",
-    "defaultMessage": "The pricing information of this entity has just been updated, refreshing chart.",
-    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
-  },
-  {
-    "id": "entity_price_history_date_rage",
-    "defaultMessage": "Date range for the chart. The minimum value is the entity's detection date",
-    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
-  },
-  {
-    "id": "filters",
-    "defaultMessage": "Filters",
-    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
-  },
-  {
-    "id": "date_range_from_to",
-    "defaultMessage": "Date range (from / to)",
-    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
-  },
-  {
-    "id": "result",
-    "defaultMessage": "Result",
-    "filepath": "./src/views/Entity/EntityDetailStockHistory.js"
   },
   {
     "id": "all",
@@ -1145,6 +1115,36 @@
     "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
   },
   {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "store_types",
+    "defaultMessage": "Types",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "is_active",
+    "defaultMessage": "Is active?",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/views/Store/StoreList.js"
@@ -1172,6 +1172,11 @@
   {
     "id": "scraper",
     "defaultMessage": "Scraper",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "no_results_found",
+    "defaultMessage": "No results found",
     "filepath": "./src/views/Store/StoreList.js"
   },
   {

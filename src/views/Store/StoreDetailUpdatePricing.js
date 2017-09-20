@@ -32,7 +32,7 @@ class StoreDetailUpdatePricing extends Component {
           ...formData,
           categories: []
         },
-        categoryChoices: formData.categories,
+        categoryChoices: this.props.categories.filter(category => formData.categories.includes(category.url))
       })
     });
   }
@@ -109,9 +109,6 @@ class StoreDetailUpdatePricing extends Component {
       )
     }
 
-    const categoryChoices = this.state.categoryChoices.map(
-        x => this.props.ApiResourceObject(this.props.apiResourceObjects[x]));
-
     return (
         <div className="animated fadeIn">
           {!store.isActive && (
@@ -172,7 +169,7 @@ class StoreDetailUpdatePricing extends Component {
                           <label htmlFor="categories"><FormattedMessage id="categories" defaultMessage={`Categories`} /></label>
                           <select className="form-control" id="categories" name="categories" multiple="multiple" size="8"
                                   value={formData.categories} onChange={this.handleInputChange}>
-                            {categoryChoices.map(category => (
+                            {this.state.categoryChoices.map(category => (
                                 <option key={category.id} value={category.id}>{category.name}</option>
                             ))}
                           </select>

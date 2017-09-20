@@ -3,7 +3,7 @@ import {UncontrolledTooltip} from "reactstrap";
 import queryString from 'query-string';
 import changeCase from 'change-case'
 
-class TextField extends Component {
+class ApiFormTextField extends Component {
   constructor(props) {
     super(props);
 
@@ -73,4 +73,4 @@ class TextField extends Component {
   }
 }
 
-export default TextField
+export default ApiFormTextField

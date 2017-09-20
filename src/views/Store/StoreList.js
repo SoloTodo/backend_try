@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import {
-  addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
 } from '../../ApiResource';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import NavLink from "react-router-dom/es/NavLink";
 import ApiForm from "../../api_forms/ApiForm";
-import ChoiceField from "../../api_forms/ChoiceField";
-import MultiChoiceField from "../../api_forms/MultiChoiceField";
+import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
-import Loading from "../../components/Loading";
+import messages from "../../messages";
+import {booleanChoices} from "../../utils";
+import {
+  createOrderingOptionChoice,
+  createOrderingOptionChoices
+} from "../../api_forms/utils";
+import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 
 
 class StoreList extends Component {
@@ -18,53 +22,70 @@ class StoreList extends Component {
     super(props);
 
     this.state = {
-      apiFormChangeHandler: undefined,
+      formValues: {},
+      apiFormFieldChangeHandler: undefined,
       stores: undefined
     }
   }
 
-  setApiFormValueChangeHandler = apiFormChangeHandler => {
+  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
     this.setState({
-      apiFormChangeHandler
+      apiFormFieldChangeHandler
     })
   };
 
   setStores = json => {
-    const stores = json ? json.payload : null;
-
     this.setState({
-      stores
+      stores: json ? json.payload : null
     })
   };
 
-  render() {
-    const stores = this.state.stores ?
-        this.state.stores.map(x => this.props.ApiResourceObject(x)) :
-        null;
+  handleFormValueChange = formValues => {
+    this.setState({formValues})
+  };
 
-    const nullBooleanChoices = [
+  render() {
+    const columns = [
       {
-        id: 'any',
-        name: 'Any',
+        label: <FormattedMessage id="name" defaultMessage={`Name`} />,
+        ordering: 'name',
+        renderer: entry => <NavLink to={'/stores/' + entry.id}>{entry.name}</NavLink>
       },
       {
-        id: 1,
-        name: 'Yes',
+        label: <FormattedMessage id="country" defaultMessage={`Country`}/>,
+        ordering: 'country',
+        renderer: entry => entry.country.name
       },
       {
-        id: 0,
-        name: 'No',
+        label: <FormattedMessage id="type" defaultMessage={`Type`}/>,
+        ordering: 'type',
+        renderer: entry => entry.type.name
+      },
+      {
+        label: <FormattedMessage id="active_question" defaultMessage={`Active?`}/>,
+        ordering: 'is_active',
+        renderer: entry => <i className={entry.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i>,
+        cssClasses: 'hidden-xs-down text-center'
+      },
+      {
+        label: <FormattedMessage id="scraper" defaultMessage={`Scraper`}/>,
+        ordering: 'storescraper_class',
+        field: 'storescraperClass',
+        cssClasses: 'hidden-sm-down'
       }
     ];
 
     return <div className="animated fadeIn">
       <ApiForm
-          endpoint="stores"
-          fields={['countries']}
+          endpoint="stores/"
+          fields={['countries', 'types', 'is_active', 'ordering']}
           onResultsChange={this.setStores}
-          setValueChangeHandler={this.setApiFormValueChangeHandler}>
+          onFormValueChange={this.handleFormValueChange}
+          setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
         <div className="card">
-          <div className="card-header"><strong><FormattedMessage id="filters" defaultMessage={`Filters`} /></strong></div>
+          <div className="card-header">
+            <i className="glyphicons glyphicons-search">&nbsp;</i> <FormattedMessage id="filters" defaultMessage={`Filters`} />
+          </div>
           <div className="card-block">
             <div className="row negative-top-margin">
               <div className="mt-2 col-12 col-md-6 col-xl-4">
@@ -72,48 +93,66 @@ class StoreList extends Component {
                   <FormattedMessage id="countries" defaultMessage="Countries" />
                 </label>
 
-                <MultiChoiceField
+                <ApiFormChoiceField
                     name="countries"
                     id="countries"
                     choices={this.props.countries}
+                    multiple={true}
                     searchable={false}
-                    onApiParamChange={this.state.apiFormChangeHandler}
-                    urlParams=''
+                    onChange={this.state.apiFormFieldChangeHandler}
+                    value={this.state.formValues.countries}
+                    placeholder={messages.all_masculine}
                 />
               </div>
-              <div className="mt-2 col-12 col-md-6 col-xl-4">
+              <div className="mt-2 col-12 col-md-6 col-xl-3">
                 <label htmlFor="types">
                   <FormattedMessage id="store_types" defaultMessage="Types" />
                 </label>
 
-                <MultiChoiceField
+                <ApiFormChoiceField
                     name="types"
                     id="types"
                     choices={this.props.storeTypes}
+                    multiple={true}
                     searchable={false}
-                    onApiParamChange={this.state.apiFormChangeHandler}
-                    urlParams=''
+                    onChange={this.state.apiFormFieldChangeHandler}
+                    value={this.state.formValues.types}
+                    placeholder={messages.all_masculine}
                 />
               </div>
               <div className="mt-2 col-12 col-sm-8 col-md-6 col-xl-2">
                 <label htmlFor="is_active">
-                  <FormattedMessage id="is_listed" defaultMessage="Is listed?" />
+                  <FormattedMessage id="is_active" defaultMessage="Is active?" />
                 </label>
 
-                <ChoiceField
+                <ApiFormChoiceField
                     name="is_active"
                     id="is_active"
-                    choices={nullBooleanChoices}
+                    choices={booleanChoices}
+                    multiple={false}
                     searchable={false}
-                    onApiParamChange={this.state.apiFormChangeHandler}
-                    urlParams=''
+                    onChange={this.state.apiFormFieldChangeHandler}
+                    value={this.state.formValues.is_active}
+                    placeholder={messages.all_feminine}
                 />
               </div>
-              <div className="mt-2 col-12 col-sm-4 col-xl-2">
+
+              <ApiFormChoiceField
+                  name="ordering"
+                  choices={createOrderingOptionChoices(['name', 'country', 'type'])}
+                  hidden={true}
+                  initial={createOrderingOptionChoice('name')}
+                  value={this.state.formValues.ordering}
+                  onChange={this.state.apiFormFieldChangeHandler}
+              />
+
+              <div className="mt-2 col-12 col-sm-4 col-xl-3">
                 <label htmlFor="submit">&nbsp;</label>
                 <ApiFormSubmitButton
                     label={<FormattedMessage id="search" defaultMessage='Search' />}
-                    onApiParamChange={this.state.apiFormChangeHandler}
+                    loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
+                    onChange={this.state.apiFormFieldChangeHandler}
+                    loading={this.state.stores === null}
                 />
               </div>
             </div>
@@ -121,49 +160,18 @@ class StoreList extends Component {
         </div>
       </ApiForm>
       <div className="row">
-        <div className="col-12 col-md-10 col-lg-10 col-xl-8">
+        <div className="col-12">
           <div className="card">
             <div className="card-header">
               <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="stores" defaultMessage={`Stores`} />
             </div>
             <div className="card-block">
-              {stores ?
-                  <table className="table table-striped">
-                    <thead>
-                    <tr>
-                      <th><FormattedMessage id="name" defaultMessage={`Name`}/>
-                      </th>
-                      <th><FormattedMessage id="country"
-                                            defaultMessage={`Country`}/></th>
-                      <th className="hidden-xs-down"><FormattedMessage id="type"
-                                                                       defaultMessage={`type`}/>
-                      </th>
-                      <th className="text-center hidden-xs-down">
-                        <FormattedMessage id="active_question"
-                                          defaultMessage={`Active?`}/></th>
-                      <th className="hidden-sm-down"><FormattedMessage
-                          id="scraper" defaultMessage={`Scraper`}/></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {stores.map(store => (
-                        <tr key={store.url}>
-                          <td>
-                            <NavLink
-                                to={'/stores/' + store.id}>{store.name}</NavLink>
-                          </td>
-                          <td>{store.country.name}</td>
-                          <td className="hidden-xs-down">{store.type.name}</td>
-                          <td className="text-center hidden-xs-down"><i
-                              className={store.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i>
-                          </td>
-                          <td className="hidden-sm-down">{store.storescraperClass}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                  </table>
-                  : <Loading />
-              }
+              <ApiFormResultsTable
+                results={this.state.stores}
+                columns={columns}
+                ordering={this.state.formValues.ordering}
+                onChange={this.state.apiFormFieldChangeHandler}
+              />
             </div>
           </div>
         </div>
@@ -179,6 +187,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(StoreList);
+export default connect(addApiResourceStateToPropsUtils(mapStateToProps))(StoreList);

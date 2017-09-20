@@ -3,9 +3,9 @@ import {UncontrolledTooltip} from "reactstrap";
 import queryString from 'query-string';
 import changeCase from 'change-case'
 import moment from "moment";
-import './DateRangeField.css'
+import './ApiFormDateRangeField.css'
 
-class DateRangeField extends Component {
+class ApiFormDateRangeField extends Component {
   constructor(props) {
     super(props);
 
@@ -181,4 +181,4 @@ class DateRangeField extends Component {
   }
 }
 
-export default DateRangeField
+export default ApiFormDateRangeField

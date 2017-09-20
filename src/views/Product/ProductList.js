@@ -6,13 +6,13 @@ import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
 } from "../../ApiResource";
-import MultiChoiceField from "../../api_forms/MultiChoiceField";
+import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiForm from "../../api_forms/ApiForm";
-import ApiResultDisplay from "../../api_forms/ApiResultDisplay";
+import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import {settings} from "../../settings";
-import DateRangeField from "../../api_forms/DateRangeField";
+import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import {formatDateStr} from "../../utils";
-import TextField from "../../api_forms/TextField";
+import ApiFormTextField from "../../api_forms/ApiFormTextField";
 
 class ProductList extends Component {
   constructor(props) {
@@ -123,7 +123,7 @@ class ProductList extends Component {
                       ordering={this.state.ordering}
                       onPageChange={this.handlePageChange}
                   >
-                    <MultiChoiceField
+                    <ApiFormChoiceField
                         name="categories"
                         label={<FormattedMessage id="categories" defaultMessage={`Categories`} />}
                         classNames="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
@@ -131,7 +131,7 @@ class ProductList extends Component {
                         placeholder={<FormattedMessage id="all_feminine" defaultMessage={`All`} />}
                         searchable={!this.props.breakpoint.isExtraSmall}
                     />
-                    <MultiChoiceField
+                    <ApiFormChoiceField
                         name="availabilityCountries"
                         label={<FormattedMessage id="availability_countries" defaultMessage='Availability countries' />}
                         classNames="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
@@ -140,7 +140,7 @@ class ProductList extends Component {
                         placeholder={<FormattedMessage id="do_not_apply" defaultMessage={`Do not apply`} />}
                         searchable={!this.props.breakpoint.isExtraSmall}
                     />
-                    <MultiChoiceField
+                    <ApiFormChoiceField
                         name="availabilityStores"
                         label={<FormattedMessage id="availability_stores" defaultMessage='Availability stores' />}
                         classNames="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
@@ -149,19 +149,19 @@ class ProductList extends Component {
                         placeholder={<FormattedMessage id="do_not_apply" defaultMessage={`Do not apply`} />}
                         searchable={!this.props.breakpoint.isExtraSmall}
                     />
-                    <TextField
+                    <ApiFormTextField
                         name="search"
                         label={<FormattedMessage id="keyword" defaultMessage='Keywords' />}
                         classNames="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
                     />
-                    <DateRangeField
+                    <ApiFormDateRangeField
                         name="creationDate"
                         label={<FormattedMessage id="creation_date_from_to" defaultMessage='Creation date (from / to)' />}
                         classNames="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
                         tooltipContent={creationDateTooltipContent}
                         nullable={true}
                     />
-                    <DateRangeField
+                    <ApiFormDateRangeField
                         name="lastUpdated"
                         label={<FormattedMessage id="last_updated_from_to" defaultMessage='Last updated (from / to)' />}
                         classNames="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
@@ -180,7 +180,7 @@ class ProductList extends Component {
                   <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="entities" defaultMessage={`Entities`} />
                 </div>
                 <div className="card-block" id="results-container">
-                  <ApiResultDisplay
+                  <ApiFormResultsTable
                       results={this.state.products}
                       page={this.state.page}
                       pageSize={this.state.pageSize}

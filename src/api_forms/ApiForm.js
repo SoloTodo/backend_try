@@ -13,18 +13,19 @@ class ApiForm extends Component {
   }
 
   componentWillMount() {
-    this.props.setValueChangeHandler(this.handleApiParamChange);
-  }
-
-  componentDidMount() {
-    this.unlistenHistory = this.props.history.listen(this.onHistoryChange);
-  }
-
-  componentWillUnmount() {
-    this.unlistenHistory();
+    this.props.setFieldChangeHandler(this.handleFieldChange);
   }
 
   componentWillReceiveProps(nextProps) {
+    if (this.props.location.search !== nextProps.location.search && nextProps.history.action === 'POP') {
+      const formValues = {};
+
+      for (const field of this.props.fields) {
+        formValues[field] = this.state[field] ? this.state[field].fieldValues : undefined
+      }
+
+      this.handleFieldChange(this.defaultState());
+    }
     const currentObservedObjects = this.props.observedObjects || [];
 
     const currentObservedObjectsDict = listToObject(currentObservedObjects, 'id');
@@ -68,15 +69,6 @@ class ApiForm extends Component {
     this.setState(this.defaultState())
   };
 
-  onHistoryChange = (location, action) => {
-    if (action !== 'POP') {
-      return
-    }
-
-    this.resetState();
-  };
-
-
   isFormValid = (state=null) => {
     state = state ? state : this.state;
 
@@ -86,7 +78,7 @@ class ApiForm extends Component {
         });
   };
 
-  handleApiParamChange = (updatedFieldsData={}, updateOnFinish=false) => {
+  handleFieldChange = (updatedFieldsData={}, updateOnFinish=false) => {
     let wasValid = undefined;
     let isValid = undefined;
     this.setState(state => {
@@ -100,6 +92,13 @@ class ApiForm extends Component {
       isValid = this.isFormValid(newState);
       return newState
     }, () => {
+      const formValues = {};
+
+      for (const field of this.props.fields) {
+        formValues[field] = this.state[field] ? this.state[field].fieldValues : undefined
+      }
+
+      this.props.onFormValueChange(formValues);
 
       if (!wasValid && isValid) {
         this.updateSearchResults();

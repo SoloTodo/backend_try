@@ -8,8 +8,8 @@ import {FormattedMessage, injectIntl} from "react-intl";
 import {convertToDecimal} from "../../utils";
 import {settings} from "../../settings";
 import ApiForm from "../../api_forms/ApiForm";
-import DateRangeField from "../../api_forms/DateRangeField";
-import ChoiceField from "../../api_forms/ChoiceField";
+import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
+import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import { toast } from 'react-toastify';
 import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
@@ -144,7 +144,7 @@ class EntityDetailPricingHistory extends Component {
               <div className="card-header"><strong><FormattedMessage id="filters" defaultMessage={`Filters`} /></strong></div>
               <div className="card-block">
                 <div className="row">
-                  <DateRangeField
+                  <ApiFormDateRangeField
                       name="timestamp"
                       label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
                       classNames="col-12 col-sm-12 col-md-10 col-lg-6 col-xl-4"
@@ -154,7 +154,7 @@ class EntityDetailPricingHistory extends Component {
                       onApiParamChange={this.state.apiFormChangeHandler}
                       urlParams=''
                   />
-                  <ChoiceField
+                  <ApiFormChoiceField
                       name="currency"
                       label={<FormattedMessage id="currency" defaultMessage={`Currency`} />}
                       classNames="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3"

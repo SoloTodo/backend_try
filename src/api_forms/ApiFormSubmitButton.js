@@ -1,21 +1,23 @@
 import React, {Component} from 'react';
+import LaddaButton from "react-ladda";
 
 class ApiFormSubmitButton extends Component {
   handleValueChange = (evt) => {
     evt.preventDefault();
 
-    this.props.onApiParamChange({}, true)
+    this.props.onChange({}, true)
   };
 
   render() {
-    return <button
-        name="submit"
-        id="submit"
-        type="submit"
-        className="btn btn-primary"
-        onClick={this.handleValueChange}>
-      {this.props.label}
-    </button>
+    return <LaddaButton
+        loading={this.props.loading}
+        onClick={this.handleValueChange}
+        className="btn btn-primary">
+      {this.props.loading ?
+          this.props.loadingLabel :
+          this.props.label
+      }
+    </LaddaButton>
   }
 }
 
