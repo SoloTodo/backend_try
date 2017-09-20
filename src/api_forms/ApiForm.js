@@ -89,6 +89,14 @@ class ApiForm extends Component {
         ...updatedFieldsData
       };
 
+      if (updateOnFinish && !Object.keys(updatedFieldsData).includes('page')) {
+        newState.page = {
+          apiParams: {page: [1]},
+          urlParams: {page: [1]},
+          fieldValues: 1
+        }
+      }
+
       isValid = this.isFormValid(newState);
       return newState
     }, () => {

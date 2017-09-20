@@ -1,75 +1,78 @@
 import React, {Component} from 'react'
-import {UncontrolledTooltip} from "reactstrap";
 import queryString from 'query-string';
 import changeCase from 'change-case'
 
 class ApiFormTextField extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: this.parseAndCleanValue()
-    };
-  }
-
-  componentWillMount() {
-    this.notifyNewParams()
+  componentDidMount() {
+    this.notifyNewParams(this.parseValueFromUrl())
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.urlParams !== nextProps.urlParams) {
-      const value = this.parseAndCleanValue(nextProps.urlParams);
-      this.setState({
-        value
-      }, this.notifyNewParams)
+    if (this.props.onChange !== nextProps.onChange) {
+      this.notifyNewParams(this.parseValueFromUrl(), nextProps)
+    }
+
+    if (typeof(nextProps.value) === 'undefined') {
+      this.notifyNewParams(this.parseValueFromUrl())
     }
   }
 
-  parseAndCleanValue = (urlParams=null) => {
-    urlParams = urlParams ? urlParams : this.props.urlParams;
+  parseValueFromUrl = () => {
+    const parameters = queryString.parse(window.location.search);
 
-    const parameters = queryString.parse(urlParams);
-    return parameters[changeCase.snake(this.props.name)];
+    let value = parameters[changeCase.snake(this.props.name)];
+
+    if (Array.isArray(value)) {
+      value = value[0]
+    }
+
+    return value ? value : this.props.initial || '';
   };
 
-  notifyNewParams() {
-    const params = {};
+  notifyNewParams(value, props) {
+    props = props ? props : this.props;
 
-    if (this.state.value) {
-      params[changeCase.snake(this.props.name)] = [this.state.value]
+    if (!props.onChange) {
+      return;
     }
 
-    this.props.onApiParamChange({
-      apiParams: params,
-      urlParams: params,
-    })
+    const fieldName = changeCase.snake(props.name);
+
+    const urlParams = {};
+    if (value && props.urlField !== null) {
+      urlParams[props.urlField || fieldName] = value
+    }
+
+    const apiParams = value ? {[fieldName]: value} : {};
+
+    const result = {
+      [this.props.name]: {
+        apiParams: apiParams,
+        urlParams: urlParams,
+        fieldValues: value
+      }
+    };
+
+    props.onChange(result)
   }
 
-
-  handleValueChange = (evt) => {
-    this.setState({
-      value: evt.target.value
-    }, this.notifyNewParams)
+  handleValueChange = evt => {
+    evt.preventDefault();
+    this.notifyNewParams(evt.target.value)
   };
 
   render() {
-    return <div className={this.props.classNames}>
-      {this.props.tooltipContent &&
-      <UncontrolledTooltip placement="top" target={this.props.name}>
-        {this.props.tooltipContent}
-      </UncontrolledTooltip>}
-      <label htmlFor={this.props.name} id={this.props.name} className={this.props.tooltipContent ? 'dashed' : ''}>
-        {this.props.label}
-      </label>
-      <input
-          type="text"
-          className="form-control"
-          name={this.props.name}
-          id={this.props.name}
-          value={this.state.value}
-          onChange={this.handleValueChange}
-      />
-    </div>
+    const value = this.props.value ? this.props.value : '';
+
+    return (
+        <input
+            type="text"
+            className="form-control"
+            name={this.props.name}
+            id={this.props.name}
+            value={value}
+            onChange={this.handleValueChange}
+        />)
   }
 }
 

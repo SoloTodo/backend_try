@@ -14,16 +14,24 @@ class ApiFormResultsTable extends Component {
 
     const results = this.props.results.map(entry => this.props.ApiResourceObject(entry));
 
+    const finalColumns = [];
+
     let i = 1;
     for (const column of this.props.columns) {
-      column.id = i++
+      if (column.displayFilter && !column.displayFilter(results)) {
+        continue;
+      }
+      finalColumns.push({
+        ...column,
+        id: i++
+      })
     }
 
     return <div>
       <table className="table table-striped">
         <thead>
         <tr>
-          {this.props.columns.map(column => (
+          {finalColumns.map(column => (
               <th key={column.id} className={column.cssClasses}>
                 <ApiFormOrderingColumn
                     name={column.ordering}
@@ -39,7 +47,7 @@ class ApiFormResultsTable extends Component {
         <tbody>
         {results.length ? results.map(entry => (
             <tr key={entry.id}>
-              {this.props.columns.map(column => (
+              {finalColumns.map(column => (
                   <td key={column.id} className={column.cssClasses}>
                     {column.renderer ? column.renderer(entry) : entry[column.field]}
                   </td>))}

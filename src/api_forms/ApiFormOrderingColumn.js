@@ -50,7 +50,7 @@ class ApiFormOrderingColumn extends Component {
   };
 
   render() {
-    if (this.props.ordering) {
+    if (this.props.name) {
       const orderingPattern = /^(-?)(.+)$/;
       const orderingComponents = orderingPattern.exec(this.props.ordering.name);
 

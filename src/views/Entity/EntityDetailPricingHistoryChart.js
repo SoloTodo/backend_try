@@ -14,6 +14,7 @@ class EntityDetailPricingHistoryChart extends Component {
   preparePricingHistoryChartData() {
     const entity = this.props.ApiResourceObject(this.props.entity);
     const targetCurrency = this.props.chart.currency;
+
     const exchangeRate =
         targetCurrency.exchange_rate /
         entity.currency.exchangeRate;

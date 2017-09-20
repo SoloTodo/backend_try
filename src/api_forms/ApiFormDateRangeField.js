@@ -1,47 +1,29 @@
 import React, {Component} from 'react'
-import {UncontrolledTooltip} from "reactstrap";
 import queryString from 'query-string';
 import changeCase from 'change-case'
 import moment from "moment";
 import './ApiFormDateRangeField.css'
 
 class ApiFormDateRangeField extends Component {
-  constructor(props) {
-    super(props);
-
-    const {startDate, endDate} = this.parseAndCleanDates();
-
-    this.state = {
-      startDate: startDate,
-      endDate: endDate,
-    };
-  }
-
-  componentDidMount() {
-    this.notifyNewParams()
+    componentDidMount() {
+    this.notifyNewParams(this.parseValueFromUrl())
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.urlParams !== nextProps.urlParams) {
-      const {startDate, endDate} = this.parseAndCleanDates(nextProps.urlParams);
-      this.setState({
-        startDate,
-        endDate
-      }, this.notifyNewParams)
+    if (this.props.onChange !== nextProps.onChange) {
+      this.notifyNewParams(this.parseValueFromUrl(), nextProps)
     }
 
-    if (this.props.onApiParamChange !== nextProps.onApiParamChange) {
-      this.notifyNewParams(nextProps)
+    if (typeof(nextProps.value) === 'undefined') {
+      this.notifyNewParams(this.parseValueFromUrl())
     }
   }
 
-  parseAndCleanDates = (urlParams=null) => {
-    urlParams = urlParams ? urlParams : this.props.urlParams;
-
+  parseValueFromUrl = () => {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
     // Obtain URL params
-    const parameters = queryString.parse(urlParams);
+    const parameters = queryString.parse(window.location);
     const startDateStr = parameters[changeCase.snakeCase(this.props.name) + '_start'];
     let startDate = null;
     if (dateRegex.test(startDateStr)) {
@@ -99,23 +81,23 @@ class ApiFormDateRangeField extends Component {
     }
   };
 
-  notifyNewParams(props) {
+  notifyNewParams(value, props) {
     props = props ? props : this.props;
 
-    if (!props.onApiParamChange) {
+    if (!props.onChange) {
       return;
     }
 
     const apiParams = {};
     const urlParams = {};
-    const base_field_name = changeCase.snake(props.name);
-    if (this.state.startDate) {
-      apiParams[base_field_name + '_0'] = [this.state.startDate.format('YYYY-MM-DD')];
-      urlParams[base_field_name + '_start'] = [this.state.startDate.format('YYYY-MM-DD')]
+    const baseFieldName = changeCase.snake(props.name);
+    if (value.startDate) {
+      apiParams[baseFieldName + '_0'] = [value.startDate.format('YYYY-MM-DD')];
+      urlParams[baseFieldName + '_start'] = [value.startDate.format('YYYY-MM-DD')]
     }
-    if (this.state.endDate) {
-      apiParams[base_field_name + '_1'] = [moment(this.state.endDate).add(1, 'days').format('YYYY-MM-DD')];
-      urlParams[base_field_name + '_end'] = [this.state.endDate.format('YYYY-MM-DD')]
+    if (value.endDate) {
+      apiParams[baseFieldName + '_1'] = [moment(value.endDate).add(1, 'days').format('YYYY-MM-DD')];
+      urlParams[baseFieldName + '_end'] = [value.endDate.format('YYYY-MM-DD')]
     }
 
     const result = {
@@ -123,61 +105,70 @@ class ApiFormDateRangeField extends Component {
         apiParams,
         urlParams,
         fieldValues: {
-          startDate: this.state.startDate,
-          endDate: this.state.endDate
+          startDate: value.startDate,
+          endDate: value.endDate
         }
       }
     };
 
-    props.onApiParamChange(result)
+    props.onChange(result)
   }
 
-  handleDateChange = (event, field) => {
-    this.setState({
-      [field]: event.target.value ? moment(event.target.value) : null
-    }, this.notifyNewParams)
+  handleDateChange = (event) => {
+    const startDateValue = document.getElementById(this.props.name + '_start').value;
+    const endDateValue = document.getElementById(this.props.name + '_end').value;
+
+    const startDate = startDateValue ? moment(startDateValue) : null;
+    const endDate = endDateValue ? moment(endDateValue) : null;
+
+    this.notifyNewParams({
+      startDate,
+      endDate
+    })
   };
 
   render() {
     const max = this.props.max ? this.props.max : moment().startOf('day');
 
-    return <div className={this.props.classNames}>
-      {this.props.tooltipContent &&
-      <UncontrolledTooltip placement="top" target={this.props.name}>
-        {this.props.tooltipContent}
-      </UncontrolledTooltip>}
-      <label htmlFor={this.props.name} id={this.props.name} className={this.props.tooltipContent ? 'dashed' : ''}>
-        {this.props.label}
-      </label>
-      <div className="row">
-        <div className="col-12 col-sm-6">
-          <input
-              type="date"
-              className="form-control"
-              required={!this.props.nullable}
-              min={this.props.min ? this.props.min.format('YYYY-MM-DD') : ''}
-              max={this.state.endDate ? this.state.endDate.format('YYYY-MM-DD') : max.format('YYYY-MM-DD')}
-              value={this.state.startDate ? this.state.startDate.format('YYYY-MM-DD') : ''}
-              onChange={evt => this.handleDateChange(evt, 'startDate')}
-          />
+    let startDate = null;
+    let endDate = null;
 
-        </div>
-        <div className="col-12 col-sm-6 end-date-container">
-          <input
-              type="date"
-              className="form-control"
-              required={!this.props.nullable}
-              min={this.state.startDate ?
-                  this.state.startDate.format('YYYY-MM-DD') :
-                  this.props.min ?
-                      this.props.min.format('YYYY-MM-DD') : ''}
-              max={max.format('YYYY-MM-DD')}
-              value={this.state.endDate ? this.state.endDate.format('YYYY-MM-DD') : ''}
-              onChange={evt => this.handleDateChange(evt, 'endDate')}
-          />
-        </div>
-      </div>
-    </div>
+    if (this.props.value) {
+      startDate = this.props.value.startDate;
+      endDate = this.props.value.endDate
+    }
+
+    return (
+        <div className={this.props.classNames}>
+          <div className="row">
+            <div className="col-12 col-sm-6">
+              <input
+                  type="date"
+                  id={this.props.name + '_start'}
+                  className="form-control"
+                  required={!this.props.nullable}
+                  min={this.props.min ? this.props.min.format('YYYY-MM-DD') : ''}
+                  max={endDate ? endDate.format('YYYY-MM-DD') : max.format('YYYY-MM-DD')}
+                  value={startDate ? startDate.format('YYYY-MM-DD') : ''}
+                  onChange={evt => this.handleDateChange(evt)}
+              />
+
+            </div>
+            <div className="col-12 col-sm-6 end-date-container">
+              <input
+                  type="date"
+                  id={this.props.name + '_start'}
+                  className="form-control"
+                  required={!this.props.nullable}
+                  min={startDate ? startDate.format('YYYY-MM-DD') :
+                      this.props.min ? this.props.min.format('YYYY-MM-DD') : ''}
+                  max={max.format('YYYY-MM-DD')}
+                  value={endDate ? endDate.format('YYYY-MM-DD') : ''}
+                  onChange={evt => this.handleDateChange(evt)}
+              />
+            </div>
+          </div>
+        </div>)
   }
 }
 

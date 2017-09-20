@@ -19,39 +19,20 @@ class EntityDetailPricingHistory extends Component {
     super(props);
 
     this.state = {
-      apiFormChangeHandler: undefined,
-      chart: null,
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    console.log('componentwillupdate');
-    
-    for (const myKey of Object.keys(this.props)) {
-      if (JSON.stringify(this.props[myKey]) !== JSON.stringify(nextProps[myKey])) {
-        console.log(myKey);
-        console.log(this.props[myKey]);
-        console.log(nextProps[myKey]);
-      }
-    }
-
-    for (const myKey of Object.keys(this.state)) {
-      if (this.state[myKey] !== nextState[myKey]) {
-        console.log(myKey);
-        console.log(this.state[myKey]);
-        console.log(nextState[myKey]);
-      }
+      formValues: {},
+      apiFormFieldChangeHandler: undefined,
+      chart: undefined
     }
   }
 
-  setApiFormValueChangeHandler = apiFormChangeHandler => {
+  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
     this.setState({
-      apiFormChangeHandler
+      apiFormFieldChangeHandler
     })
+  };
+
+  handleFormValueChange = formValues => {
+    this.setState({formValues})
   };
 
   setChartData = (bundle) => {
@@ -127,8 +108,6 @@ class EntityDetailPricingHistory extends Component {
 
     currencyOptions.sort((a, b) => a.priority - b.priority);
 
-    console.log('Rendering component');
-
     return (
         <div className="animated fadeIn d-flex flex-column">
           <ApiForm
@@ -138,8 +117,8 @@ class EntityDetailPricingHistory extends Component {
               observedObjects={[this.props.apiResourceObject]}
               observedObjectsField="last_pricing_update"
               onObservedObjectChange={this.handleObservedObjectChange}
-              setValueChangeHandler={this.setApiFormValueChangeHandler}
-          >
+              onFormValueChange={this.handleFormValueChange}
+              setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <div className="card">
               <div className="card-header"><strong><FormattedMessage id="filters" defaultMessage={`Filters`} /></strong></div>
               <div className="card-block">
@@ -149,10 +128,9 @@ class EntityDetailPricingHistory extends Component {
                       label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
                       classNames="col-12 col-sm-12 col-md-10 col-lg-6 col-xl-4"
                       min={entityCreationDate}
-                      tooltipContent={dateRangeTooltip}
                       initial={[dateRangeInitialMin, dateRangeInitialMax]}
-                      onApiParamChange={this.state.apiFormChangeHandler}
-                      urlParams=''
+                      value={this.state.formValues.timestamp}
+                      onChange={this.state.apiFormFieldChangeHandler}
                   />
                   <ApiFormChoiceField
                       name="currency"
@@ -161,16 +139,15 @@ class EntityDetailPricingHistory extends Component {
                       choices={currencyOptions}
                       searchable={false}
                       tooltipContent={currencyTooltip}
-                      onApiParamChange={this.state.apiFormChangeHandler}
-                      urlParams=''
+                      value={this.state.formValues.currency}
+                      onChange={this.state.apiFormFieldChangeHandler}
                   />
-                  <div className="col-12 col-sm-6 col-md-7 col-lg-3 col-xl-2">
-                    <label htmlFor="submit">&nbsp;</label>
-                    <ApiFormSubmitButton
-                        label={<FormattedMessage id="search" defaultMessage='Search' />}
-                        onApiParamChange={this.state.apiFormChangeHandler}
-                    />
-                  </div>
+                  <ApiFormSubmitButton
+                      label={<FormattedMessage id="search" defaultMessage='Search' />}
+                      loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
+                      onChange={this.state.apiFormFieldChangeHandler}
+                      loading={this.state.chart === null}
+                  />
                 </div>
               </div>
             </div>
