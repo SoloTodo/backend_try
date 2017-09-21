@@ -17,10 +17,10 @@ import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
 import {
-  createOrderingOptionChoice,
-  createOrderingOptionChoices
+  createOrderingOptionChoices, createPageSizeChoices
 } from "../../api_forms/utils";
 import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
+import ApiFormResultPageCount from "../../api_forms/ApiFormResultPageCount";
 
 class EntityList extends Component {
   constructor(props) {
@@ -39,14 +39,14 @@ class EntityList extends Component {
     })
   };
 
+  handleFormValueChange = formValues => {
+    this.setState({formValues})
+  };
+
   setEntities = json => {
     this.setState({
       entities: json ? json.payload : null
     })
-  };
-
-  handleFormValueChange = formValues => {
-    this.setState({formValues})
   };
 
   render() {
@@ -189,18 +189,9 @@ class EntityList extends Component {
                 name="ordering"
                 choices={createOrderingOptionChoices(['name', 'country', 'type'])}
                 hidden={true}
-                initial={createOrderingOptionChoice('name')}
+                initial="name"
                 value={this.state.formValues.ordering}
                 onChange={this.state.apiFormFieldChangeHandler}
-            />
-            <ApiFormChoiceField
-                name="page_size"
-                choices={[{id: 50, name: 50}]}
-                initial={{id: 50, name: 50}}
-                hidden={true}
-                onChange={this.state.apiFormFieldChangeHandler}
-                value={this.state.formValues.page_size}
-                urlField={null}
             />
             <UncontrolledTooltip placement="top" target="is_available_label">
               <dl>
@@ -295,6 +286,7 @@ class EntityList extends Component {
                             name="is_available"
                             id="is_available"
                             choices={booleanChoices}
+                            searchable={false}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.is_available}
                             placeholder={messages.all_feminine}
@@ -306,17 +298,21 @@ class EntityList extends Component {
                             name="is_active"
                             id="is_active"
                             choices={booleanChoices}
+                            searchable={false}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.is_active}
                             placeholder={messages.all_feminine}
                         />
                       </div>
                       <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                        <label id="is_visible_label" className="dashed" htmlFor="is_visible"><FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} /></label>
+                        <label id="is_visible_label" className="dashed" htmlFor="is_visible">
+                          <FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} />
+                        </label>
                         <ApiFormChoiceField
                             name="is_visible"
                             id="is_visible"
                             choices={booleanChoices}
+                            searchable={false}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.is_visible}
                             placeholder={messages.all_feminine}
@@ -328,6 +324,7 @@ class EntityList extends Component {
                             name="is_associated"
                             id="is_associated"
                             choices={booleanChoices}
+                            searchable={false}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.is_associated}
                             placeholder={messages.all_feminine}
@@ -341,7 +338,6 @@ class EntityList extends Component {
                             name="search"
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.search}
-                            initial=""
                         />
                       </div>
                       <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
@@ -362,15 +358,40 @@ class EntityList extends Component {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
-                    <i className="glyphicons glyphicons-list">&nbsp;</i> <FormattedMessage id="entities" defaultMessage={`Entities`} />
+                    <i className="glyphicons glyphicons-list">&nbsp;</i>
+                    <FormattedMessage id="entities" defaultMessage={`Entities`} />
+                    &nbsp;<ApiFormResultPageCount
+                      page={this.state.formValues.page}
+                      pageSize={this.state.formValues.page_size}
+                      resultCount={this.state.entities && this.state.entities.count}
+                  />
                   </div>
                   <div className="card-block" id="results-container">
-                    <ApiFormPaginationField
-                        page={this.state.formValues.page}
-                        pageSize={this.state.formValues.page_size}
-                        results={this.state.entities}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                    />
+                    <div className="d-flex justify-content-between flex-wrap align-items-center mb-3 api-form-filters">
+                      <div className="d-flex results-per-page-fields align-items-center mr-3">
+                        <div className="results-per-page-dropdown ml-0 mr-2">
+                          <ApiFormChoiceField
+                              name="page_size"
+                              choices={createPageSizeChoices([50, 100, 200])}
+                              initial="50"
+                              onChange={this.state.apiFormFieldChangeHandler}
+                              value={this.state.formValues.page_size}
+                              required={true}
+                              updateResultsOnChange={true}
+                              searchable={false}
+                          />
+                        </div>
+                        <label><FormattedMessage id="results_per_page" defaultMessage="Results per page" /></label>
+                      </div>
+                      <div className="pagination-fields ml-auto d-flex align-items-center mr-0">
+                          <ApiFormPaginationField
+                              page={this.state.formValues.page}
+                              pageSize={this.state.formValues.page_size}
+                              resultCount={this.state.entities && this.state.entities.count}
+                              onChange={this.state.apiFormFieldChangeHandler}
+                          />
+                      </div>
+                    </div>
 
                     <ApiFormResultsTable
                         results={this.state.entities && this.state.entities.results}

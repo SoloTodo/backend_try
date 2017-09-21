@@ -53,8 +53,6 @@ class ResourceObjectPermission extends Component {
       }}/>
 
     } else {
-      // document.title = `${apiResourceObject.name} - SoloTodo`;
-
       const propsForChild = {
         apiResourceObject
       };

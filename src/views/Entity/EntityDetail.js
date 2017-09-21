@@ -228,7 +228,7 @@ class EntityDetail extends Component {
 
   handleChangeCategory = newCategoryChoice => {
     this.setState({
-      categoryForChange: newCategoryChoice
+      categoryForChange: newCategoryChoice.option
     }, () => {
       if (this.userHasStaffPermissionOverSelectedCategory()) {
         this.changeCategory();
@@ -238,7 +238,7 @@ class EntityDetail extends Component {
 
   handleChangeState = newStateChoice => {
     this.setState({
-      stateForChange: newStateChoice
+      stateForChange: newStateChoice.option
     }, () => {
       this.changeState();
     });
@@ -307,6 +307,7 @@ class EntityDetail extends Component {
     const categorySelectEnabled = !this.state.categoryForChange && !entity.product;
     const categoryOptions = createOptions(this.props.categories);
     const stateOptions = createOptions(this.props.entityStates);
+
     const isModalOpen = Boolean(this.state.categoryForChange) && !this.userHasStaffPermissionOverSelectedCategory();
 
     let images = null;

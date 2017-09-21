@@ -106,7 +106,7 @@ class StoreDetailUpdateLogs extends Component {
             <ApiFormChoiceField
                 name="page_size"
                 choices={[{id: 5, name: 5}]}
-                initial={{id: 5, name: 5}}
+                initial="5"
                 hidden={true}
                 onChange={this.state.apiFormFieldChangeHandler}
                 value={this.state.formValues.page_size}
@@ -120,12 +120,14 @@ class StoreDetailUpdateLogs extends Component {
                     <FormattedMessage id="update_logs" defaultMessage={`Update logs`} />
                   </div>
                   <div className="card-block">
-                    <ApiFormPaginationField
-                        page={this.state.formValues.page}
-                        pageSize={this.state.formValues.page_size}
-                        results={this.state.updateLogs}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                    />
+                    <div className="mb-3 float-right">
+                      <ApiFormPaginationField
+                          page={this.state.formValues.page}
+                          pageSize={this.state.formValues.page_size}
+                          resultCount={this.state.updateLogs && this.state.updateLogs.count}
+                          onChange={this.state.apiFormFieldChangeHandler}
+                      />
+                    </div>
 
                     <ApiFormResultsTable
                         results={this.state.updateLogs && this.state.updateLogs.results}

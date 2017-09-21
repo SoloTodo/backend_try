@@ -156,6 +156,10 @@ main > .container-fluid {
   margin-top: 60px !important;
 }
 
-.negative-top-margin {
+.api-form-filters {
   margin-top: -8px;
+}
+
+.api-form-filters > div {
+  margin-top: 8px;
 }

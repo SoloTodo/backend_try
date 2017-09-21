@@ -15,3 +15,10 @@ export function createOrderingOptionChoice(field) {
     name: field
   }
 }
+
+export function createPageSizeChoices(pageSizes) {
+  return pageSizes.map(pageSize => ({
+    id: pageSize,
+    name: pageSize
+  }))
+}

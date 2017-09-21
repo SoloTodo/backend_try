@@ -5,7 +5,7 @@ import moment from "moment";
 import './ApiFormDateRangeField.css'
 
 class ApiFormDateRangeField extends Component {
-    componentDidMount() {
+  componentDidMount() {
     this.notifyNewParams(this.parseValueFromUrl())
   }
 
@@ -139,34 +139,31 @@ class ApiFormDateRangeField extends Component {
     }
 
     return (
-        <div className={this.props.classNames}>
-          <div className="row">
-            <div className="col-12 col-sm-6">
-              <input
-                  type="date"
-                  id={this.props.name + '_start'}
-                  className="form-control"
-                  required={!this.props.nullable}
-                  min={this.props.min ? this.props.min.format('YYYY-MM-DD') : ''}
-                  max={endDate ? endDate.format('YYYY-MM-DD') : max.format('YYYY-MM-DD')}
-                  value={startDate ? startDate.format('YYYY-MM-DD') : ''}
-                  onChange={evt => this.handleDateChange(evt)}
-              />
-
-            </div>
-            <div className="col-12 col-sm-6 end-date-container">
-              <input
-                  type="date"
-                  id={this.props.name + '_start'}
-                  className="form-control"
-                  required={!this.props.nullable}
-                  min={startDate ? startDate.format('YYYY-MM-DD') :
-                      this.props.min ? this.props.min.format('YYYY-MM-DD') : ''}
-                  max={max.format('YYYY-MM-DD')}
-                  value={endDate ? endDate.format('YYYY-MM-DD') : ''}
-                  onChange={evt => this.handleDateChange(evt)}
-              />
-            </div>
+        <div className="row">
+          <div className="col-12 col-sm-6">
+            <input
+                type="date"
+                id={this.props.name + '_start'}
+                className="form-control"
+                required={!this.props.nullable}
+                min={this.props.min ? this.props.min.format('YYYY-MM-DD') : ''}
+                max={endDate ? endDate.format('YYYY-MM-DD') : max.format('YYYY-MM-DD')}
+                value={startDate ? startDate.format('YYYY-MM-DD') : ''}
+                onChange={evt => this.handleDateChange(evt)}
+            />
+          </div>
+          <div className="col-12 col-sm-6 end-date-container">
+            <input
+                type="date"
+                id={this.props.name + '_end'}
+                className="form-control"
+                required={!this.props.nullable}
+                min={startDate ? startDate.format('YYYY-MM-DD') :
+                    this.props.min ? this.props.min.format('YYYY-MM-DD') : ''}
+                max={max.format('YYYY-MM-DD')}
+                value={endDate ? endDate.format('YYYY-MM-DD') : ''}
+                onChange={evt => this.handleDateChange(evt)}
+            />
           </div>
         </div>)
   }

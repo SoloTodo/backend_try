@@ -11,7 +11,6 @@ import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import messages from "../../messages";
 import {booleanChoices} from "../../utils";
 import {
-  createOrderingOptionChoice,
   createOrderingOptionChoices
 } from "../../api_forms/utils";
 import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
@@ -87,8 +86,8 @@ class StoreList extends Component {
             <i className="glyphicons glyphicons-search">&nbsp;</i> <FormattedMessage id="filters" defaultMessage={`Filters`} />
           </div>
           <div className="card-block">
-            <div className="row negative-top-margin">
-              <div className="mt-2 col-12 col-md-6 col-xl-4">
+            <div className="row api-form-filters">
+              <div className="col-12 col-md-6 col-xl-4">
                 <label htmlFor="countries">
                   <FormattedMessage id="countries" defaultMessage="Countries" />
                 </label>
@@ -104,7 +103,7 @@ class StoreList extends Component {
                     placeholder={messages.all_masculine}
                 />
               </div>
-              <div className="mt-2 col-12 col-md-6 col-xl-3">
+              <div className="col-12 col-md-6 col-xl-3">
                 <label htmlFor="types">
                   <FormattedMessage id="store_types" defaultMessage="Types" />
                 </label>
@@ -120,7 +119,7 @@ class StoreList extends Component {
                     placeholder={messages.all_masculine}
                 />
               </div>
-              <div className="mt-2 col-12 col-sm-8 col-md-6 col-xl-2">
+              <div className="col-12 col-sm-8 col-md-6 col-xl-2">
                 <label htmlFor="is_active">
                   <FormattedMessage id="is_active" defaultMessage="Is active?" />
                 </label>
@@ -141,7 +140,7 @@ class StoreList extends Component {
                   name="ordering"
                   choices={createOrderingOptionChoices(['name', 'country', 'type'])}
                   hidden={true}
-                  initial={createOrderingOptionChoice('name')}
+                  initial="name"
                   value={this.state.formValues.ordering}
                   onChange={this.state.apiFormFieldChangeHandler}
               />

@@ -40,10 +40,10 @@ class ApiFormTextField extends Component {
 
     const urlParams = {};
     if (value && props.urlField !== null) {
-      urlParams[props.urlField || fieldName] = value
+      urlParams[props.urlField || fieldName] = [value]
     }
 
-    const apiParams = value ? {[fieldName]: value} : {};
+    const apiParams = value ? {[fieldName]: [value]} : {};
 
     const result = {
       [this.props.name]: {

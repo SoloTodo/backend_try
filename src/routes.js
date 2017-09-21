@@ -1,17 +1,16 @@
-import React from 'react';
-import {FormattedMessage} from "react-intl";
-
 const routes = {
-  '/': <FormattedMessage id="home" defaultMessage={`Home`} />,
+  '/': 'home',
   '/dashboard': 'Dashboard',
-  '/stores': <FormattedMessage id="stores" defaultMessage={`Stores`} />,
-  '/stores/update': <FormattedMessage id="update" defaultMessage={`Update`} />,
+  '/stores': 'stores',
+  '/stores/update_pricing': 'update_pricing',
   '/stores/:id': params => ({apiResource: 'stores', apiResourceObjectId: params.id}),
-  '/stores/:id/update': <FormattedMessage id="update" defaultMessage={`Update`} />,
-  '/stores/:id/update_logs': <FormattedMessage id="update_logs" defaultMessage={`Update logs`} />,
-  '/entities': <FormattedMessage id="entities" defaultMessage={`Entities`} />,
+  '/stores/:id/update_pricing': 'update_pricing',
+  '/stores/:id/update_logs': 'update_logs',
+  '/entities': 'entities',
   '/entities/:id': params => ({apiResource: 'entities', apiResourceObjectId: params.id}),
-  '/entities/:id/events': <FormattedMessage id="events" defaultMessage={`Events`} />,
-  '/entities/:id/price_history': <FormattedMessage id="price_history" defaultMessage={`Price history`} />,
+  '/entities/:id/events': 'events',
+  '/entities/:id/pricing_history': 'pricing_history',
+  '/products': 'products',
+  '/products/:id': params => ({apiResource: 'products', apiResourceObjectId: params.id}),
 };
 export default routes;

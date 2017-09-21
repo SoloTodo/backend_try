@@ -21,17 +21,25 @@ class EntityDetailPricingHistoryChart extends Component {
 
     let initiallyAvailable = false;
     let includesStockInfo = false;
-    if (this.props.chart.data.length) {
-      initiallyAvailable = this.props.chart.data[0].isAvailable;
-      includesStockInfo = typeof(this.props.chart.data[0].stock) !== 'undefined'
+    const chartData = this.props.chart.data;
+
+    if (chartData.length) {
+      initiallyAvailable = chartData[0].isAvailable;
+      includesStockInfo = typeof(chartData[0].stock) !== 'undefined'
     }
 
     const isCurrentlyAvailable = entity.activeRegistry && entity.activeRegistry.stock !== 0;
 
     const datapoints = [
       this.makeEmptyDatapoint(this.props.chart.startDate, initiallyAvailable, includesStockInfo),
-      ...this.props.chart.data,
+      ...chartData,
     ];
+
+    if (!isCurrentlyAvailable && chartData.length) {
+      const lastDataPoint = chartData[chartData.length - 1];
+
+      datapoints.push(this.makeEmptyDatapoint(moment(lastDataPoint.timestamp), false, includesStockInfo))
+    }
 
     const lastPricingUpdate = moment(entity.lastPricingUpdate);
 

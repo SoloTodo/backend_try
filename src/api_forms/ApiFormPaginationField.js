@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import ReactPaginate from 'react-paginate';
 import queryString from 'query-string';
-import messages from "../messages";
+import {connect} from "react-redux";
 
 class ApiFormPaginationField extends Component {
   componentDidMount() {
@@ -59,17 +59,20 @@ class ApiFormPaginationField extends Component {
   };
 
   render() {
-    if (!this.props.results) {
+    if (!this.props.resultCount) {
       return null
     }
 
-    const pageCount = Math.ceil(this.props.results.count / this.props.pageSize.id);
+    const pageRangeDisplayed = this.props.breakpoint.isExtraSmall ? 2 : 3;
+    const marginPagesDisplayed = this.props.breakpoint.isExtraSmall ? 1 : 2;
+
+    const pageCount = Math.ceil(this.props.resultCount / this.props.pageSize.id);
 
     return <ReactPaginate
         forcePage={this.props.page - 1}
         pageCount={pageCount}
-        pageRangeDisplayed={3}
-        marginPagesDisplayed={2}
+        pageRangeDisplayed={pageRangeDisplayed}
+        marginPagesDisplayed={marginPagesDisplayed}
         containerClassName="pagination"
         pageClassName="page-item"
         pageLinkClassName="page-link"
@@ -81,10 +84,16 @@ class ApiFormPaginationField extends Component {
         disabledClassName="disabled"
         hrefBuilder={page => `?page=${page}`}
         onPageChange={this.onPageChange}
-        previousLabel={messages.previous}
-        nextLabel={messages.next}
+        previousLabel="&lsaquo;"
+        nextLabel="&rsaquo;"
     />
   }
 }
 
-export default ApiFormPaginationField
+function mapStateToProps(state) {
+  return {
+    breakpoint: state.breakpoint,
+  }
+}
+
+export default connect(mapStateToProps)(ApiFormPaginationField)

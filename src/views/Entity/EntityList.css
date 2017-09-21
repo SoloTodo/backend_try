@@ -21,3 +21,19 @@
         display: none !important;
     }
 }
+
+.results-per-page-fields > label {
+    margin-bottom: 0;
+}
+
+.pagination-fields {
+    flex: 0;
+}
+
+.results-per-page-dropdown {
+    width: 80px !important;
+}
+
+ul.pagination {
+    margin-bottom: 0;
+}

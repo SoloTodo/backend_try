@@ -27,4 +27,6 @@ export const settings = {
     countries: 6
   },
   defaultLanguageCode: 'en',
+  categoryTemplateTargetId: 1,
+  categoryTemplateDetailPurposeId: 1,
 };

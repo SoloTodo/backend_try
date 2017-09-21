@@ -32,6 +32,11 @@ class ApiFormChoiceField extends Component {
       return this.props.choices
           .filter(choice => choiceIds.includes(choice.id.toString()));
     } else {
+      const defaultValue =
+          this.props.initial ? this.props.choices.filter(choice => choice.id.toString() === this.props.initial)[0]:
+          this.props.required ? this.props.choices[0] :
+          null;
+
       if (Array.isArray(choiceIds)) {
         choiceIds = choiceIds[0]
       }
@@ -40,8 +45,8 @@ class ApiFormChoiceField extends Component {
 
       if (value) {
         return [value]
-      } else if (this.props.initial) {
-        return [this.props.initial]
+      } else if (defaultValue) {
+        return [defaultValue]
       } else {
         return null
       }
@@ -79,7 +84,7 @@ class ApiFormChoiceField extends Component {
       }
     };
 
-    props.onChange(result)
+    props.onChange(result, Boolean(this.props.updateResultsOnChange))
   }
 
   handleValueChange = (vals) => {
@@ -112,6 +117,7 @@ class ApiFormChoiceField extends Component {
           multi={this.props.multiple}
           placeholder={this.props.placeholder}
           searchable={this.props.searchable}
+          clearable={!this.props.required}
           autoBlur={true}
       />
     }

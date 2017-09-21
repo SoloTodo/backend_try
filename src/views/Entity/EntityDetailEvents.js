@@ -30,7 +30,7 @@ class EntityDetailEvents extends Component {
     )
   }
 
-  fieldValueToComponent(field, value) {
+  static fieldValueToComponent(field, value) {
     if (['category', 'scraped_category', 'currency', 'state'].includes(field)) {
       return value.name
     } else if (['product', 'cell_plan'].includes(field)) {
@@ -43,6 +43,7 @@ class EntityDetailEvents extends Component {
       return value ? messages.yes : messages.no
     } else if (field === 'picture_urls') {
       if (value) {
+        console.log(value)
         return <ul>
           {JSON.parse(value).map(pictureUrl =>
             <li key={pictureUrl}><a href={pictureUrl} target="_blank">{pictureUrl}</a></li>
@@ -77,7 +78,7 @@ class EntityDetailEvents extends Component {
             }
 
             {this.state.events.map((event, idx) => (
-                <div key={idx} className="col-12 col-lg-6">
+                <div key={idx} className="col-12">
                   <div className="card" >
                     <div className="card-header"><strong>{formatDateStr(event.timestamp)}</strong></div>
                     <div className="card-block">
@@ -90,11 +91,11 @@ class EntityDetailEvents extends Component {
                               <dl>
                                 <dt><FormattedMessage id="old_value" defaultMessage={`Old value`} /></dt>
                                 <dd>
-                                  {this.fieldValueToComponent(change.field, change.old_value)}
+                                  {EntityDetailEvents.fieldValueToComponent(change.field, change.old_value)}
                                 </dd>
                                 <dt><FormattedMessage id="new_value" defaultMessage={`New value`} /></dt>
                                 <dd>
-                                  {this.fieldValueToComponent(change.field, change.new_value)}
+                                  {EntityDetailEvents.fieldValueToComponent(change.field, change.new_value)}
                                 </dd>
                               </dl>
                             </li>

@@ -1,8 +1,8 @@
 [
   {
-    "id": "no_products_found",
-    "defaultMessage": "No products found",
-    "filepath": "./src/api_forms/ApiResultDisplay.js"
+    "id": "no_results_found",
+    "defaultMessage": "No results found",
+    "filepath": "./src/api_forms/ApiFormResultsTable.js"
   },
   {
     "id": "permission_denied_toast",
@@ -212,37 +212,32 @@
   {
     "id": "home",
     "defaultMessage": "Home",
-    "filepath": "./src/routes.js"
+    "filepath": "./src/messages.js"
   },
   {
-    "id": "stores",
-    "defaultMessage": "Stores",
-    "filepath": "./src/routes.js"
-  },
-  {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/routes.js"
+    "id": "update_pricing",
+    "defaultMessage": "Update pricing",
+    "filepath": "./src/messages.js"
   },
   {
     "id": "update_logs",
     "defaultMessage": "Update logs",
-    "filepath": "./src/routes.js"
+    "filepath": "./src/messages.js"
   },
   {
     "id": "entities",
     "defaultMessage": "Entities",
-    "filepath": "./src/routes.js"
+    "filepath": "./src/messages.js"
   },
   {
     "id": "events",
     "defaultMessage": "Events",
-    "filepath": "./src/routes.js"
+    "filepath": "./src/messages.js"
   },
   {
-    "id": "price_history",
-    "defaultMessage": "Price history",
-    "filepath": "./src/routes.js"
+    "id": "pricing_history",
+    "defaultMessage": "Pricing history",
+    "filepath": "./src/messages.js"
   },
   {
     "id": "stores",
@@ -615,19 +610,14 @@
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
-    "id": "result",
-    "defaultMessage": "Result",
+    "id": "searching",
+    "defaultMessage": "Searching",
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
-    "id": "all",
-    "defaultMessage": "All",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_list_changes_detected",
-    "defaultMessage": "Entity changes detected, updating search results",
-    "filepath": "./src/views/Entity/EntityList.js"
+    "id": "result",
+    "defaultMessage": "Result",
+    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
     "id": "normal_price_short",
@@ -690,16 +680,6 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "currency_label",
-    "defaultMessage": "Currency",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "no_entities_found",
-    "defaultMessage": "No entities found",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
     "id": "entity_is_available_label_yes",
     "defaultMessage": "The entity is available for purchase",
     "filepath": "./src/views/Entity/EntityList.js"
@@ -750,18 +730,8 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "all_feminine",
-    "defaultMessage": "All",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
     "id": "categories",
     "defaultMessage": "Categories",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "all_masculine",
-    "defaultMessage": "All",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -795,13 +765,18 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "filter_pending",
-    "defaultMessage": "Filter pending",
+    "id": "searching",
+    "defaultMessage": "Searching",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
     "id": "entities",
     "defaultMessage": "Entities",
+    "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "results_per_page",
+    "defaultMessage": "Results per page",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -1015,11 +990,6 @@
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
   {
-    "id": "update_logs",
-    "defaultMessage": "Update logs",
-    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
-  },
-  {
     "id": "status",
     "defaultMessage": "Status",
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
@@ -1070,6 +1040,11 @@
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
   },
   {
+    "id": "update_logs",
+    "defaultMessage": "Update logs",
+    "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
+  },
+  {
     "id": "store_update_requested_success",
     "defaultMessage": "Store update requested successfully.",
     "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
@@ -1115,6 +1090,31 @@
     "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
   },
   {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "country",
+    "defaultMessage": "Country",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "type",
+    "defaultMessage": "Type",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "active_question",
+    "defaultMessage": "Active?",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
+    "id": "scraper",
+    "defaultMessage": "Scraper",
+    "filepath": "./src/views/Store/StoreList.js"
+  },
+  {
     "id": "filters",
     "defaultMessage": "Filters",
     "filepath": "./src/views/Store/StoreList.js"
@@ -1147,36 +1147,6 @@
   {
     "id": "stores",
     "defaultMessage": "Stores",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "name",
-    "defaultMessage": "Name",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "country",
-    "defaultMessage": "Country",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "type",
-    "defaultMessage": "type",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "active_question",
-    "defaultMessage": "Active?",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "scraper",
-    "defaultMessage": "Scraper",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "no_results_found",
-    "defaultMessage": "No results found",
     "filepath": "./src/views/Store/StoreList.js"
   },
   {

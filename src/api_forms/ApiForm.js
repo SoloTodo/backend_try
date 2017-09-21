@@ -65,10 +65,6 @@ class ApiForm extends Component {
     return params;
   };
 
-  resetState = () => {
-    this.setState(this.defaultState())
-  };
-
   isFormValid = (state=null) => {
     state = state ? state : this.state;
 
@@ -89,7 +85,7 @@ class ApiForm extends Component {
         ...updatedFieldsData
       };
 
-      if (updateOnFinish && !Object.keys(updatedFieldsData).includes('page')) {
+      if (updateOnFinish && !Object.keys(updatedFieldsData).includes('page') && this.props.fields.includes('page')) {
         newState.page = {
           apiParams: {page: [1]},
           urlParams: {page: [1]},

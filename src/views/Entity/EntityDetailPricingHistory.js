@@ -13,6 +13,7 @@ import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import { toast } from 'react-toastify';
 import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
+import {UncontrolledTooltip} from "reactstrap";
 
 class EntityDetailPricingHistory extends Component {
   constructor(props) {
@@ -82,12 +83,6 @@ class EntityDetailPricingHistory extends Component {
 
     const dateRangeInitialMax = moment().startOf('day');
 
-    const dateRangeTooltip = <div>
-      <FormattedMessage id="entity_price_history_date_rage" defaultMessage="Date range for the chart. The minimum value is the entity's detection date" /> ({moment(entity.creationDate).format('ll')})
-    </div>;
-
-    const currencyTooltip = <FormattedMessage id="entity_price_history_currency" defaultMessage="The price points are converted to this currency. The values are calculated using standard exchange rates" />;
-
     const currencyOptions = this.props.currencies.map(currency => {
       let priority = 3;
       let name = currency.name;
@@ -110,6 +105,14 @@ class EntityDetailPricingHistory extends Component {
 
     return (
         <div className="animated fadeIn d-flex flex-column">
+          <UncontrolledTooltip placement="top" target="timestamp_label">
+            <FormattedMessage id="entity_price_history_date_rage" defaultMessage="Date range for the chart. The minimum value is the entity's detection date" /> ({moment(entity.creationDate).format('ll')})
+          </UncontrolledTooltip>
+
+          <UncontrolledTooltip placement="top" target="currency_label">
+            <FormattedMessage id="entity_price_history_currency" defaultMessage="The price points are converted to this currency. The values are calculated using standard exchange rates" />
+          </UncontrolledTooltip>
+
           <ApiForm
               endpoint={entity.url + 'pricing_history/'}
               fields={['timestamp', 'currency']}
@@ -120,34 +123,49 @@ class EntityDetailPricingHistory extends Component {
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <div className="card">
-              <div className="card-header"><strong><FormattedMessage id="filters" defaultMessage={`Filters`} /></strong></div>
+              <div className="card-header">
+                <FormattedMessage id="filters" defaultMessage={`Filters`} />
+              </div>
               <div className="card-block">
-                <div className="row">
-                  <ApiFormDateRangeField
-                      name="timestamp"
-                      label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
-                      classNames="col-12 col-sm-12 col-md-10 col-lg-6 col-xl-4"
-                      min={entityCreationDate}
-                      initial={[dateRangeInitialMin, dateRangeInitialMax]}
-                      value={this.state.formValues.timestamp}
-                      onChange={this.state.apiFormFieldChangeHandler}
-                  />
-                  <ApiFormChoiceField
-                      name="currency"
-                      label={<FormattedMessage id="currency" defaultMessage={`Currency`} />}
-                      classNames="col-12 col-sm-6 col-md-5 col-lg-3 col-xl-3"
-                      choices={currencyOptions}
-                      searchable={false}
-                      tooltipContent={currencyTooltip}
-                      value={this.state.formValues.currency}
-                      onChange={this.state.apiFormFieldChangeHandler}
-                  />
-                  <ApiFormSubmitButton
-                      label={<FormattedMessage id="search" defaultMessage='Search' />}
-                      loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                      onChange={this.state.apiFormFieldChangeHandler}
-                      loading={this.state.chart === null}
-                  />
+                <div className="row api-form-filters">
+                  <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <label id="timestamp_label" className="dashed" htmlFor="timestamp">
+                      <FormattedMessage id="date_range_from_to" defaultMessage="Date range (from / to)" />
+                    </label>
+                    <ApiFormDateRangeField
+                        name="timestamp"
+                        id="timestamp"
+                        label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
+                        min={entityCreationDate}
+                        initial={[dateRangeInitialMin, dateRangeInitialMax]}
+                        value={this.state.formValues.timestamp}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                    />
+                  </div>
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                    <label id="currency_label" className="dashed" htmlFor="currency">
+                      <FormattedMessage id="currency" defaultMessage="Currency" />
+                    </label>
+                    <ApiFormChoiceField
+                        name="currency"
+                        id="currency"
+                        label={<FormattedMessage id="currency" defaultMessage={`Currency`} />}
+                        choices={currencyOptions}
+                        required={true}
+                        searchable={false}
+                        value={this.state.formValues.currency}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                    />
+                  </div>
+                  <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <label className="hidden-xs-down">&nbsp;</label>
+                    <ApiFormSubmitButton
+                        label={<FormattedMessage id="search" defaultMessage='Search' />}
+                        loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        loading={this.state.chart === null}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

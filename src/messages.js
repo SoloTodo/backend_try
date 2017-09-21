@@ -34,6 +34,12 @@ const messages = {
   cell_monthly_payment: <FormattedMessage id="cell_monthly_payment" defaultMessage={`Cell monthly payment`} />,
   default_text: <FormattedMessage id="default_text" defaultMessage={`default`} />,
   entity_dissociation_reason_placeholder: <FormattedMessage id="entity_dissociation_reason_placeholder" defaultMessage="Dissociation reason (optional)" />,
+  home: <FormattedMessage id="home" defaultMessage={`Home`} />,
+  update_pricing: <FormattedMessage id="update_pricing" defaultMessage={`Update pricing`} />,
+  update_logs: <FormattedMessage id="update_logs" defaultMessage="Update logs" />,
+  entities: <FormattedMessage id="entities" defaultMessage="Entities" />,
+  events: <FormattedMessage id="events" defaultMessage="Events" />,
+  pricing_history: <FormattedMessage id="pricing_history" defaultMessage="Pricing history" />
 };
 
 export default messages;

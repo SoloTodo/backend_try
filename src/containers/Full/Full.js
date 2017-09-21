@@ -8,10 +8,6 @@ import Breadcrumbs from '../../components/Breadcrumbs/';
 import Aside from '../../components/Aside/';
 import PubNub from 'pubnub';
 import Dashboard from '../../views/Dashboard/';
-import { routes } from '../../TopLevelRoutes';
-import EntityDetail from "../../views/Entity/EntityDetail";
-import EntityDetailEvents from "../../views/Entity/EntityDetailEvents";
-import EntityDetailPricingHistory from "../../views/Entity/EntityDetailPricingHistory";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
@@ -21,6 +17,7 @@ import UserPermissionFilter from "../../auth/UserPermissionFilter";
 import Page404 from "../../views/Pages/Page404/Page404";
 import StoreSwitch from "../../views/Store/StoreSwitch";
 import EntitySwitch from "../../views/Entity/EntitySwitch";
+import ProductSwitch from "../../views/Product/ProductSwitch";
 
 
 class Full extends Component {
@@ -76,6 +73,12 @@ class Full extends Component {
                   <Route path="/entities" render={props => (
                       <UserPermissionFilter requiredPermission="solotodo.backend_list_entities">
                         <EntitySwitch {...props} location={props.location}/>
+                      </UserPermissionFilter>
+                  )} />
+
+                  <Route path="/products" render={props => (
+                      <UserPermissionFilter requiredPermission="solotodo.backend_list_products">
+                        <ProductSwitch {...props} location={props.location}/>
                       </UserPermissionFilter>
                   )} />
 

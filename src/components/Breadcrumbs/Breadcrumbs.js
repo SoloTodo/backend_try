@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import Route from 'route-parser';
+import {injectIntl} from "react-intl";
 import routes from '../../routes'
 import {connect} from "react-redux";
 import {settings} from "../../settings";
@@ -37,47 +38,70 @@ function getRouteMatch(path) {
       .filter(item => item.didMatch)[0];
 }
 
-function getBreadcrumbs({ location, apiResourceObjects }) {
-  const pathTokens = getPathTokens(location.pathname);
-  return pathTokens.map((path, i) => {
-    const routeMatch = getRouteMatch(path);
-    if (!routeMatch) {
-      return null
-    }
-    const routeValue = routes[routeMatch.key];
-    let name = '';
-
-    if (isFunction(routeValue)) {
-      const {apiResource, apiResourceObjectId} = routeValue(routeMatch.params);
-      const apiResourceObjectUrl = `${settings.apiResourceEndpoints[apiResource]}${apiResourceObjectId}/`;
-      const apiResourceObject = apiResourceObjects[apiResourceObjectUrl];
-      if (apiResourceObject) {
-        name = apiResourceObject.name;
+class Breadcrumbs extends Component {
+  getBreadcrumbs() {
+    const pathTokens = getPathTokens(this.props.location.pathname);
+    return pathTokens.map((path, i) => {
+      const routeMatch = getRouteMatch(path);
+      if (!routeMatch) {
+        return null
       }
-    } else {
-      name = routeValue
+      const routeValue = routes[routeMatch.key];
+      let name = '';
+
+      if (isFunction(routeValue)) {
+        const {apiResource, apiResourceObjectId} = routeValue(routeMatch.params);
+        const apiResourceObjectUrl = `${settings.apiResourceEndpoints[apiResource]}${apiResourceObjectId}/`;
+        const apiResourceObject = this.props.apiResourceObjects[apiResourceObjectUrl];
+        if (apiResourceObject) {
+          name = apiResourceObject.name;
+        }
+      } else {
+        name = this.props.intl.formatMessage({id: routeValue})
+      }
+
+      return { name, path };
+    }).filter(x => x !== null);
+  }
+
+  render () {
+    const breadcrumbs = this.getBreadcrumbs();
+
+    let title = '';
+
+    switch (breadcrumbs.length) {
+      case 1:
+        title = 'Página principal';
+        break;
+      case 2:
+        title = breadcrumbs[1].name;
+        break;
+      case 3:
+        title = `${breadcrumbs[2].name} - ${breadcrumbs[1].name}`;
+        break;
+      case 4:
+        title = `${breadcrumbs[2].name} - ${breadcrumbs[3].name}`;
+        break;
+      default:
+        title = ''
     }
 
-    return { name, path };
-  }).filter(x => x !== null);
-}
+    document.title = title + ' - SoloTodo';
 
-function Breadcrumbs({ location, apiResourceObjects }) {
-  const breadcrumbs = getBreadcrumbs({ location, apiResourceObjects });
-
-  return (
-      <div>
-        <ol className="mb-0 breadcrumb">
-          {breadcrumbs.map((breadcrumb, i) =>
-              <li key={breadcrumb.path} className="breadcrumb-item">
-                <Link to={breadcrumb.path}>
-                  {breadcrumb.name}
-                </Link>
-              </li>
-          )}
-        </ol>
-      </div>
-  );
+    return (
+        <div>
+          <ol className="mb-0 breadcrumb">
+            {breadcrumbs.map((breadcrumb, i) =>
+                <li key={breadcrumb.path} className="breadcrumb-item">
+                  <Link to={breadcrumb.path}>
+                    {breadcrumb.name}
+                  </Link>
+                </li>
+            )}
+          </ol>
+        </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {
@@ -86,4 +110,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Breadcrumbs)
+export default injectIntl(connect(mapStateToProps)(Breadcrumbs))

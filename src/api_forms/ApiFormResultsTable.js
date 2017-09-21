@@ -64,11 +64,5 @@ class ApiFormResultsTable extends Component {
 }
 
 
-function mapStateToProps(state) {
-  return {
-    breakpoint: state.breakpoint,
-  }
-}
-
 export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(ApiFormResultsTable)
+    addApiResourceStateToPropsUtils())(ApiFormResultsTable)
