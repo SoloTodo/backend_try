@@ -15,7 +15,7 @@ export default ({match}) => {
         )} />
         <Route path={match.url + '/:id'} exact render={props => (
             <ResourceObjectPermission match={props.match} resource="products">
-              <RequiredResources resources={['categories', 'users_with_staff_actions']}>
+              <RequiredResources resources={['categories', 'stores', 'users_with_staff_actions']}>
                 <ProductDetail />
               </RequiredResources>
             </ResourceObjectPermission>

@@ -1,5 +1,5 @@
 import { settings } from "./settings"
-import { camelize, fetchAuth } from './utils';
+import {camelize, fetchAuth, formatCurrency} from './utils';
 
 export function filterApiResourceObjectsByType(apiResourceObjects, resource) {
   const apiResourceEndpoint = settings.apiResourceEndpoints[resource];
@@ -57,6 +57,10 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
       originalMapStateToPropsResult = mapStateToProps(state, ownProps)
     }
 
+    const user = state.apiResourceObjects[settings.ownUserUrl];
+    const preferredNumberFormat = state.apiResourceObjects[user.preferred_number_format];
+    const preferredCurrency = state.apiResourceObjects[user.preferred_currency];
+
     const result = {
       ApiResourceObject: (jsonData) => {
         return new ApiResourceObject(jsonData, state.apiResourceObjects)
@@ -72,6 +76,24 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
       },
       filterApiResourceObjectsByType: resource => {
         return filterApiResourceObjectsByType(state.apiResourceObjects, resource)
+      },
+      formatCurrency: (value, currency, convertToPreferredCurrency=false) => {
+        return formatCurrency(
+            value,
+            currency,
+            convertToPreferredCurrency ? preferredCurrency : null,
+            preferredNumberFormat.thousands_separator,
+            preferredNumberFormat.decimal_separator)
+      },
+      convertToPreferredCurrency: (value, currency) => {
+        if (value === null) {
+          return null;
+        }
+
+        const originalCurrencyExchangeRate = currency.exchangeRate || currency.exchange_rate;
+        const exchangeRate = preferredCurrency.exchange_rate / originalCurrencyExchangeRate;
+
+        return value * exchangeRate;
       },
       ...originalMapStateToPropsResult
     };

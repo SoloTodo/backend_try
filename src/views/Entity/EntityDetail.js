@@ -18,7 +18,6 @@ import {formatCurrency, formatDateStr} from "../../utils";
 import imageNotAvailable from '../../images/image-not-available.svg';
 import './EntityDetail.css'
 import {createOption, createOptions} from "../../form_utils";
-import LoadingInline from "../../components/LoadingInline";
 import moment from "moment";
 
 const DISSOCIATING_STATES = {
@@ -324,7 +323,10 @@ class EntityDetail extends Component {
           <div className="row">
             <div className="col-sm-12 col-md-8 col-lg-6 col-xl-5" id="entity-pictures-carousel-card">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="pictures" defaultMessage='Pictures'/></strong></div>
+                <div className="card-header">
+                  <span className="glyphicons glyphicons-pictures">&nbsp;</span>
+                  <FormattedMessage id="pictures" defaultMessage='Pictures'/>
+                </div>
                 <div className="card-block center-aligned">
                   {images ?
                       <ImageGallery
@@ -339,7 +341,9 @@ class EntityDetail extends Component {
             </div>
             <div className="col-sm-12 col-md-4 col-lg-6 col-xl-5">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="options" defaultMessage={`Options`} /></strong></div>
+                <div className="card-header">
+                  <FormattedMessage id="options" defaultMessage={`Options`} />
+                </div>
                 <div className="card-block">
                   <ul className="list-without-decoration subnavigation-links">
                     <li><NavLink to={`/entities/${entity.id}/events`}>
@@ -363,9 +367,9 @@ class EntityDetail extends Component {
               </div>
               {canUpdatePricing &&
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage
-                    id="update_information"
-                    defaultMessage='Update information'/></strong></div>
+                <div className="card-header">
+                  <FormattedMessage id="update_information" defaultMessage='Update information'/>
+                </div>
                 <div className="card-block">
                   <p>
                     <FormattedMessage id="update_entity_description"
@@ -396,7 +400,9 @@ class EntityDetail extends Component {
           <div className="row">
             <div className="col-12 col-md-6">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="general_information" defaultMessage='General Information'/></strong></div>
+                <div className="card-header">
+                  <FormattedMessage id="general_information" defaultMessage='General Information'/>
+                </div>
                 <div className="card-block">
                   <table className="table table-striped mb-0">
                     <tbody>
@@ -506,7 +512,6 @@ class EntityDetail extends Component {
                                       data-off={this.props.intl.formatMessage({id: 'no'})}>&nbsp;</span>
                                 <span className="switch-handle">&nbsp;</span>
                               </label>
-                              {this.state.changingVisibility && <LoadingInline />}
                             </div>
                             : <i className={entity.isVisible ?
                                 'glyphicons glyphicons-check' :
@@ -520,7 +525,9 @@ class EntityDetail extends Component {
             </div>
             <div className="col-12 col-md-6">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="pricing_information" defaultMessage='Pricing Information'/></strong></div>
+                <div className="card-header">
+                  <FormattedMessage id="pricing_information" defaultMessage='Pricing Information'/>
+                </div>
                 <div className="card-block">
                   <table className="table table-striped mb-0">
                     <tbody>
@@ -611,7 +618,9 @@ class EntityDetail extends Component {
               </div>
 
               {entity.store.permissions.includes('store_entities_staff') && entity.category.permissions.includes('category_entities_staff') && <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="staff_information" defaultMessage='Staff Information'/></strong></div>
+                <div className="card-header">
+                  <FormattedMessage id="staff_information" defaultMessage='Staff Information'/>
+                </div>
                 <div className="card-block">
                   <table className="table table-striped">
                     <tbody>
@@ -643,7 +652,9 @@ class EntityDetail extends Component {
 
             <div className="col-12">
               <div className="card">
-                <div className="card-header"><strong><FormattedMessage id="description" defaultMessage='Description'/></strong></div>
+                <div className="card-header">
+                  <FormattedMessage id="description" defaultMessage='Description'/>
+                </div>
                 <div className="card-block" id="description-container">
                   <Markdown markup={ entity.description } tables={true} />
                 </div>
