@@ -34,16 +34,22 @@ class ProductDetailPricesTable extends Component {
     }
 
     const currenciesDict = listToObject(this.props.currencies, 'url');
-    const prefererredCurrency = this.props.preferredCurrency;
+    const prefererredCurrency = this.props.ApiResourceObject(this.props.preferredCurrency);
 
     let entities = this.state.availableEntities.map(e => {
       const currency = currenciesDict[e.currency];
+      const normalPrice = parseFloat(e.active_registry.normal_price);
+      const offerPrice = parseFloat(e.active_registry.offer_price);
+      const cellMonthlyPayment = parseFloat(e.active_registry.cell_monthly_payment);
 
       const expandedEntity = {
         ...e,
-        convertedNormalPrice: this.props.convertToPreferredCurrency(e.active_registry.normal_price, currency),
-        convertedOfferPrice: this.props.convertToPreferredCurrency(e.active_registry.offer_price, currency),
-        convertedCellMonthlyPayment: this.props.convertToPreferredCurrency(e.active_registry.cell_monthly_payment, currency),
+        normalPrice,
+        offerPrice,
+        cellMonthlyPayment,
+        convertedNormalPrice: this.props.convertToPreferredCurrency(normalPrice, currency),
+        convertedOfferPrice: this.props.convertToPreferredCurrency(offerPrice, currency),
+        convertedCellMonthlyPayment: this.props.convertToPreferredCurrency(cellMonthlyPayment, currency),
       };
 
       return this.props.ApiResourceObject(expandedEntity);
@@ -81,6 +87,17 @@ class ProductDetailPricesTable extends Component {
       })
     }
 
+    // If some of the entities have cell plans associated, add the column
+
+    if (entities.some(entity => Boolean(entity.cellPlan))) {
+      columns.push({
+        name: 'cellPlan',
+        label: <FormattedMessage id="cell_plan" defaultMessage="Cell plan" />,
+        field: entity => entity.cellPlan ? entity.cellPlan.name : <em>N/A</em>,
+        ordering: entity => entity.cellPlan ? entity.cellPlan.name : ''
+      })
+    }
+
     /*
       Check whether there are multiple currencies in the results. We do this here
       because if there are, then we disable sorting by the original prices as
@@ -105,7 +122,7 @@ class ProductDetailPricesTable extends Component {
       name: 'normalPrice',
       label: <FormattedMessage id="normal_price" defaultMessage="Normal" />,
       field: entity => this.props.formatCurrency(entity.activeRegistry.normal_price, entity.currency),
-      ordering: commonCurrency && (entity => entity.activeRegistry.normal_price),
+      ordering: commonCurrency ? entity => entity.normalPrice : undefined,
       className: 'text-right'
     });
 
@@ -113,7 +130,7 @@ class ProductDetailPricesTable extends Component {
       name: 'offerPrice',
       label: <FormattedMessage id="offer_price" defaultMessage="Offer" />,
       field: entity => this.props.formatCurrency(entity.activeRegistry.offer_price, entity.currency),
-      ordering: commonCurrency && (entity => entity.activeRegistry.offer_price),
+      ordering: commonCurrency ? entity => entity.offerPrice : undefined,
       className: 'text-right'
     });
 
@@ -126,7 +143,7 @@ class ProductDetailPricesTable extends Component {
         name: 'cellMonthlyPayment',
         label: <FormattedMessage id="monthly_payment" defaultMessage="Monthly payment" />,
         field: entity => this.props.formatCurrency(entity.activeRegistry.cell_monthly_payment, entity.currency),
-        ordering: commonCurrency && (entity => entity.activeRegistry.cell_monthly_payment),
+        ordering: commonCurrency ? entity => entity.cellMonthlyPayment : undefined,
         className: 'text-right'
       })
     }
@@ -136,7 +153,7 @@ class ProductDetailPricesTable extends Component {
     if (entities.length && (!commonCurrency || commonCurrency.id !== prefererredCurrency.id)) {
       columns.push({
         name: 'convertedNormalPrice',
-        label: <span><FormattedMessage id="normal_price" defaultMessage="Normal" /> ({prefererredCurrency.iso_code})</span>,
+        label: <span><FormattedMessage id="normal_price" defaultMessage="Normal" /> ({prefererredCurrency.isoCode})</span>,
         field: entity => this.props.formatCurrency(entity.convertedNormalPrice, prefererredCurrency),
         ordering: entity => entity.convertedNormalPrice,
         className: 'text-right'
@@ -144,7 +161,7 @@ class ProductDetailPricesTable extends Component {
 
       columns.push({
         name: 'convertedOfferPrice',
-        label: <span><FormattedMessage id="offer_price" defaultMessage="Normal" /> ({prefererredCurrency.iso_code})</span>,
+        label: <span><FormattedMessage id="offer_price" defaultMessage="Normal" /> ({prefererredCurrency.isoCode})</span>,
         field: entity => this.props.formatCurrency(entity.convertedOfferPrice, prefererredCurrency),
         ordering: entity => entity.convertedOfferPrice,
         className: 'text-right'
@@ -153,7 +170,7 @@ class ProductDetailPricesTable extends Component {
       if (hasCellMonthlyPayments) {
         columns.push({
           name: 'convertedCellMonthlyPayment',
-          label: <span><FormattedMessage id="monthly_payment" defaultMessage="Monthly payment" /> ({prefererredCurrency.iso_code})</span>,
+          label: <span><FormattedMessage id="monthly_payment" defaultMessage="Monthly payment" /> ({prefererredCurrency.isoCode})</span>,
           field: entity => this.props.formatCurrency(entity.convertedCellMonthlyPayment, prefererredCurrency),
           ordering: entity => entity.convertedCellMonthlyPayment,
           className: 'text-right'

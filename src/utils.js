@@ -120,3 +120,11 @@ export const booleanChoices = [
     name: messages.no,
   }
 ];
+
+export function parseBig(value) {
+  if (value === null) {
+    return null
+  }
+
+  return new Big(value)
+}

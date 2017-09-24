@@ -90,7 +90,7 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
           return null;
         }
 
-        const originalCurrencyExchangeRate = currency.exchangeRate || currency.exchange_rate;
+        const originalCurrencyExchangeRate = currency.exchange_rate;
         const exchangeRate = preferredCurrency.exchange_rate / originalCurrencyExchangeRate;
 
         return value * exchangeRate;

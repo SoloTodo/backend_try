@@ -55,7 +55,7 @@
   "entity_is_visible_label_yes": "Estado normal de una entidad",
   "entity_price_history_auto_updated": "La información de pricing de esta entidad se acaba de actualizar y el gráfico se ha recargado.",
   "entity_price_history_currency": "Los datos de precio son convertidos a esta moneda usando tasas de cambio estándar",
-  "entity_price_history_date_rage": "Rango de fechas, desde la fecha de detección de la entidad",
+  "entity_price_history_date_rage": "Rango de fechas, desde la detección de la entidad",
   "entity_pricing_information_updated_by_another_user": "Otro usuario acaba de actualizar la información de pricing de esta entidad",
   "entity_staff_overlap_warning": "Alguien ha estado trabajando en esta entidad hace poco. ¡Cuidado!",
   "entity_staff_someone_editing_warning": "Alguien está editando esta entidad",

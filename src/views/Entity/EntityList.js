@@ -7,7 +7,7 @@ import {
 } from "../../ApiResource";
 import {settings} from "../../settings";
 import './EntityList.css'
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import {booleanChoices, formatCurrency} from "../../utils";
 import {UncontrolledTooltip} from "reactstrap";
 import messages from "../../messages";
@@ -82,7 +82,12 @@ class EntityList extends Component {
       {
         label: <FormattedMessage id="store" defaultMessage={`Store`} />,
         ordering: 'store',
-        renderer: entity => <a href={entity.externalUrl} target="_blank">{entity.store.name}</a>,
+        renderer: entity => <span>
+          <Link to={'/stores/' + entity.store.id}>{entity.store.name}</Link>
+          <a href={entity.externalUrl} target="_blank" className="ml-2">
+            <span className="glyphicons glyphicons-link">&nbsp;</span>
+          </a>
+        </span>
       },
       {
         label: <FormattedMessage id="sku" defaultMessage={`SKU`} />,

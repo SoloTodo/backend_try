@@ -60,7 +60,7 @@ class OrderTable extends Component {
         return 0;
       }
 
-      return aValue > bValue ? valueMultiplier : 1 - valueMultiplier
+      return aValue > bValue ? valueMultiplier : -valueMultiplier;
     });
 
     return (
