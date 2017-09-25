@@ -128,3 +128,30 @@ export function parseBig(value) {
 
   return new Big(value)
 }
+
+export function fillTimeLapse(dataset, startDate, endDate, dateField, valueField, emptyValue) {
+  const valuesDict = {};
+
+  for (const dataPoint of dataset) {
+    valuesDict[dataPoint[dateField]] = dataPoint[valueField]
+  }
+
+  const result = [];
+
+  const iterDate = startDate;
+  while (iterDate <= endDate) {
+    let entryValue = valuesDict[iterDate];
+    if (typeof(entryValue) === 'undefined') {
+      entryValue = emptyValue
+    }
+
+    result.push({
+      date: moment(iterDate),
+      [valueField]: entryValue
+    });
+
+    iterDate.add(1, 'days')
+  }
+
+  return result;
+}

@@ -114,7 +114,7 @@ class EntityDetailPricingHistory extends Component {
           </UncontrolledTooltip>
 
           <ApiForm
-              endpoint={entity.url + 'pricing_history/'}
+              endpoints={[entity.url + 'pricing_history/']}
               fields={['timestamp', 'currency']}
               onResultsChange={this.setChartData}
               observedObjects={[this.props.apiResourceObject]}

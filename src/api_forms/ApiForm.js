@@ -131,12 +131,9 @@ class ApiForm extends Component {
       pageAndOrderingParams += `ordering=${props.ordering}&`;
     }
 
-    let apiSearch = '?';
-    if (props.endpoint.indexOf('?') !== -1) {
-      apiSearch = '&'
-    }
+    let apiSearch = '';
 
-    let urlSearch = '?';
+    let urlSearch = '';
 
     for (const fieldName of Object.keys(this.state)) {
       for (const apiParamKey of Object.keys(this.state[fieldName].apiParams)) {
@@ -152,19 +149,25 @@ class ApiForm extends Component {
       }
     }
 
-    const endpoint = props.endpoint + apiSearch + pageAndOrderingParams;
+    let i = 0;
+    for (const endpoint of props.endpoints) {
+      const separator = endpoint.indexOf('?') === -1 ? '?' : '&';
 
-    props.fetchAuth(endpoint).then(json => {
-      const fieldValues = {};
-      for (const fieldName of Object.keys(this.state)) {
-        fieldValues[fieldName] = this.state[fieldName].fieldValues
-      }
+      const finalEndpoint = endpoint + separator + apiSearch + pageAndOrderingParams;
 
-      props.onResultsChange({
-        payload: json,
-        fieldValues
+      props.fetchAuth(finalEndpoint).then(json => {
+        const fieldValues = {};
+        for (const fieldName of Object.keys(this.state)) {
+          fieldValues[fieldName] = this.state[fieldName].fieldValues
+        }
+
+        props.onResultsChange({
+          index: i++,
+          payload: json,
+          fieldValues
+        });
       });
-    });
+    }
 
     if (pushLocation) {
       const newRoute = props.history.location.pathname + urlSearch + pageAndOrderingParams;

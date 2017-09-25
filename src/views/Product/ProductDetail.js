@@ -19,7 +19,7 @@ class ProductDetail extends Component {
   componentWillMount() {
     const product = this.props.ApiResourceObject(this.props.apiResourceObject);
 
-    const specsTemplateUrl = `${settings.apiResourceEndpoints.category_templates}?target=${settings.categoryTemplateTargetId}&purpose=${settings.categoryTemplateDetailPurposeId}&category=${product.category.id}`;
+    const specsTemplateUrl = `${settings.apiResourceEndpoints.category_templates}?api_client=${settings.apiClientId}&purpose=${settings.categoryTemplateDetailPurposeId}&category=${product.category.id}`;
 
     this.props.fetchAuth(specsTemplateUrl)
         .then(categoryTemplates => {

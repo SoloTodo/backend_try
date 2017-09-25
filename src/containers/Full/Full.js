@@ -18,6 +18,7 @@ import Page404 from "../../views/Pages/Page404/Page404";
 import StoreSwitch from "../../views/Store/StoreSwitch";
 import EntitySwitch from "../../views/Entity/EntitySwitch";
 import ProductSwitch from "../../views/Product/ProductSwitch";
+import RequiredResources from "../../RequiredResources";
 
 
 class Full extends Component {
@@ -62,7 +63,11 @@ class Full extends Component {
               <Breadcrumbs location={this.props.location} />
               <div className="container-fluid main-content d-flex flex-column">
                 <Switch>
-                  <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                  <Route path="/dashboard" name="Dashboard" render={props => (
+                      <RequiredResources resources={['stores']}>
+                        <Dashboard />
+                      </RequiredResources>
+                  )}/>
 
                   <Route path="/stores" render={props => (
                       <UserPermissionFilter requiredPermission="solotodo.backend_list_stores">

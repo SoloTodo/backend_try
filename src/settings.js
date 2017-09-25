@@ -1,9 +1,10 @@
-// let endpoint = 'http://192.168.90.111:8000/api/';
-let endpoint = 'http://192.168.1.100:8000/api/';
+let endpoint = 'http://192.168.90.111:8000/api/';
+// let endpoint = 'http://192.168.1.100:8000/api/';
 // let endpoint = 'http://localhost:8000/api/';
 
 export const settings = {
   endpoint,
+  apiClientId: 1,
   apiResourceEndpoints: {
     stores: endpoint + 'stores/',
     languages: endpoint + 'languages/',
@@ -18,7 +19,8 @@ export const settings = {
     entity_histories: endpoint + 'entity_histories/',
     users_with_staff_actions: endpoint + 'users/with_staff_actions/',
     products: endpoint + 'products/',
-    category_templates: endpoint + 'category_templates/'
+    category_templates: endpoint + 'category_templates/',
+    entity_visits: endpoint + 'entity_visits/',
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA
@@ -28,6 +30,5 @@ export const settings = {
     countries: 6
   },
   defaultLanguageCode: 'en',
-  categoryTemplateTargetId: 1,
   categoryTemplateDetailPurposeId: 1,
 };

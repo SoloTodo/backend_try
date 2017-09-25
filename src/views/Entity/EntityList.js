@@ -185,7 +185,7 @@ class EntityList extends Component {
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoint="entities/"
+              endpoints={["entities/"]}
               fields={['stores', 'categories', 'is_available', 'is_active', 'is_visible', 'is_associated', 'search', 'page', 'page_size', 'ordering']}
               onResultsChange={this.setEntities}
               onFormValueChange={this.handleFormValueChange}

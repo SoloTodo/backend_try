@@ -97,7 +97,7 @@ class StoreDetailUpdateLogs extends Component {
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoint={settings.apiResourceEndpoints.store_update_logs + '?store=' + this.props.apiResourceObject.id}
+              endpoints={[settings.apiResourceEndpoints.store_update_logs + '?store=' + this.props.apiResourceObject.id]}
               fields={['page', 'page_size']}
               onResultsChange={this.setUpdateLogs}
               onFormValueChange={this.handleFormValueChange}

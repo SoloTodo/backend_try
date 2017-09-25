@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import DashboardStoreEntityVisitsChart from "./DashboardStoreEntityVisitsChart";
 
 class Dashboard extends Component {
 
@@ -7,9 +7,11 @@ class Dashboard extends Component {
     document.title = 'Dashboard - SoloTodo';
 
     return (
-      <div className="animated fadeIn">
-        <FormattedMessage id="hello_world" defaultMessage={`Hello World`} />
-      </div>
+        <div className="animated fadeIn">
+          <div className="row">
+            <DashboardStoreEntityVisitsChart />
+          </div>
+        </div>
     )
   }
 }

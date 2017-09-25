@@ -275,9 +275,14 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
-    "id": "hello_world",
-    "defaultMessage": "Hello World",
-    "filepath": "./src/views/Dashboard/Dashboard.js"
+    "id": "traffic_from_solotodo",
+    "defaultMessage": "Traffic from SoloTodo.com",
+    "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
+  },
+  {
+    "id": "last_7_days",
+    "defaultMessage": "Last 7 days",
+    "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
   },
   {
     "id": "entity_information_updated_error",
@@ -835,6 +840,56 @@
     "filepath": "./src/views/Pages/Page404/Page404.js"
   },
   {
+    "id": "no_tech_specs_available",
+    "defaultMessage": "The tech specs of this product are not available at this time",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "picture",
+    "defaultMessage": "Picture",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "current_prices",
+    "defaultMessage": "Current prices",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "tech_specs",
+    "defaultMessage": "Tech specs",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+  },
+  {
+    "id": "country",
+    "defaultMessage": "Country",
+    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+  },
+  {
+    "id": "normal_price",
+    "defaultMessage": "Normal",
+    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+  },
+  {
+    "id": "offer_price",
+    "defaultMessage": "Offer price",
+    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+  },
+  {
+    "id": "monthly_payment",
+    "defaultMessage": "Monthly payment",
+    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+  },
+  {
     "id": "product_availability_countries_tooltip",
     "defaultMessage": "Filter the products that are available for purchase in the selected countries",
     "filepath": "./src/views/Product/ProductList.js"
@@ -852,11 +907,6 @@
   {
     "id": "last_updated_tooltip",
     "defaultMessage": "Filter the products that were last updated between the given dates",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "id",
-    "defaultMessage": "ID",
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
@@ -925,8 +975,23 @@
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
-    "id": "entities",
-    "defaultMessage": "Entities",
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
+    "filepath": "./src/views/Product/ProductList.js"
+  },
+  {
+    "id": "results_per_page",
+    "defaultMessage": "Results per page",
     "filepath": "./src/views/Product/ProductList.js"
   },
   {

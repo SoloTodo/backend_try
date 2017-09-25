@@ -76,7 +76,7 @@ class StoreList extends Component {
 
     return <div className="animated fadeIn">
       <ApiForm
-          endpoint="stores/"
+          endpoints={["stores/"]}
           fields={['countries', 'types', 'is_active', 'ordering']}
           onResultsChange={this.setStores}
           onFormValueChange={this.handleFormValueChange}

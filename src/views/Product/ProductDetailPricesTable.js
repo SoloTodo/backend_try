@@ -128,7 +128,7 @@ class ProductDetailPricesTable extends Component {
 
     columns.push({
       name: 'offerPrice',
-      label: <FormattedMessage id="offer_price" defaultMessage="Offer" />,
+      label: <FormattedMessage id="offer_price" defaultMessage="Offer price" />,
       field: entity => this.props.formatCurrency(entity.activeRegistry.offer_price, entity.currency),
       ordering: commonCurrency ? entity => entity.offerPrice : undefined,
       className: 'text-right'
@@ -161,7 +161,7 @@ class ProductDetailPricesTable extends Component {
 
       columns.push({
         name: 'convertedOfferPrice',
-        label: <span><FormattedMessage id="offer_price" defaultMessage="Normal" /> ({prefererredCurrency.isoCode})</span>,
+        label: <span><FormattedMessage id="offer_price" defaultMessage="Offer price" /> ({prefererredCurrency.isoCode})</span>,
         field: entity => this.props.formatCurrency(entity.convertedOfferPrice, prefererredCurrency),
         ordering: entity => entity.convertedOfferPrice,
         className: 'text-right'

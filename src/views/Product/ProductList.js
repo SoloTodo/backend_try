@@ -92,7 +92,7 @@ class ProductList extends Component {
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoint="products/"
+              endpoints={["products/"]}
               fields={['categories', 'availabilityCountries', 'availabilityStores', 'search', 'creationDate', 'lastUpdated', 'page', 'page_size', 'ordering']}
               onResultsChange={this.setProducts}
               onFormValueChange={this.handleFormValueChange}
