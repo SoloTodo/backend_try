@@ -1,0 +1,31 @@
+.product_specs dt {
+    display: inline;
+    color: #333;
+}
+
+.product_specs dt:after {
+    content: ": "
+}
+
+.product_specs dd {
+    display: inline;
+}
+
+.product_specs dd:after {
+    display: block;
+    content: ''
+}
+
+.product_specs h3 {
+    font-size: 20px;
+    color: #1985ac;
+}
+
+#prices-card table {
+    width: auto;
+    font-size: 14px;
+}
+
+#prices-card {
+    flex-basis: 0;
+}

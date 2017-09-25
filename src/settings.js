@@ -18,6 +18,7 @@ export const settings = {
     entity_histories: endpoint + 'entity_histories/',
     users_with_staff_actions: endpoint + 'users/with_staff_actions/',
     products: endpoint + 'products/',
+    category_templates: endpoint + 'category_templates/'
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA
