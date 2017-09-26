@@ -116,7 +116,9 @@ class DashboardStoreEntityVisitsChart extends Component {
                   </div>
                 </div>
                 <div className="col-12 col-sm-4 text-right">
-                  <Link to="/" className="btn btn-info mr-3">View full report</Link>
+                  <Link to={'/stores/' + user.preferredStore.id + '/visits'} className="btn btn-info mr-3">
+                    <FormattedMessage id="view_full_report" defaultMessage="View full report"/>
+                  </Link>
                 </div>
               </div>
               <div className="row">

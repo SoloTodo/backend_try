@@ -8,13 +8,13 @@ export default function StoreDetailMenu(props) {
 
   return (<div className="col-sm-6 col-md-4">
     <div className="card">
-      <div className="card-header"><strong><FormattedMessage id="options" defaultMessage={`Options`} /></strong></div>
+      <div className="card-header"><strong><FormattedMessage id="options" defaultMessage="Options" /></strong></div>
       <div className="card-block">
         <ul className="list-without-decoration subnavigation-links">
           {store.permissions.includes('view_store') &&
           <li><NavLink to={'/stores/' + store.id}>
             <button type="button" className="btn btn-link">
-              <FormattedMessage id="general_information" defaultMessage={`General Information`} />
+              <FormattedMessage id="general_information" defaultMessage="General Information" />
             </button>
           </NavLink></li>
           }
@@ -22,7 +22,7 @@ export default function StoreDetailMenu(props) {
           <li>
             <NavLink to={'/stores/' + store.id + '/update_pricing'}>
               <button type="button" className="btn btn-link">
-                <FormattedMessage id="update_pricing" defaultMessage={`Update pricing`} />
+                <FormattedMessage id="update_pricing" defaultMessage="Update pricing" />
               </button>
             </NavLink></li>
           }
@@ -30,7 +30,15 @@ export default function StoreDetailMenu(props) {
           <li>
             <NavLink to={'/stores/' + store.id + '/update_logs'}>
               <button type="button" className="btn btn-link">
-                <FormattedMessage id="update_logs" defaultMessage={`Update logs`} />
+                <FormattedMessage id="update_logs" defaultMessage="Update logs" />
+              </button>
+            </NavLink></li>
+          }
+          {store.permissions.includes('view_store_entity_visits') &&
+          <li>
+            <NavLink to={'/stores/' + store.id + '/visits'}>
+              <button type="button" className="btn btn-link">
+                <FormattedMessage id="visits" defaultMessage="Visits" />
               </button>
             </NavLink></li>
           }

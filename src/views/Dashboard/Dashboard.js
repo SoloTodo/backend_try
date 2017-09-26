@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DashboardStoreEntityVisitsChart from "./DashboardStoreEntityVisitsChart";
+import DashboardBestSellingEntities from "./DashboardBestSellingEntities";
 
 class Dashboard extends Component {
 
@@ -10,6 +11,7 @@ class Dashboard extends Component {
         <div className="animated fadeIn">
           <div className="row">
             <DashboardStoreEntityVisitsChart />
+            <DashboardBestSellingEntities />
           </div>
         </div>
     )

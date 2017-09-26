@@ -240,6 +240,16 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "visits",
+    "defaultMessage": "Visits",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "Dashboard",
+    "defaultMessage": "Dashboard",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -275,6 +285,21 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "best_selling_entities",
+    "defaultMessage": "Best selling entities",
+    "filepath": "./src/views/Dashboard/DashboardBestSellingEntities.js"
+  },
+  {
+    "id": "last_7_days",
+    "defaultMessage": "Last 7 days",
+    "filepath": "./src/views/Dashboard/DashboardBestSellingEntities.js"
+  },
+  {
+    "id": "units_sold",
+    "defaultMessage": "Sold this week",
+    "filepath": "./src/views/Dashboard/DashboardBestSellingEntities.js"
+  },
+  {
     "id": "traffic_from_solotodo",
     "defaultMessage": "Traffic from SoloTodo.com",
     "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
@@ -282,6 +307,11 @@
   {
     "id": "last_7_days",
     "defaultMessage": "Last 7 days",
+    "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
+  },
+  {
+    "id": "view_full_report",
+    "defaultMessage": "View full report",
     "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
   },
   {
@@ -1035,6 +1065,11 @@
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
+    "id": "visits",
+    "defaultMessage": "Visits",
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
+  },
+  {
     "id": "pending",
     "defaultMessage": "Pending",
     "filepath": "./src/views/Store/StoreDetailUpdateLogs.js"
@@ -1153,6 +1188,61 @@
     "id": "categories",
     "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "categories",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "updating",
+    "defaultMessage": "Updating",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "visits_per_day",
+    "defaultMessage": "Visits per day",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "visits_per_category",
+    "defaultMessage": "Visits per category",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "most_visited_entites",
+    "defaultMessage": "Most visited entities",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "entity",
+    "defaultMessage": "Entity",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
+  },
+  {
+    "id": "count",
+    "defaultMessage": "Count",
+    "filepath": "./src/views/Store/StoreDetailVisits.js"
   },
   {
     "id": "name",

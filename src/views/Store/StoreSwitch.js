@@ -6,6 +6,7 @@ import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import StoreDetail from "./StoreDetail";
 import StoreDetailUpdateLogs from "./StoreDetailUpdateLogs";
 import StoreDetailUpdatePricing from "./StoreDetailUpdatePricing";
+import StoreDetailVisits from "./StoreDetailVisits";
 
 export default ({match}) => {
   return (
@@ -29,6 +30,13 @@ export default ({match}) => {
             <ResourceObjectPermission match={props.match} resource="stores" permission="update_store_pricing">
               <RequiredResources resources={['categories']}>
                 <StoreDetailUpdatePricing />
+              </RequiredResources>
+            </ResourceObjectPermission>
+        )} />
+        <Route path={match.url + '/:id/visits'} exact render={props => (
+            <ResourceObjectPermission match={props.match} resource="stores" permission="view_store_entity_visits">
+              <RequiredResources resources={['categories']}>
+                <StoreDetailVisits />
               </RequiredResources>
             </ResourceObjectPermission>
         )} />

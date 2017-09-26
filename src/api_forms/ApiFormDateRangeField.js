@@ -76,12 +76,12 @@ class ApiFormDateRangeField extends Component {
     }
 
     return {
-      startDate,
-      endDate
+      startDate: startDate,
+      endDate: endDate
     }
   };
 
-  notifyNewParams(value, props) {
+  notifyNewParams(value, props=null) {
     props = props ? props : this.props;
 
     if (!props.onChange) {
@@ -95,6 +95,7 @@ class ApiFormDateRangeField extends Component {
       apiParams[baseFieldName + '_0'] = [value.startDate.format('YYYY-MM-DD')];
       urlParams[baseFieldName + '_start'] = [value.startDate.format('YYYY-MM-DD')]
     }
+
     if (value.endDate) {
       apiParams[baseFieldName + '_1'] = [moment(value.endDate).add(1, 'days').format('YYYY-MM-DD')];
       urlParams[baseFieldName + '_end'] = [value.endDate.format('YYYY-MM-DD')]

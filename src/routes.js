@@ -6,6 +6,7 @@ const routes = {
   '/stores/:id': params => ({apiResource: 'stores', apiResourceObjectId: params.id}),
   '/stores/:id/update_pricing': 'update_pricing',
   '/stores/:id/update_logs': 'update_logs',
+  '/stores/:id/visits': 'visits',
   '/entities': 'entities',
   '/entities/:id': params => ({apiResource: 'entities', apiResourceObjectId: params.id}),
   '/entities/:id/events': 'events',

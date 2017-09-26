@@ -138,7 +138,7 @@ export function fillTimeLapse(dataset, startDate, endDate, dateField, valueField
 
   const result = [];
 
-  const iterDate = startDate;
+  const iterDate = moment(startDate);
   while (iterDate <= endDate) {
     let entryValue = valuesDict[iterDate];
     if (typeof(entryValue) === 'undefined') {

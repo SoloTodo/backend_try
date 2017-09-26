@@ -133,7 +133,7 @@ class ApiForm extends Component {
 
     let apiSearch = '';
 
-    let urlSearch = '';
+    let urlSearch = '?';
 
     for (const fieldName of Object.keys(this.state)) {
       for (const apiParamKey of Object.keys(this.state[fieldName].apiParams)) {
@@ -152,6 +152,7 @@ class ApiForm extends Component {
     let i = 0;
     for (const endpoint of props.endpoints) {
       const separator = endpoint.indexOf('?') === -1 ? '?' : '&';
+      const loopIndex = i;
 
       const finalEndpoint = endpoint + separator + apiSearch + pageAndOrderingParams;
 
@@ -162,11 +163,13 @@ class ApiForm extends Component {
         }
 
         props.onResultsChange({
-          index: i++,
+          index: loopIndex,
           payload: json,
           fieldValues
         });
       });
+
+      i++;
     }
 
     if (pushLocation) {

@@ -39,7 +39,9 @@ const messages = {
   update_logs: <FormattedMessage id="update_logs" defaultMessage="Update logs" />,
   entities: <FormattedMessage id="entities" defaultMessage="Entities" />,
   events: <FormattedMessage id="events" defaultMessage="Events" />,
-  pricing_history: <FormattedMessage id="pricing_history" defaultMessage="Pricing history" />
+  pricing_history: <FormattedMessage id="pricing_history" defaultMessage="Pricing history" />,
+  visits: <FormattedMessage id="visits" defaultMessage="Visits" />,
+  Dashboard: <FormattedMessage id="Dashboard" defaultMessage="Dashboard" />,
 };
 
 export default messages;
