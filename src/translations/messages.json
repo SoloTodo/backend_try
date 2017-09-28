@@ -1025,6 +1025,21 @@
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
+    "id": "parameters",
+    "defaultMessage": "Parameters",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "downloading_report",
+    "defaultMessage": "Downloading",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "download_report",
+    "defaultMessage": "Download report",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
     "id": "name",
     "defaultMessage": "Name",
     "filepath": "./src/views/Store/StoreDetail.js"

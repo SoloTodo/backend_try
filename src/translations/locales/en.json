@@ -39,6 +39,8 @@
   "dissociating": "Dissociating",
   "do_not_apply": "Do not apply",
   "download": "Download",
+  "download_report": "Download report",
+  "downloading_report": "Downloading",
   "entities": "Entities",
   "entity": "Entity",
   "entity_dissociation_body": "Please confirm the dissociation of the entity",

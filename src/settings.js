@@ -1,6 +1,6 @@
-let endpoint = 'http://192.168.90.111:8000/api/';
+// let endpoint = 'http://192.168.90.111:8000/api/';
 // let endpoint = 'http://192.168.1.100:8000/api/';
-// let endpoint = 'http://localhost:8000/api/';
+let endpoint = 'http://local.solotodo.com:8000/api/';
 
 export const settings = {
   endpoint,
@@ -21,6 +21,7 @@ export const settings = {
     products: endpoint + 'products/',
     category_templates: endpoint + 'category_templates/',
     entity_visits: endpoint + 'entity_visits/',
+    reports: endpoint + 'reports/',
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA
