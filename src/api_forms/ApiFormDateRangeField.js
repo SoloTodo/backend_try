@@ -23,7 +23,7 @@ class ApiFormDateRangeField extends Component {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
     // Obtain URL params
-    const parameters = queryString.parse(window.location);
+    const parameters = queryString.parse(window.location.search);
     const startDateStr = parameters[changeCase.snakeCase(this.props.name) + '_start'];
     let startDate = null;
     if (dateRegex.test(startDateStr)) {
@@ -91,13 +91,14 @@ class ApiFormDateRangeField extends Component {
     const apiParams = {};
     const urlParams = {};
     const baseFieldName = changeCase.snake(props.name);
+
     if (value.startDate) {
-      apiParams[baseFieldName + '_0'] = [value.startDate.format('YYYY-MM-DD')];
+      apiParams[baseFieldName + '_0'] = [value.startDate.toISOString()];
       urlParams[baseFieldName + '_start'] = [value.startDate.format('YYYY-MM-DD')]
     }
 
     if (value.endDate) {
-      apiParams[baseFieldName + '_1'] = [moment(value.endDate).add(1, 'days').format('YYYY-MM-DD')];
+      apiParams[baseFieldName + '_1'] = [moment(value.endDate).add(1, 'days').toISOString()];
       urlParams[baseFieldName + '_end'] = [value.endDate.format('YYYY-MM-DD')]
     }
 
