@@ -118,7 +118,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'number_formats', 'entity_states'];
+    const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'number_formats'];
 
     for (let resource of requiredResources) {
       fetchApiResource(resource, this.store.dispatch)

@@ -430,6 +430,26 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "condition_new",
+    "defaultMessage": "New",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "condition_damaged",
+    "defaultMessage": "Damaged",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "condition_refurbished",
+    "defaultMessage": "Refurbished",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "condition_used",
+    "defaultMessage": "Used",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "pictures",
     "defaultMessage": "Pictures",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -500,8 +520,8 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "state",
-    "defaultMessage": "State",
+    "id": "condition",
+    "defaultMessage": "Condition",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -527,6 +547,11 @@
   {
     "id": "sku",
     "defaultMessage": "SKU",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "ean",
+    "defaultMessage": "EAN",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {

@@ -13,6 +13,7 @@ import {
   DropdownToggle, UncontrolledDropdown
 } from "reactstrap";
 import './StoreUpdate.css';
+import moment from "moment";
 
 class StoreUpdate extends Component {
   constructor(props) {
@@ -174,12 +175,6 @@ class StoreUpdate extends Component {
       4: <FormattedMessage id="error" defaultMessage={`Error`} />
     };
 
-    const categoryDict = this.props.categories.reduce(
-        (acum, category) => ({
-          ...acum,
-          [category.url]: category.name
-        }), {}
-    );
 
     return (
         <div className="animated fadeIn">
@@ -284,11 +279,11 @@ class StoreUpdate extends Component {
                                     : 'N/A'
                                 }
                               </td>
-                              <td className="hidden-sm-down">{storeEntry.latestUpdateLog.lastUpdated.toLocaleString()}</td>
+                              <td className="hidden-sm-down">{moment(storeEntry.latestUpdateLog.lastUpdated).format('llll')}</td>
                               <td className="hidden-sm-down">
                                 <ul>
-                                  {storeEntry.latestUpdateLog.categories.map(pt => (
-                                      <li key={pt}>{categoryDict[pt]}</li>
+                                  {storeEntry.latestUpdateLog.categories.map(category => (
+                                      <li key={category.id}>{category.name}</li>
                                   ))}
                                 </ul>
                               </td>

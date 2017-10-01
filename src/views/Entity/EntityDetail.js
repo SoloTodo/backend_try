@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
+  addApiResourceStateToPropsUtils
 } from "../../ApiResource";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
@@ -34,7 +34,7 @@ class EntityDetail extends Component {
       updatingPricing: false,
       changingVisibility: false,
       categoryForChange: null,
-      stateForChange: null,
+      conditionForChange: null,
       dissociatingState: DISSOCIATING_STATES.STAND_BY,
       dissociationReason: ''
     }
@@ -183,16 +183,16 @@ class EntityDetail extends Component {
     });
   };
 
-  changeState = () => {
-    const requestBody = JSON.stringify({entity_state: this.state.stateForChange.id});
+  changeCondition = () => {
+    const requestBody = JSON.stringify({condition: this.state.conditionForChange.id});
 
-    this.props.fetchAuth(`${this.props.apiResourceObject.url}change_state/`, {
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}change_condition/`, {
       method: 'POST',
       body: requestBody
     }).then(json => {
       this.saveEntityChanges(json);
       this.setState({
-        stateForChange: null
+        conditionForChange: null
       });
     });
   };
@@ -235,11 +235,11 @@ class EntityDetail extends Component {
     });
   };
 
-  handleChangeState = newStateChoice => {
+  handleChangeCondition = newConditionChoice => {
     this.setState({
-      stateForChange: newStateChoice.option
+      conditionForChange: newConditionChoice.option
     }, () => {
-      this.changeState();
+      this.changeCondition();
     });
   };
 
@@ -305,7 +305,28 @@ class EntityDetail extends Component {
     const visibilitySwitchEnabled = !this.state.changingVisibility && !entity.product;
     const categorySelectEnabled = !this.state.categoryForChange && !entity.product;
     const categoryOptions = createOptions(this.props.categories);
-    const stateOptions = createOptions(this.props.entityStates);
+
+    const conditions = [
+      {
+        'id': 'https://schema.org/NewCondition',
+        'name': <FormattedMessage id="condition_new" defaultMessage="New"/>
+      },
+        {
+        'id': 'https://schema.org/DamagedCondition',
+        'name': <FormattedMessage id="condition_damaged" defaultMessage="Damaged"/>
+      },
+        {
+        'id': 'https://schema.org/RefurbishedCondition',
+        'name': <FormattedMessage id="condition_refurbished" defaultMessage="Refurbished"/>
+      },
+        {
+        'id': 'https://schema.org/UsedCondition',
+        'name': <FormattedMessage id="condition_used" defaultMessage="Used"/>
+      }
+    ];
+
+    const currentCondition = conditions.filter(condition => condition.id === entity.condition)[0];
+    const conditionOptions = createOptions(conditions);
 
     const isModalOpen = Boolean(this.state.categoryForChange) && !this.userHasStaffPermissionOverSelectedCategory();
 
@@ -446,21 +467,21 @@ class EntityDetail extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="state" defaultMessage={'State'} /></th>
+                      <th><FormattedMessage id="condition" defaultMessage="Condition" /></th>
                       <td>
                         {hasStaffPermissions ?
                             <Select
-                                name="states"
-                                id="states"
-                                options={stateOptions}
-                                value={createOption(entity.state)}
-                                onChange={this.handleChangeState}
+                                name="conditions"
+                                id="conditions"
+                                options={conditionOptions}
+                                value={createOption(currentCondition)}
+                                onChange={this.handleChangeCondition}
                                 searchable={false}
                                 clearable={false}
-                                disabled={Boolean(this.state.stateForChange)}
+                                disabled={Boolean(this.state.conditionForChange)}
                             />
                             :
-                            entity.state.name
+                            currentCondition.name
                         }
                       </td>
                     </tr>
@@ -486,6 +507,10 @@ class EntityDetail extends Component {
                     <tr>
                       <th><FormattedMessage id="sku" defaultMessage='SKU' /></th>
                       <td>{entity.sku || <em>N/A</em>}</td>
+                    </tr>
+                    <tr>
+                      <th><FormattedMessage id="ean" defaultMessage='EAN' /></th>
+                      <td>{entity.ean || <em>N/A</em>}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="detection_date" defaultMessage='Detection date' /></th>
@@ -727,7 +752,6 @@ function mapStateToProps(state) {
     preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
     preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
     user: state.apiResourceObjects[settings.ownUserUrl],
-    entityStates: filterApiResourceObjectsByType(state.apiResourceObjects, 'entity_states')
   }
 }
 

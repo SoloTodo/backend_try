@@ -116,7 +116,7 @@ class DashboardStoreLeadsChart extends Component {
                   </div>
                 </div>
                 <div className="col-12 col-sm-4 text-right">
-                  <Link to={'/stores/' + user.preferredStore.id + '/visits'} className="btn btn-info mr-3">
+                  <Link to={'/leads/stats?stores=' + user.preferredStore.id} className="btn btn-info mr-3">
                     <FormattedMessage id="view_full_report" defaultMessage="View full report"/>
                   </Link>
                 </div>

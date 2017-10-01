@@ -11,7 +11,6 @@ export const settings = {
     store_types: endpoint + 'store_types/',
     number_formats: endpoint + 'number_formats/',
     currencies: endpoint + 'currencies/',
-    entity_states: endpoint + 'entity_states/',
     countries: endpoint + 'countries/',
     categories: endpoint + 'categories/',
     store_update_logs: endpoint + 'store_update_logs/',

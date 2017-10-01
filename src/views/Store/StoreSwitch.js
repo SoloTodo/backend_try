@@ -6,12 +6,23 @@ import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import StoreDetail from "./StoreDetail";
 import StoreDetailUpdateLogs from "./StoreDetailUpdateLogs";
 import StoreDetailUpdatePricing from "./StoreDetailUpdatePricing";
+import StoreUpdate from "./StoreUpdate";
 
 export default ({match}) => {
   return (
       <Switch>
         <Route path={match.url} exact render={props => (
             <StoreList />
+        )} />
+        <Route path={match.url + '/update'} exact render={props => (
+            <RequiredResources resources={['stores', 'categories']}>
+              <StoreUpdate />
+            </RequiredResources>
+        )} />
+        <Route path={match.url + '/update_logs'} exact render={props => (
+            <RequiredResources resources={['stores', 'categories']}>
+              <StoreUpdate />
+            </RequiredResources>
         )} />
         <Route path={match.url + '/:id'} exact render={props => (
             <ResourceObjectPermission match={props.match} resource="stores">
