@@ -42,6 +42,8 @@ const messages = {
   pricing_history: <FormattedMessage id="pricing_history" defaultMessage="Pricing history" />,
   visits: <FormattedMessage id="visits" defaultMessage="Visits" />,
   Dashboard: <FormattedMessage id="Dashboard" defaultMessage="Dashboard" />,
+  leads: <FormattedMessage id="leads" defaultMessage="Leads" />,
+  stats: <FormattedMessage id="stats" defaultMessage="Estadísticas" />,
 };
 
 export default messages;

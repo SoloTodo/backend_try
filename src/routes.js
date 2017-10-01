@@ -13,5 +13,7 @@ const routes = {
   '/entities/:id/pricing_history': 'pricing_history',
   '/products': 'products',
   '/products/:id': params => ({apiResource: 'products', apiResourceObjectId: params.id}),
+  '/leads': 'leads',
+  '/leads/stats': 'stats'
 };
 export default routes;

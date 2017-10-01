@@ -8,22 +8,21 @@ import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import moment from "moment";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
-import {fillTimeLapse} from "../../utils";
-import StoreDetailVisitsTimelapse from "./StoreDetailVisitsTimelapse";
-import StoreDetailVisitsCategoryPieChart from "./StoreDetailVisitsCategoryPieChart";
 import Loading from "../../components/Loading";
 import {Link} from "react-router-dom";
+import './LeadStats.css'
+import LeadStatsPieChart from "./LeadStatsPieChart";
+import LeadStatsTimelapse from "./LeadStatsTimelapse";
 
-class StoreDetailVisits extends Component {
+class LeadStats extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       formValues: {},
       apiFormFieldChangeHandler: undefined,
-      timelapseChartData: undefined,
-      pieChartData: undefined,
-      entityTableData: undefined,
+      leadStats: undefined,
+      resultsGrouping: undefined
     }
   }
 
@@ -40,65 +39,77 @@ class StoreDetailVisits extends Component {
   setResults = (bundle) => {
     if (!bundle) {
       this.setState({
-        timelapseChartData: null,
-        pieChartData: null,
-        entityTableData: null
+        leadStats: null,
+        resultsGrouping: null,
       });
       return;
     }
 
-    if (bundle.index === 0) {
-      // Timelapse chart
-
-      const cleanedResults = bundle.payload.map(datapoint => ({
-        date: moment(datapoint.date),
-        count: datapoint.count
-      }));
-      const timelapseChartData = fillTimeLapse(
-          cleanedResults,
-          bundle.fieldValues.timestamp.startDate,
-          bundle.fieldValues.timestamp.endDate,
-          'date',
-          'count',
-          0
-      );
-
-      this.setState({
-        timelapseChartData
-      })
-    } else if (bundle.index === 1) {
-      // Category pie chart
-
-      const pieChartData = bundle.payload.map(datapoint => ({
-        category: this.props.ApiResourceObject(datapoint).category,
-        count: datapoint.count
-      }));
-
-      this.setState({
-        pieChartData
-      })
-    } else if (bundle.index === 2) {
-      const entityTableData = [...bundle.payload];
-      entityTableData.sort((a, b) => b.count - a.count)
-
-      this.setState({
-        entityTableData: entityTableData
-      })
-    }
+    this.setState({
+      leadStats: bundle.payload,
+      resultFormValues: bundle.fieldValues
+    })
   };
 
   render() {
-    const store = this.props.ApiResourceObject(this.props.apiResourceObject);
-    const baseEndpoint = `${settings.apiResourceEndpoints.entity_visits}grouped/?stores=${store.id}&grouping=`;
-
     const dateRangeInitialMax = moment().startOf('day');
     const dateRangeInitialMin = moment(dateRangeInitialMax).subtract(30, 'days');
+
+    const groupingChoices = [
+      {
+        id: 'category',
+        name: <FormattedMessage id="category" defaultMessage="Category"/>,
+        ordering: 'count'
+      },
+      {
+        id: 'store',
+        name: <FormattedMessage id="store" defaultMessage="Store"/>,
+        ordering: 'count'
+      },
+      {
+        id: 'date',
+        name: <FormattedMessage id="date" defaultMessage="Date"/>,
+        ordering: null
+      },
+    ];
+
+    let resultComponent = null;
+    const resultGrouping = this.state.resultFormValues ? this.state.resultFormValues.grouping.id : null;
+
+    switch (resultGrouping) {
+      case 'category':
+        resultComponent =
+            <LeadStatsPieChart
+                data={this.state.leadStats}
+                label_field='category'
+                label={<FormattedMessage id="category" defaultMessage="Category" />}
+            />;
+        break;
+      case 'store':
+        resultComponent =
+            <LeadStatsPieChart
+                data={this.state.leadStats}
+                label_field='store'
+                label={<FormattedMessage id="store" defaultMessage="Store" />}
+            />;
+        break;
+      case 'date':
+        resultComponent =
+            <LeadStatsTimelapse
+                startDate={this.state.resultFormValues.timestamp && this.state.resultFormValues.timestamp.startDate}
+                endDate={this.state.resultFormValues.timestamp && this.state.resultFormValues.timestamp.endDate}
+                data={this.state.leadStats}
+            />;
+        break;
+      default:
+        resultComponent = <Loading />
+    }
 
     return (
         <div className="animated fadeIn d-flex flex-column">
           <ApiForm
-              endpoints={[baseEndpoint + 'date', baseEndpoint + 'category', baseEndpoint + 'entity']}
-              fields={['timestamp', 'categories']}
+              endpoints={[settings.apiResourceEndpoints.leads + 'grouped/']}
+              fields={['grouping', 'stores', 'timestamp', 'categories']}
               onResultsChange={this.setResults}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -106,10 +117,58 @@ class StoreDetailVisits extends Component {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
+                    <span className="glyphicons glyphicons-filter">&nbsp;</span>
                     <FormattedMessage id="filters" defaultMessage={`Filters`} />
                   </div>
                   <div className="card-block">
                     <div className="row api-form-filters">
+                      <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                        <label htmlFor="stores">
+                          <FormattedMessage id="stores" defaultMessage="Stores" />
+                        </label>
+                        <ApiFormChoiceField
+                            name="stores"
+                            id="stores"
+                            placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
+                            choices={this.props.stores}
+                            multiple={true}
+                            searchable={true}
+                            value={this.state.formValues.stores}
+                            onChange={this.state.apiFormFieldChangeHandler}
+                        />
+                      </div>
+
+                      <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                        <label htmlFor="categories">
+                          <FormattedMessage id="categories" defaultMessage="categories" />
+                        </label>
+                        <ApiFormChoiceField
+                            name="categories"
+                            id="categories"
+                            placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
+                            choices={this.props.categories}
+                            multiple={true}
+                            searchable={true}
+                            value={this.state.formValues.categories}
+                            onChange={this.state.apiFormFieldChangeHandler}
+                        />
+                      </div>
+
+                      <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                        <label htmlFor="grouping">
+                          <FormattedMessage id="grouping" defaultMessage="Grouping" />
+                        </label>
+                        <ApiFormChoiceField
+                            name="grouping"
+                            id="grouping"
+                            required={true}
+                            choices={groupingChoices}
+                            value={this.state.formValues.grouping}
+                            onChange={this.state.apiFormFieldChangeHandler}
+                            additionalApiFields={['ordering']}
+                        />
+                      </div>
+
                       <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <label htmlFor="timestamp">
                           <FormattedMessage id="date_range_from_to" defaultMessage="Date range (from / to)" />
@@ -123,21 +182,7 @@ class StoreDetailVisits extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                         />
                       </div>
-                      <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                        <label htmlFor="categories">
-                          <FormattedMessage id="categories" defaultMessage="categories" />
-                        </label>
-                        <ApiFormChoiceField
-                            name="categories"
-                            id="categories"
-                            placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
-                            choices={this.props.categories}
-                            multiple={true}
-                            searchable={false}
-                            value={this.state.formValues.categories}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                        />
-                      </div>
+
                       <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                         <label className="hidden-xs-down">&nbsp;</label>
                         <ApiFormSubmitButton
@@ -154,29 +199,13 @@ class StoreDetailVisits extends Component {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
-                    <span className="glyphicons glyphicons-pictures">&nbsp;</span>
-                    <FormattedMessage id="visits_per_day" defaultMessage='Visits per day'/>
+                    <span className="glyphicons glyphicons-signal">&nbsp;</span>
+                    <FormattedMessage id="results" defaultMessage='Results'/>
                   </div>
                   <div className="card-block">
-                    <StoreDetailVisitsTimelapse
-                        startDate={this.state.formValues.timestamp && this.state.formValues.timestamp.startDate}
-                        endDate={this.state.formValues.timestamp && this.state.formValues.timestamp.endDate}
-                        data={this.state.timelapseChartData}
-                    />
-                  </div>
-
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-header">
-                    <span className="glyphicons glyphicons-pictures">&nbsp;</span>
-                    <FormattedMessage id="visits_per_category" defaultMessage='Visits per category'/>
-                  </div>
-                  <div className="card-block">
-                    <StoreDetailVisitsCategoryPieChart
-                        data={this.state.pieChartData}
-                    />
+                    <div id="lead-stats-result-container">
+                      {resultComponent}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -213,12 +242,6 @@ class StoreDetailVisits extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-
-  }
-}
-
 export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(mapStateToProps)
-)(StoreDetailVisits));
+    addApiResourceStateToPropsUtils()
+)(LeadStats));

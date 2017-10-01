@@ -20,7 +20,7 @@ export const settings = {
     users_with_staff_actions: endpoint + 'users/with_staff_actions/',
     products: endpoint + 'products/',
     category_templates: endpoint + 'category_templates/',
-    entity_visits: endpoint + 'entity_visits/',
+    leads: endpoint + 'leads/',
     reports: endpoint + 'reports/',
   },
   customIp: '190.215.123.220',  // Chile

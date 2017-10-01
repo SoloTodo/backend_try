@@ -48,12 +48,12 @@ class Sidebar extends Component {
                 <NavLink to={'/dashboard'} className="nav-link"><i className="icon icon-speedometer">&nbsp;</i> Dashboard</NavLink>
               </li>
 
-              {layout.map(section => (
-                  <li className="nav-item nav-dropdown" key={section.key}>
+              {layout.map((section, idx) => (
+                  <li className="nav-item nav-dropdown" key={idx}>
                     <a className="nav-link nav-dropdown-toggle" href="/" onClick={this.handleClick}><i className={section.icon}>&nbsp;</i>{ section.title }</a>
                     <ul className="nav-dropdown-items">
                       {section.entries.map(entry => (
-                          <li className="nav-item" key={entry.key}>
+                          <li className="nav-item" key={entry.path}>
                             <NavLink to={entry.path} className="nav-link" activeClassName="active"><i className='false' />{entry.label}</NavLink>
                           </li>
                       ))}

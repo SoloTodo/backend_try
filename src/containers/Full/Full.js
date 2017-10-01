@@ -20,6 +20,7 @@ import EntitySwitch from "../../views/Entity/EntitySwitch";
 import ProductSwitch from "../../views/Product/ProductSwitch";
 import RequiredResources from "../../RequiredResources";
 import ReportSwitch from "../../views/Report/ReportSwitch";
+import LeadSwitch from "../../views/Lead/LeadSwitch";
 
 
 class Full extends Component {
@@ -85,6 +86,12 @@ class Full extends Component {
                   <Route path="/products" render={props => (
                       <UserPermissionFilter requiredPermission="solotodo.backend_list_products">
                         <ProductSwitch {...props} location={props.location}/>
+                      </UserPermissionFilter>
+                  )} />
+
+                  <Route path="/leads" render={props => (
+                      <UserPermissionFilter requiredPermission="solotodo.backend_list_leads">
+                        <LeadSwitch {...props} location={props.location}/>
                       </UserPermissionFilter>
                   )} />
 

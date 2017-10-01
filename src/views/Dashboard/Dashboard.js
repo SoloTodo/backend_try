@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DashboardStoreEntityVisitsChart from "./DashboardStoreEntityVisitsChart";
+import DashboardStoreLeadsChart from "./DashboardStoreLeadsChart";
 import DashboardBestSellingEntities from "./DashboardBestSellingEntities";
 
 class Dashboard extends Component {
@@ -10,7 +10,7 @@ class Dashboard extends Component {
     return (
         <div className="animated fadeIn">
           <div className="row">
-            <DashboardStoreEntityVisitsChart />
+            <DashboardStoreLeadsChart />
             <DashboardBestSellingEntities />
           </div>
         </div>

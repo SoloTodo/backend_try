@@ -6,6 +6,7 @@ import EntityDetail from "./EntityDetail";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import EntityDetailPricingHistory from "./EntityDetailPricingHistory";
 import EntityDetailEvents from "./EntityDetailEvents";
+import EntityConflicts from "./EntityConflicts";
 
 export default ({match}) => {
   return (
@@ -13,6 +14,11 @@ export default ({match}) => {
         <Route path={match.url} exact render={props => (
             <RequiredResources resources={['categories', 'stores']}>
               <EntityList />
+            </RequiredResources>
+        )} />
+        <Route path={match.url + '/conflicts'} exact render={props => (
+            <RequiredResources resources={['categories', 'stores']}>
+              <EntityConflicts />
             </RequiredResources>
         )} />
         <Route path={match.url + '/:id'} exact render={props => (

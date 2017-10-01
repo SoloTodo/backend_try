@@ -69,6 +69,16 @@ class ApiFormChoiceField extends Component {
 
     const apiParams = value ? {[fieldName] : value.map(x => x.id)} : {};
 
+    if (value && props.additionalApiFields) {
+      for (const field of props.additionalApiFields) {
+        const paramName = changeCase.snake(field);
+        const paramValue = value.map(x => x[field]);
+        if (paramValue.some(x => Boolean(x))) {
+          apiParams[paramName] = paramValue
+        }
+      }
+    }
+
     let fieldValues = null;
     if (this.props.multiple) {
       fieldValues = value

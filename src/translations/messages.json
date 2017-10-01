@@ -250,6 +250,16 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "leads",
+    "defaultMessage": "Leads",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "stats",
+    "defaultMessage": "Estadísticas",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -272,6 +282,11 @@
   {
     "id": "show_list_female",
     "defaultMessage": "Show all",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "conflicts",
+    "defaultMessage": "Conflicts",
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
@@ -302,17 +317,72 @@
   {
     "id": "traffic_from_solotodo",
     "defaultMessage": "Traffic from SoloTodo.com",
-    "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
+    "filepath": "./src/views/Dashboard/DashboardStoreLeadsChart.js"
   },
   {
     "id": "last_7_days",
     "defaultMessage": "Last 7 days",
-    "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
+    "filepath": "./src/views/Dashboard/DashboardStoreLeadsChart.js"
   },
   {
     "id": "view_full_report",
     "defaultMessage": "View full report",
-    "filepath": "./src/views/Dashboard/DashboardStoreEntityVisitsChart.js"
+    "filepath": "./src/views/Dashboard/DashboardStoreLeadsChart.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
+  },
+  {
+    "id": "conflicts",
+    "defaultMessage": "Conflicts",
+    "filepath": "./src/views/Entity/EntityConflicts.js"
   },
   {
     "id": "entity_information_updated_error",
@@ -815,6 +885,81 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "date",
+    "defaultMessage": "Date",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "categories",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "grouping",
+    "defaultMessage": "Grouping",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "updating",
+    "defaultMessage": "Updating",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "results",
+    "defaultMessage": "Results",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "most_visited_entites",
+    "defaultMessage": "Most visited entities",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "entity",
+    "defaultMessage": "Entity",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "count",
+    "defaultMessage": "Count",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
     "id": "login",
     "defaultMessage": "Login",
     "filepath": "./src/views/Pages/Login/Login.js"
@@ -1203,61 +1348,6 @@
     "id": "categories",
     "defaultMessage": "Categories",
     "filepath": "./src/views/Store/StoreDetailUpdatePricing.js"
-  },
-  {
-    "id": "filters",
-    "defaultMessage": "Filters",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "date_range_from_to",
-    "defaultMessage": "Date range (from / to)",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "categories",
-    "defaultMessage": "categories",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "all_feminine",
-    "defaultMessage": "All",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "updating",
-    "defaultMessage": "Updating",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "visits_per_day",
-    "defaultMessage": "Visits per day",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "visits_per_category",
-    "defaultMessage": "Visits per category",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "most_visited_entites",
-    "defaultMessage": "Most visited entities",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "entity",
-    "defaultMessage": "Entity",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
-  },
-  {
-    "id": "count",
-    "defaultMessage": "Count",
-    "filepath": "./src/views/Store/StoreDetailVisits.js"
   },
   {
     "id": "name",

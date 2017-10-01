@@ -12,7 +12,13 @@ class ApiFormResultsTable extends Component {
       return <Loading/>;
     }
 
-    const results = this.props.results.map(entry => this.props.ApiResourceObject(entry));
+    const results = this.props.results.map((entry, idx) => {
+      const result = this.props.ApiResourceObject(entry);
+      if (!result.id) {
+        result.id = idx + 1
+      }
+      return result
+    });
 
     const finalColumns = [];
 

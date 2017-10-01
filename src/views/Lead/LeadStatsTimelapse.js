@@ -1,17 +1,23 @@
 import React, {Component} from 'react'
 import {fillTimeLapse} from "../../utils";
-import Loading from "../../components/Loading";
 import {chartColors} from "../../colors";
 import {Line} from "react-chartjs-2";
+import moment from "moment";
+import Loading from "../../components/Loading";
 
-class StoreDetailVisitsTimelapse extends Component {
+class LeadStatsTimelapse extends Component {
   render() {
     if (!this.props.data) {
       return <Loading />
     }
 
-    const data = fillTimeLapse(
-        this.props.data,
+    const data = this.props.data.map(datapoint => ({
+      ...datapoint,
+      date: moment(datapoint.date)
+    }));
+
+    const chartData = fillTimeLapse(
+        data,
         this.props.startDate,
         this.props.endDate,
         'date',
@@ -46,7 +52,7 @@ class StoreDetailVisitsTimelapse extends Component {
     const datasets = [
       {
         label: 'Visits',
-        data: data.map(x => x.count),
+        data: chartData.map(x => x.count),
         // fill: false,
         borderColor: chartColors[1],
         backgroundColor: 'rgba(182, 217, 87, 0.3)',
@@ -54,7 +60,7 @@ class StoreDetailVisitsTimelapse extends Component {
     ];
 
     const lineChartData = {
-      labels: data.map(datapoint => datapoint.date),
+      labels: chartData.map(datapoint => datapoint.date),
       datasets: datasets
     };
 
@@ -62,4 +68,4 @@ class StoreDetailVisitsTimelapse extends Component {
   }
 }
 
-export default StoreDetailVisitsTimelapse
+export default LeadStatsTimelapse

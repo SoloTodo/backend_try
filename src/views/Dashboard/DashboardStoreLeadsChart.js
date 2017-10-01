@@ -8,10 +8,10 @@ import {fillTimeLapse} from "../../utils";
 import Loading from "../../components/Loading";
 import {chartColors} from "../../colors";
 import {Line} from "react-chartjs-2";
-import './DashboardStoreEntityVisitsChart.css'
+import './DashboardStoreLeadsChart.css'
 import {Link} from "react-router-dom";
 
-class DashboardStoreEntityVisitsChart extends Component {
+class DashboardStoreLeadsChart extends Component {
   constructor(props) {
     super(props);
 
@@ -30,9 +30,9 @@ class DashboardStoreEntityVisitsChart extends Component {
     const tomorrow = moment().add(1, 'days').startOf('day');
     const oneWeekAgo = moment().subtract(7, 'days').startOf('day');
 
-    const endpointParams = `timestamp_0=${oneWeekAgo.format('YYYY-MM-DD')}&timestamp_1=${tomorrow.format('YYYY-MM-DD')}&stores=${user.preferredStore.id}&grouping=date`;
+    const endpointParams = `timestamp_0=${oneWeekAgo.toISOString()}&timestamp_1=${tomorrow.toISOString()}&stores=${user.preferredStore.id}&grouping=date`;
 
-    const endpoint = `${settings.apiResourceEndpoints.entity_visits}grouped/?${endpointParams}`;
+    const endpoint = `${settings.apiResourceEndpoints.leads}grouped/?${endpointParams}`;
 
     this.props.fetchAuth(endpoint).then(json => {
       let chartData = json.map(entry => ({
@@ -141,5 +141,4 @@ function mapStateToProps(state) {
 
 export default connect(
     addApiResourceStateToPropsUtils(mapStateToProps),
-)(DashboardStoreEntityVisitsChart);
-
+)(DashboardStoreLeadsChart);

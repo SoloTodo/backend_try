@@ -34,7 +34,7 @@ export default function StoreDetailMenu(props) {
               </button>
             </NavLink></li>
           }
-          {store.permissions.includes('view_store_entity_visits') &&
+          {store.permissions.includes('view_store_leads') &&
           <li>
             <NavLink to={'/stores/' + store.id + '/visits'}>
               <button type="button" className="btn btn-link">
