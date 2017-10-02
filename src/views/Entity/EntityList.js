@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
-  addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
+  addApiResourceStateToPropsUtils
 } from "../../ApiResource";
 import {settings} from "../../settings";
 import './EntityList.css'
@@ -15,12 +14,10 @@ import ApiForm from "../../api_forms/ApiForm";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
-import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
 import {
-  createOrderingOptionChoices, createPageSizeChoices
+  createOrderingOptionChoices
 } from "../../api_forms/utils";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
-import ApiFormResultPageCount from "../../api_forms/ApiFormResultPageCount";
+import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
 
 class EntityList extends Component {
   constructor(props) {
@@ -361,51 +358,16 @@ class EntityList extends Component {
             </div>
             <div className="row">
               <div className="col-12">
-                <div className="card">
-                  <div className="card-header">
-                    <i className="glyphicons glyphicons-list">&nbsp;</i>
-                    <FormattedMessage id="entities" defaultMessage={`Entities`} />
-                    &nbsp;<ApiFormResultPageCount
-                      page={this.state.formValues.page}
-                      pageSize={this.state.formValues.page_size}
-                      resultCount={this.state.entities && this.state.entities.count}
-                  />
-                  </div>
-                  <div className="card-block" id="results-container">
-                    <div className="d-flex justify-content-between flex-wrap align-items-center mb-3 api-form-filters">
-                      <div className="d-flex results-per-page-fields align-items-center mr-3">
-                        <div className="results-per-page-dropdown ml-0 mr-2">
-                          <ApiFormChoiceField
-                              name="page_size"
-                              choices={createPageSizeChoices([50, 100, 200])}
-                              initial="50"
-                              onChange={this.state.apiFormFieldChangeHandler}
-                              value={this.state.formValues.page_size}
-                              required={true}
-                              updateResultsOnChange={true}
-                              searchable={false}
-                          />
-                        </div>
-                        <label><FormattedMessage id="results_per_page" defaultMessage="Results per page" /></label>
-                      </div>
-                      <div className="pagination-fields ml-auto d-flex align-items-center mr-0">
-                          <ApiFormPaginationField
-                              page={this.state.formValues.page}
-                              pageSize={this.state.formValues.page_size}
-                              resultCount={this.state.entities && this.state.entities.count}
-                              onChange={this.state.apiFormFieldChangeHandler}
-                          />
-                      </div>
-                    </div>
-
-                    <ApiFormResultsTable
-                        results={this.state.entities && this.state.entities.results}
-                        columns={columns}
-                        ordering={this.state.formValues.ordering}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                    />
-                  </div>
-                </div>
+                <ApiFormResultTableWithPagination
+                    label={<FormattedMessage id="entities" defaultMessage="Entities" />}
+                    page_size_choices={[50, 100, 200]}
+                    page={this.state.formValues.page}
+                    page_size={this.state.formValues.page_size}
+                    data={this.state.entities}
+                    onChange={this.state.apiFormFieldChangeHandler}
+                    columns={columns}
+                    ordering={this.state.formValues.ordering}
+                />
               </div>
             </div>
           </ApiForm>
@@ -418,11 +380,9 @@ function mapStateToProps(state) {
   return {
     preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
     preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
-    entities: filterApiResourceObjectsByType(state.apiResourceObjects, 'entities'),
     breakpoint: state.breakpoint
   }
 }
 
 export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(EntityList);
+    addApiResourceStateToPropsUtils(mapStateToProps))(EntityList);

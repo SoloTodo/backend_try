@@ -288,7 +288,7 @@ class StoreUpdate extends Component {
                                 </ul>
                               </td>
 
-                              <td className="hidden-sm-down">{storeEntry.latestUpdateLog.creationDate.toLocaleString()}</td>
+                              <td className="hidden-sm-down">{moment(storeEntry.latestUpdateLog.creationDate).format('llll')}</td>
 
                               <td className="hidden-md-down">
                                 {storeEntry.latestUpdateLog.registryFile ?

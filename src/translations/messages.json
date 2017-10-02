@@ -5,6 +5,11 @@
     "filepath": "./src/api_forms/ApiFormResultsTable.js"
   },
   {
+    "id": "results_per_page",
+    "defaultMessage": "Results per page",
+    "filepath": "./src/api_forms/ApiFormResultTableWithPagination.js"
+  },
+  {
     "id": "permission_denied_toast",
     "defaultMessage": "This resource does not exist or you don't have permission to access it.",
     "filepath": "./src/auth/ResourceObjectPermission.js"
@@ -300,6 +305,16 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "leads",
+    "defaultMessage": "Leads",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "stats",
+    "defaultMessage": "Stats",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
     "id": "best_selling_entities",
     "defaultMessage": "Best selling entities",
     "filepath": "./src/views/Dashboard/DashboardBestSellingEntities.js"
@@ -472,6 +487,11 @@
   {
     "id": "associate_to_prduct",
     "defaultMessage": "Associate",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "leads",
+    "defaultMessage": "Leads",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -905,9 +925,69 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "results_per_page",
-    "defaultMessage": "Results per page",
-    "filepath": "./src/views/Entity/EntityList.js"
+    "id": "date",
+    "defaultMessage": "Date",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "entity",
+    "defaultMessage": "Entity",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "source",
+    "defaultMessage": "Source",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "sources",
+    "defaultMessage": "Sources",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "leads",
+    "defaultMessage": "Leads",
+    "filepath": "./src/views/Lead/LeadList.js"
   },
   {
     "id": "category",
@@ -922,6 +1002,21 @@
   {
     "id": "date",
     "defaultMessage": "Date",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "entity",
+    "defaultMessage": "Entidad",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "count",
+    "defaultMessage": "Count",
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
@@ -945,13 +1040,23 @@
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
-    "id": "grouping",
-    "defaultMessage": "Grouping",
+    "id": "origin",
+    "defaultMessage": "Origin",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
     "id": "date_range_from_to",
     "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "grouping",
+    "defaultMessage": "Grouping",
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
@@ -965,23 +1070,28 @@
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
+    "id": "additional_filters",
+    "defaultMessage": "Additional filters",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
+    "filepath": "./src/views/Lead/LeadStats.js"
+  },
+  {
     "id": "results",
     "defaultMessage": "Results",
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
-    "id": "most_visited_entites",
-    "defaultMessage": "Most visited entities",
-    "filepath": "./src/views/Lead/LeadStats.js"
-  },
-  {
-    "id": "entity",
-    "defaultMessage": "Entity",
-    "filepath": "./src/views/Lead/LeadStats.js"
-  },
-  {
-    "id": "count",
-    "defaultMessage": "Count",
+    "id": "results_per_page",
+    "defaultMessage": "Results per page",
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
@@ -1052,6 +1162,16 @@
   {
     "id": "current_prices",
     "defaultMessage": "Current prices",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "options",
+    "defaultMessage": "Options",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "leads",
+    "defaultMessage": "Leads",
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
@@ -1185,16 +1305,6 @@
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
-    "id": "products",
-    "defaultMessage": "Products",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "results_per_page",
-    "defaultMessage": "Results per page",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
     "id": "parameters",
     "defaultMessage": "Parameters",
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
@@ -1250,8 +1360,8 @@
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
-    "id": "visits",
-    "defaultMessage": "Visits",
+    "id": "leads",
+    "defaultMessage": "Leads",
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {

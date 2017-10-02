@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import changeCase from 'change-case'
 import moment from "moment";
 import './ApiFormDateRangeField.css'
+import {parseDateToCurrentTz} from "../utils";
 
 class ApiFormDateRangeField extends Component {
   componentDidMount() {
@@ -27,13 +28,13 @@ class ApiFormDateRangeField extends Component {
     const startDateStr = parameters[changeCase.snakeCase(this.props.name) + '_start'];
     let startDate = null;
     if (dateRegex.test(startDateStr)) {
-      startDate = moment(startDateStr);
+      startDate = parseDateToCurrentTz(startDateStr);
     }
 
     const endDateStr = parameters[changeCase.snakeCase(this.props.name) + '_end'];
     let endDate = null;
     if (dateRegex.test(endDateStr)) {
-      endDate = moment(endDateStr);
+      endDate = parseDateToCurrentTz(endDateStr);
     }
 
     let defaultStartDate = this.props.min;
@@ -120,8 +121,8 @@ class ApiFormDateRangeField extends Component {
     const startDateValue = document.getElementById(this.props.name + '_start').value;
     const endDateValue = document.getElementById(this.props.name + '_end').value;
 
-    const startDate = startDateValue ? moment(startDateValue) : null;
-    const endDate = endDateValue ? moment(endDateValue) : null;
+    const startDate = startDateValue ? parseDateToCurrentTz(startDateValue) : null;
+    const endDate = endDateValue ? parseDateToCurrentTz(endDateValue) : null;
 
     this.notifyNewParams({
       startDate,

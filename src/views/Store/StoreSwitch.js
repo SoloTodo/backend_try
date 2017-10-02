@@ -14,7 +14,7 @@ export default ({match}) => {
         <Route path={match.url} exact render={props => (
             <StoreList />
         )} />
-        <Route path={match.url + '/update'} exact render={props => (
+        <Route path={match.url + '/update_pricing'} exact render={props => (
             <RequiredResources resources={['stores', 'categories']}>
               <StoreUpdate />
             </RequiredResources>

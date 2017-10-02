@@ -372,6 +372,7 @@ class EntityDetail extends Component {
                         <FormattedMessage id="events" defaultMessage={`Events`} />
                       </button>
                     </NavLink></li>
+
                     <li><NavLink to={`/entities/${entity.id}/pricing_history`}>
                       <button type="button" className="btn btn-link">
                         <FormattedMessage id="pricing_history" defaultMessage={`Pricing history`} />
@@ -383,6 +384,12 @@ class EntityDetail extends Component {
                         <FormattedMessage id="associate_to_prduct" defaultMessage={`Associate`} />
                       </button>
                     </NavLink></li>
+                    {entity.store.permissions.includes('view_store_leads') && entity.category.permissions.includes('view_category_leads') &&
+                    <li><NavLink to={'/leads/stats?grouping=date&entities=' + entity.id}>
+                      <button type="button" className="btn btn-link">
+                        <FormattedMessage id="leads" defaultMessage="Leads" />
+                      </button>
+                    </NavLink></li>}
                   </ul>
                 </div>
               </div>

@@ -29,7 +29,7 @@ class RequiredResources extends Component {
     }
 
     // May or may not be, in the worst case it wil be "undefined"
-    additionalChildProps.apiResourceObject = this.props.apiResourceObject
+    additionalChildProps.apiResourceObject = this.props.apiResourceObject;
 
     return React.cloneElement(React.Children.only(this.props.children), {...additionalChildProps});
   }

@@ -5,17 +5,14 @@ import {FormattedMessage} from "react-intl";
 import {filterApiResourceObjectsByType} from "../../ApiResource";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiForm from "../../api_forms/ApiForm";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import {formatDateStr} from "../../utils";
 import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import {
   createOrderingOptionChoices,
-  createPageSizeChoices
 } from "../../api_forms/utils";
-import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
-import ApiFormResultPageCount from "../../api_forms/ApiFormResultPageCount";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
+import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
 
 class ProductList extends Component {
   constructor(props) {
@@ -205,51 +202,15 @@ class ProductList extends Component {
             </div>
             <div className="row">
               <div className="col-12">
-                <div className="card">
-                  <div className="card-header">
-                    <i className="glyphicons glyphicons-list">&nbsp;</i>
-                    <FormattedMessage id="products" defaultMessage="Products" />
-                    &nbsp;<ApiFormResultPageCount
-                      page={this.state.formValues.page}
-                      pageSize={this.state.formValues.page_size}
-                      resultCount={this.state.products && this.state.products.count}
-                  />
-                  </div>
-                  <div className="card-block" id="results-container">
-                    <div className="d-flex justify-content-between flex-wrap align-items-center mb-3 api-form-filters">
-                      <div className="d-flex results-per-page-fields align-items-center mr-3">
-                        <div className="results-per-page-dropdown ml-0 mr-2">
-                          <ApiFormChoiceField
-                              name="page_size"
-                              choices={createPageSizeChoices([50, 100, 200])}
-                              initial="50"
-                              onChange={this.state.apiFormFieldChangeHandler}
-                              value={this.state.formValues.page_size}
-                              required={true}
-                              updateResultsOnChange={true}
-                              searchable={false}
-                          />
-                        </div>
-                        <label><FormattedMessage id="results_per_page" defaultMessage="Results per page" /></label>
-                      </div>
-                      <div className="pagination-fields ml-auto d-flex align-items-center mr-0">
-                        <ApiFormPaginationField
-                            page={this.state.formValues.page}
-                            pageSize={this.state.formValues.page_size}
-                            resultCount={this.state.products && this.state.products.count}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                        />
-                      </div>
-                    </div>
-
-                    <ApiFormResultsTable
-                        results={this.state.products && this.state.products.results}
-                        columns={columns}
-                        ordering={this.state.formValues.ordering}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                    />
-                  </div>
-                </div>
+                <ApiFormResultTableWithPagination
+                    page_size_choices={[50, 100, 200]}
+                    page={this.state.formValues.page}
+                    page_size={this.state.formValues.page_size}
+                    data={this.state.products}
+                    onChange={this.state.apiFormFieldChangeHandler}
+                    columns={columns}
+                    ordering={this.state.formValues.ordering}
+                />
               </div>
             </div>
           </ApiForm>

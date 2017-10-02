@@ -13,7 +13,7 @@ export const sidebarLayout = [
       },
       {
         label: <FormattedMessage id='update' defaultMessage='Update' />,
-        path: '/stores/update',
+        path: '/stores/update_pricing',
         requiredPermission: 'solotodo.update_store_pricing',
       }
     ]
@@ -42,6 +42,22 @@ export const sidebarLayout = [
         label: <FormattedMessage id='show_list_male' defaultMessage='Show all' />,
         path: '/products',
         requiredPermission: 'solotodo.backend_list_products',
+      }
+    ]
+  },
+  {
+    title: <FormattedMessage id="leads" defaultMessage='Leads' />,
+    icon: 'fa fa-external-link',
+    entries: [
+      {
+        label: <FormattedMessage id='show_list_male' defaultMessage='Show all' />,
+        path: '/leads',
+        requiredPermission: 'solotodo.backend_list_leads',
+      },
+      {
+        label: <FormattedMessage id='stats' defaultMessage='Stats' />,
+        path: '/leads/stats',
+        requiredPermission: 'solotodo.backend_list_leads',
       }
     ]
   }

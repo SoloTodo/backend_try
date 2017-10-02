@@ -6,6 +6,7 @@ import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import ProductDetailPricesTable from "./ProductDetailPricesTable";
 import './ProductDetail.css'
+import {NavLink} from "react-router-dom";
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -79,6 +80,25 @@ class ProductDetail extends Component {
                 <div className="card-block">
                   <ProductDetailPricesTable
                       product={this.props.apiResourceObject} />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  <FormattedMessage id="options" defaultMessage="Options" />
+                </div>
+                <div className="card-block">
+                  <ul className="list-without-decoration subnavigation-links">
+                    {product.category.permissions.includes('view_category_leads') &&
+                    <li>
+                      <NavLink to={'/leads/stats?grouping=date&products=' + product.id}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="leads" defaultMessage="Leads"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+                  </ul>
                 </div>
               </div>
             </div>

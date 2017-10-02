@@ -155,3 +155,13 @@ export function fillTimeLapse(dataset, startDate, endDate, dateField, valueField
 
   return result;
 }
+
+const offset = moment().utcOffset();
+
+export function parseDateToCurrentTz(dateStr) {
+  /* Handle all the dates using the CURRENT timezone of the browser
+  * This is different than just calling moment(dateStr) because moment()
+  * handles DST, so if two dates are in different DST then they have a 1 hour
+  * offset */
+  return moment(dateStr).utcOffset(offset, true);
+}

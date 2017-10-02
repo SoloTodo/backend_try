@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
-import {fillTimeLapse} from "../../utils";
+import {fillTimeLapse, parseDateToCurrentTz} from "../../utils";
 import {chartColors} from "../../colors";
 import {Line} from "react-chartjs-2";
-import moment from "moment";
 import Loading from "../../components/Loading";
 
 class LeadStatsTimelapse extends Component {
@@ -13,7 +12,7 @@ class LeadStatsTimelapse extends Component {
 
     const data = this.props.data.map(datapoint => ({
       ...datapoint,
-      date: moment(datapoint.date)
+      date: parseDateToCurrentTz(datapoint.date)
     }));
 
     const chartData = fillTimeLapse(
