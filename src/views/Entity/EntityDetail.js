@@ -385,9 +385,15 @@ class EntityDetail extends Component {
                       </button>
                     </NavLink></li>
                     {entity.store.permissions.includes('view_store_leads') && entity.category.permissions.includes('view_category_leads') &&
+                    <li><NavLink to={'/leads/?entities=' + entity.id}>
+                      <button type="button" className="btn btn-link">
+                        <FormattedMessage id="leads_list" defaultMessage="Leads (list)" />
+                      </button>
+                    </NavLink></li>}
+                    {entity.store.permissions.includes('view_store_leads') && entity.category.permissions.includes('view_category_leads') &&
                     <li><NavLink to={'/leads/stats?grouping=date&entities=' + entity.id}>
                       <button type="button" className="btn btn-link">
-                        <FormattedMessage id="leads" defaultMessage="Leads" />
+                        <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)" />
                       </button>
                     </NavLink></li>}
                   </ul>

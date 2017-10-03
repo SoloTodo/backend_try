@@ -91,9 +91,18 @@ class ProductDetail extends Component {
                   <ul className="list-without-decoration subnavigation-links">
                     {product.category.permissions.includes('view_category_leads') &&
                     <li>
+                      <NavLink to={'/leads/?products=' + product.id}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="leads_list" defaultMessage="Leads (list)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+                    {product.category.permissions.includes('view_category_leads') &&
+                    <li>
                       <NavLink to={'/leads/stats?grouping=date&products=' + product.id}>
                         <button type="button" className="btn btn-link">
-                          <FormattedMessage id="leads" defaultMessage="Leads"/>
+                          <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)"/>
                         </button>
                       </NavLink>
                     </li>

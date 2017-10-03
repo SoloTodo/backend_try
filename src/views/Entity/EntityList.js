@@ -8,7 +8,6 @@ import {settings} from "../../settings";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
 import {booleanChoices, formatCurrency} from "../../utils";
-import {UncontrolledTooltip} from "reactstrap";
 import messages from "../../messages";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
@@ -195,54 +194,6 @@ class EntityList extends Component {
                 value={this.state.formValues.ordering}
                 onChange={this.state.apiFormFieldChangeHandler}
             />
-            <UncontrolledTooltip placement="top" target="is_available_label">
-              <dl>
-                <dt className="left-aligned">{messages.yes}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_available_label_yes" defaultMessage='The entity is available for purchase' />
-                </dd>
-                <dt className="left-aligned">{messages.no}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_available_label_no" defaultMessage='The entity is not available for purchase, whether because it is unlisted ("inactive") or "out of stock"' />
-                </dd>
-              </dl>
-            </UncontrolledTooltip>
-            <UncontrolledTooltip placement="top" target="is_active_label">
-              <dl>
-                <dt className="left-aligned">{messages.yes}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_active_label_yes" defaultMessage='The entity is listed in the store website. It may be available for purchase or not' />
-                </dd>
-                <dt className="left-aligned">{messages.no}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_active_label_no" defaultMessage='The entity is no longer listed in the store website. It is unavailable for purchase' />
-                </dd>
-              </dl>
-            </UncontrolledTooltip>
-            <UncontrolledTooltip placement="top" target="is_visible_label">
-              <dl>
-                <dt className="left-aligned">{messages.yes}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_visible_label_yes" defaultMessage='Defaut state of an entity' />
-                </dd>
-                <dt className="left-aligned">{messages.no}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_visible_label_no" defaultMessage='The entity has been flagged by our staff as non-relevant' />
-                </dd>
-              </dl>
-            </UncontrolledTooltip>
-            <UncontrolledTooltip placement="top" target="is_associated_label">
-              <dl>
-                <dt className="left-aligned">{messages.yes}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_associated_label_yes" defaultMessage='The entity has been matched with a product' />
-                </dd>
-                <dt className="left-aligned">{messages.no}</dt>
-                <dd className="left-aligned">
-                  <FormattedMessage id="entity_is_associated_label_no" defaultMessage="The entity hasn't been matched" />
-                </dd>
-              </dl>
-            </UncontrolledTooltip>
             <div className="row">
               <div className="col-12">
                 <div className="card">
@@ -283,7 +234,7 @@ class EntityList extends Component {
                         />
                       </div>
                       <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                        <label id="is_available_label" className="dashed" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>
+                        <label id="is_available_label" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>
                         <ApiFormChoiceField
                             name="is_available"
                             id="is_available"
@@ -295,7 +246,7 @@ class EntityList extends Component {
                         />
                       </div>
                       <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                        <label id="is_active_label" className="dashed" htmlFor="is_active"><FormattedMessage id="is_active_question" defaultMessage={`Active?`} /></label>
+                        <label id="is_active_label" htmlFor="is_active"><FormattedMessage id="is_active_question" defaultMessage={`Active?`} /></label>
                         <ApiFormChoiceField
                             name="is_active"
                             id="is_active"
@@ -307,7 +258,7 @@ class EntityList extends Component {
                         />
                       </div>
                       <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                        <label id="is_visible_label" className="dashed" htmlFor="is_visible">
+                        <label id="is_visible_label" htmlFor="is_visible">
                           <FormattedMessage id="is_visible_question" defaultMessage={`Visible?`} />
                         </label>
                         <ApiFormChoiceField
@@ -321,7 +272,7 @@ class EntityList extends Component {
                         />
                       </div>
                       <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                        <label id="is_associated_label" className="dashed" htmlFor="is_associated"><FormattedMessage id="is_associated_question" defaultMessage={`Associated?`} /></label>
+                        <label id="is_associated_label" htmlFor="is_associated"><FormattedMessage id="is_associated_question" defaultMessage={`Associated?`} /></label>
                         <ApiFormChoiceField
                             name="is_associated"
                             id="is_associated"

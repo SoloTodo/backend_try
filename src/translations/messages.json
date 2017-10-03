@@ -261,7 +261,12 @@
   },
   {
     "id": "stats",
-    "defaultMessage": "Estadísticas",
+    "defaultMessage": "Stats",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "estimated_sales",
+    "defaultMessage": "Estimated sales",
     "filepath": "./src/messages.js"
   },
   {
@@ -292,6 +297,11 @@
   {
     "id": "conflicts",
     "defaultMessage": "Conflicts",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "estimated_sales",
+    "defaultMessage": "Estimated sales",
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
@@ -490,8 +500,13 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "leads",
-    "defaultMessage": "Leads",
+    "id": "leads_list",
+    "defaultMessage": "Leads (list)",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "leads_stats",
+    "defaultMessage": "Leads (stats)",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -770,6 +785,101 @@
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "date",
+    "defaultMessage": "Date",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "entity",
+    "defaultMessage": "Entidad",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "count",
+    "defaultMessage": "Count",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "categories",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "grouping",
+    "defaultMessage": "Grouping",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "updating",
+    "defaultMessage": "Updating",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "additional_filters",
+    "defaultMessage": "Additional filters",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "results",
+    "defaultMessage": "Results",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "results_per_page",
+    "defaultMessage": "Results per page",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
     "id": "normal_price_short",
     "defaultMessage": "Normal",
     "filepath": "./src/views/Entity/EntityList.js"
@@ -827,46 +937,6 @@
   {
     "id": "is_visible_short_question",
     "defaultMessage": "Vis?",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_available_label_yes",
-    "defaultMessage": "The entity is available for purchase",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_available_label_no",
-    "defaultMessage": "The entity is not available for purchase, whether because it is unlisted (\"inactive\") or \"out of stock\"",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_active_label_yes",
-    "defaultMessage": "The entity is listed in the store website. It may be available for purchase or not",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_active_label_no",
-    "defaultMessage": "The entity is no longer listed in the store website. It is unavailable for purchase",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_visible_label_yes",
-    "defaultMessage": "Defaut state of an entity",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_visible_label_no",
-    "defaultMessage": "The entity has been flagged by our staff as non-relevant",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_associated_label_yes",
-    "defaultMessage": "The entity has been matched with a product",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "entity_is_associated_label_no",
-    "defaultMessage": "The entity hasn't been matched",
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
@@ -955,6 +1025,16 @@
     "filepath": "./src/views/Lead/LeadList.js"
   },
   {
+    "id": "user",
+    "defaultMessage": "User",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "ip",
+    "defaultMessage": "IP",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
     "id": "filters",
     "defaultMessage": "Filters",
     "filepath": "./src/views/Lead/LeadList.js"
@@ -982,6 +1062,21 @@
   {
     "id": "searching",
     "defaultMessage": "Searching",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "additional_filters",
+    "defaultMessage": "Additional filters",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Lead/LeadList.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
     "filepath": "./src/views/Lead/LeadList.js"
   },
   {
@@ -1170,8 +1265,13 @@
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
-    "id": "leads",
-    "defaultMessage": "Leads",
+    "id": "leads_list",
+    "defaultMessage": "Leads (list)",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "leads_stats",
+    "defaultMessage": "Leads (stats)",
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
@@ -1360,8 +1460,13 @@
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {
-    "id": "leads",
-    "defaultMessage": "Leads",
+    "id": "leads_list",
+    "defaultMessage": "Leads (list)",
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
+  },
+  {
+    "id": "leads_stats",
+    "defaultMessage": "Leads (stats)",
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {

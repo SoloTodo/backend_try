@@ -11,6 +11,7 @@ import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import messages from "../../messages";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import {NavLink} from "react-router-dom";
+import ApiFormRemoveOnlyListField from "../../api_forms/ApiFormRemoveOnlyListField";
 
 class LeadList extends Component {
   constructor(props) {
@@ -87,11 +88,26 @@ class LeadList extends Component {
       }
     ];
 
+    if (this.props.user.permissions.includes('solotodo.view_leads_user_data')) {
+      columns.push({
+        label: <FormattedMessage id="user" defaultMessage="User" />,
+        renderer: lead => lead.user.email
+      });
+
+      columns.push({
+        label: <FormattedMessage id="ip" defaultMessage="IP" />,
+        renderer: lead => lead.ip
+      })
+    }
+
+    const displayEntitiesFilter = this.state.formValues.entities && this.state.formValues.entities.length;
+    const displayProductsFilter = this.state.formValues.products && this.state.formValues.products.length;
+
     return (
         <div className="animated fadeIn">
           <ApiForm
               endpoints={[settings.apiResourceEndpoints.leads + '?ordering=-timestamp']}
-              fields={['stores', 'categories', 'api_clients', 'page', 'page_size']}
+              fields={['stores', 'categories', 'api_clients', 'entities', 'products', 'page', 'page_size']}
               onResultsChange={this.setLeads}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -162,8 +178,44 @@ class LeadList extends Component {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="row">
+              <div className={`col-12 ${displayEntitiesFilter || displayProductsFilter ? '' : ' hidden-xs-up'}`}>
+                <div className="card">
+                  <div className="card-header">
+                    <span className="glyphicons glyphicons-filter">&nbsp;</span>
+                    <FormattedMessage id="additional_filters" defaultMessage="Additional filters" />
+                  </div>
+                  <div className="card-block">
+                    <div className="row api-form-filters">
+                      <div className={`col-12 col-sm-6 ${displayEntitiesFilter ? '' : ' hidden-xs-up'}`}>
+                        <label htmlFor="entities">
+                          <FormattedMessage id="entities" defaultMessage="Entities" />
+                        </label>
+                        <ApiFormRemoveOnlyListField
+                            name="entities"
+                            id="entities"
+                            value={this.state.formValues.entities}
+                            onChange={this.state.apiFormFieldChangeHandler}
+                            resource="entities"
+                            updateResultsOnChange={true}
+                        />
+                      </div>
+                      <div className={`col-12 col-sm-6 ${displayProductsFilter ? '' : ' hidden-xs-up'}`}>
+                        <label htmlFor="products">
+                          <FormattedMessage id="products" defaultMessage="Products" />
+                        </label>
+                        <ApiFormRemoveOnlyListField
+                            name="products"
+                            id="products"
+                            value={this.state.formValues.products}
+                            onChange={this.state.apiFormFieldChangeHandler}
+                            resource="products"
+                            updateResultsOnChange={true}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="col-12">
                 <ApiFormResultTableWithPagination
                     label={<FormattedMessage id="leads" defaultMessage="Leads" />}
@@ -184,8 +236,7 @@ class LeadList extends Component {
 
 function mapStateToProps(state) {
   return {
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
+    user: state.apiResourceObjects[settings.ownUserUrl],
     breakpoint: state.breakpoint
   }
 }

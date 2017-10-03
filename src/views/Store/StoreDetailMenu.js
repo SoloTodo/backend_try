@@ -36,9 +36,17 @@ export default function StoreDetailMenu(props) {
           }
           {store.permissions.includes('view_store_leads') &&
           <li>
+            <NavLink to={'/leads/?stores=' + store.id}>
+              <button type="button" className="btn btn-link">
+                <FormattedMessage id="leads_list" defaultMessage="Leads (list)" />
+              </button>
+            </NavLink></li>
+          }
+          {store.permissions.includes('view_store_leads') &&
+          <li>
             <NavLink to={'/leads/stats?grouping=category&stores=' + store.id}>
               <button type="button" className="btn btn-link">
-                <FormattedMessage id="leads" defaultMessage="Leads" />
+                <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)" />
               </button>
             </NavLink></li>
           }

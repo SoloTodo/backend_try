@@ -31,6 +31,11 @@ export const sidebarLayout = [
         label: <FormattedMessage id='conflicts' defaultMessage='Conflicts' />,
         path: '/entities/conflicts',
         requiredPermission: 'solotodo.backend_view_entity_conflicts',
+      },
+      {
+        label: <FormattedMessage id='estimated_sales' defaultMessage="Estimated sales" />,
+        path: '/entities/estimated_sales',
+        requiredPermission: 'solotodo.backend_view_entity_estimated_sales',
       }
     ]
   },

@@ -26,13 +26,15 @@ class ApiFormRemoveOnlyListField extends Component {
       endpoint += `ids=${value}&`
     }
 
-    this.props.fetchAuth(endpoint)
-        .then(json => {
-          const apiResourceObjects = listToObject(json.results, 'id')
-          this.setState({
-            apiResourceObjects
+    if (values.length) {
+      this.props.fetchAuth(endpoint)
+          .then(json => {
+            const apiResourceObjects = listToObject(json.results, 'id')
+            this.setState({
+              apiResourceObjects
+            })
           })
-        })
+    }
 
   }
 

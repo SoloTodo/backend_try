@@ -43,7 +43,8 @@ const messages = {
   visits: <FormattedMessage id="visits" defaultMessage="Visits" />,
   Dashboard: <FormattedMessage id="Dashboard" defaultMessage="Dashboard" />,
   leads: <FormattedMessage id="leads" defaultMessage="Leads" />,
-  stats: <FormattedMessage id="stats" defaultMessage="Estadísticas" />,
+  stats: <FormattedMessage id="stats" defaultMessage="Stats" />,
+  estimated_sales: <FormattedMessage id="estimated_sales" defaultMessage="Estimated sales" />,
 };
 
 export default messages;
