@@ -6,6 +6,7 @@ import {FormattedMessage} from "react-intl";
 import Loading from "../../components/Loading";
 import {Link} from "react-router-dom";
 import './DashboardBestSellingEntities.css'
+import moment from "moment";
 
 class DashboardBestSellingEntities extends Component {
   constructor(props) {
@@ -17,15 +18,17 @@ class DashboardBestSellingEntities extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAuth(settings.apiResourceEndpoints.entities + 'estimated_sales/?limit=10')
+    const oneWeekAgo = moment().subtract(2, 'days').startOf('day');
+
+    this.props.fetchAuth(settings.apiResourceEndpoints.entities + 'estimated_sales/?grouping=entity&page_size=10&timestamp_0=' + oneWeekAgo.toISOString())
         .then(json => {
-          const estimatedSales = json.map(e => ({
+          const estimatedSalesPage = json.results.map(e => ({
             ...e,
             entity: this.props.ApiResourceObject(e.entity)
           }));
 
           this.setState({
-            estimatedSales
+            estimatedSales: estimatedSalesPage
           })
         })
   }

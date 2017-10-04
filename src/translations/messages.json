@@ -795,11 +795,6 @@
     "filepath": "./src/views/Entity/EntityEstimatedSales.js"
   },
   {
-    "id": "date",
-    "defaultMessage": "Date",
-    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
-  },
-  {
     "id": "product",
     "defaultMessage": "Product",
     "filepath": "./src/views/Entity/EntityEstimatedSales.js"
@@ -812,6 +807,16 @@
   {
     "id": "count",
     "defaultMessage": "Count",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "normal_price_sum",
+    "defaultMessage": "Normal price sum",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "offer_price_sum",
+    "defaultMessage": "Offer price sum",
     "filepath": "./src/views/Entity/EntityEstimatedSales.js"
   },
   {
@@ -842,6 +847,11 @@
   {
     "id": "grouping",
     "defaultMessage": "Grouping",
+    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
+  },
+  {
+    "id": "ordering",
+    "defaultMessage": "Ordering",
     "filepath": "./src/views/Entity/EntityEstimatedSales.js"
   },
   {

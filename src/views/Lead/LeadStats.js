@@ -11,13 +11,13 @@ import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import Loading from "../../components/Loading";
 import {NavLink} from "react-router-dom";
 import './LeadStats.css'
-import LeadStatsPieChart from "./LeadStatsPieChart";
 import LeadStatsTimelapse from "./LeadStatsTimelapse";
 import {createPageSizeChoices} from "../../api_forms/utils";
 import {listToObject} from "../../utils";
 import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
 import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import ApiFormRemoveOnlyListField from "../../api_forms/ApiFormRemoveOnlyListField";
+import ApiFormResultPieChart from "../../api_forms/ApiFormResultPieChart";
 
 class LeadStats extends Component {
   constructor(props) {
@@ -101,7 +101,7 @@ class LeadStats extends Component {
     switch (resultGrouping) {
       case 'category':
         resultComponent =
-            <LeadStatsPieChart
+            <ApiFormResultPieChart
                 data={this.state.leadStats}
                 label_field='category'
                 label={<FormattedMessage id="category" defaultMessage="Category" />}
@@ -109,7 +109,7 @@ class LeadStats extends Component {
         break;
       case 'store':
         resultComponent =
-            <LeadStatsPieChart
+            <ApiFormResultPieChart
                 data={this.state.leadStats}
                 label_field='store'
                 label={<FormattedMessage id="store" defaultMessage="Store" />}

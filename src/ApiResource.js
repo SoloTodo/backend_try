@@ -62,6 +62,7 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
     const preferredCurrency = state.apiResourceObjects[user.preferred_currency];
 
     const result = {
+      preferredCurrency: preferredCurrency,
       ApiResourceObject: (jsonData) => {
         return new ApiResourceObject(jsonData, state.apiResourceObjects)
       },
@@ -77,7 +78,11 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
       filterApiResourceObjectsByType: resource => {
         return filterApiResourceObjectsByType(state.apiResourceObjects, resource)
       },
-      formatCurrency: (value, currency, convertToPreferredCurrency=false) => {
+      formatCurrency: (value, currency=null, convertToPreferredCurrency=false) => {
+        if (!currency) {
+          currency = preferredCurrency
+        }
+
         return formatCurrency(
             value,
             currency,

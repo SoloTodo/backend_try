@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ApiForm from "../../api_forms/ApiForm";
 import {settings} from "../../settings";
-import {FormattedMessage, injectIntl} from "react-intl";
+import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
 import {addApiResourceStateToPropsUtils} from "../../ApiResource";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
@@ -15,6 +15,7 @@ import {listToObject} from "../../utils";
 import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
 import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import ApiFormRemoveOnlyListField from "../../api_forms/ApiFormRemoveOnlyListField";
+import ApiFormResultPieChart from "../../api_forms/ApiFormResultPieChart";
 
 class EntityEstimatedSales extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class EntityEstimatedSales extends Component {
     this.state = {
       formValues: {},
       apiFormFieldChangeHandler: undefined,
-      leadStats: undefined,
+      estimatedSales: undefined,
       resultsGrouping: undefined
     }
   }
@@ -41,14 +42,14 @@ class EntityEstimatedSales extends Component {
   setResults = (bundle) => {
     if (!bundle) {
       this.setState({
-        leadStats: null,
+        estimatedSales: null,
         resultsGrouping: null,
       });
       return;
     }
 
     this.setState({
-      leadStats: bundle.payload,
+      estimatedSales: bundle.payload,
       resultFormValues: bundle.fieldValues
     })
   };
@@ -83,15 +84,18 @@ class EntityEstimatedSales extends Component {
     const orderingChoices = [
       {
         id: 'count',
-        name: <FormattedMessage id="count" defaultMessage="Count"/>
+        name: <FormattedMessage id="count" defaultMessage="Count"/>,
+        dataField: 'count',
       },
       {
         id: 'normal_price_sum',
-        name: <FormattedMessage id="normal_price_sum" defaultMessage="Normal price sum"/>
+        name: <FormattedMessage id="normal_price_sum" defaultMessage="Normal price sum"/>,
+        dataField: 'normalPriceSum',
       },
       {
         id: 'offer_price_sum',
-        name: <FormattedMessage id="offer_price_sum" defaultMessage="Offer price sum"/>
+        name: <FormattedMessage id="offer_price_sum" defaultMessage="Offer price sum"/>,
+        dataField: 'offerPriceSum'
       }
     ];
 
@@ -106,9 +110,27 @@ class EntityEstimatedSales extends Component {
 
     switch (resultGrouping) {
       case 'category':
-        break;
+        resultComponent =
+            <ApiFormResultPieChart
+                data={this.state.estimatedSales}
+                label_field='category'
+                data_field={this.state.resultFormValues.ordering.dataField}
+                label={<FormattedMessage id="category" defaultMessage="Category" />}
+                column_header={this.state.resultFormValues.ordering.name}
+                column_value_formatter={value => this.props.formatCurrency(value)}
+            />;
+          break;
       case 'store':
-        break;
+        resultComponent =
+            <ApiFormResultPieChart
+                data={this.state.estimatedSales}
+                label_field='store'
+                data_field={this.state.resultFormValues.ordering.dataField}
+                label={<FormattedMessage id="store" defaultMessage="Store" />}
+                column_header={this.state.resultFormValues.ordering.name}
+                column_value_formatter={value => this.props.formatCurrency(value)}
+            />;
+          break;
       case 'product':
         displayPaginationControls = true;
         const productColumns = [
@@ -129,18 +151,18 @@ class EntityEstimatedSales extends Component {
           },
           {
             label: <FormattedMessage id="normal_price_sum" defaultMessage="Normal price sum" />,
-            renderer: entry => entry.normalPriceSum
+            renderer: entry => this.props.formatCurrency(entry.normalPriceSum)
           },
           {
             label: <FormattedMessage id="offer_price_sum" defaultMessage="Offer price sum" />,
-            renderer: entry => entry.offerPriceSum
+            renderer: entry => this.props.formatCurrency(entry.offerPriceSum)
           }
         ];
 
         resultComponent = <ApiFormResultsTable
             columns={productColumns}
             onChange={this.state.apiFormFieldChangeHandler}
-            results={this.state.leadStats && this.state.leadStats.results}
+            results={this.state.estimatedSales && this.state.estimatedSales.results}
         />;
         break;
       case 'entity':
@@ -181,18 +203,18 @@ class EntityEstimatedSales extends Component {
           },
           {
             label: <FormattedMessage id="normal_price_sum" defaultMessage="Normal price sum" />,
-            renderer: entry => entry.normalPriceSum
+            renderer: entry => this.props.formatCurrency(entry.normalPriceSum)
           },
           {
             label: <FormattedMessage id="offer_price_sum" defaultMessage="Offer price sum" />,
-            renderer: entry => entry.offerPriceSum
+            renderer: entry => this.props.formatCurrency(entry.offerPriceSum)
           }
         ];
 
         resultComponent = <ApiFormResultsTable
             columns={entityColumns}
             onChange={this.state.apiFormFieldChangeHandler}
-            results={this.state.leadStats && this.state.leadStats.results}
+            results={this.state.estimatedSales && this.state.estimatedSales.results}
         />;
         break;
       default:
@@ -301,7 +323,7 @@ class EntityEstimatedSales extends Component {
                             label={<FormattedMessage id="update" defaultMessage='Update' />}
                             loadingLabel={<FormattedMessage id="updating" defaultMessage='Updating'/>}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.leadStats === null}
+                            loading={this.state.estimatedSales === null}
                         />
                       </div>
                     </div>
@@ -374,7 +396,7 @@ class EntityEstimatedSales extends Component {
                           <ApiFormPaginationField
                               page={this.state.formValues.page}
                               pageSize={this.state.formValues.page_size}
-                              resultCount={this.state.leadStats && this.state.leadStats.count}
+                              resultCount={this.state.estimatedSales && this.state.estimatedSales.count}
                               onChange={this.state.apiFormFieldChangeHandler}
                           />
                         </div>

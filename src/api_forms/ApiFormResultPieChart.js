@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {Pie} from "react-chartjs-2";
-import {chartColors} from "../../colors";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
 import {connect} from "react-redux";
-import Loading from "../../components/Loading";
+import Loading from "../components/Loading";
+import {addApiResourceStateToPropsUtils} from "../ApiResource";
+import {chartColors} from "../colors";
 
-class LeadStatsPieChart extends Component {
+class ApiFormResultPieChart extends Component {
   render() {
     if (!this.props.data) {
       return <Loading />
@@ -15,9 +15,11 @@ class LeadStatsPieChart extends Component {
 
     const data = this.props.data.map(datapoint => this.props.ApiResourceObject(datapoint));
 
+    const dataField = this.props.data_field || 'count';
+
     const chartData = {
       datasets: [{
-        data: data.map(datapoint => datapoint.count),
+        data: data.map(datapoint => datapoint[dataField]),
         backgroundColor: data.map((datapoint, index) => chartColors[index % chartColors.length]),
       }],
       labels: data.map(datapoint => datapoint[field].name)
@@ -40,14 +42,14 @@ class LeadStatsPieChart extends Component {
               <thead>
               <tr>
                 <th>{this.props.label}</th>
-                <th>Count</th>
+                <th>{this.props.column_header}</th>
               </tr>
               </thead>
               <tbody>
               {data.map(datapoint => (
                   <tr key={datapoint[field].id}>
                     <td>{datapoint[field].name}</td>
-                    <td>{datapoint.count}</td>
+                    <td>{this.props.column_value_formatter ? this.props.column_value_formatter(datapoint[dataField]) : datapoint[dataField]}</td>
                   </tr>
               ))}
               </tbody>
@@ -60,4 +62,4 @@ class LeadStatsPieChart extends Component {
 
 export default connect(
     addApiResourceStateToPropsUtils()
-)(LeadStatsPieChart)
+)(ApiFormResultPieChart)
