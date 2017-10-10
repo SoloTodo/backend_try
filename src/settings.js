@@ -22,6 +22,7 @@ export const settings = {
     leads: endpoint + 'leads/',
     reports: endpoint + 'reports/',
     api_clients: endpoint + 'api_clients/',
+    category_specs_form_layouts: endpoint + 'category_specs_form_layouts/',
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA

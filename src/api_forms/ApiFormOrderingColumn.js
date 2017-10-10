@@ -52,10 +52,14 @@ class ApiFormOrderingColumn extends Component {
   render() {
     if (this.props.name) {
       const orderingPattern = /^(-?)(.+)$/;
-      const orderingComponents = orderingPattern.exec(this.props.ordering.name);
 
-      const orderingDescending = Boolean(orderingComponents[1]);
-      const orderingField = orderingComponents[2];
+      let orderingDescending = null;
+      let orderingField = null;
+      if (this.props.ordering) {
+        const orderingComponents = orderingPattern.exec(this.props.ordering.name);
+        orderingDescending = Boolean(orderingComponents[1]);
+        orderingField = orderingComponents[2];
+      }
 
       return <a href="" onClick={this.onChangeOrdering}>
         {this.props.label} {this.renderOrderingArrow(this.props.name, orderingField, orderingDescending)}

@@ -21,7 +21,7 @@ class ProductList extends Component {
     this.state = {
       formValues: {},
       apiFormFieldChangeHandler: undefined,
-      entities: undefined
+      products: undefined
     }
   }
 

@@ -43,7 +43,6 @@ class EntityDetailEvents extends Component {
       return value ? messages.yes : messages.no
     } else if (field === 'picture_urls') {
       if (value) {
-        console.log(value)
         return <ul>
           {JSON.parse(value).map(pictureUrl =>
             <li key={pictureUrl}><a href={pictureUrl} target="_blank">{pictureUrl}</a></li>
