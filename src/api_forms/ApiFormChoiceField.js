@@ -17,33 +17,55 @@ class ApiFormChoiceField extends Component {
     if (typeof(nextProps.value) === 'undefined') {
       this.notifyNewParams(this.parseValueFromUrl())
     }
+
+    if (typeof(this.props.choices) === 'undefined' && typeof(nextProps.choices) !== 'undefined') {
+      this.notifyNewParams(this.parseValueFromUrl(nextProps))
+    }
   }
 
-  parseValueFromUrl = () => {
+  parseValueFromUrl = (props) => {
+    props = props || this.props
+
     const parameters = queryString.parse(window.location.search);
 
-    const urlField = this.props.urlField || changeCase.snake(this.props.name);
-
+    const urlField = props.urlField || changeCase.snake(props.name);
     let choiceIds = parameters[urlField];
 
-    if (this.props.multiple) {
-      if (!Array.isArray(choiceIds)) {
+    if (props.multiple) {
+      if (typeof(choiceIds) === 'undefined') {
+        choiceIds = []
+      } else if (!Array.isArray(choiceIds)) {
         choiceIds = [choiceIds]
       }
 
-      return this.props.choices
-          .filter(choice => choiceIds.includes(choice.id.toString()));
+      if (props.choices) {
+        return props.choices
+            .filter(choice => choiceIds.includes(choice.id.toString()));
+      } else {
+        return choiceIds.map(choiceId => ({
+          id: parseInt(choiceId, 10),
+          name: ''
+        }))
+      }
     } else {
       const defaultValue =
-          this.props.initial ? this.props.choices.filter(choice => choice.id.toString() === this.props.initial)[0]:
-          this.props.required ? this.props.choices[0] :
-          null;
+          props.initial ? props.choices.filter(choice => choice.id.toString() === props.initial)[0]:
+              props.required ? props.choices[0] : null;
 
       if (Array.isArray(choiceIds)) {
         choiceIds = choiceIds[0]
       }
 
-      let value = this.props.choices.filter(choice => choice.id.toString() === choiceIds)[0];
+      let value = null;
+
+      if (props.choices) {
+        value = props.choices.filter(choice => choice.id.toString() === choiceIds)[0];
+      } else if (choiceIds) {
+        value = {
+          id: parseInt(choiceIds.id, 10),
+          name: ''
+        }
+      }
 
       if (value) {
         return [value]
@@ -114,7 +136,7 @@ class ApiFormChoiceField extends Component {
   };
 
   render() {
-    const choices = createOptions(this.props.choices);
+    const choices = createOptions(this.props.choices || []);
 
     const selectedChoices = this.props.multiple ?
         createOptions(this.props.value || []) :

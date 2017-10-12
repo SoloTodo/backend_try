@@ -14,6 +14,9 @@ const routes = {
   '/entities/:id/pricing_history': 'pricing_history',
   '/products': 'products',
   '/products/:id': params => ({apiResource: 'products', apiResourceObjectId: params.id}),
+  '/categories': 'categories',
+  '/categories/:id': params => ({apiResource: 'categories', apiResourceObjectId: params.id}),
+  '/categories/:id/products': 'products',
   '/leads': 'leads',
   '/leads/stats': 'stats'
 };

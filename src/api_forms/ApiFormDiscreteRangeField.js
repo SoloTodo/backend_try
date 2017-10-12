@@ -7,12 +7,10 @@ import {Range, Handle} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import {FormattedMessage} from "react-intl";
+import RcDiscreteRange from "./RcDiscreteRange";
 
-// const createSliderWithTooltip = Slider.createSliderWithTooltip;
-// const Range = createSliderWithTooltip(Slider.Range);
-// const Handle = Slider.Handle;
 
-class ApiFormRangeField extends Component {
+class ApiFormDiscreteRangeField extends Component {
   componentDidMount() {
     this.notifyNewParams(this.parseIdFromUrl())
   }
@@ -143,11 +141,11 @@ class ApiFormRangeField extends Component {
         }
       }
 
-      if (newValues[0] === min) {
+      if (newValues[0] <= min) {
         newStartId = null
       }
 
-      if (newValues[1] === max) {
+      if (newValues[1] >= max) {
         newEndId = null
       }
 
@@ -190,15 +188,12 @@ class ApiFormRangeField extends Component {
           <div className="col-12 pb-3">
             <label>{this.props.label}</label>
             <div className="pb-2">
-              <Range
+              <RcDiscreteRange
                   marks={marks}
                   min={min}
                   max={max}
-                  defaultValue={[startValue, endValue]}
-                  step={null}
                   onAfterChange={handleValueChange}
                   handle={handle}
-                  allowCross={false}
               />
             </div>
           </div>
@@ -206,4 +201,4 @@ class ApiFormRangeField extends Component {
   }
 }
 
-export default ApiFormRangeField
+export default ApiFormDiscreteRangeField

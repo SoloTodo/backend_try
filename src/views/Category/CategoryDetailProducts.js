@@ -5,13 +5,13 @@ import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
-import ApiFormRangeField from "../../api_forms/ApiFormRangeField";
 import {FormattedMessage} from "react-intl";
 import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
 import {NavLink} from "react-router-dom";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import "./CategoryDetailProducts.css"
+import ApiFormDiscreteRangeField from "../../api_forms/ApiFormDiscreteRangeField";
+import ApiFormContinuousRangeField from "../../api_forms/ApiFormContinouousRangeField";
 
 class CategoryDetailProducts extends Component {
   constructor(props) {
@@ -22,7 +22,8 @@ class CategoryDetailProducts extends Component {
       formLayout: undefined,
       apiFormFieldChangeHandler: undefined,
       formValues: {},
-      productsPage: undefined
+      productsPage: undefined,
+      formChoices: {}
 
     }
   }
@@ -40,7 +41,16 @@ class CategoryDetailProducts extends Component {
   setProductsPage = json => {
     if (json) {
       this.setState({
-        productsPage: json.payload
+        productsPage: {
+          count: json.payload.count,
+          results: json.payload.results
+        },
+        formChoices: json.payload.aggs
+      })
+    } else {
+      // Keep the old formChoices to prevent the form fields from resetting so much
+      this.setState({
+        productsPage: null
       })
     }
   };
@@ -76,13 +86,13 @@ class CategoryDetailProducts extends Component {
 
   render() {
     const formLayout = this.state.formLayout;
-    let aggs = null;
     let products = null;
 
     if (this.state.productsPage) {
-      aggs = this.state.productsPage.aggs;
       products = this.state.productsPage
     }
+
+    const formChoices = this.state.formChoices;
 
     if (!formLayout) {
       return <Loading />
@@ -107,17 +117,16 @@ class CategoryDetailProducts extends Component {
       const fieldSetFilters = [];
       for (const filter of fieldset.filters) {
         apiFormFields.push(filter.name);
-        let filterAggs = [];
-        if (this.state.productsPage) {
-          filterAggs = aggs[filter.name]
-        }
-
+        let originalFilterChoices = formChoices[filter.name];
         let filterComponent = null;
         if (filter.type === 'exact') {
-          let filterChoices = filterAggs.map(agg => ({
-            ...agg,
-            name: `${agg.label} (${agg.doc_count})`
-          }));
+          let filterChoices = undefined;
+          if (originalFilterChoices) {
+            filterChoices = originalFilterChoices.map(choice => ({
+              ...choice,
+              name: `${choice.label} (${choice.doc_count})`
+            }));
+          }
 
           filterComponent = <ApiFormChoiceField
               name={filter.name}
@@ -130,12 +139,12 @@ class CategoryDetailProducts extends Component {
           />
         } else if (filter.type === 'lte') {
           let accumulatedDocCount = 0;
-          let filterChoices = filterAggs.map(agg => {
-            accumulatedDocCount += agg.doc_count
+          let filterChoices = originalFilterChoices.map(choice => {
+            accumulatedDocCount += choice.doc_count
 
             return {
-              ...agg,
-              name: `${agg.label} (${accumulatedDocCount})`
+              ...choice,
+              name: `${choice.label} (${accumulatedDocCount})`
             };
           });
 
@@ -148,18 +157,22 @@ class CategoryDetailProducts extends Component {
               value={this.state.formValues[filter.name]}
           />
         } else if (filter.type === 'gte') {
-          let resultCount = filterAggs.reduce((acum, agg) => acum + agg.doc_count, 0)
+          let filterChoices = undefined;
 
-          let filterChoices = filterAggs.map(agg => {
-            let result = {
-              ...agg,
-              name: `${agg.label} (${resultCount})`
-            };
+          if (originalFilterChoices) {
+            let resultCount = originalFilterChoices.reduce((acum, choice) => acum + choice.doc_count, 0)
 
-            resultCount -= agg.doc_count;
+            filterChoices = originalFilterChoices.map(choice => {
+              let result = {
+                ...choice,
+                name: `${choice.label} (${resultCount})`
+              };
 
-            return result
-          });
+              resultCount -= choice.doc_count;
+
+              return result
+            });
+          }
 
           filterComponent = <ApiFormChoiceField
               name={filter.name}
@@ -172,13 +185,27 @@ class CategoryDetailProducts extends Component {
               value={this.state.formValues[filter.name]}
           />
         } else if (filter.type === 'range') {
-          filterComponent = <ApiFormRangeField
-              name={filter.name}
-              label={filter.label}
-              onChange={this.state.apiFormFieldChangeHandler}
-              choices={filterAggs}
-              value={this.state.formValues[filter.name]}
-          />
+          if (filter.continuous_range_step) {
+            // Continous (weight....)
+            filterComponent = <ApiFormContinuousRangeField
+                name={filter.name}
+                label={filter.label}
+                onChange={this.state.apiFormFieldChangeHandler}
+                choices={originalFilterChoices}
+                value={this.state.formValues[filter.name]}
+                step={filter.continuous_range_step}
+                unit={filter.continuous_range_unit}
+            />
+          } else {
+            // Discrete (screen size...)
+            filterComponent = <ApiFormDiscreteRangeField
+                name={filter.name}
+                label={filter.label}
+                onChange={this.state.apiFormFieldChangeHandler}
+                choices={originalFilterChoices}
+                value={this.state.formValues[filter.name]}
+            />
+          }
         }
 
         fieldSetFilters.push({
@@ -211,6 +238,17 @@ class CategoryDetailProducts extends Component {
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}
               updateOnChange={true}>
             <div className="row">
+              <div className="col-12 col-md-6 col-lg-8 col-xl-8">
+                <ApiFormResultTableWithPagination
+                    page_size_choices={[50, 100, 200]}
+                    page={this.state.formValues.page}
+                    page_size={this.state.formValues.page_size}
+                    data={products}
+                    onChange={this.state.apiFormFieldChangeHandler}
+                    columns={columns}
+                    ordering={this.state.formValues.ordering}
+                />
+              </div>
               <div className="col-12 col-md-6 col-lg-4 col-xl-4">
                 <div className="card">
                   <div className="card-header">
@@ -228,25 +266,8 @@ class CategoryDetailProducts extends Component {
                           ))}
                         </fieldset>
                     ))}
-                    <ApiFormSubmitButton
-                        label={<FormattedMessage id="search" defaultMessage="Search" />}
-                        loadingLabel={<FormattedMessage id="searching" defaultMessage="Searching" />}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                        loading={this.state.productsPage === null}
-                    />
                   </div>
                 </div>
-              </div>
-              <div className="col-12 col-md-6 col-lg-8 col-xl-8">
-                <ApiFormResultTableWithPagination
-                    page_size_choices={[50, 100, 200]}
-                    page={this.state.formValues.page}
-                    page_size={this.state.formValues.page_size}
-                    data={products}
-                    onChange={this.state.apiFormFieldChangeHandler}
-                    columns={columns}
-                    ordering={this.state.formValues.ordering}
-                />
               </div>
             </div>
           </ApiForm>
