@@ -10,6 +10,8 @@ import {FormattedMessage} from "react-intl";
 import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
 import {NavLink} from "react-router-dom";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
+import ApiFormTextField from "../../api_forms/ApiFormTextField";
+import "./CategoryDetailProducts.css"
 
 class CategoryDetailProducts extends Component {
   constructor(props) {
@@ -36,9 +38,11 @@ class CategoryDetailProducts extends Component {
   };
 
   setProductsPage = json => {
-    this.setState({
-      productsPage: json ? json.payload : null
-    })
+    if (json) {
+      this.setState({
+        productsPage: json.payload
+      })
+    }
   };
 
   componentDidMount() {
@@ -84,23 +88,37 @@ class CategoryDetailProducts extends Component {
       return <Loading />
     }
 
-    const apiFormFields = ['page', 'page_size'];
-    const processedFormLayout = [];
+    const apiFormFields = ['page', 'page_size', 'search'];
+    const processedFormLayout = [{
+      label: <FormattedMessage id="keywords" defaultMessage="Keywords" />,
+      filters: [{
+        name: 'search',
+        component: <ApiFormTextField
+            name="search"
+            placeholder={<FormattedMessage id="keywords" defaultMessage="Keywords" />}
+            onChange={this.state.apiFormFieldChangeHandler}
+            value={this.state.formValues.search}
+            debounceTimeout={500}
+        />
+      }]
+    }];
 
     for (const fieldset of formLayout.fieldsets) {
       const fieldSetFilters = [];
       for (const filter of fieldset.filters) {
         apiFormFields.push(filter.name);
-        let filterChoices = [];
-        if (aggs) {
-          filterChoices = aggs[filter.name].map(agg => ({
-            ...agg,
-            name: `${agg.label} (${agg.doc_count})`
-          }))
+        let filterAggs = [];
+        if (this.state.productsPage) {
+          filterAggs = aggs[filter.name]
         }
 
         let filterComponent = null;
         if (filter.type === 'exact') {
+          let filterChoices = filterAggs.map(agg => ({
+            ...agg,
+            name: `${agg.label} (${agg.doc_count})`
+          }));
+
           filterComponent = <ApiFormChoiceField
               name={filter.name}
               choices={filterChoices}
@@ -110,9 +128,43 @@ class CategoryDetailProducts extends Component {
               value={this.state.formValues[filter.name]}
               multiple={true}
           />
-        } else if (['gte', 'lte'].includes(filter.type)) {
+        } else if (filter.type === 'lte') {
+          let accumulatedDocCount = 0;
+          let filterChoices = filterAggs.map(agg => {
+            accumulatedDocCount += agg.doc_count
+
+            return {
+              ...agg,
+              name: `${agg.label} (${accumulatedDocCount})`
+            };
+          });
+
           filterComponent = <ApiFormChoiceField
               name={filter.name}
+              choices={filterChoices}
+              placeholder={filter.label}
+              searchable={true}
+              onChange={this.state.apiFormFieldChangeHandler}
+              value={this.state.formValues[filter.name]}
+          />
+        } else if (filter.type === 'gte') {
+          let resultCount = filterAggs.reduce((acum, agg) => acum + agg.doc_count, 0)
+
+          let filterChoices = filterAggs.map(agg => {
+            let result = {
+              ...agg,
+              name: `${agg.label} (${resultCount})`
+            };
+
+            resultCount -= agg.doc_count;
+
+            return result
+          });
+
+          filterComponent = <ApiFormChoiceField
+              name={filter.name}
+              apiField={filter.name + '_0'}
+              urlField={filter.name + '_start'}
               choices={filterChoices}
               placeholder={filter.label}
               searchable={true}
@@ -124,7 +176,7 @@ class CategoryDetailProducts extends Component {
               name={filter.name}
               label={filter.label}
               onChange={this.state.apiFormFieldChangeHandler}
-              choices={filterChoices}
+              choices={filterAggs}
               value={this.state.formValues[filter.name]}
           />
         }
@@ -151,19 +203,6 @@ class CategoryDetailProducts extends Component {
 
     return (
         <div className="animated fadeIn">
-          <div className="row">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-header">
-                  <i className="glyphicons glyphicons-search">&nbsp;</i>
-                  <FormattedMessage id="settings" defaultMessage="Settings" />
-                </div>
-                <div className="card-block">
-                  Insert settings here
-                </div>
-              </div>
-            </div>
-          </div>
           <ApiForm
               endpoints={[`categories/${this.props.apiResourceObject.id}/products/`]}
               fields={apiFormFields}
@@ -172,7 +211,7 @@ class CategoryDetailProducts extends Component {
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}
               updateOnChange={true}>
             <div className="row">
-              <div className="col-xl-4">
+              <div className="col-12 col-md-6 col-lg-4 col-xl-4">
                 <div className="card">
                   <div className="card-header">
                     <i className="glyphicons glyphicons-search">&nbsp;</i>
@@ -198,7 +237,7 @@ class CategoryDetailProducts extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-xl-8">
+              <div className="col-12 col-md-6 col-lg-8 col-xl-8">
                 <ApiFormResultTableWithPagination
                     page_size_choices={[50, 100, 200]}
                     page={this.state.formValues.page}

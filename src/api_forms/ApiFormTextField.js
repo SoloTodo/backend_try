@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import queryString from 'query-string';
 import changeCase from 'change-case'
+import {DebounceInput} from 'react-debounce-input';
 
 class ApiFormTextField extends Component {
   componentDidMount() {
@@ -63,16 +64,19 @@ class ApiFormTextField extends Component {
 
   render() {
     const value = this.props.value ? this.props.value : '';
+    const debounceTimeout = this.props.debounceTimeout || 0;
 
     return (
-        <input
+        <DebounceInput
             type="text"
-            className="form-control"
             name={this.props.name}
             id={this.props.name}
-            value={value}
+            className="form-control"
+            debounceTimeout={debounceTimeout}
             onChange={this.handleValueChange}
-        />)
+            value={value}
+        />
+    )
   }
 }
 

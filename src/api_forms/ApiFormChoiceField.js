@@ -22,7 +22,9 @@ class ApiFormChoiceField extends Component {
   parseValueFromUrl = () => {
     const parameters = queryString.parse(window.location.search);
 
-    let choiceIds = parameters[changeCase.snake(this.props.name)];
+    const urlField = this.props.urlField || changeCase.snake(this.props.name);
+
+    let choiceIds = parameters[urlField];
 
     if (this.props.multiple) {
       if (!Array.isArray(choiceIds)) {
@@ -67,7 +69,10 @@ class ApiFormChoiceField extends Component {
       urlParams[props.urlField || fieldName] = value.map(x => x.id)
     }
 
-    const apiParams = value ? {[fieldName] : value.map(x => x.id)} : {};
+    const apiParams = {};
+    if (value && props.apiField !== null) {
+      apiParams[props.apiField || fieldName] = value.map(x => x.id)
+    }
 
     if (value && props.additionalApiFields) {
       for (const field of props.additionalApiFields) {
