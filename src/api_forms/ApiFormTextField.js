@@ -54,7 +54,7 @@ class ApiFormTextField extends Component {
       }
     };
 
-    props.onChange(result)
+    props.onChange(result, Boolean(this.props.updateResultsOnChange))
   }
 
   handleValueChange = evt => {

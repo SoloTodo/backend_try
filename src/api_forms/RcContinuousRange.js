@@ -6,8 +6,8 @@ class RcContinuousRange extends Component {
     super(props);
 
     this.state = {
-      startValue: undefined,
-      endValue: undefined
+      startValue: props.value[0],
+      endValue: props.value[1]
     }
   }
 
@@ -15,9 +15,6 @@ class RcContinuousRange extends Component {
     if (this.props.min !== nextProps.min || this.props.max !== nextProps.max) {
       this.onChange([this.state.startValue, this.state.endValue], nextProps)
     }
-
-    console.log(this.props.value)
-    console.log(nextProps.value)
 
     if (this.props.value[0] !== nextProps.value[0] || this.props.value[1] !== nextProps.value[1]) {
       this.onChange([nextProps.value[0], nextProps.value[1]], nextProps)
@@ -52,18 +49,13 @@ class RcContinuousRange extends Component {
     let startValue = this.state.startValue;
     let endValue = this.state.endValue;
 
-    if (typeof(startValue) === 'undefined') {
+    if (startValue === null || typeof(startValue) === 'undefined') {
       startValue = this.props.min
     }
 
-    if (typeof(endValue) === 'undefined') {
+    if (endValue === null || typeof(endValue) === 'undefined') {
       endValue = this.props.max
     }
-
-    console.log(this.state.startValue)
-    console.log(this.state.endValue)
-    console.log(this.props.min)
-    console.log(this.props.max)
 
     return <Range
         min={this.props.min}

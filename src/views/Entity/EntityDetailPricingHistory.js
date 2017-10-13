@@ -171,7 +171,7 @@ class EntityDetailPricingHistory extends Component {
             </div>
             <div className="card d-flex flex-column flex-grow">
               <div className="card-header">
-                <strong><FormattedMessage id="result" defaultMessage={`Result`} /></strong>
+                <FormattedMessage id="result" defaultMessage={`Result`} />
               </div>
               <div className="card-block d-flex flex-column">
                 <EntityDetailPricingHistoryChart

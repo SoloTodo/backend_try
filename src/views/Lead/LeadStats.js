@@ -105,6 +105,7 @@ class LeadStats extends Component {
                 data={this.state.leadStats}
                 label_field='category'
                 label={<FormattedMessage id="category" defaultMessage="Category" />}
+                column_header={<FormattedMessage id="count" defaultMessage="Count" />}
             />;
         break;
       case 'store':
@@ -113,6 +114,8 @@ class LeadStats extends Component {
                 data={this.state.leadStats}
                 label_field='store'
                 label={<FormattedMessage id="store" defaultMessage="Store" />}
+                column_header={<FormattedMessage id="count" defaultMessage="Count" />}
+
             />;
         break;
       case 'date':
@@ -354,7 +357,7 @@ class LeadStats extends Component {
                             <ApiFormChoiceField
                                 name="page_size"
                                 choices={createPageSizeChoices([50, 100, 200])}
-                                initial="50"
+                                initial={50}
                                 onChange={this.state.apiFormFieldChangeHandler}
                                 value={this.state.formValues.page_size}
                                 required={true}

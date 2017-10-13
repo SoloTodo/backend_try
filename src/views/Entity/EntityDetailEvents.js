@@ -68,7 +68,7 @@ class EntityDetailEvents extends Component {
             {!this.state.events.length &&
             <div className="col-12 col-sm-8 col-md-6 col-lg-6">
               <div className="card" >
-                <div className="card-header"><strong><FormattedMessage id="no_events_found" defaultMessage={`No events found`} /></strong></div>
+                <div className="card-header"><FormattedMessage id="no_events_found" defaultMessage={`No events found`} /></div>
                 <div className="card-block">
                   <FormattedMessage id="no_events_found_description" defaultMessage={`This entity dooesn't have any events`} />
                 </div>
@@ -79,7 +79,7 @@ class EntityDetailEvents extends Component {
             {this.state.events.map((event, idx) => (
                 <div key={idx} className="col-12">
                   <div className="card" >
-                    <div className="card-header"><strong>{formatDateStr(event.timestamp)}</strong></div>
+                    <div className="card-header">{formatDateStr(event.timestamp)}</div>
                     <div className="card-block">
                       <strong><FormattedMessage id="user" defaultMessage={`User`} />:</strong> {event.user.full_name}
 

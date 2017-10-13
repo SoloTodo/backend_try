@@ -8,10 +8,11 @@ export default function ApiFormResultPageCount({page, pageSize, resultCount}) {
     return null
   }
 
+  const pageValue = page.id;
   const pageSizeValue = pageSize.id;
-  const startIndex = (page - 1) * pageSizeValue + 1;
+  const startIndex = (pageValue - 1) * pageSizeValue + 1;
 
-  let endIndex = page * pageSizeValue;
+  let endIndex = pageValue * pageSizeValue;
   if (endIndex > resultCount) {
     endIndex = resultCount
   }

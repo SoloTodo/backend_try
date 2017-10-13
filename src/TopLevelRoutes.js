@@ -1,68 +1,79 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import React from "react";
+import { FormattedMessage } from "react-intl";
 
 export const sidebarLayout = [
   {
-    title: <FormattedMessage id={'stores'} defaultMessage={'Stores'} />,
-    icon: 'glyphicons glyphicons-shop',
+    title: <FormattedMessage id="stores" defaultMessage="Stores" />,
+    icon: "glyphicons glyphicons-shop",
     entries: [
       {
-        label: <FormattedMessage id='show_list' defaultMessage='Show all' />,
-        path: '/stores',
-        requiredPermission: 'solotodo.backend_list_stores',
+        label: <FormattedMessage id="show_list" defaultMessage="Show all" />,
+        path: "/stores",
+        requiredPermission: "solotodo.backend_list_stores",
       },
       {
-        label: <FormattedMessage id='update' defaultMessage='Update' />,
-        path: '/stores/update_pricing',
-        requiredPermission: 'solotodo.update_store_pricing',
+        label: <FormattedMessage id="update" defaultMessage="Update" />,
+        path: "/stores/update_pricing",
+        requiredPermission: "solotodo.update_store_pricing",
       }
     ]
   },
   {
-    title: <FormattedMessage id={'entities'} defaultMessage={'Entities'} />,
-    icon: 'glyphicons glyphicons-inbox',
+    title: <FormattedMessage id="categories" defaultMessage="Categories" />,
+    icon: "glyphicons glyphicons-tv",
     entries: [
       {
-        label: <FormattedMessage id='show_list_female' defaultMessage='Show all' />,
-        path: '/entities',
-        requiredPermission: 'solotodo.backend_list_entities',
-      },
-      {
-        label: <FormattedMessage id='conflicts' defaultMessage='Conflicts' />,
-        path: '/entities/conflicts',
-        requiredPermission: 'solotodo.backend_view_entity_conflicts',
-      },
-      {
-        label: <FormattedMessage id='estimated_sales' defaultMessage="Estimated sales" />,
-        path: '/entities/estimated_sales',
-        requiredPermission: 'solotodo.backend_view_entity_estimated_sales',
+        label: <FormattedMessage id="show_list" defaultMessage="Show all" />,
+        path: "/categories",
+        requiredPermission: "solotodo.backend_list_categories",
       }
     ]
   },
   {
-    title: <FormattedMessage id={'products'} defaultMessage='Products' />,
-    icon: 'glyphicons glyphicons-tags',
+    title: <FormattedMessage id="entities" defaultMessage="Entities" />,
+    icon: "glyphicons glyphicons-inbox",
     entries: [
       {
-        label: <FormattedMessage id='show_list_male' defaultMessage='Show all' />,
-        path: '/products',
-        requiredPermission: 'solotodo.backend_list_products',
+        label: <FormattedMessage id="show_list_female" defaultMessage="Show all" />,
+        path: "/entities",
+        requiredPermission: "solotodo.backend_list_entities",
+      },
+      {
+        label: <FormattedMessage id="conflicts" defaultMessage="Conflicts" />,
+        path: "/entities/conflicts",
+        requiredPermission: "solotodo.backend_view_entity_conflicts",
+      },
+      {
+        label: <FormattedMessage id="estimated_sales" defaultMessage="Estimated sales" />,
+        path: "/entities/estimated_sales",
+        requiredPermission: "solotodo.backend_view_entity_estimated_sales",
       }
     ]
   },
   {
-    title: <FormattedMessage id="leads" defaultMessage='Leads' />,
-    icon: 'fa fa-external-link',
+    title: <FormattedMessage id="products" defaultMessage="Products" />,
+    icon: "glyphicons glyphicons-tags",
     entries: [
       {
-        label: <FormattedMessage id='show_list_male' defaultMessage='Show all' />,
-        path: '/leads',
-        requiredPermission: 'solotodo.backend_list_leads',
+        label: <FormattedMessage id="show_list_male" defaultMessage="Show all" />,
+        path: "/products",
+        requiredPermission: "solotodo.backend_list_products",
+      }
+    ]
+  },
+  {
+    title: <FormattedMessage id="leads" defaultMessage="Leads" />,
+    icon: "fa fa-external-link",
+    entries: [
+      {
+        label: <FormattedMessage id="show_list_male" defaultMessage="Show all" />,
+        path: "/leads",
+        requiredPermission: "solotodo.backend_list_leads",
       },
       {
-        label: <FormattedMessage id='stats' defaultMessage='Stats' />,
-        path: '/leads/stats',
-        requiredPermission: 'solotodo.backend_list_leads',
+        label: <FormattedMessage id="stats" defaultMessage="Stats" />,
+        path: "/leads/stats",
+        requiredPermission: "solotodo.backend_list_leads",
       }
     ]
   }

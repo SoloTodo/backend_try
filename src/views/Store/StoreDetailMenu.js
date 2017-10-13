@@ -8,7 +8,7 @@ export default function StoreDetailMenu(props) {
 
   return (<div className="col-sm-6 col-md-4">
     <div className="card">
-      <div className="card-header"><strong><FormattedMessage id="options" defaultMessage="Options" /></strong></div>
+      <div className="card-header"><FormattedMessage id="options" defaultMessage="Options" /></div>
       <div className="card-block">
         <ul className="list-without-decoration subnavigation-links">
           {store.permissions.includes('view_store') &&
@@ -40,7 +40,8 @@ export default function StoreDetailMenu(props) {
               <button type="button" className="btn btn-link">
                 <FormattedMessage id="leads_list" defaultMessage="Leads (list)" />
               </button>
-            </NavLink></li>
+            </NavLink>
+          </li>
           }
           {store.permissions.includes('view_store_leads') &&
           <li>
@@ -48,7 +49,8 @@ export default function StoreDetailMenu(props) {
               <button type="button" className="btn btn-link">
                 <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)" />
               </button>
-            </NavLink></li>
+            </NavLink>
+          </li>
           }
         </ul>
       </div>

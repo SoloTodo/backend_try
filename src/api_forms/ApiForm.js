@@ -89,7 +89,7 @@ class ApiForm extends Component {
         newState.page = {
           apiParams: {page: [1]},
           urlParams: {page: [1]},
-          fieldValues: 1
+          fieldValues: {id: 1, name: ''}
         }
       }
 
@@ -106,7 +106,7 @@ class ApiForm extends Component {
 
       if (!wasValid && isValid) {
         this.updateSearchResults();
-      } else if (isValid && (updateOnFinish || this.props.updateOnChange )) {
+      } else if (isValid && updateOnFinish) {
         this.updateSearchResults(true)
       }
     });

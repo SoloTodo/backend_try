@@ -15,7 +15,7 @@ class StoreDetail extends Component {
           <div className="row">
             <div className="col-sm-6 col-md-8">
               <div className="card">
-                <div className="card-header"><strong>{store.name}</strong></div>
+                <div className="card-header">{store.name}</div>
                 <div className="card-block">
                   <table className="table table-striped">
                     <tbody>

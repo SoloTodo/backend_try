@@ -7,18 +7,18 @@ import ApiForm from "../../api_forms/ApiForm";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import {FormattedMessage} from "react-intl";
 import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
-import {NavLink} from "react-router-dom";
+import {NavLink, Redirect} from "react-router-dom";
 import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import "./CategoryDetailProducts.css"
 import ApiFormDiscreteRangeField from "../../api_forms/ApiFormDiscreteRangeField";
 import ApiFormContinuousRangeField from "../../api_forms/ApiFormContinouousRangeField";
+import { toast } from 'react-toastify';
 
 class CategoryDetailProducts extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      formLayouts: undefined,
       formLayout: undefined,
       apiFormFieldChangeHandler: undefined,
       formValues: {},
@@ -77,15 +77,25 @@ class CategoryDetailProducts extends Component {
               });
 
           processed_form_layouts.sort((a, b) => b.priority - a.priority);
+
           this.setState({
-            formLayouts: processed_form_layouts,
-            formLayout: processed_form_layouts[0],
+            formLayout: processed_form_layouts[0] || null,
           })
         })
   }
 
   render() {
     const formLayout = this.state.formLayout;
+
+    if (formLayout === null) {
+      toast.warn(<FormattedMessage id="category_no_search_form" defaultMessage="No search form has been defined for this category"/>);
+
+      return <Redirect to={{
+        pathname: `/categories/${this.props.apiResourceObject.id}`,
+      }} />
+
+    }
+
     let products = null;
 
     if (this.state.productsPage) {
@@ -109,6 +119,7 @@ class CategoryDetailProducts extends Component {
             onChange={this.state.apiFormFieldChangeHandler}
             value={this.state.formValues.search}
             debounceTimeout={500}
+            updateResultsOnChange={true}
         />
       }]
     }];
@@ -124,7 +135,8 @@ class CategoryDetailProducts extends Component {
           if (originalFilterChoices) {
             filterChoices = originalFilterChoices.map(choice => ({
               ...choice,
-              name: `${choice.label} (${choice.doc_count})`
+              name: choice.label,
+              docCount: choice.doc_count
             }));
           }
 
@@ -136,6 +148,7 @@ class CategoryDetailProducts extends Component {
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues[filter.name]}
               multiple={true}
+              updateResultsOnChange={true}
           />
         } else if (filter.type === 'lte') {
           let accumulatedDocCount = 0;
@@ -183,6 +196,7 @@ class CategoryDetailProducts extends Component {
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues[filter.name]}
+              updateResultsOnChange={true}
           />
         } else if (filter.type === 'range') {
           if (filter.continuous_range_step) {
@@ -195,6 +209,7 @@ class CategoryDetailProducts extends Component {
                 value={this.state.formValues[filter.name]}
                 step={filter.continuous_range_step}
                 unit={filter.continuous_range_unit}
+                updateResultsOnChange={true}
             />
           } else {
             // Discrete (screen size...)
@@ -204,6 +219,7 @@ class CategoryDetailProducts extends Component {
                 onChange={this.state.apiFormFieldChangeHandler}
                 choices={originalFilterChoices}
                 value={this.state.formValues[filter.name]}
+                updateResultsOnChange={true}
             />
           }
         }
@@ -235,8 +251,7 @@ class CategoryDetailProducts extends Component {
               fields={apiFormFields}
               onResultsChange={this.setProductsPage}
               onFormValueChange={this.handleFormValueChange}
-              setFieldChangeHandler={this.setApiFormFieldChangeHandler}
-              updateOnChange={true}>
+              setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <div className="row">
               <div className="col-12 col-md-6 col-lg-8 col-xl-8">
                 <ApiFormResultTableWithPagination

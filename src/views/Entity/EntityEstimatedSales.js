@@ -382,7 +382,6 @@ class EntityEstimatedSales extends Component {
                             <ApiFormChoiceField
                                 name="page_size"
                                 choices={createPageSizeChoices([50, 100, 200])}
-                                initial="50"
                                 onChange={this.state.apiFormFieldChangeHandler}
                                 value={this.state.formValues.page_size}
                                 required={true}

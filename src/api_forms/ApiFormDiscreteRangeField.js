@@ -70,7 +70,7 @@ class ApiFormDiscreteRangeField extends Component {
       }
     };
 
-    props.onChange(result)
+    props.onChange(result, Boolean(this.props.updateResultsOnChange))
   }
 
   render() {

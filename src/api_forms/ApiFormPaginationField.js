@@ -46,7 +46,7 @@ class ApiFormPaginationField extends Component {
       page: {
         apiParams: params,
         urlParams: params,
-        fieldValues: value
+        fieldValues: {id: value, name: ''}
       }
     };
 
@@ -69,7 +69,7 @@ class ApiFormPaginationField extends Component {
     const pageCount = Math.ceil(this.props.resultCount / this.props.pageSize.id);
 
     return <ReactPaginate
-        forcePage={this.props.page - 1}
+        forcePage={this.props.page.id - 1}
         pageCount={pageCount}
         pageRangeDisplayed={pageRangeDisplayed}
         marginPagesDisplayed={marginPagesDisplayed}

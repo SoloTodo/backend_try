@@ -70,12 +70,11 @@ class ApiFormContinuousRangeField extends Component {
       }
     };
 
-    props.onChange(result)
+    props.onChange(result, Boolean(this.props.updateResultsOnChange))
   }
 
   render() {
     const originalChoices = this.props.choices;
-    console.log(originalChoices);
 
     if (!originalChoices || !originalChoices.length) {
       return (
@@ -84,9 +83,6 @@ class ApiFormContinuousRangeField extends Component {
             <Range />
           </div>)
     }
-
-    const originalMin = originalChoices[0].value;
-    const originalMax = originalChoices[originalChoices.length - 1].value;
 
     const step = this.props.step;
 
@@ -105,8 +101,11 @@ class ApiFormContinuousRangeField extends Component {
       bucketDocCountDict[bucket].bucketDocCount += choice.doc_count;
     }
 
+    const originalMin = originalChoices[0].value;
+    const originalMax = originalChoices[originalChoices.length - 1].value;
     const steppedMin = Math.floor((originalMin / step)) * step;
     const newChoices = [];
+
 
     for (let steppedValue = steppedMin; steppedValue < originalMax + step; steppedValue += step) {
       const bucketDocData = bucketDocCountDict[steppedValue] || {};
@@ -140,13 +139,15 @@ class ApiFormContinuousRangeField extends Component {
     let startValue = this.props.value.startValue;
     let endValue = this.props.value.endValue;
 
-    console.log(startValue)
-
-    if (typeof(startValue) === 'undefined' || startValue === null) {
+    if (typeof(startValue) === 'undefined') {
+      startValue = null
+    } else if (startValue < min) {
       startValue = min
     }
 
-    if (typeof(endValue) === 'undefined' || endValue === null) {
+    if (typeof(endValue) === 'undefined') {
+      endValue = null
+    } else if (endValue > max) {
       endValue = max
     }
 
@@ -181,18 +182,21 @@ class ApiFormContinuousRangeField extends Component {
     const handle = (props) => {
       const { value, dragging, index, ...restProps } = props;
 
+      let concreteStartValue = startValue !== null ? startValue : min;
+      let concreteEndValue = endValue !== null ? endValue : max;
+
       let startDocCounts = {};
       let endDocCounts = {};
       let valueRangeAsText = '';
 
       if (index === 0) {
         startDocCounts = valueDocCountDict[value];
-        endDocCounts = valueDocCountDict[endValue];
-        valueRangeAsText = `${value} - ${endValue}`
+        endDocCounts = valueDocCountDict[concreteEndValue];
+        valueRangeAsText = `${value} - ${concreteEndValue}`
       } else {
-        startDocCounts = valueDocCountDict[startValue];
+        startDocCounts = valueDocCountDict[concreteStartValue];
         endDocCounts = valueDocCountDict[value];
-        valueRangeAsText = `${startValue} - ${value}`
+        valueRangeAsText = `${concreteStartValue} - ${value}`
       }
 
       const resultCount = endDocCounts.ownDocCount + endDocCounts.aggregatedDocCount - startDocCounts.aggregatedDocCount;

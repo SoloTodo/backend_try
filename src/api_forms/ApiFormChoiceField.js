@@ -5,7 +5,7 @@ import {createOption, createOptions} from "../form_utils";
 import changeCase from 'change-case'
 
 class ApiFormChoiceField extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.notifyNewParams(this.parseValueFromUrl())
   }
 
@@ -19,105 +19,115 @@ class ApiFormChoiceField extends Component {
     }
 
     if (typeof(this.props.choices) === 'undefined' && typeof(nextProps.choices) !== 'undefined') {
-      this.notifyNewParams(this.parseValueFromUrl(nextProps))
+      // this.notifyNewParams(this.parseValueFromUrl(nextProps))
     }
   }
 
   parseValueFromUrl = (props) => {
-    props = props || this.props
+    props = props || this.props;
 
     const parameters = queryString.parse(window.location.search);
 
     const urlField = props.urlField || changeCase.snake(props.name);
-    let choiceIds = parameters[urlField];
+    let valueIds = parameters[urlField];
 
     if (props.multiple) {
-      if (typeof(choiceIds) === 'undefined') {
-        choiceIds = []
-      } else if (!Array.isArray(choiceIds)) {
-        choiceIds = [choiceIds]
+      if (!valueIds) {
+        valueIds = []
+      } else if (!Array.isArray(valueIds)) {
+        valueIds = [valueIds]
       }
+
+      valueIds = valueIds
+          .filter(choiceId => Boolean(parseInt(choiceId, 10)))
+          .map(choiceId => parseInt(choiceId, 10));
 
       if (props.choices) {
         return props.choices
-            .filter(choice => choiceIds.includes(choice.id.toString()));
+            .filter(choice => valueIds.includes(choice.id))
       } else {
-        return choiceIds.map(choiceId => ({
-          id: parseInt(choiceId, 10),
-          name: ''
-        }))
+        return valueIds.map(valueId => ({id: valueId, name: ''}))
       }
     } else {
-      const defaultValue =
-          props.initial ? props.choices.filter(choice => choice.id.toString() === props.initial)[0]:
-              props.required ? props.choices[0] : null;
+      let valueId = undefined;
 
-      if (Array.isArray(choiceIds)) {
-        choiceIds = choiceIds[0]
-      }
-
-      let value = null;
-
-      if (props.choices) {
-        value = props.choices.filter(choice => choice.id.toString() === choiceIds)[0];
-      } else if (choiceIds) {
-        value = {
-          id: parseInt(choiceIds.id, 10),
-          name: ''
-        }
-      }
-
-      if (value) {
-        return [value]
-      } else if (defaultValue) {
-        return [defaultValue]
+      if (!valueIds) {
+        valueId = null;
+      } else if (Array.isArray(valueIds)) {
+        valueId = valueIds[0]
       } else {
-        return null
+        valueId = valueIds
       }
+
+      const initialValueId =
+          props.initial ? props.initial :
+              props.required ? props.choices[0].id : null;
+
+      if (!valueId) {
+        valueId = initialValueId
+      }
+
+      let value = undefined;
+
+      if (valueId === null) {
+        value = null
+      } else if (props.choices) {
+        value = props.choices.filter(choice => choice.id === valueId)[0];
+      } else {
+        value = {id: valueId, name: ''}
+      }
+
+      return value
     }
   };
 
-  notifyNewParams(value, props) {
+  notifyNewParams(valueOrValues, props) {
     props = props ? props : this.props;
 
     if (!props.onChange) {
       return;
     }
 
+    let values = undefined;
+
+    if (valueOrValues) {
+      if (Array.isArray(valueOrValues)) {
+        values = valueOrValues
+      } else {
+        values = [valueOrValues]
+      }
+    } else {
+      values = []
+    }
+
+    const valueIds = values.map(value => value.id);
     const fieldName = changeCase.snake(props.name);
 
     const urlParams = {};
-    if (value && props.urlField !== null) {
-      urlParams[props.urlField || fieldName] = value.map(x => x.id)
+    if (values.length && props.urlField !== null) {
+      urlParams[props.urlField || fieldName] = valueIds
     }
 
     const apiParams = {};
-    if (value && props.apiField !== null) {
-      apiParams[props.apiField || fieldName] = value.map(x => x.id)
+    if (values.length && props.apiField !== null) {
+      apiParams[props.apiField || fieldName] = valueIds
     }
 
-    if (value && props.additionalApiFields) {
+    if (values.length && props.additionalApiFields) {
       for (const field of props.additionalApiFields) {
         const paramName = changeCase.snake(field);
-        const paramValue = value.map(x => x[field]);
+        const paramValue = values.map(x => x[field]);
         if (paramValue.some(x => Boolean(x))) {
           apiParams[paramName] = paramValue
         }
       }
     }
 
-    let fieldValues = null;
-    if (this.props.multiple) {
-      fieldValues = value
-    } else if (value) {
-      fieldValues = value[0]
-    }
-
     const result = {
       [this.props.name]: {
         apiParams: apiParams,
         urlParams: urlParams,
-        fieldValues: fieldValues
+        fieldValues: valueOrValues
       }
     };
 
@@ -129,18 +139,50 @@ class ApiFormChoiceField extends Component {
     if (this.props.multiple) {
       sanitizedValue = vals.map(val => val.option)
     } else if (vals) {
-      sanitizedValue = [vals.option]
+      sanitizedValue = vals.option
     }
 
     this.notifyNewParams(sanitizedValue)
   };
 
   render() {
-    const choices = createOptions(this.props.choices || []);
+    let propsValue = this.props.value;
+
+    const choices = this.props.choices || [];
+
+    let widgetValue = undefined;
+
+    if (this.props.multiple) {
+      widgetValue = [];
+
+      for (const value of propsValue || []) {
+        const matchingChoice = choices.filter(choice => choice.id === value.id)[0];
+        const sanitizedValue = {...value, docCount: 0};
+        if (matchingChoice) {
+          sanitizedValue.name = matchingChoice.name;
+          sanitizedValue.docCount = matchingChoice.doc_count;
+        }
+
+        widgetValue.push(sanitizedValue)
+      }
+    } else {
+      if (propsValue) {
+        const matchingChoice = choices.filter(choice => choice.id === propsValue.id)[0];
+        const sanitizedValue = {...propsValue, docCount: 0};
+        if (matchingChoice) {
+          sanitizedValue.name = matchingChoice.name;
+          sanitizedValue.docCount = matchingChoice.doc_count;
+        }
+        widgetValue = sanitizedValue
+      } else {
+        widgetValue = null
+      }
+    }
 
     const selectedChoices = this.props.multiple ?
-        createOptions(this.props.value || []) :
-        this.props.value ? createOption(this.props.value) : null;
+        createOptions(widgetValue) :
+        widgetValue ? createOption(widgetValue) : null;
+
 
     if (this.props.hidden) {
       return null
@@ -148,7 +190,7 @@ class ApiFormChoiceField extends Component {
       return <Select
           name={this.props.name}
           id={this.props.name}
-          options={choices}
+          options={createOptions(this.props.choices || [])}
           value={selectedChoices}
           onChange={this.handleValueChange}
           multi={this.props.multiple}
