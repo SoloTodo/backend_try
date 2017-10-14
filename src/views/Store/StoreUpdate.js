@@ -252,7 +252,6 @@ class StoreUpdate extends Component {
                       <th><FormattedMessage id="status" defaultMessage={`Status`} /></th>
                       <th className="hidden-xs-down"><FormattedMessage id="result" defaultMessage={`Result`} /></th>
                       <th className="hidden-sm-down"><FormattedMessage id="last_update" defaultMessage={`Last update`} /></th>
-                      <th className="hidden-sm-down"><FormattedMessage id="categories" defaultMessage={`Categories`} /></th>
                       <th className="hidden-sm-down"><FormattedMessage id="start" defaultMessage={`Start`} /></th>
                       <th className="hidden-md-down"><FormattedMessage id="log" defaultMessage={`Log`} /></th>
                     </tr>
@@ -280,14 +279,6 @@ class StoreUpdate extends Component {
                                 }
                               </td>
                               <td className="hidden-sm-down">{moment(storeEntry.latestUpdateLog.lastUpdated).format('llll')}</td>
-                              <td className="hidden-sm-down">
-                                <ul>
-                                  {storeEntry.latestUpdateLog.categories.map(category => (
-                                      <li key={category.id}>{category.name}</li>
-                                  ))}
-                                </ul>
-                              </td>
-
                               <td className="hidden-sm-down">{moment(storeEntry.latestUpdateLog.creationDate).format('llll')}</td>
 
                               <td className="hidden-md-down">

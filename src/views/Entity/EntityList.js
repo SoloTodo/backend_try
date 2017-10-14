@@ -190,7 +190,7 @@ class EntityList extends Component {
                 name="ordering"
                 choices={createOrderingOptionChoices(['name', 'country', 'type'])}
                 hidden={true}
-                initial="name"
+                required={true}
                 value={this.state.formValues.ordering}
                 onChange={this.state.apiFormFieldChangeHandler}
             />

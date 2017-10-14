@@ -106,7 +106,7 @@ class StoreDetailUpdateLogs extends Component {
             <ApiFormChoiceField
                 name="page_size"
                 choices={[{id: 5, name: 5}]}
-                initial="5"
+                required={true}
                 hidden={true}
                 onChange={this.state.apiFormFieldChangeHandler}
                 value={this.state.formValues.page_size}
