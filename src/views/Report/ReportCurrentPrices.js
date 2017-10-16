@@ -21,7 +21,7 @@ class ReportCurrentPrices extends Component {
 
     this.props.fetchAuth(settings.apiResourceEndpoints.reports + 'current_prices/')
         .then(downloadLink => {
-          window.open(downloadLink.url);
+          window.location = downloadLink.url;
 
           this.setState({
             downloadLink

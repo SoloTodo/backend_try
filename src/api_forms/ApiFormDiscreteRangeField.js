@@ -149,10 +149,18 @@ class ApiFormDiscreteRangeField extends Component {
         newEndId = null
       }
 
-      this.notifyNewParams({
-        startId: newStartId,
-        endId: newEndId
-      })
+      // The range may change dynamically due to changes in the results
+      // e.g. The original search form may contain notebook with screen sizes
+      // from 4 to 21", but applying a filter compressed the range to 14 - 17"
+      // The internal range values may change (to accomodate the new range)
+      // but if the actual value doesn't change then don't notify it.
+      if (this.props.value.startId !== newStartId || this.props.value.endId !== newEndId) {
+        this.notifyNewParams({
+          startId: newStartId,
+          endId: newEndId
+        })
+      }
+
     };
 
     const handle = (props) => {

@@ -173,10 +173,12 @@ class ApiFormContinuousRangeField extends Component {
         newEndValue = null
       }
 
-      this.notifyNewParams({
-        startValue: newStartValue,
-        endValue: newEndValue
-      })
+      if (this.props.value.startValue !== newStartValue || this.props.value.endValue !== newEndValue) {
+        this.notifyNewParams({
+          startValue: newStartValue,
+          endValue: newEndValue
+        })
+      }
     };
 
     const handle = (props) => {

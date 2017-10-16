@@ -23,7 +23,7 @@ class CategoryDetailProducts extends Component {
       apiFormFieldChangeHandler: undefined,
       formValues: {},
       productsPage: undefined,
-      formChoices: {}
+      resultsAggs: {}
 
     }
   }
@@ -45,10 +45,10 @@ class CategoryDetailProducts extends Component {
           count: json.payload.count,
           results: json.payload.results
         },
-        formChoices: json.payload.aggs
+        resultsAggs: json.payload.aggs
       })
     } else {
-      // Keep the old formChoices to prevent the form fields from resetting so much
+      // Keep the old resultsAggs to prevent the form fields from resetting so much
       this.setState({
         productsPage: null
       })
@@ -87,13 +87,16 @@ class CategoryDetailProducts extends Component {
   render() {
     const formLayout = this.state.formLayout;
 
+    if (typeof(formLayout) === 'undefined') {
+      return <Loading />
+    }
+
     if (formLayout === null) {
       toast.warn(<FormattedMessage id="category_no_search_form" defaultMessage="No search form has been defined for this category"/>);
 
       return <Redirect to={{
         pathname: `/categories/${this.props.apiResourceObject.id}`,
       }} />
-
     }
 
     let products = null;
@@ -102,11 +105,7 @@ class CategoryDetailProducts extends Component {
       products = this.state.productsPage
     }
 
-    const formChoices = this.state.formChoices;
-
-    if (!formLayout) {
-      return <Loading />
-    }
+    const resultsAggs = this.state.resultsAggs;
 
     const apiFormFields = ['page', 'page_size', 'search'];
     const processedFormLayout = [{
@@ -128,16 +127,24 @@ class CategoryDetailProducts extends Component {
       const fieldSetFilters = [];
       for (const filter of fieldset.filters) {
         apiFormFields.push(filter.name);
-        let originalFilterChoices = formChoices[filter.name];
+
+        const filterChoiceIdToNameDict = {};
+        for (const choice of (filter.choices || [])) {
+          filterChoiceIdToNameDict[choice.id] = choice.name
+        }
+
+        let filterAggs = resultsAggs[filter.name];
         let filterComponent = null;
+
         if (filter.type === 'exact') {
           let filterChoices = undefined;
-          if (originalFilterChoices) {
-            filterChoices = originalFilterChoices.map(choice => ({
+          if (filterAggs) {
+            filterChoices = filterAggs.map(choice => ({
               ...choice,
-              name: choice.label,
-              docCount: choice.doc_count
+              name: `${filterChoiceIdToNameDict[choice.id]} (${choice.doc_count})`,
             }));
+          } else {
+            filterChoices = filter.choices
           }
 
           filterComponent = <ApiFormChoiceField
@@ -151,40 +158,52 @@ class CategoryDetailProducts extends Component {
               updateResultsOnChange={true}
           />
         } else if (filter.type === 'lte') {
-          let accumulatedDocCount = 0;
-          let filterChoices = originalFilterChoices.map(choice => {
-            accumulatedDocCount += choice.doc_count
+          let filterChoices = undefined;
 
-            return {
-              ...choice,
-              name: `${choice.label} (${accumulatedDocCount})`
-            };
-          });
+          if (filterAggs) {
+            let aggSum = 0;
+
+            filterChoices = filterAggs.map(choice => {
+              aggSum += choice.doc_count;
+
+              return {
+                ...choice,
+                name: `${filterChoiceIdToNameDict[choice.id]} (${aggSum})`
+              };
+            });
+          } else {
+            filterChoices = filter.choices
+          }
 
           filterComponent = <ApiFormChoiceField
               name={filter.name}
+              apiField={filter.name + '_1'}
+              urlField={filter.name + '_end'}
               choices={filterChoices}
               placeholder={filter.label}
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues[filter.name]}
+              updateResultsOnChange={true}
           />
         } else if (filter.type === 'gte') {
           let filterChoices = undefined;
 
-          if (originalFilterChoices) {
-            let resultCount = originalFilterChoices.reduce((acum, choice) => acum + choice.doc_count, 0)
+          if (filterAggs) {
+            let aggSum = filterAggs.reduce((acum, choice) => acum + choice.doc_count, 0);
 
-            filterChoices = originalFilterChoices.map(choice => {
+            filterChoices = filterAggs.map(choice => {
               let result = {
                 ...choice,
-                name: `${choice.label} (${resultCount})`
+                name: `${filterChoiceIdToNameDict[choice.id]} (${aggSum})`
               };
 
-              resultCount -= choice.doc_count;
+              aggSum -= choice.doc_count;
 
               return result
             });
+          } else {
+            filterChoices = filter.choices
           }
 
           filterComponent = <ApiFormChoiceField
@@ -201,11 +220,17 @@ class CategoryDetailProducts extends Component {
         } else if (filter.type === 'range') {
           if (filter.continuous_range_step) {
             // Continous (weight....)
+            let filterChoices = [];
+
+            if (filterAggs) {
+              filterChoices = filterAggs
+            }
+
             filterComponent = <ApiFormContinuousRangeField
                 name={filter.name}
                 label={filter.label}
                 onChange={this.state.apiFormFieldChangeHandler}
-                choices={originalFilterChoices}
+                choices={filterChoices}
                 value={this.state.formValues[filter.name]}
                 step={filter.continuous_range_step}
                 unit={filter.continuous_range_unit}
@@ -213,11 +238,27 @@ class CategoryDetailProducts extends Component {
             />
           } else {
             // Discrete (screen size...)
+            let filterChoices = undefined;
+
+            if (filterAggs) {
+              filterChoices = filterAggs.map(choice => ({
+                ...choice,
+                label: `${filterChoiceIdToNameDict[choice.id]}`,
+              }));
+            } else {
+              filterChoices = filter.choices.map(choice => ({
+                ...choice,
+                label: choice.name,
+                value: parseFloat(choice.value)
+              }))
+            }
+
+
             filterComponent = <ApiFormDiscreteRangeField
                 name={filter.name}
                 label={filter.label}
                 onChange={this.state.apiFormFieldChangeHandler}
-                choices={originalFilterChoices}
+                choices={filterChoices}
                 value={this.state.formValues[filter.name]}
                 updateResultsOnChange={true}
             />

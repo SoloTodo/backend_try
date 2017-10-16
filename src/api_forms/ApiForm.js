@@ -77,6 +77,7 @@ class ApiForm extends Component {
   handleFieldChange = (updatedFieldsData={}, updateOnFinish=false) => {
     let wasValid = undefined;
     let isValid = undefined;
+
     this.setState(state => {
       wasValid = this.isFormValid(state);
 
@@ -101,6 +102,8 @@ class ApiForm extends Component {
       for (const field of this.props.fields) {
         formValues[field] = this.state[field] ? this.state[field].fieldValues : undefined
       }
+
+      // if (this.props.)
 
       this.props.onFormValueChange(formValues);
 

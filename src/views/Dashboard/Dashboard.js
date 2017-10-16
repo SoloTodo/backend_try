@@ -10,8 +10,8 @@ class Dashboard extends Component {
     return (
         <div className="animated fadeIn">
           <div className="row">
-            <DashboardStoreLeadsChart />
-            <DashboardBestSellingEntities />
+            {/*<DashboardStoreLeadsChart />*/}
+            {/*<DashboardBestSellingEntities />*/}
           </div>
         </div>
     )
