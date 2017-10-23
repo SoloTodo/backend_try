@@ -1,6 +1,7 @@
 // let endpoint = 'http://192.168.90.111:8000/api/';
 // let endpoint = 'http://192.168.1.100:8000/api/';
 let endpoint = 'http://local.solotodo.com:8000/api/';
+// let endpoint = 'https://try.solotodo.com/api/';
 
 export const settings = {
   endpoint,

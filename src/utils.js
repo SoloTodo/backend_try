@@ -112,11 +112,11 @@ export function listToObject(list, key='id') {
 
 export const booleanChoices = [
   {
-    id: 1,
+    id: '1',
     name: messages.yes,
   },
   {
-    id: 0,
+    id: '0',
     name: messages.no,
   }
 ];

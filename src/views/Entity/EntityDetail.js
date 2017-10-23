@@ -500,21 +500,6 @@ class EntityDetail extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="product" defaultMessage='Product' /></th>
-                      <td>{entity.product ?
-                          <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink> :
-                          <em>N/A</em>}</td>
-                    </tr>
-                    {hasStaffPermissions && entity.product && <tr>
-                      <th>&nbsp;</th>
-                      <td><button className="btn btn-danger" onClick={this.handleDissociateClick} disabled={this.state.dissociatingState !== DISSOCIATING_STATES.STAND_BY}><FormattedMessage id="dissociate" defaultMessage='Dissociate' /></button></td>
-                    </tr>
-                    }
-                    <tr>
-                      <th><FormattedMessage id="cell_plan" defaultMessage='Cell Plan' /></th>
-                      <td>{entity.cellPlan ? <NavLink to={'/products/' + entity.cellPlan.id}>{entity.cellPlan.name}</NavLink> : <em>N/A</em>}</td>
-                    </tr>
-                    <tr>
                       <th><FormattedMessage id="part_number" defaultMessage='Part Number' /></th>
                       <td>{entity.partNumber || <em>N/A</em>}</td>
                     </tr>
@@ -571,8 +556,19 @@ class EntityDetail extends Component {
                   <table className="table table-striped mb-0">
                     <tbody>
                     <tr>
-                      <th><FormattedMessage id="last_pricing_update" defaultMessage='Last update' /></th>
-                      <td>{formatDateStr(entity.lastPricingUpdate)}</td>
+                      <th><FormattedMessage id="product" defaultMessage='Product' /></th>
+                      <td>{entity.product ?
+                          <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink> :
+                          <em>N/A</em>}</td>
+                    </tr>
+                    {hasStaffPermissions && entity.product && <tr>
+                      <th>&nbsp;</th>
+                      <td><button className="btn btn-danger" onClick={this.handleDissociateClick} disabled={this.state.dissociatingState !== DISSOCIATING_STATES.STAND_BY}><FormattedMessage id="dissociate" defaultMessage='Dissociate' /></button></td>
+                    </tr>
+                    }
+                    <tr>
+                      <th><FormattedMessage id="cell_plan" defaultMessage='Cell Plan' /></th>
+                      <td>{entity.cellPlan ? <NavLink to={'/products/' + entity.cellPlan.id}>{entity.cellPlan.name}</NavLink> : <em>N/A</em>}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="normal_price" defaultMessage='Normal price' /></th>
@@ -649,6 +645,11 @@ class EntityDetail extends Component {
                       <td>
                         {stock}
                       </td>
+                    </tr>
+
+                    <tr>
+                      <th><FormattedMessage id="last_pricing_update" defaultMessage='Last update' /></th>
+                      <td>{formatDateStr(entity.lastPricingUpdate)}</td>
                     </tr>
 
                     </tbody>
