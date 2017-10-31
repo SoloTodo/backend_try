@@ -5,6 +5,7 @@ import CategoryDetailProducts from "./CategoryDetailProducts";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import CategoryDetail from "./CategoryDetail";
 import CategoryList from "./CategoryList";
+import CategoryDetailBrowse from "./CategoryDetailBrowse";
 
 export default ({match}) => {
   return (
@@ -23,6 +24,13 @@ export default ({match}) => {
             <ResourceObjectPermission match={props.match} resource="categories">
               <RequiredResources resources={['stores']}>
                 <CategoryDetailProducts />
+              </RequiredResources>
+            </ResourceObjectPermission>
+        )} />
+        <Route path={match.url + '/:id/browse'} exact render={props => (
+            <ResourceObjectPermission match={props.match} resource="categories">
+              <RequiredResources resources={['stores']}>
+                <CategoryDetailBrowse />
               </RequiredResources>
             </ResourceObjectPermission>
         )} />

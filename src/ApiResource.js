@@ -64,6 +64,7 @@ export function addApiResourceStateToPropsUtils(mapStateToProps=null) {
     const result = {
       preferredCurrency: preferredCurrency,
       preferredCountry: state.apiResourceObjects[user.preferred_country],
+      preferredNumberFormat: state.apiResourceObjects[user.preferred_number_format],
       ApiResourceObject: (jsonData) => {
         return new ApiResourceObject(jsonData, state.apiResourceObjects)
       },

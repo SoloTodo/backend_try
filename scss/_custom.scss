@@ -163,3 +163,12 @@ main > .container-fluid {
 .api-form-filters > div {
   margin-top: 8px;
 }
+
+.page-item.active .page-link, .pagination-datatables li.active .page-link, .pagination li.active .page-link, .page-item.active .pagination-datatables li a, .pagination-datatables li .page-item.active a, .pagination-datatables li.active a, .page-item.active .pagination li a, .pagination li .page-item.active a, .pagination li.active a {
+  z-index: 0;
+}
+
+list-without-decoration {
+  list-style-type: none;
+  padding-left: 0;
+}

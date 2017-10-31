@@ -103,13 +103,12 @@ class ApiForm extends Component {
         formValues[field] = this.state[field] ? this.state[field].fieldValues : undefined
       }
 
-      // if (this.props.)
-
       this.props.onFormValueChange(formValues);
 
       if (!wasValid && isValid) {
         this.updateSearchResults();
       } else if (isValid && updateOnFinish) {
+        console.log(updatedFieldsData);
         this.updateSearchResults(true)
       }
     });

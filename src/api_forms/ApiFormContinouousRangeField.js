@@ -136,8 +136,8 @@ class ApiFormContinuousRangeField extends Component {
     const max = newChoices[newChoices.length - 1].value;
 
 
-    let startValue = this.props.value.startValue;
-    let endValue = this.props.value.endValue;
+    let startValue = this.props.value ? this.props.value.startValue : undefined;
+    let endValue = this.props.value ? this.props.value.endValue : undefined;
 
     if (typeof(startValue) === 'undefined') {
       startValue = null
@@ -173,7 +173,7 @@ class ApiFormContinuousRangeField extends Component {
         newEndValue = null
       }
 
-      if (this.props.value.startValue !== newStartValue || this.props.value.endValue !== newEndValue) {
+      if (!this.props.value || this.props.value.startValue !== newStartValue || this.props.value.endValue !== newEndValue) {
         this.notifyNewParams({
           startValue: newStartValue,
           endValue: newEndValue

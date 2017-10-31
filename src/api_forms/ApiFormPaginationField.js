@@ -66,10 +66,18 @@ class ApiFormPaginationField extends Component {
     const pageRangeDisplayed = this.props.breakpoint.isExtraSmall ? 2 : 3;
     const marginPagesDisplayed = this.props.breakpoint.isExtraSmall ? 1 : 2;
 
-    const pageCount = Math.ceil(this.props.resultCount / this.props.pageSize.id);
+    let pageCount = 1;
+    if (this.props.pageSize) {
+      pageCount = Math.ceil(this.props.resultCount / this.props.pageSize.id);
+    }
+
+    let page = 1;
+    if (this.props.page) {
+      page = this.props.page.id
+    }
 
     return <ReactPaginate
-        forcePage={this.props.page.id - 1}
+        forcePage={page - 1}
         pageCount={pageCount}
         pageRangeDisplayed={pageRangeDisplayed}
         marginPagesDisplayed={marginPagesDisplayed}

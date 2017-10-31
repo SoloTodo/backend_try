@@ -18,6 +18,13 @@ export default function CategoryDetailMenu(props) {
           </NavLink></li>
           }
           {category.permissions.includes('view_category') &&
+          <li><NavLink to={'/categories/' + category.id + '/browse'}>
+            <button type="button" className="btn btn-link">
+              <FormattedMessage id="browse" defaultMessage="Browse" />
+            </button>
+          </NavLink></li>
+          }
+          {category.permissions.includes('view_category') &&
           <li><NavLink to={'/categories/' + category.id + '/products'}>
             <button type="button" className="btn btn-link">
               <FormattedMessage id="products" defaultMessage="Products" />

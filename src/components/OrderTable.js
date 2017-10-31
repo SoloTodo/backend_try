@@ -52,16 +52,19 @@ class OrderTable extends Component {
     const valueMultiplier = this.state.descending ? -1 : 1;
 
     const sortedData = [...this.props.data];
-    sortedData.sort((a, b) => {
-      const aValue = valueFunction(a);
-      const bValue = valueFunction(b);
 
-      if (aValue === bValue) {
-        return 0;
-      }
+    if (valueFunction) {
+      sortedData.sort((a, b) => {
+        const aValue = valueFunction(a);
+        const bValue = valueFunction(b);
 
-      return aValue > bValue ? valueMultiplier : -valueMultiplier;
-    });
+        if (aValue === bValue) {
+          return 0;
+        }
+
+        return aValue > bValue ? valueMultiplier : -valueMultiplier;
+      });
+    }
 
     return (
         <table className="table table-striped">
@@ -70,10 +73,10 @@ class OrderTable extends Component {
             {columns.map(column => (
                 <th key={column.name} className={'text-nowrap ' + column.className}>
                   <OrderTableHeader
-                    column={column}
-                    ordering={this.state.ordering}
-                    descending={this.state.descending}
-                    onChange={this.handleSortingChange}
+                      column={column}
+                      ordering={this.state.ordering}
+                      descending={this.state.descending}
+                      onChange={this.handleSortingChange}
                   />
                 </th>
             ))}
