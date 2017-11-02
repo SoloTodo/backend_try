@@ -66,7 +66,7 @@ class EntityList extends Component {
       {
         label: <FormattedMessage id="name" defaultMessage={`Name`} />,
         ordering: 'name',
-        renderer: entity => <NavLink to={'/entities/' + entity.id}>{entity.name}</NavLink>
+        renderer: entity => <NavLink to={'/entities/' + entity.id}>{entity.name || <em>N/A</em>}</NavLink>
       },
       {
         label: <FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} />,

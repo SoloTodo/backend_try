@@ -36,7 +36,8 @@ class EntityDetail extends Component {
       categoryForChange: null,
       conditionForChange: null,
       dissociatingState: DISSOCIATING_STATES.STAND_BY,
-      dissociationReason: ''
+      dissociationReason: '',
+      stock: undefined
     }
   }
 
@@ -71,6 +72,22 @@ class EntityDetail extends Component {
           .then(json => {
             this.saveEntityChanges(json)
           })
+    }
+
+    if (this.userHasStockPermissions()) {
+      if (entity.active_registry && entity.active_registry.is_available) {
+        const endpoint = entity.active_registry.url + 'stock/';
+        this.props.fetchAuth(endpoint).then(json => {
+          const stock = json.stock;
+          this.setState({
+            stock
+          })
+        })
+      } else {
+        this.setState({
+          stock: 0
+        })
+      }
     }
   }
 
@@ -269,6 +286,12 @@ class EntityDetail extends Component {
     })
   };
 
+  userHasStockPermissions = () => {
+    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
+    return entity.category.permissions.includes('view_category_stocks') &&
+        entity.store.permissions.includes('view_store_stocks');
+  };
+
   userHasStaffPermissions = () => {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     return entity.category.permissions.includes('category_entities_staff') &&
@@ -284,14 +307,7 @@ class EntityDetail extends Component {
 
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
 
-    let stock = 0;
-    if (entity.activeRegistry) {
-      if (entity.activeRegistry.stock === -1) {
-        stock = <FormattedMessage id="unknown" defaultMessage="Unknown" />;
-      } else {
-        stock = entity.activeRegistry.stock
-      }
-    }
+    const displayStocksCell = this.userHasStockPermissions();
 
     const hasStaffPermissions = this.userHasStaffPermissions();
 
@@ -311,15 +327,15 @@ class EntityDetail extends Component {
         'id': 'https://schema.org/NewCondition',
         'name': <FormattedMessage id="condition_new" defaultMessage="New"/>
       },
-        {
+      {
         'id': 'https://schema.org/DamagedCondition',
         'name': <FormattedMessage id="condition_damaged" defaultMessage="Damaged"/>
       },
-        {
+      {
         'id': 'https://schema.org/RefurbishedCondition',
         'name': <FormattedMessage id="condition_refurbished" defaultMessage="Refurbished"/>
       },
-        {
+      {
         'id': 'https://schema.org/UsedCondition',
         'name': <FormattedMessage id="condition_used" defaultMessage="Used"/>
       }
@@ -634,18 +650,19 @@ class EntityDetail extends Component {
 
                     <tr>
                       <th><FormattedMessage id="is_available_question" defaultMessage='Is available?' /></th>
-                      <td><i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
+                      <td><i className={entity.activeRegistry && entity.activeRegistry.is_available ?
                           'glyphicons glyphicons-check' :
                           'glyphicons glyphicons-unchecked'}/>
                       </td>
                     </tr>
 
-                    <tr>
+                    {displayStocksCell && <tr>
                       <th><FormattedMessage id="stock" defaultMessage='Stock' /></th>
                       <td>
-                        {stock}
+                        {this.state.stock}
                       </td>
                     </tr>
+                    }
 
                     <tr>
                       <th><FormattedMessage id="last_pricing_update" defaultMessage='Last update' /></th>

@@ -108,7 +108,6 @@ class ApiForm extends Component {
       if (!wasValid && isValid) {
         this.updateSearchResults();
       } else if (isValid && updateOnFinish) {
-        console.log(updatedFieldsData);
         this.updateSearchResults(true)
       }
     });
