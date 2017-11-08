@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import {
   addApiResourceDispatchToPropsUtils,
@@ -11,47 +10,33 @@ import Loading from "../components/Loading";
 import {FormattedMessage} from "react-intl";
 
 class ResourceObjectPermission extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      resolved: false
-    }
+  componentDidMount() {
+    this.componentUpdate(this.props)
   }
 
-  componentDidMount() {
-    if (this.props.apiResourceObject) {
-      this.setState({resolved: true})
-    } else {
-      const id = this.props.match.params.id;
-      this.props.fetchApiResourceObject(this.props.resource, id, this.props.dispatch)
-          .then(json => {
-            this.setState({resolved: true})
-          })
+  componentWillReceiveProps(nextProps) {
+    this.componentUpdate(nextProps);
+  }
+
+  componentUpdate(props) {
+    if (!props.apiResourceObject) {
+      const id = props.match.params.id;
+      props.fetchApiResourceObject(props.resource, id, props.dispatch).catch(err => {
+        toast.error(<FormattedMessage
+            id="permission_denied_toast"
+            defaultMessage="This resource does not exist or you don't have permission to access it." />, {
+          autoClose: false
+        });
+      })
     }
   }
 
   render = () => {
     const apiResourceObject = this.props.apiResourceObject;
-    const resolved = this.state.resolved;
 
-    if (!apiResourceObject && !resolved) {
+    if (!apiResourceObject) {
       // Object is currently fetching or resource endpoints have not been loaded
       return <Loading />
-    } else if (!apiResourceObject && resolved) {
-      // Object does not exist or the user has no permission over the objet at API level
-      const redirectPath = this.props.redirectPath;
-
-      toast.error(<FormattedMessage
-          id="permission_denied_toast"
-          defaultMessage="This resource does not exist or you don't have permission to access it." />, {
-        autoClose: false
-      });
-
-      return <Redirect to={{
-        pathname: redirectPath || '/404'
-      }}/>
-
     } else {
       const propsForChild = {
         apiResourceObject

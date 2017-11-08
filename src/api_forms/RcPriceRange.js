@@ -117,7 +117,7 @@ class RcPriceRange extends Component {
   };
 
   handle = rangeProps => {
-    const { value, dragging, index, ...restProps } = rangeProps;
+    const { value, index } = rangeProps;
 
     const startValue = this.state.startValue;
     const endValue = this.state.endValue;

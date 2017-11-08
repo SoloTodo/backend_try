@@ -8,10 +8,23 @@ import Loading from "./components/Loading";
 
 class RequiredResources extends Component {
   componentDidMount() {
-    const requiredResources = this.props.resources || [];
+    this.componentUpdate(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const oldResources = this.props.resources;
+    const newResources = nextProps.resources;
+
+    if (oldResources.length !== newResources.length || !oldResources.every((v, i)=> v === newResources[i])) {
+      this.componentUpdate(nextProps);
+    }
+  }
+
+  componentUpdate(props) {
+    const requiredResources = props.resources || [];
     for (let requiredResource of requiredResources) {
-      if (!this.props.loadedResources.includes(requiredResource)) {
-        this.props.fetchApiResource(requiredResource, this.props.dispatch)
+      if (!props.loadedResources.includes(requiredResource)) {
+        props.fetchApiResource(requiredResource, props.dispatch)
       }
     }
   }
@@ -20,6 +33,7 @@ class RequiredResources extends Component {
     const additionalChildProps = {};
 
     const requiredResources = this.props.resources || [];
+
     for (let requiredResource of requiredResources) {
       if (!this.props.loadedResources.includes(requiredResource)) {
         return <Loading />

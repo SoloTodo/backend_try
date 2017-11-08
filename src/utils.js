@@ -19,7 +19,13 @@ export function fetchAuth(authToken, input, init={}) {
   init.headers.Authorization = `Token ${authToken}`;
   init.headers['Content-Type'] = 'application/json';
   init.headers['Accept'] = 'application/json';
-  return fetch(input, init).then(res => res.json())
+
+  return fetch(input, init).then(res => {
+    if (!res.ok) {
+      throw res
+    }
+    return res.json()
+  })
 }
 
 export function navigatorLanguage() {

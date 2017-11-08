@@ -34,10 +34,10 @@ class EntityDetail extends Component {
       updatingPricing: false,
       changingVisibility: false,
       categoryForChange: null,
-      conditionForChange: null,
       dissociatingState: DISSOCIATING_STATES.STAND_BY,
       dissociationReason: '',
-      stock: undefined
+      stock: undefined,
+      staffInfo: undefined
     }
   }
 
@@ -49,7 +49,10 @@ class EntityDetail extends Component {
     // if some other staff has been editing this entity in the last 10 minutes, show a warning
     // Othjerwise register the staff entry
     let registerStaffAccess = false;
-    if (this.userHasStaffPermissions()) {
+
+    const userHasStaffPermissions = this.userHasStaffPermissions();
+
+    if (userHasStaffPermissions) {
       if (entity.last_staff_access) {
         const lastStaffAccess = moment(entity.last_staff_access);
         const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccess));
@@ -89,6 +92,15 @@ class EntityDetail extends Component {
         })
       }
     }
+
+    if (userHasStaffPermissions) {
+      const endpoint = entity.url + 'staff_info/';
+      this.props.fetchAuth(endpoint).then(staffInfo => {
+        this.setState({
+          staffInfo
+        })
+      })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -110,22 +122,6 @@ class EntityDetail extends Component {
         toast.info(<FormattedMessage
             id="entity_pricing_information_updated_by_another_user"
             defaultMessage='Another user has just updated the pricing information of this entity' />);
-      }
-    }
-
-    // Staff change notification
-    const currentLastStaffChange = currentEntity.lastStaffChange ? moment(currentEntity.lastStaffChange) : null;
-    const nextLastStaffChange = nextEntity.lastStaffChange ? moment(nextEntity.lastStaffChange) : null;
-
-    if (nextLastStaffChange) {
-      if (!currentLastStaffChange || currentLastStaffChange.isBefore(nextLastStaffChange)) {
-        if (nextEntity.lastStaffChangeUserUrl === this.props.user.detail_url) {
-          toast.success(<FormattedMessage id="entity_updated_successfully" defaultMessage="Entity updated" />, {autoClose: 2000});
-        } else {
-          toast.warn(<FormattedMessage
-              id="entity_staff_someone_editing_warning"
-              defaultMessage="Someone else is editing this entity" />, {autoClose: false});
-        }
       }
     }
   }
@@ -200,20 +196,6 @@ class EntityDetail extends Component {
     });
   };
 
-  changeCondition = () => {
-    const requestBody = JSON.stringify({condition: this.state.conditionForChange.id});
-
-    this.props.fetchAuth(`${this.props.apiResourceObject.url}change_condition/`, {
-      method: 'POST',
-      body: requestBody
-    }).then(json => {
-      this.saveEntityChanges(json);
-      this.setState({
-        conditionForChange: null
-      });
-    });
-  };
-
   dissociate = () => {
     this.setState({
       dissociatingState: DISSOCIATING_STATES.EXECUTING
@@ -249,14 +231,6 @@ class EntityDetail extends Component {
       if (this.userHasStaffPermissionOverSelectedCategory()) {
         this.changeCategory();
       }
-    });
-  };
-
-  handleChangeCondition = newConditionChoice => {
-    this.setState({
-      conditionForChange: newConditionChoice.option
-    }, () => {
-      this.changeCondition();
     });
   };
 
@@ -342,7 +316,6 @@ class EntityDetail extends Component {
     ];
 
     const currentCondition = conditions.filter(condition => condition.id === entity.condition)[0];
-    const conditionOptions = createOptions(conditions);
 
     const isModalOpen = Boolean(this.state.categoryForChange) && !this.userHasStaffPermissionOverSelectedCategory();
 
@@ -354,6 +327,8 @@ class EntityDetail extends Component {
         thumbnail: pictureUrl
       }))
     }
+
+    const staffInfo = this.state.staffInfo ? this.props.ApiResourceObject(this.state.staffInfo) : null;
 
     return (
         <div className="animated fadeIn">
@@ -499,20 +474,7 @@ class EntityDetail extends Component {
                     <tr>
                       <th><FormattedMessage id="condition" defaultMessage="Condition" /></th>
                       <td>
-                        {hasStaffPermissions ?
-                            <Select
-                                name="conditions"
-                                id="conditions"
-                                options={conditionOptions}
-                                value={createOption(currentCondition)}
-                                onChange={this.handleChangeCondition}
-                                searchable={false}
-                                clearable={false}
-                                disabled={Boolean(this.state.conditionForChange)}
-                            />
-                            :
-                            currentCondition.name
-                        }
+                        {currentCondition.name}
                       </td>
                     </tr>
                     <tr>
@@ -674,7 +636,7 @@ class EntityDetail extends Component {
                 </div>
               </div>
 
-              {entity.store.permissions.includes('store_entities_staff') && entity.category.permissions.includes('category_entities_staff') && <div className="card">
+              {staffInfo && <div className="card">
                 <div className="card-header">
                   <FormattedMessage id="staff_information" defaultMessage='Staff Information'/>
                 </div>
@@ -687,19 +649,19 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="original_category" defaultMessage='Original category' /></th>
-                      <td>{entity.scrapedCategory.name}</td>
+                      <td>{staffInfo.scrapedCategory.name}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="discovery_url" defaultMessage='Discovery URL' /></th>
-                      <td className="overflowed-table-cell"><a href={entity.discoveryUrl} target="_blank">{entity.discoveryUrl}</a></td>
+                      <td className="overflowed-table-cell"><a href={staffInfo.discoveryUrl} target="_blank">{staffInfo.discoveryUrl}</a></td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="last_association_date" defaultMessage='Last association date' /></th>
-                      <td>{entity.lastAssociation ? formatDateStr(entity.lastAssociation) : <em>N/A</em>}</td>
+                      <th><FormattedMessage id="last_association" defaultMessage='Last association' /></th>
+                      <td>{staffInfo.lastAssociation ? `${formatDateStr(staffInfo.lastAssociation)} (${staffInfo.lastAssociationUser.firstName} ${staffInfo.lastAssociationUser.lastName})` : <em>N/A</em>}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="last_association_user" defaultMessage='Last association user' /></th>
-                      <td>{entity.lastAssociationUserUrl ? `${entity.lastAssociationUser.firstName} ${entity.lastAssociationUser.lastName}` : <em>N/A</em>}</td>
+                      <th><FormattedMessage id="last_access" defaultMessage='Last access' /></th>
+                      <td>{staffInfo.lastStaffAccess ? `${formatDateStr(staffInfo.lastStaffAccess)} (${staffInfo.lastStaffAccessUser.firstName} ${staffInfo.lastStaffAccessUser.lastName})` : <em>N/A</em>}</td>
                     </tr>
                     </tbody>
                   </table>

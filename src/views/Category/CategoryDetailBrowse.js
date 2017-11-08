@@ -224,11 +224,7 @@ class CategoryDetailBrowse extends Component {
           let filterChoices = undefined;
 
           if (filterAggs) {
-            let aggSum = 0;
-
             filterChoices = filterAggs.map(choice => {
-              aggSum += choice.doc_count;
-
               return {
                 ...choice,
                 name: `${filterChoiceIdToNameDict[choice.id]}`
@@ -253,15 +249,11 @@ class CategoryDetailBrowse extends Component {
           let filterChoices = undefined;
 
           if (filterAggs) {
-            let aggSum = filterAggs.reduce((acum, choice) => acum + choice.doc_count, 0);
-
             filterChoices = filterAggs.map(choice => {
               let result = {
                 ...choice,
                 name: `${filterChoiceIdToNameDict[choice.id]}`
               };
-
-              aggSum -= choice.doc_count;
 
               return result
             });

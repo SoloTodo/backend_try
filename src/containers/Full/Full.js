@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import { Switch, Route, Redirect } from 'react-router-dom'
-import moment from 'moment';
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
 import Breadcrumbs from '../../components/Breadcrumbs/';
 import Aside from '../../components/Aside/';
-import PubNub from 'pubnub';
 import Dashboard from '../../views/Dashboard/';
 import {
   addApiResourceDispatchToPropsUtils,
@@ -25,37 +23,6 @@ import CategorySwitch from "../../views/Category/CategorySwitch";
 
 
 class Full extends Component {
-  componentDidMount() {
-    const pubnub = new PubNub({
-      subscribeKey: 'sub-c-6794a024-8f21-11e7-80ad-ba6da068eefb',
-      ssl: true
-    });
-
-    pubnub.subscribe({
-      channels: ['backend'],
-    });
-
-    pubnub.addListener({
-      message: (m) => {
-        const message = m.message;
-
-        if (message.type === 'updateApiResourceObject') {
-          const newApiResourceObject = message.apiResourceObject;
-          const existingResourceObject = this.props.apiResourceObjects[newApiResourceObject.url];
-
-          if (existingResourceObject) {
-            const existingObjectLastUpdate = moment(existingResourceObject.last_updated);
-            const newObjectLastUpdate = moment(newApiResourceObject.last_updated);
-
-            if (existingObjectLastUpdate.isBefore(newObjectLastUpdate)) {
-              this.props.fetchApiResourceObject(message.resource, message.id, this.props.dispatch)
-            }
-          }
-        }
-      }})
-  };
-
-
   render() {
     return (
         <div className="app">

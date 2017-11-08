@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import DashboardStoreLeadsChart from "./DashboardStoreLeadsChart";
-import DashboardBestSellingEntities from "./DashboardBestSellingEntities";
+// import DashboardStoreLeadsChart from "./DashboardStoreLeadsChart";
+// import DashboardBestSellingEntities from "./DashboardBestSellingEntities";
 
 class Dashboard extends Component {
 
