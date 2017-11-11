@@ -8,6 +8,7 @@ import {
 import {settings} from "../settings";
 import Loading from "../components/Loading";
 import {FormattedMessage} from "react-intl";
+import {Redirect} from "react-router-dom";
 
 class ResourceObjectPermission extends Component {
   componentDidMount() {
@@ -31,14 +32,38 @@ class ResourceObjectPermission extends Component {
     }
   }
 
+  hasPermission = () => {
+    const permission = this.props.permission;
+
+    if (!permission) {
+      return true
+    }
+
+    const apiResourceObject = this.props.ApiResourceObject(this.props.apiResourceObject);
+
+    if (typeof permission === 'function') {
+      return permission(apiResourceObject)
+    } else {
+      return apiResourceObject.permissions.includes(permission)
+    }
+  };
+
   render = () => {
     const apiResourceObject = this.props.apiResourceObject;
 
     if (!apiResourceObject) {
       // Object is currently fetching or resource endpoints have not been loaded
-      return <Loading />
+      return <Loading/>
+    } else if (!this.hasPermission()) {
+      toast.error(<FormattedMessage
+          id="permission_denied_toast"
+          defaultMessage="This resource does not exist or you don't have permission to access it." />, {
+        autoClose: false
+      });
+      return <Redirect to="/" />
     } else {
       const propsForChild = {
+        ...this.props,
         apiResourceObject
       };
 

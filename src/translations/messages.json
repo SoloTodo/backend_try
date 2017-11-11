@@ -40,6 +40,11 @@
     "filepath": "./src/components/Header/Header.js"
   },
   {
+    "id": "currently_unavailable",
+    "defaultMessage": "Currently unavailable",
+    "filepath": "./src/components/OrderTable.js"
+  },
+  {
     "id": "menu",
     "defaultMessage": "Menu",
     "filepath": "./src/components/Sidebar/Sidebar.js"
@@ -287,6 +292,11 @@
   {
     "id": "descending",
     "defaultMessage": "Descending",
+    "filepath": "./src/messages.js"
+  },
+  {
+    "id": "conflicts",
+    "defaultMessage": "Conflicts",
     "filepath": "./src/messages.js"
   },
   {
@@ -585,28 +595,23 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "entity_invisible_warning",
+    "defaultMessage": "Our staff has marked this entity as non-relevant, so it is ignored by our system. If this is not the case please contact us.",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_not_associated_info",
+    "defaultMessage": "This entity has not yet been processed by our staff. Please contact us if you want to prioritize it.",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "entity_not_available_info",
+    "defaultMessage": "Please note that this entity is not available for purchase according to our system.",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "entity_information_updated_successfully",
     "defaultMessage": "Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff.",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "entity_pricing_information_updated_by_another_user",
-    "defaultMessage": "Another user has just updated the pricing information of this entity",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "entity_updated_successfully",
-    "defaultMessage": "Entity updated",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "entity_staff_someone_editing_warning",
-    "defaultMessage": "Someone else is editing this entity",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "unknown",
-    "defaultMessage": "Unknown",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -815,13 +820,13 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "last_association_date",
-    "defaultMessage": "Last association date",
+    "id": "last_association",
+    "defaultMessage": "Last association",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "last_association_user",
-    "defaultMessage": "Last association user",
+    "id": "last_access",
+    "defaultMessage": "Last access",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -1440,9 +1445,94 @@
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
     "id": "tech_specs",
     "defaultMessage": "Tech specs",
     "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "id",
+    "defaultMessage": "ID",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "sku",
+    "defaultMessage": "SKU",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "part_number",
+    "defaultMessage": "Part Number",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "ean",
+    "defaultMessage": "EAN",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "cell_plan_name",
+    "defaultMessage": "Cell plan name",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "last_update",
+    "defaultMessage": "Last update",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "is_available_short_question",
+    "defaultMessage": "Avail?",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "is_active_short_question",
+    "defaultMessage": "Act?",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "normal_price",
+    "defaultMessage": "Normal price",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "offer_price",
+    "defaultMessage": "Offer price",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "cell_monthly_payment",
+    "defaultMessage": "Cell monthly payment",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Product/ProductDetailEntities.js"
   },
   {
     "id": "store",
@@ -1632,6 +1722,11 @@
   {
     "id": "leads_stats",
     "defaultMessage": "Leads (stats)",
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
+  },
+  {
+    "id": "conflicting_entities",
+    "defaultMessage": "Conflicting entities",
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {

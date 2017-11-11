@@ -68,6 +68,26 @@ class EntityDetail extends Component {
       } else {
         registerStaffAccess = true;
       }
+    } else {
+      if (!entity.is_visible) {
+        console.log('Invisibile!');
+
+        toast.warn(<FormattedMessage
+            id="entity_invisible_warning"
+            defaultMessage="Our staff has marked this entity as non-relevant, so it is ignored by our system. If this is not the case please contact us."/>, {autoClose: false})
+      }
+
+      if (entity.is_visible && entity.active_registry.is_available && !entity.product) {
+        toast.info(<FormattedMessage
+            id="entity_not_associated_info"
+            defaultMessage="This entity has not yet been processed by our staff. Please contact us if you want to prioritize it."/>, {autoClose: false})
+      }
+
+      if (!entity.active_registry.is_available) {
+        toast.info(<FormattedMessage
+            id="entity_not_available_info"
+            defaultMessage="Please note that this entity is not available for purchase according to our system."/>, {autoClose: false})
+      }
     }
 
     if (registerStaffAccess) {
@@ -112,23 +132,17 @@ class EntityDetail extends Component {
     const nextLastPricingUpdate = moment(nextEntity.lastPricingUpdate);
 
     if (currentLastPricingUpdate.isBefore(nextLastPricingUpdate)) {
-      if (nextEntity.lastPricingUpdateUserUrl === this.props.user.detail_url) {
-        toast.success(<FormattedMessage
-            id="entity_information_updated_successfully"
-            defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />, {
-          autoClose: false
-        })
-      } else {
-        toast.info(<FormattedMessage
-            id="entity_pricing_information_updated_by_another_user"
-            defaultMessage='Another user has just updated the pricing information of this entity' />);
-      }
+      toast.success(<FormattedMessage
+          id="entity_information_updated_successfully"
+          defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />, {
+        autoClose: false
+      })
     }
   }
 
   saveEntityChanges = (changedEntity) => {
     this.props.dispatch({
-      type: 'updateApiResource',
+      type: 'updateApiResourceObject',
       apiResourceObject: changedEntity
     });
   };

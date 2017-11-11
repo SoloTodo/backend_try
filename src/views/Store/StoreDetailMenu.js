@@ -52,6 +52,15 @@ export default function StoreDetailMenu(props) {
             </NavLink>
           </li>
           }
+          {store.permissions.includes('is_store_staff') &&
+          <li>
+            <NavLink to={'/entities/conflicts?stores=' + store.id}>
+              <button type="button" className="btn btn-link">
+                <FormattedMessage id="conflicting_entities" defaultMessage="Conflicting entities" />
+              </button>
+            </NavLink>
+          </li>
+          }
         </ul>
       </div>
     </div>

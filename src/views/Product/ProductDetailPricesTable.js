@@ -22,9 +22,11 @@ class ProductDetailPricesTable extends Component {
 
   componentDidMount() {
     this.props
-        .fetchAuth(this.props.product.url + 'available_entities/')
-        .then(availableEntities => {
-          this.setState({availableEntities})
+        .fetchAuth(this.props.product.url + 'entities/')
+        .then(entities => {
+          this.setState({
+            availableEntities: entities.filter(entity => entity.active_registry && entity.active_registry.is_available)
+          })
         })
   }
 
@@ -142,7 +144,7 @@ class ProductDetailPricesTable extends Component {
       columns.push({
         name: 'cellMonthlyPayment',
         label: <FormattedMessage id="monthly_payment" defaultMessage="Monthly payment" />,
-        field: entity => this.props.formatCurrency(entity.activeRegistry.cell_monthly_payment, entity.currency),
+        field: entity => entity.cellMonthlyPayment ? this.props.formatCurrency(entity.activeRegistry.cell_monthly_payment, entity.currency) : <em>N/A</em>,
         ordering: commonCurrency ? entity => entity.cellMonthlyPayment : undefined,
         className: 'text-right'
       })
@@ -171,7 +173,7 @@ class ProductDetailPricesTable extends Component {
         columns.push({
           name: 'convertedCellMonthlyPayment',
           label: <span><FormattedMessage id="monthly_payment" defaultMessage="Monthly payment" /> ({prefererredCurrency.isoCode})</span>,
-          field: entity => this.props.formatCurrency(entity.convertedCellMonthlyPayment, prefererredCurrency),
+          field: entity => entity.cellMonthlyPayment ? this.props.formatCurrency(entity.convertedCellMonthlyPayment, prefererredCurrency) : <em>N/A</em>,
           ordering: entity => entity.convertedCellMonthlyPayment,
           className: 'text-right'
         });

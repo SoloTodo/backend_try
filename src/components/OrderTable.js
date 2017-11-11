@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {FormattedMessage} from "react-intl";
 
 function OrderTableHeader ({column, ordering, descending, onChange}) {
   if (!column.ordering) {
@@ -92,6 +93,9 @@ class OrderTable extends Component {
                 ))}
               </tr>
           ))}
+          {!sortedData.length && <tr>
+            <td colSpan={10}><em><FormattedMessage id="currently_unavailable" defaultMessage="Currently unavailable"/></em></td>
+          </tr>}
           </tbody>
         </table>
     )

@@ -70,7 +70,6 @@ class EntityList extends Component {
       },
       {
         label: <FormattedMessage id="cell_plan_name" defaultMessage={`Cell plan`} />,
-        ordering: 'cell_plan',
         renderer: entity => entity.cellPlanName || <em>N/A</em>,
         cssClasses: 'hidden-xs-down',
         displayFilter: entities => entities.some(entity => entity.cellPlanName !== null)
@@ -99,7 +98,6 @@ class EntityList extends Component {
       },
       {
         label: <FormattedMessage id="product" defaultMessage={`Product`} />,
-        ordering: 'product',
         renderer: entity => entity.product ?
             <span>
               <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink>
@@ -137,7 +135,6 @@ class EntityList extends Component {
         label: <span>{labels.normalPrice}
           {convertCurrencies &&
           <span>&nbsp;({labels.original})</span>}</span>,
-        ordering: 'normal_price',
         renderer: entity => entity.activeRegistry ?
             <span>{localFormatCurrency(entity.activeRegistry.normal_price, entity.currency)}</span> :
             <em>N/A</em>,
@@ -148,7 +145,6 @@ class EntityList extends Component {
           {convertCurrencies &&
           <span>&nbsp;({labels.original})</span>
           }</span>,
-        ordering: 'offer_price',
         renderer: entity => entity.activeRegistry ?
             <span>{localFormatCurrency(entity.activeRegistry.offer_price, entity.currency)}</span> :
             <em>N/A</em>,
@@ -188,7 +184,7 @@ class EntityList extends Component {
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <ApiFormChoiceField
                 name="ordering"
-                choices={createOrderingOptionChoices(['name', 'country', 'type'])}
+                choices={createOrderingOptionChoices(['name', 'store', 'sku', 'category'])}
                 hidden={true}
                 required={true}
                 value={this.state.formValues.ordering}

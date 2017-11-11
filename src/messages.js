@@ -47,6 +47,7 @@ const messages = {
   estimated_sales: <FormattedMessage id="estimated_sales" defaultMessage="Estimated sales" />,
   ascending: <FormattedMessage id="ascending" defaultMessage="Ascending" />,
   descending: <FormattedMessage id="descending" defaultMessage="Descending" />,
+  conflicts: <FormattedMessage id="conflicts" defaultMessage="Conflicts" />,
 };
 
 export default messages;

@@ -107,6 +107,15 @@ class ProductDetail extends Component {
                       </NavLink>
                     </li>
                     }
+                    {product.category.permissions.includes('is_category_staff') &&
+                    <li>
+                      <NavLink to={`/products/${product.id}/entities`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="entities" defaultMessage="Entities"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
                   </ul>
                 </div>
               </div>
