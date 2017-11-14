@@ -19,6 +19,8 @@ const routes = {
   '/categories/:id': params => ({apiResource: 'categories', apiResourceObjectId: params.id}),
   '/categories/:id/products': 'products',
   '/leads': 'leads',
-  '/leads/stats': 'stats'
+  '/leads/stats': 'stats',
+  '/visits': 'visits',
+  '/visits/stats': 'stats'
 };
 export default routes;

@@ -141,7 +141,6 @@
   "old_value": "Old value",
   "options": "Options",
   "ordering": "Ordering",
-  "origin": "Origin",
   "original_category": "Original category",
   "original_label_short": "orig.",
   "page_access_denied": "You don't have permission to access this page",
@@ -178,8 +177,6 @@
   "sign_up_message": "This section is reserved for the staff at SoloTodo",
   "sign_up_title": "Sign up",
   "sku": "SKU",
-  "source": "Source",
-  "sources": "Sources",
   "staff_information": "Staff Information",
   "start": "Start",
   "stats": "Estadísticas",
@@ -212,6 +209,10 @@
   "user": "User",
   "view_full_report": "View full report",
   "visits": "Visits",
+  "visits_list": "Visits (list)",
+  "visits_stats": "Visits (stats)",
   "warning_exclamation": "Warning!",
+  "website": "Website",
+  "websites": "Websites",
   "yes": "Yes"
 }

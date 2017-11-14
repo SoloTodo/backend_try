@@ -10,8 +10,8 @@ import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import Loading from "../../components/Loading";
 import {NavLink} from "react-router-dom";
-import './LeadStats.css'
-import LeadStatsTimelapse from "./LeadStatsTimelapse";
+import './VisitStats.css'
+import LeadStatsTimelapse from "../Lead/LeadStatsTimelapse";
 import {createPageSizeChoices} from "../../api_forms/utils";
 import {listToObject} from "../../utils";
 import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
@@ -19,14 +19,14 @@ import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import ApiFormRemoveOnlyListField from "../../api_forms/ApiFormRemoveOnlyListField";
 import ApiFormResultPieChart from "../../api_forms/ApiFormResultPieChart";
 
-class LeadStats extends Component {
+class VisitStats extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       formValues: {},
       apiFormFieldChangeHandler: undefined,
-      leadStats: undefined,
+      visitStats: undefined,
       resultsGrouping: undefined
     }
   }
@@ -44,14 +44,14 @@ class LeadStats extends Component {
   setResults = (bundle) => {
     if (!bundle) {
       this.setState({
-        leadStats: null,
+        visitStats: null,
         resultsGrouping: null,
       });
       return;
     }
 
     this.setState({
-      leadStats: bundle.payload,
+      visitStats: bundle.payload,
       resultFormValues: bundle.fieldValues
     })
   };
@@ -67,11 +67,6 @@ class LeadStats extends Component {
         ordering: 'count'
       },
       {
-        id: 'store',
-        name: <FormattedMessage id="store" defaultMessage="Store"/>,
-        ordering: 'count'
-      },
-      {
         id: 'date',
         name: <FormattedMessage id="date" defaultMessage="Date"/>,
         ordering: null
@@ -81,19 +76,13 @@ class LeadStats extends Component {
         name: <FormattedMessage id="product" defaultMessage="Product"/>,
         ordering: 'count'
       },
-      {
-        id: 'entity',
-        name: <FormattedMessage id="entity" defaultMessage="Entidad"/>,
-        ordering: 'count'
-      },
     ];
 
     let resultComponent = null;
     const resultGrouping = this.state.resultFormValues ? this.state.resultFormValues.grouping.id : null;
 
-    const categories = this.props.categories.filter(category => category.permissions.includes('view_category_leads'));
-    const stores = this.props.stores.filter(store => store.permissions.includes('view_store_leads'));
-    const websites = this.props.websites.filter(website => website.permissions.includes('view_website_leads'));
+    const categories = this.props.categories.filter(category => category.permissions.includes('view_category_visits'));
+    const websites = this.props.websites.filter(website => website.permissions.includes('view_website_visits'));
 
     const categoriesDict = listToObject(categories, 'url');
     let displayPaginationControls = false;
@@ -102,20 +91,10 @@ class LeadStats extends Component {
       case 'category':
         resultComponent =
             <ApiFormResultPieChart
-                data={this.state.leadStats}
+                data={this.state.visitStats}
                 label_field='category'
                 label={<FormattedMessage id="category" defaultMessage="Category" />}
                 column_header={<FormattedMessage id="count" defaultMessage="Count" />}
-            />;
-        break;
-      case 'store':
-        resultComponent =
-            <ApiFormResultPieChart
-                data={this.state.leadStats}
-                label_field='store'
-                label={<FormattedMessage id="store" defaultMessage="Store" />}
-                column_header={<FormattedMessage id="count" defaultMessage="Count" />}
-
             />;
         break;
       case 'date':
@@ -123,7 +102,7 @@ class LeadStats extends Component {
             <LeadStatsTimelapse
                 startDate={this.state.resultFormValues.timestamp && this.state.resultFormValues.timestamp.startDate}
                 endDate={this.state.resultFormValues.timestamp && this.state.resultFormValues.timestamp.endDate}
-                data={this.state.leadStats}
+                data={this.state.visitStats}
             />;
         break;
       case 'product':
@@ -136,7 +115,6 @@ class LeadStats extends Component {
           {
             label: <FormattedMessage id="category" defaultMessage="Category" />,
             renderer: entry => {
-              console.log(entry.product)
               const category = categoriesDict[entry.product.category];
               return <NavLink to={'/categories/' + category.id}>{category.name}</NavLink>
             }
@@ -150,44 +128,7 @@ class LeadStats extends Component {
         resultComponent = <ApiFormResultsTable
             columns={productColumns}
             onChange={this.state.apiFormFieldChangeHandler}
-            results={this.state.leadStats && this.state.leadStats.results}
-        />;
-        break;
-      case 'entity':
-        displayPaginationControls = true;
-        const storesDict = listToObject(stores, 'url');
-
-        const entityColumns = [
-          {
-            label: <FormattedMessage id="entity" defaultMessage="Entidad" />,
-            renderer: entry => <span>
-              <NavLink to={'/entities/' + entry.entity.id}>{entry.entity.name}</NavLink>
-              <a href={entry.entity.external_url} target="_blank" className="ml-2">
-                <span className="glyphicons glyphicons-link">&nbsp;</span>
-              </a>
-            </span>
-          },
-          {
-            label: <FormattedMessage id="store" defaultMessage="Store" />,
-            renderer: entry => {
-              const store = storesDict[entry.entity.store];
-              return <NavLink to={'/stores/' + store.id}>{store.name}</NavLink>
-            }
-          },
-          {
-            label: <FormattedMessage id="product" defaultMessage="Product" />,
-            renderer: entry => <NavLink to={'/products/' + entry.entity.product.id}>{entry.entity.product.name}</NavLink>
-          },
-          {
-            label: <FormattedMessage id="count" defaultMessage="Count" />,
-            renderer: entry => entry.count
-          }
-        ];
-
-        resultComponent = <ApiFormResultsTable
-            columns={entityColumns}
-            onChange={this.state.apiFormFieldChangeHandler}
-            results={this.state.leadStats && this.state.leadStats.results}
+            results={this.state.visitStats && this.state.visitStats.results}
         />;
         break;
       default:
@@ -196,14 +137,13 @@ class LeadStats extends Component {
 
     const paginationVisibilityClass = displayPaginationControls ? '' : ' hidden-xs-up';
 
-    const displayEntitiesFilter = this.state.formValues.entities && this.state.formValues.entities.length;
     const displayProductsFilter = this.state.formValues.products && this.state.formValues.products.length;
 
     return (
         <div className="animated fadeIn d-flex flex-column">
           <ApiForm
-              endpoints={[settings.apiResourceEndpoints.leads + 'grouped/']}
-              fields={['grouping', 'stores', 'timestamp', 'categories', 'websites', 'entities', 'products', 'page', 'page_size']}
+              endpoints={[settings.apiResourceEndpoints.visits + 'grouped/']}
+              fields={['grouping', 'timestamp', 'categories', 'websites', 'products', 'page', 'page_size']}
               onResultsChange={this.setResults}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -212,26 +152,10 @@ class LeadStats extends Component {
                 <div className="card">
                   <div className="card-header">
                     <span className="glyphicons glyphicons-filter">&nbsp;</span>
-                    <FormattedMessage id="filters" defaultMessage={`Filters`} />
+                    <FormattedMessage id="filters" defaultMessage="Filters" />
                   </div>
                   <div className="card-block">
                     <div className="row api-form-filters">
-                      <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                        <label htmlFor="stores">
-                          <FormattedMessage id="stores" defaultMessage="Stores" />
-                        </label>
-                        <ApiFormChoiceField
-                            name="stores"
-                            id="stores"
-                            placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
-                            choices={stores}
-                            multiple={true}
-                            searchable={true}
-                            value={this.state.formValues.stores}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                        />
-                      </div>
-
                       <div className="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label htmlFor="categories">
                           <FormattedMessage id="categories" defaultMessage="categories" />
@@ -299,14 +223,14 @@ class LeadStats extends Component {
                             label={<FormattedMessage id="update" defaultMessage='Update' />}
                             loadingLabel={<FormattedMessage id="updating" defaultMessage='Updating'/>}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.leadStats === null}
+                            loading={this.state.visitStats === null}
                         />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className={`col-12 ${displayEntitiesFilter || displayProductsFilter ? '' : ' hidden-xs-up'}`}>
+              <div className={`col-12 ${displayProductsFilter ? '' : ' hidden-xs-up'}`}>
                 <div className="card">
                   <div className="card-header">
                     <span className="glyphicons glyphicons-filter">&nbsp;</span>
@@ -314,19 +238,6 @@ class LeadStats extends Component {
                   </div>
                   <div className="card-block">
                     <div className="row api-form-filters">
-                      <div className={`col-12 col-sm-6 ${displayEntitiesFilter ? '' : ' hidden-xs-up'}`}>
-                        <label htmlFor="entities">
-                          <FormattedMessage id="entities" defaultMessage="Entities" />
-                        </label>
-                        <ApiFormRemoveOnlyListField
-                            name="entities"
-                            id="entities"
-                            value={this.state.formValues.entities}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            resource="entities"
-                            updateResultsOnChange={true}
-                        />
-                      </div>
                       <div className={`col-12 col-sm-6 ${displayProductsFilter ? '' : ' hidden-xs-up'}`}>
                         <label htmlFor="products">
                           <FormattedMessage id="products" defaultMessage="Products" />
@@ -351,7 +262,7 @@ class LeadStats extends Component {
                     <FormattedMessage id="results" defaultMessage='Results'/>
                   </div>
                   <div className="card-block">
-                    <div id="lead-stats-result-container">
+                    <div id="visit-stats-result-container">
                       <div className={'d-flex justify-content-between flex-wrap align-items-center mb-3 api-form-filters ' + paginationVisibilityClass}>
                         <div className="d-flex results-per-page-fields align-items-center mr-3">
                           <div className="results-per-page-dropdown ml-0 mr-2">
@@ -372,7 +283,7 @@ class LeadStats extends Component {
                           <ApiFormPaginationField
                               page={this.state.formValues.page}
                               pageSize={this.state.formValues.page_size}
-                              resultCount={this.state.leadStats && this.state.leadStats.count}
+                              resultCount={this.state.visitStats && this.state.visitStats.count}
                               onChange={this.state.apiFormFieldChangeHandler}
                           />
                         </div>
@@ -392,4 +303,4 @@ class LeadStats extends Component {
 
 export default injectIntl(connect(
     addApiResourceStateToPropsUtils()
-)(LeadStats));
+)(VisitStats));

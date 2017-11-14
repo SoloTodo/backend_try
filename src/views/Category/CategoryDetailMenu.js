@@ -49,7 +49,24 @@ export default function CategoryDetailMenu(props) {
             </NavLink>
           </li>
           }
-
+          {category.permissions.includes('view_category_visits') &&
+          <li>
+            <NavLink to={'/visits/?categories=' + category.id}>
+              <button type="button" className="btn btn-link">
+                <FormattedMessage id="visits_list" defaultMessage="Visits (list)" />
+              </button>
+            </NavLink>
+          </li>
+          }
+          {category.permissions.includes('view_category_visits') &&
+          <li>
+            <NavLink to={'/visits/stats?grouping=product&categories=' + category.id}>
+              <button type="button" className="btn btn-link">
+                <FormattedMessage id="visits_stats" defaultMessage="Visits (stats)" />
+              </button>
+            </NavLink>
+          </li>
+          }
         </ul>
       </div>
     </div>

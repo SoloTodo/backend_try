@@ -62,6 +62,22 @@ export const sidebarLayout = [
     ]
   },
   {
+    title: <FormattedMessage id="visits" defaultMessage="Visits" />,
+    icon: "fa fa-eye",
+    entries: [
+      {
+        label: <FormattedMessage id="show_list_female" defaultMessage="Show all" />,
+        path: "/visits",
+        requiredPermission: "solotodo.backend_list_visits",
+      },
+      {
+        label: <FormattedMessage id="stats" defaultMessage="Stats" />,
+        path: "/visits/stats",
+        requiredPermission: "solotodo.backend_list_visits",
+      }
+    ]
+  },
+  {
     title: <FormattedMessage id="leads" defaultMessage="Leads" />,
     icon: "fa fa-external-link",
     entries: [
@@ -76,5 +92,5 @@ export const sidebarLayout = [
         requiredPermission: "solotodo.backend_list_leads",
       }
     ]
-  }
+  },
 ];

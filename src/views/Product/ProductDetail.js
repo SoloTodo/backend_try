@@ -20,7 +20,7 @@ class ProductDetail extends Component {
   componentWillMount() {
     const product = this.props.ApiResourceObject(this.props.apiResourceObject);
 
-    const specsTemplateUrl = `${settings.apiResourceEndpoints.category_templates}?api_client=${settings.apiClientId}&purpose=${settings.categoryTemplateDetailPurposeId}&category=${product.category.id}`;
+    const specsTemplateUrl = `${settings.apiResourceEndpoints.category_templates}?website=${settings.websiteId}&purpose=${settings.categoryTemplateDetailPurposeId}&category=${product.category.id}`;
 
     this.props.fetchAuth(specsTemplateUrl)
         .then(categoryTemplates => {
@@ -107,6 +107,26 @@ class ProductDetail extends Component {
                       </NavLink>
                     </li>
                     }
+
+                    {product.category.permissions.includes('view_category_visits') &&
+                    <li>
+                      <NavLink to={'/visits/?products=' + product.id}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="visits_list" defaultMessage="Visits (list)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+                    {product.category.permissions.includes('view_category_visits') &&
+                    <li>
+                      <NavLink to={'/visits/stats?grouping=date&products=' + product.id}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="visits_stats" defaultMessage="Visits (stats)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+
                     {product.category.permissions.includes('is_category_staff') &&
                     <li>
                       <NavLink to={`/products/${product.id}/entities`}>
@@ -116,6 +136,7 @@ class ProductDetail extends Component {
                       </NavLink>
                     </li>
                     }
+
                   </ul>
                 </div>
               </div>

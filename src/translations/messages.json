@@ -350,13 +350,18 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
-    "id": "leads",
-    "defaultMessage": "Leads",
+    "id": "visits",
+    "defaultMessage": "Visits",
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
     "id": "stats",
     "defaultMessage": "Stats",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "leads",
+    "defaultMessage": "Leads",
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
@@ -452,6 +457,16 @@
   {
     "id": "leads_stats",
     "defaultMessage": "Leads (stats)",
+    "filepath": "./src/views/Category/CategoryDetailMenu.js"
+  },
+  {
+    "id": "visits_list",
+    "defaultMessage": "Visits (list)",
+    "filepath": "./src/views/Category/CategoryDetailMenu.js"
+  },
+  {
+    "id": "visits_stats",
+    "defaultMessage": "Visits (stats)",
     "filepath": "./src/views/Category/CategoryDetailMenu.js"
   },
   {
@@ -1190,8 +1205,8 @@
     "filepath": "./src/views/Lead/LeadList.js"
   },
   {
-    "id": "source",
-    "defaultMessage": "Source",
+    "id": "website",
+    "defaultMessage": "Website",
     "filepath": "./src/views/Lead/LeadList.js"
   },
   {
@@ -1220,8 +1235,8 @@
     "filepath": "./src/views/Lead/LeadList.js"
   },
   {
-    "id": "sources",
-    "defaultMessage": "Sources",
+    "id": "websites",
+    "defaultMessage": "Websites",
     "filepath": "./src/views/Lead/LeadList.js"
   },
   {
@@ -1305,8 +1320,8 @@
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
-    "id": "origin",
-    "defaultMessage": "Origin",
+    "id": "websites",
+    "defaultMessage": "Websites",
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
@@ -1442,6 +1457,16 @@
   {
     "id": "leads_stats",
     "defaultMessage": "Leads (stats)",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "visits_list",
+    "defaultMessage": "Visits (list)",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "visits_stats",
+    "defaultMessage": "Visits (stats)",
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
@@ -2018,5 +2043,160 @@
     "id": "no_registry_found",
     "defaultMessage": "No registry found",
     "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "date",
+    "defaultMessage": "Date",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "website",
+    "defaultMessage": "Website",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "user",
+    "defaultMessage": "User",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "ip",
+    "defaultMessage": "IP",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "websites",
+    "defaultMessage": "Websites",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "additional_filters",
+    "defaultMessage": "Additional filters",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "visits",
+    "defaultMessage": "Visits",
+    "filepath": "./src/views/Visit/VisitList.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "date",
+    "defaultMessage": "Date",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "count",
+    "defaultMessage": "Count",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "categories",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "websites",
+    "defaultMessage": "Websites",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "grouping",
+    "defaultMessage": "Grouping",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "updating",
+    "defaultMessage": "Updating",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "additional_filters",
+    "defaultMessage": "Additional filters",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "results",
+    "defaultMessage": "Results",
+    "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "results_per_page",
+    "defaultMessage": "Results per page",
+    "filepath": "./src/views/Visit/VisitStats.js"
   }
 ]
