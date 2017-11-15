@@ -7,13 +7,22 @@ import Loading from "../../components/Loading";
 import ProductDetailPricesTable from "./ProductDetailPricesTable";
 import './ProductDetail.css'
 import {NavLink} from "react-router-dom";
+import { toast } from 'react-toastify';
+import JSONTree from 'react-json-tree'
+
+import {
+  ButtonDropdown, DropdownItem, DropdownMenu,
+  DropdownToggle, Modal, ModalBody, ModalHeader
+} from "reactstrap";
 
 class ProductDetail extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      renderedSpecs: undefined
+      renderedSpecs: undefined,
+      websiteDropDownOpen: false,
+      specsModalOpen: false,
     }
   }
 
@@ -40,6 +49,33 @@ class ProductDetail extends Component {
         })
   }
 
+  websiteDropDownToggle = evt => {
+    this.setState({
+      websiteDropDownOpen: !this.state.websiteDropDownOpen
+    });
+  };
+
+  specsModalToggle = evt => {
+    this.setState({
+      specsModalOpen: !this.state.specsModalOpen
+    });
+  };
+
+  clone = evt => {
+    const toastId = toast.info(<FormattedMessage
+        id="product_currently_cloning"
+        defaultMessage="Cloning product, please wait!" />, {
+      autoClose: false
+    });
+
+    this.props.fetchAuth(this.props.apiResourceObject.url + 'clone/', {method: 'POST'}).then(json => {
+      const clonedInstanceId = json.instance_id;
+      const clonedInstanceUrl = `${settings.endpoint}metamodel/instances/${clonedInstanceId}`;
+      toast.dismiss(toastId);
+      window.open(clonedInstanceUrl, '_blank')
+    })
+  };
+
   render() {
     const product = this.props.ApiResourceObject(this.props.apiResourceObject);
 
@@ -55,6 +91,8 @@ class ProductDetail extends Component {
       default:
         techSpecs = <div className="product_specs" dangerouslySetInnerHTML={{ __html: this.state.renderedSpecs }} />
     }
+
+    const websites = this.props.websites.filter(website => website.id !== settings.ownWebsiteId);
 
     return (
         <div className="animated fadeIn">
@@ -131,12 +169,64 @@ class ProductDetail extends Component {
                     <li>
                       <NavLink to={`/products/${product.id}/entities`}>
                         <button type="button" className="btn btn-link">
-                          <FormattedMessage id="entities" defaultMessage="Entities"/>
+                          <FormattedMessage id="associated_entities" defaultMessage="Associated entities"/>
                         </button>
                       </NavLink>
                     </li>
                     }
 
+                    {product.category.permissions.includes('is_category_staff') &&
+                    <li>
+                      <NavLink to={`${settings.endpoint}metamodel/instances/${product.instanceModelId}`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="edit" defaultMessage="Edit"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+
+                    {product.category.permissions.includes('is_category_staff') &&
+                    <li>
+                      <button type="button" className="btn btn-link" onClick={this.clone}>
+                        <FormattedMessage id="clone" defaultMessage="Clone"/>
+                      </button>
+                    </li>
+                    }
+
+                    {product.category.permissions.includes('is_category_staff') &&
+                    <li>
+                      <Modal isOpen={this.state.specsModalOpen} toggle={this.specsModalToggle} size="lg">
+                        <ModalHeader toggle={this.specsModalToggle}>Modal title</ModalHeader>
+                        <ModalBody>
+                          <JSONTree data={product.specs} theme="default" />
+                        </ModalBody>
+                      </Modal>
+
+                      <button type="button" className="btn btn-link" onClick={this.specsModalToggle}>
+                        <FormattedMessage id="json_specs" defaultMessage="Specs (as JSON)"/>
+                      </button>
+                    </li>
+                    }
+
+                    {websites.length &&
+                    <li>
+                      <ButtonDropdown isOpen={this.state.websiteDropDownOpen}
+                                      toggle={this.websiteDropDownToggle}>
+                        <DropdownToggle caret>
+                          <FormattedMessage id="view_in_website"
+                                            defaultMessage="View in website"/>
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          {websites.map(website => (
+                              <DropdownItem key={website.id}>
+                                <a href={`${website.external_url}/products/${product.id}`}
+                                   target="_blank">{website.name}</a>
+                              </DropdownItem>
+                          ))}
+                        </DropdownMenu>
+                      </ButtonDropdown>
+                    </li>
+                    }
                   </ul>
                 </div>
               </div>

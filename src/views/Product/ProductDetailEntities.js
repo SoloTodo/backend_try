@@ -81,7 +81,7 @@ class ProductDetailEntities extends Component {
       },
       {
         label: <FormattedMessage id="is_available_short_question" defaultMessage="Avail?" />,
-        renderer: entity => <i className={entity.activeRegistry && entity.activeRegistry.stock !== 0 ?
+        renderer: entity => <i className={entity.activeRegistry && entity.activeRegistry.is_available ?
             'glyphicons glyphicons-check' :
             'glyphicons glyphicons-unchecked' }/>,
         cssClasses: 'center-aligned',

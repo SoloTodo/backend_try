@@ -37,4 +37,5 @@ export const settings = {
   defaultLanguageCode: 'en',
   usdCurrencyUrl: endpoint + 'currencies/4/',
   categoryTemplateDetailPurposeId: 1,
+  ownWebsiteId: 1
 };

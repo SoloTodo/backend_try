@@ -1430,6 +1430,11 @@
     "filepath": "./src/views/Pages/Page404/Page404.js"
   },
   {
+    "id": "product_currently_cloning",
+    "defaultMessage": "Cloning product, please wait!",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
     "id": "no_tech_specs_available",
     "defaultMessage": "The tech specs of this product are not available at this time",
     "filepath": "./src/views/Product/ProductDetail.js"
@@ -1470,8 +1475,28 @@
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
-    "id": "entities",
-    "defaultMessage": "Entities",
+    "id": "associated_entities",
+    "defaultMessage": "Associated entities",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "edit",
+    "defaultMessage": "Edit",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "clone",
+    "defaultMessage": "Clone",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "json_specs",
+    "defaultMessage": "Specs (as JSON)",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "view_in_website",
+    "defaultMessage": "View in website",
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
