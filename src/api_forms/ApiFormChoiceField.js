@@ -27,6 +27,8 @@ class ApiFormChoiceField extends Component {
     const urlField = props.urlField || changeCase.snake(props.name);
     let valueIds = parameters[urlField];
 
+    const choices = this.sanitizeChoices(props);
+
     if (props.multiple) {
       if (!valueIds) {
         valueIds = []
@@ -34,12 +36,7 @@ class ApiFormChoiceField extends Component {
         valueIds = [valueIds]
       }
 
-      valueIds = valueIds
-          .filter(choiceId => Boolean(parseInt(choiceId, 10)))
-          .map(choiceId => parseInt(choiceId, 10));
-
-      return props.choices
-          .filter(choice => valueIds.includes(choice.id))
+      return choices.filter(choice => valueIds.includes(choice.id))
     } else {
       let valueId = undefined;
 
@@ -53,7 +50,7 @@ class ApiFormChoiceField extends Component {
 
       const initialValueId =
           props.initial ? props.initial :
-              props.required ? props.choices[0].id : null;
+              props.required ? choices[0].id : null;
 
       if (!valueId) {
         valueId = initialValueId
@@ -64,7 +61,7 @@ class ApiFormChoiceField extends Component {
       if (valueId === null) {
         value = null
       } else {
-        value = props.choices.filter(choice => choice.id === valueId)[0];
+        value = choices.filter(choice => choice.id === valueId)[0];
       }
 
       return value
@@ -135,20 +132,26 @@ class ApiFormChoiceField extends Component {
     this.notifyNewParams(sanitizedValue)
   };
 
+  sanitizeChoices(props) {
+    return props.choices.map(choice => ({...choice, id: choice.id.toString()}))
+  }
+
   render() {
     let selectedChoices = null;
+
+    const choices = this.sanitizeChoices(this.props);
 
     if (this.props.multiple) {
       if (this.props.value) {
         const valueIds = this.props.value.map(value => value.id);
-        selectedChoices = this.props.choices.filter(choice => valueIds.includes(choice.id))
+        selectedChoices = choices.filter(choice => valueIds.includes(choice.id))
       } else {
         selectedChoices = []
       }
       selectedChoices = createOptions(selectedChoices);
     } else {
       if (this.props.value) {
-        selectedChoices = createOption(this.props.choices.filter(choice => choice.id === this.props.value.id)[0])
+        selectedChoices = createOption(choices.filter(choice => choice.id === this.props.value.id)[0])
       } else {
         selectedChoices = null
       }
@@ -160,7 +163,7 @@ class ApiFormChoiceField extends Component {
       return <Select
           name={this.props.name}
           id={this.props.name}
-          options={createOptions(this.props.choices)}
+          options={createOptions(choices)}
           value={selectedChoices}
           onChange={this.handleValueChange}
           multi={this.props.multiple}

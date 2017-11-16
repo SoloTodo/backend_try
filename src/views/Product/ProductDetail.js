@@ -127,25 +127,13 @@ class ProductDetail extends Component {
                 </div>
                 <div className="card-block">
                   <ul className="list-without-decoration subnavigation-links">
-                    {product.category.permissions.includes('view_category_leads') &&
                     <li>
-                      <NavLink to={'/leads/?products=' + product.id}>
+                      <NavLink to={`/products/${product.id}/pricing_history`}>
                         <button type="button" className="btn btn-link">
-                          <FormattedMessage id="leads_list" defaultMessage="Leads (list)"/>
+                          <FormattedMessage id="pricing_history" defaultMessage="Pricing history"/>
                         </button>
                       </NavLink>
                     </li>
-                    }
-                    {product.category.permissions.includes('view_category_leads') &&
-                    <li>
-                      <NavLink to={'/leads/stats?grouping=date&products=' + product.id}>
-                        <button type="button" className="btn btn-link">
-                          <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)"/>
-                        </button>
-                      </NavLink>
-                    </li>
-                    }
-
                     {product.category.permissions.includes('view_category_visits') &&
                     <li>
                       <NavLink to={'/visits/?products=' + product.id}>
@@ -160,6 +148,25 @@ class ProductDetail extends Component {
                       <NavLink to={'/visits/stats?grouping=date&products=' + product.id}>
                         <button type="button" className="btn btn-link">
                           <FormattedMessage id="visits_stats" defaultMessage="Visits (stats)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+
+                    {product.category.permissions.includes('view_category_leads') &&
+                    <li>
+                      <NavLink to={'/leads/?products=' + product.id}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="leads_list" defaultMessage="Leads (list)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+                    {product.category.permissions.includes('view_category_leads') &&
+                    <li>
+                      <NavLink to={'/leads/stats?grouping=date&products=' + product.id}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)"/>
                         </button>
                       </NavLink>
                     </li>

@@ -5,6 +5,7 @@ import RequiredResources from "../../RequiredResources";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import ProductDetail from "./ProductDetail";
 import ProductDetailEntities from "./ProductDetailEntities";
+import ProductDetailPricingHistory from "./ProductDetailPricingHistory";
 
 export default ({match}) => {
   return (
@@ -18,6 +19,13 @@ export default ({match}) => {
             <ResourceObjectPermission match={props.match} resource="products">
               <RequiredResources resources={['categories', 'stores', 'users_with_staff_actions', 'websites']}>
                 <ProductDetail />
+              </RequiredResources>
+            </ResourceObjectPermission>
+        )} />
+        <Route path={match.url + '/:id/pricing_history'} exact render={props => (
+            <ResourceObjectPermission match={props.match} resource="products">
+              <RequiredResources resources={['categories', 'stores', 'countries', 'currencies']}>
+                <ProductDetailPricingHistory />
               </RequiredResources>
             </ResourceObjectPermission>
         )} />
