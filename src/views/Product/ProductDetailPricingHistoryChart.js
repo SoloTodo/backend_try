@@ -123,9 +123,14 @@ class ProductDetailPricingHistoryChart extends Component {
     const datasets = filledChartData.map((dataset, idx) => {
       const color = chartColors[idx % chartColors.length];
 
+      let datasetLabel = dataset.entity.store.name;
+      if (dataset.entity.cellPlan) {
+        datasetLabel += ` (${dataset.entity.cellPlan.name})`
+      }
+
       return {
-        label: dataset.entity.store.name,
-        data: dataset.pricingHistory.map(datapoint => ({x: datapoint.timestamp, y: datapoint.price.toString(), formattedPrice: datapoint.formattedPrice})),
+        label: datasetLabel,
+        data: dataset.pricingHistory.map(datapoint => ({x: datapoint.timestamp, y: datapoint.price.toString(), formattedPrice: datapoint.formattedPrice, store: dataset.entity.store.name, cellPlan: dataset.entity.cellPlan})),
         fill: false,
         borderColor: color,
         backgroundColor: lightenDarkenColor(color, 40),
@@ -162,7 +167,12 @@ class ProductDetailPricingHistoryChart extends Component {
             return tooltipItems.length && tooltipItems[0].xLabel.format('llll')
           },
           label: (tooltipItem, data) => {
-            return data.datasets[tooltipItem.datasetIndex].data[0].formattedPrice
+            const datapoint = data.datasets[tooltipItem.datasetIndex].data[0];
+            if (datapoint.cellPlan) {
+              return `${datapoint.store} (${datapoint.cellPlan.name}): ${datapoint.formattedPrice}`
+            } else {
+              return `${datapoint.store}: ${datapoint.formattedPrice}`
+            }
           }
         },
         mode: 'nearest',

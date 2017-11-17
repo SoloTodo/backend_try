@@ -3,13 +3,15 @@ import {connect} from "react-redux";
 import {addApiResourceStateToPropsUtils} from "../../ApiResource";
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {convertToDecimal} from "../../utils";
+import {convertToDecimal, listToObject} from "../../utils";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ProductDetailPricingHistoryChart from "./ProductDetailPricingHistoryChart";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import {UncontrolledTooltip} from "reactstrap";
+import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
+import {NavLink} from "react-router-dom";
 
 class ProductDetailPricingHistory extends Component {
   constructor(props) {
@@ -99,6 +101,53 @@ class ProductDetailPricingHistory extends Component {
       },
     ];
 
+    const storeDict = listToObject(this.props.stores, 'url');
+
+    const columns = [
+      {
+        label: <FormattedMessage id="name" defaultMessage='Name' />,
+        renderer: entry => <NavLink to={'/entities/' + entry.entity.id}>{entry.entity.name}</NavLink>
+      },
+      {
+        label: <FormattedMessage id="cell_plan" defaultMessage="Cell plan" />,
+        renderer: entry => entry.entity.cell_plan ? entry.entity.cell_plan.name : <em>N/A</em>,
+        displayFilter: entries => entries.some(entry => entry.entity.cell_plan !== null)
+      },
+      {
+        label: <FormattedMessage id="store" defaultMessage="Store" />,
+        renderer: entry => {
+          const store = storeDict[entry.entity.store];
+
+          return <span>
+              <NavLink
+                  to={'/stores/' + store.id}>{store.name}</NavLink>
+              <a href={entry.entity.external_url} target="_blank"
+                 className="ml-2">
+                <span className="glyphicons glyphicons-link">&nbsp;</span>
+              </a>
+            </span>
+        },
+      },
+      {
+        label: <FormattedMessage id="sku" defaultMessage="SKU" />,
+        renderer: entry => entry.entity.sku || <em>N/A</em>,
+      },
+      {
+        label: <FormattedMessage id="currently_available_question" defaultMessage="Currently available?" />,
+        renderer: entry => <i className={entry.entity.active_registry && entry.entity.active_registry.is_available ?
+            'glyphicons glyphicons-check' :
+            'glyphicons glyphicons-unchecked' }/>,
+        cssClasses: 'hidden-md-down center-aligned',
+      },
+      {
+        label: <FormattedMessage id="currently_active_question" defaultMessage="Currently active?" />,
+        renderer: entry => <i className={entry.entity.active_registry ?
+            'glyphicons glyphicons-check' :
+            'glyphicons glyphicons-unchecked'}/>,
+        cssClasses: 'hidden-md-down center-aligned',
+      },
+    ];
+
     return (
         <div className="animated fadeIn d-flex flex-column">
           <UncontrolledTooltip placement="top" target="currency_label">
@@ -113,6 +162,7 @@ class ProductDetailPricingHistory extends Component {
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <div className="card">
               <div className="card-header">
+                <i className="fa fa-filter">&nbsp;</i>
                 <FormattedMessage id="filters" defaultMessage="Filters" />
               </div>
               <div className="card-block">
@@ -220,12 +270,26 @@ class ProductDetailPricingHistory extends Component {
             </div>
             <div className="card d-flex flex-column flex-grow">
               <div className="card-header">
-                <FormattedMessage id="result" defaultMessage={`Result`} />
+                <i className="fa fa-line-chart" aria-hidden="true">&nbsp;</i>
+                <FormattedMessage id="chart" defaultMessage="Chart" />
               </div>
               <div className="card-block d-flex flex-column">
                 <ProductDetailPricingHistoryChart
-                  product={this.props.apiResourceObject}
-                  chart={this.state.chart}
+                    product={this.props.apiResourceObject}
+                    chart={this.state.chart}
+                />
+              </div>
+            </div>
+
+            <div className="card d-flex flex-column flex-grow">
+              <div className="card-header">
+                <i className="glyphicons glyphicons-inbox">&nbsp;</i>
+                <FormattedMessage id="entities_found" defaultMessage="Entities found" />
+              </div>
+              <div className="card-block d-flex flex-column">
+                <ApiFormResultsTable
+                    results={this.state.chart && this.state.chart.data}
+                    columns={columns}
                 />
               </div>
             </div>
