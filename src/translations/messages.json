@@ -300,6 +300,11 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "brands",
+    "defaultMessage": "Brands",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -362,6 +367,16 @@
   {
     "id": "leads",
     "defaultMessage": "Leads",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "where_to_buy",
+    "defaultMessage": "Where to Buy",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "brands",
+    "defaultMessage": "Brands",
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
@@ -1455,13 +1470,8 @@
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
-    "id": "leads_list",
-    "defaultMessage": "Leads (list)",
-    "filepath": "./src/views/Product/ProductDetail.js"
-  },
-  {
-    "id": "leads_stats",
-    "defaultMessage": "Leads (stats)",
+    "id": "pricing_history",
+    "defaultMessage": "Pricing history",
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
@@ -1472,6 +1482,16 @@
   {
     "id": "visits_stats",
     "defaultMessage": "Visits (stats)",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "leads_list",
+    "defaultMessage": "Leads (list)",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
+    "id": "leads_stats",
+    "defaultMessage": "Leads (stats)",
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
@@ -1613,6 +1633,121 @@
     "id": "monthly_payment",
     "defaultMessage": "Monthly payment",
     "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+  },
+  {
+    "id": "only_when_available",
+    "defaultMessage": "Only when available",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "normal_price",
+    "defaultMessage": "Normal price",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "offer_price",
+    "defaultMessage": "Offer price",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "sku",
+    "defaultMessage": "SKU",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "currently_available_question",
+    "defaultMessage": "Currently available?",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "currently_active_question",
+    "defaultMessage": "Currently active?",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "product_pricing_history_currency",
+    "defaultMessage": "The price points are converted to this currency. The values are calculated using standard exchange rates",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "view",
+    "defaultMessage": "View",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "keep_original",
+    "defaultMessage": "Keep original",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "price_type",
+    "defaultMessage": "Price type",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "chart",
+    "defaultMessage": "Chart",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
+  },
+  {
+    "id": "entities_found",
+    "defaultMessage": "Entities found",
+    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
   },
   {
     "id": "product_availability_countries_tooltip",
@@ -2223,5 +2358,45 @@
     "id": "results_per_page",
     "defaultMessage": "Results per page",
     "filepath": "./src/views/Visit/VisitStats.js"
+  },
+  {
+    "id": "detail",
+    "defaultMessage": "Detail",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "prefered_brand",
+    "defaultMessage": "Prefered brand",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "scraper",
+    "defaultMessage": "Scraper",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "brands",
+    "defaultMessage": "Brands",
+    "filepath": "./src/views/Wtb/WtbBrandList.js"
+  },
+  {
+    "id": "id",
+    "defaultMessage": "ID",
+    "filepath": "./src/views/Wtb/WtbBrandList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Wtb/WtbBrandList.js"
   }
 ]

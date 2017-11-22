@@ -93,4 +93,20 @@ export const sidebarLayout = [
       }
     ]
   },
+  {
+    title: <FormattedMessage id="where_to_buy" defaultMessage="Where to Buy" />,
+    icon: "fa fa-compass",
+    entries: [
+      {
+        label: <FormattedMessage id="brands" defaultMessage="Brands" />,
+        path: "/wtb/brands",
+        requiredPermission: "wtb.backend_view_wtb",
+      },
+      {
+        label: <FormattedMessage id="entities" defaultMessage="Entities" />,
+        path: "/wtb/entities",
+        requiredPermission: "wtb.backend_view_wtb",
+      }
+    ]
+  },
 ];

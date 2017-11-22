@@ -78,6 +78,8 @@ class ApiForm extends Component {
     let wasValid = undefined;
     let isValid = undefined;
 
+    console.log(updatedFieldsData)
+
     this.setState(state => {
       wasValid = this.isFormValid(state);
 

@@ -1,0 +1,39 @@
+.entity-form-controls > div {
+    margin-bottom: 1rem;
+}
+
+.entity-form-controls label {
+    display: block;
+}
+
+.dashed {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+.entity-name-cell {
+    max-width: 150px;
+}
+
+
+@media (max-width: 1450px) {
+    .show-xxl-up {
+        display: none !important;
+    }
+}
+
+.results-per-page-fields > label {
+    margin-bottom: 0;
+}
+
+.pagination-fields {
+    flex: 0;
+}
+
+.results-per-page-dropdown {
+    width: 80px !important;
+}
+
+ul.pagination {
+    margin-bottom: 0;
+}

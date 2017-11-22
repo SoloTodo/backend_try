@@ -21,6 +21,7 @@ import ReportSwitch from "../../views/Report/ReportSwitch";
 import LeadSwitch from "../../views/Lead/LeadSwitch";
 import CategorySwitch from "../../views/Category/CategorySwitch";
 import VisitSwitch from "../../views/Visit/VisitSwitch";
+import WtbSwitch from "../../views/Wtb/WtbSwitch";
 
 
 class Full extends Component {
@@ -71,6 +72,12 @@ class Full extends Component {
                   <Route path="/visits" render={props => (
                       <UserPermissionFilter requiredPermission="solotodo.backend_list_visits">
                         <VisitSwitch {...props} location={props.location}/>
+                      </UserPermissionFilter>
+                  )} />
+
+                  <Route path="/wtb" render={props => (
+                      <UserPermissionFilter requiredPermission="wtb.backend_view_wtb">
+                        <WtbSwitch {...props} location={props.location}/>
                       </UserPermissionFilter>
                   )} />
 

@@ -48,6 +48,7 @@ const messages = {
   ascending: <FormattedMessage id="ascending" defaultMessage="Ascending" />,
   descending: <FormattedMessage id="descending" defaultMessage="Descending" />,
   conflicts: <FormattedMessage id="conflicts" defaultMessage="Conflicts" />,
+  brands: <FormattedMessage id="brands" defaultMessage="Brands" />,
 };
 
 export default messages;

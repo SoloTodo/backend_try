@@ -26,6 +26,8 @@ export const settings = {
     reports: endpoint + 'reports/',
     websites: endpoint + 'websites/',
     category_specs_form_layouts: endpoint + 'category_specs_form_layouts/',
+    wtb_brands: endpoint + 'wtb/brands/',
+    wtb_brand_update_logs: endpoint + 'wtb/brand_update_logs/',
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA

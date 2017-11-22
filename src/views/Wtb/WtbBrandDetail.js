@@ -1,0 +1,82 @@
+import React, {Component} from 'react';
+import {FormattedMessage} from "react-intl";
+import {NavLink} from "react-router-dom";
+import connect from "react-redux/es/connect/connect";
+import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {listToObject} from "../../utils";
+
+class WtbBrandDetail extends Component {
+  render() {
+    const storesDict = listToObject(this.props.stores, 'url');
+    const wtbBrand = this.props.apiResourceObject;
+
+    return (
+        <div className="animated fadeIn">
+          <div className="row">
+            <div className="col-sm-6 col-md-4">
+              <div className="card">
+                <div className="card-header">
+                  <FormattedMessage id="detail" defaultMessage="Detail" />
+                </div>
+                <div className="card-block">
+                  <table className="table table-striped">
+                    <tbody>
+                    <tr>
+                      <th><FormattedMessage id="name" defaultMessage="Name" /></th>
+                      <td>{wtbBrand.name}</td>
+                    </tr>
+                    <tr>
+                      <th><FormattedMessage id="prefered_brand" defaultMessage="Prefered brand" /></th>
+                      <td>{wtbBrand.prefered_brand}</td>
+                    </tr>
+                    <tr>
+                      <th><FormattedMessage id="scraper" defaultMessage="Scraper" /></th>
+                      <td>{wtbBrand.storescraper_class}</td>
+                    </tr>
+                    <tr>
+                      <th><FormattedMessage id="stores" defaultMessage="Stores" /></th>
+                      <td>
+                        <ul>
+                          {wtbBrand.stores.map(storeUrl => (
+                              <li key={storeUrl}>{storesDict[storeUrl].name}</li>
+                          ))}
+                        </ul>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-6 col-md-4">
+              <div className="card">
+                <div className="card-header"><FormattedMessage id="options" defaultMessage="Options" /></div>
+                <div className="card-block">
+                  <ul className="list-without-decoration subnavigation-links">
+                    <li>
+                      <NavLink to={`/wtb/brands/${wtbBrand.id}/update_logs`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="update_logs" defaultMessage="Update logs" />
+                        </button>
+                      </NavLink>
+                    </li>
+
+                    <li>
+                      <NavLink to={`/wtb/entities?brands=${wtbBrand.id}`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="entities" defaultMessage="Entities" />
+                        </button>
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>)
+  }
+}
+
+export default connect(
+    addApiResourceStateToPropsUtils()
+)(WtbBrandDetail);
