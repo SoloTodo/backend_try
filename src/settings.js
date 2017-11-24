@@ -28,6 +28,7 @@ export const settings = {
     category_specs_form_layouts: endpoint + 'category_specs_form_layouts/',
     wtb_brands: endpoint + 'wtb/brands/',
     wtb_brand_update_logs: endpoint + 'wtb/brand_update_logs/',
+    wtb_entities: endpoint + 'wtb/entities/',
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA
@@ -39,5 +40,6 @@ export const settings = {
   defaultLanguageCode: 'en',
   usdCurrencyUrl: endpoint + 'currencies/4/',
   categoryTemplateDetailPurposeId: 1,
-  ownWebsiteId: 1
+  ownWebsiteId: 1,
+  ownWebsiteUrl: endpoint + 'websites/1/',
 };

@@ -26,8 +26,6 @@ class RcPriceRange extends Component {
   }
 
   normalizeValues(props) {
-    props = props || this.props;
-
     const originalStartValue = props.value[0];
     const originalEndValue = props.value[1];
 
@@ -91,29 +89,22 @@ class RcPriceRange extends Component {
     })
   };
 
-  onAfterChange = (values, newProps) => {
-    const props = newProps || this.props;
+  onAfterChange = () => {
+    const startValue = this.state.startValue;
+    const endValue = this.state.endValue;
 
     let denormalizedStartValue = null;
     let denormalizedEndValue = null;
 
-    const startValue = values[0];
-    const endValue = values[1];
-
-    if (startValue === this.state.startValue && endValue === this.state.endValue) {
-      return
-    }
-
     if (startValue !== null) {
-      denormalizedStartValue = this.denormalizeValue(startValue, props)
+      denormalizedStartValue = this.denormalizeValue(startValue, this.props)
     }
 
     if (endValue !== null) {
-      denormalizedEndValue = this.denormalizeValue(endValue, props)
+      denormalizedEndValue = this.denormalizeValue(endValue, this.props)
     }
 
-
-    props.onAfterChange([denormalizedStartValue, denormalizedEndValue])
+    this.props.onAfterChange([denormalizedStartValue, denormalizedEndValue])
   };
 
   handle = rangeProps => {

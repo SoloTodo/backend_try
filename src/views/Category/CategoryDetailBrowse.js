@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {
   addApiResourceStateToPropsUtils,
-  filterApiResourceObjectsByType
 } from "../../ApiResource";
 import connect from "react-redux/es/connect/connect";
 import {settings} from "../../settings";
@@ -62,19 +61,15 @@ class CategoryDetailBrowse extends Component {
   };
 
   componentDidMount() {
-    const countryUrls = this.props.stores.map(store => this.props.ApiResourceObject(store).country.url);
-    const preferredCountryUrl = this.props.preferredCountry.url;
-
     // Obtain layout of the form fields
     this.props.fetchAuth(settings.apiResourceEndpoints.category_specs_form_layouts + '?category=' + this.props.apiResourceObject.id)
         .then(all_form_layouts => {
           const processed_form_layouts = all_form_layouts
-              .filter(layout => layout.country === null || countryUrls.includes(layout.country))
               .map(layout => {
                 let priority = 0;
-                if (layout.country === preferredCountryUrl) {
+                if (layout.website === settings.ownWebsiteUrl) {
                   priority = 2
-                } else if (layout.country === null) {
+                } else if (layout.website === null) {
                   priority = 1
                 }
                 return {
@@ -197,7 +192,7 @@ class CategoryDetailBrowse extends Component {
 
             if (value) {
               for (const selectedValue of value) {
-                let valueInChoices = Boolean(filterChoices.filter(choice => choice.id === selectedValue.id).length);
+                let valueInChoices = Boolean(filterChoices.filter(choice => choice.id.toString() === selectedValue.id.toString()).length);
                 if (!valueInChoices) {
                   filterChoices.push({
                     ...selectedValue,
@@ -224,10 +219,15 @@ class CategoryDetailBrowse extends Component {
           let filterChoices = undefined;
 
           if (filterAggs) {
+            let ongoingResultCount = 0;
+
             filterChoices = filterAggs.map(choice => {
+              ongoingResultCount += choice.doc_count;
+
               return {
                 ...choice,
-                name: `${filterChoiceIdToNameDict[choice.id]}`
+                name: `${filterChoiceIdToNameDict[choice.id]}`,
+                doc_count: ongoingResultCount
               };
             });
           } else {
@@ -249,11 +249,16 @@ class CategoryDetailBrowse extends Component {
           let filterChoices = undefined;
 
           if (filterAggs) {
+            let totalResultCount = filterAggs.reduce((acum, elem) => acum + elem.doc_count, 0);
+
             filterChoices = filterAggs.map(choice => {
               let result = {
                 ...choice,
-                name: `${filterChoiceIdToNameDict[choice.id]}`
+                name: `${filterChoiceIdToNameDict[choice.id]}`,
+                doc_count: totalResultCount
               };
+
+              totalResultCount -= choice.doc_count;
 
               return result
             });
@@ -363,7 +368,7 @@ class CategoryDetailBrowse extends Component {
     const countries = this.props.countries.filter(country => countryUrls.includes(country.url));
 
     const storeTypeUrls = this.props.stores.map(store => store.type);
-    const storeTypes = this.props.storeTypes.filter(storeType => storeTypeUrls.includes(storeType.url));
+    const storeTypes = this.props.store_types.filter(storeType => storeTypeUrls.includes(storeType.url));
 
     const orderingChoices = [
       {
@@ -531,9 +536,6 @@ class CategoryDetailBrowse extends Component {
 function mapStateToProps(state) {
   return {
     breakpoint: state.breakpoint,
-    countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
-    storeTypes: filterApiResourceObjectsByType(state.apiResourceObjects, 'store_types'),
-    currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
   }
 }
 

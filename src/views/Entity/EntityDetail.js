@@ -186,7 +186,7 @@ class EntityDetail extends Component {
 
   handleVisibilityToggleClick = (event) => {
     if (this.props.apiResourceObject.product) {
-      toast.warn(<FormattedMessage id="hiding_associated_entity_warning" defaultMessage="Please deassociate the the entity before hiding it" />, {
+      toast.warn(<FormattedMessage id="hiding_associated_entity_warning" defaultMessage="Please dissociate the the entity before hiding it" />, {
         autoClose: false
       });
     }

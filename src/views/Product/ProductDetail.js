@@ -203,7 +203,9 @@ class ProductDetail extends Component {
                     {product.category.permissions.includes('is_category_staff') &&
                     <li>
                       <Modal isOpen={this.state.specsModalOpen} toggle={this.specsModalToggle} size="lg">
-                        <ModalHeader toggle={this.specsModalToggle}>Modal title</ModalHeader>
+                        <ModalHeader toggle={this.specsModalToggle}>
+                          <FormattedMessage id="specs" defaultMessage="Specs"/>
+                        </ModalHeader>
                         <ModalBody>
                           <JSONTree data={product.specs} theme="default" />
                         </ModalBody>

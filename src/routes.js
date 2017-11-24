@@ -23,8 +23,11 @@ const routes = {
   '/leads/stats': 'stats',
   '/visits': 'visits',
   '/visits/stats': 'stats',
+  '/wtb': 'where_to_buy',
   '/wtb/brands': 'brands',
   '/wtb/brands/:id': params => ({apiResource: 'wtb_brands', apiResourceObjectId: params.id}),
   '/wtb/brands/:id/update_logs': 'update_logs',
+  '/wtb/entities': 'entities',
+  '/wtb/entities/:id': params => ({apiResource: 'wtb_entities', apiResourceObjectId: params.id}),
 };
 export default routes;

@@ -4,10 +4,9 @@ import {FormattedMessage} from "react-intl";
 import {
   addApiResourceStateToPropsUtils
 } from "../../ApiResource";
-import {settings} from "../../settings";
 import './WtbEntityList.css'
-import {Link, NavLink} from "react-router-dom";
-import {booleanChoices, formatCurrency} from "../../utils";
+import {NavLink} from "react-router-dom";
+import {booleanChoices} from "../../utils";
 import messages from "../../messages";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
@@ -36,8 +35,6 @@ class WtbEntityList extends Component {
   };
 
   handleFormValueChange = formValues => {
-    console.log(formValues);
-    debugger;
     this.setState({formValues})
   };
 
@@ -58,7 +55,7 @@ class WtbEntityList extends Component {
         label: <FormattedMessage id="brand" defaultMessage="Brand" />,
         ordering: 'brand',
         renderer: wtbEntity => <span>
-          {wtbEntity.brand.name}
+          <NavLink to={'/wtb/brands/' + wtbEntity.brand.id}>{wtbEntity.brand.name}</NavLink>
           <a href={wtbEntity.externalUrl} target="_blank" className="ml-2">
             <span className="glyphicons glyphicons-link">&nbsp;</span>
           </a>
@@ -101,9 +98,9 @@ class WtbEntityList extends Component {
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoints={["/wtb/entities/"]}
+              endpoints={['wtb/entities/']}
               fields={['brands', 'is_active', 'categories', 'is_visible', 'is_associated', 'search', 'page', 'page_size', 'ordering']}
-              onResultsChange={this.setWtbEntities()}
+              onResultsChange={this.setWtbEntities}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <ApiFormChoiceField
@@ -133,7 +130,7 @@ class WtbEntityList extends Component {
                             multiple={true}
                             searchable={!this.props.breakpoint.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            value={this.state.formValues.wtb_brands}
+                            value={this.state.formValues.brands}
                             placeholder={messages.all_feminine}
 
                         />

@@ -1,0 +1,46 @@
+th {
+    width: 160px;
+    vertical-align: middle !important;
+}
+
+td {
+    vertical-align: middle !important;
+}
+
+#description-container img {
+    max-width: 100%;
+}
+
+.switch.switch-text .switch-label {
+    border-color: #bbb;
+}
+
+.switch.switch-text .switch-handle {
+    border-color: #bbb;
+}
+
+.switch.switch-text .switch-label::before {
+    color: #aaa;
+}
+
+.switch.switch-secondary .switch-label::after {
+    color: #aaa;
+}
+
+.sk-spinner-pulse {
+    display: inline;
+    margin-left: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+    font-size: 12px;
+}
+
+@media(min-width: 1200px) {
+    #entity-pictures-carousel-card {
+        max-width: 600px;
+    }
+}

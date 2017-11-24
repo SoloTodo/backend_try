@@ -2385,6 +2385,76 @@
     "filepath": "./src/views/Wtb/WtbBrandDetail.js"
   },
   {
+    "id": "options",
+    "defaultMessage": "Options",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "update_logs",
+    "defaultMessage": "Update logs",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "pending",
+    "defaultMessage": "Pending",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "in_process",
+    "defaultMessage": "In process",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "success",
+    "defaultMessage": "Success",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "error",
+    "defaultMessage": "Error",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "status",
+    "defaultMessage": "Status",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "last_update",
+    "defaultMessage": "Last update",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "start",
+    "defaultMessage": "Start",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "log",
+    "defaultMessage": "Log",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "download",
+    "defaultMessage": "Download",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "unavailable",
+    "defaultMessage": "Unavailable",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
+    "id": "update_logs",
+    "defaultMessage": "Update logs",
+    "filepath": "./src/views/Wtb/WtbBrandDetailUpdateLogs.js"
+  },
+  {
     "id": "brands",
     "defaultMessage": "Brands",
     "filepath": "./src/views/Wtb/WtbBrandList.js"
@@ -2398,5 +2468,80 @@
     "id": "name",
     "defaultMessage": "Name",
     "filepath": "./src/views/Wtb/WtbBrandList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "brand",
+    "defaultMessage": "Brand",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "key",
+    "defaultMessage": "Key",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "is_active_question",
+    "defaultMessage": "Active?",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "is_visible_question",
+    "defaultMessage": "Visible?",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "brands",
+    "defaultMessage": "Brands",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "is_associated_question",
+    "defaultMessage": "Associated?",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "keywords",
+    "defaultMessage": "Keywords",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Wtb/WtbEntityList.js"
   }
 ]

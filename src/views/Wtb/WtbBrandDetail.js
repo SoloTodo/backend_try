@@ -8,7 +8,7 @@ import {listToObject} from "../../utils";
 class WtbBrandDetail extends Component {
   render() {
     const storesDict = listToObject(this.props.stores, 'url');
-    const wtbBrand = this.props.apiResourceObject;
+    const wtbBrand = this.props.ApiResourceObject(this.props.apiResourceObject);
 
     return (
         <div className="animated fadeIn">
@@ -27,11 +27,15 @@ class WtbBrandDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="prefered_brand" defaultMessage="Prefered brand" /></th>
-                      <td>{wtbBrand.prefered_brand}</td>
+                      <td>{wtbBrand.preferedBrand}</td>
+                    </tr>
+                    <tr>
+                      <th><FormattedMessage id="website" defaultMessage="Website" /></th>
+                      <td>{wtbBrand.website.name}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="scraper" defaultMessage="Scraper" /></th>
-                      <td>{wtbBrand.storescraper_class}</td>
+                      <td>{wtbBrand.storescraperClass}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="stores" defaultMessage="Stores" /></th>
@@ -68,6 +72,39 @@ class WtbBrandDetail extends Component {
                         </button>
                       </NavLink>
                     </li>
+
+                    <li>
+                      <NavLink to={`/visits/?websites=${wtbBrand.website.id}`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="visits_list" defaultMessage="Visits (list)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+
+                    <li>
+                      <NavLink to={`/visits/stats?grouping=date&websites=${wtbBrand.website.id}`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="visits_stats" defaultMessage="Visits (stats)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+
+                    <li>
+                      <NavLink to={`/leads/?websites=${wtbBrand.website.id}`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="leads_list" defaultMessage="Leads (list)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+
+                    <li>
+                      <NavLink to={`/leads/stats?grouping=date&websites=${wtbBrand.website.id}`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+
                   </ul>
                 </div>
               </div>

@@ -76,10 +76,11 @@ class Full extends Component {
                   )} />
 
                   <Route path="/wtb" render={props => (
-                      <UserPermissionFilter requiredPermission="wtb.backend_view_wtb">
-                        <WtbSwitch {...props} location={props.location}/>
-                      </UserPermissionFilter>
-                  )} />
+                    <UserPermissionFilter
+                        requiredPermission="wtb.backend_view_wtb">
+                      <WtbSwitch {...props} location={props.location}/>
+                    </UserPermissionFilter>
+                    )} />
 
                   <Route path="/reports" render={props => (
                       <ReportSwitch {...props} location={props.location}/>

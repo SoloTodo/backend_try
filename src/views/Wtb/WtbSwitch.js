@@ -6,6 +6,7 @@ import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import WtbBrandDetail from "./WtbBrandDetail";
 import WtbBrandDetailUpdateLogs from "./WtbBrandDetailUpdateLogs";
 import WtbEntityList from "./WtbEntityList";
+import WtbEntityDetail from "./WtbEntityDetail";
 
 export default ({match}) => {
   return (
@@ -17,7 +18,7 @@ export default ({match}) => {
         )} />
         <Route path={match.url + '/brands/:id'} exact render={props => (
             <ResourceObjectPermission match={props.match} resource="wtb_brands" permission="view_wtb_brand">
-              <RequiredResources resources={['stores']}>
+              <RequiredResources resources={['stores', 'websites']}>
                 <WtbBrandDetail />
               </RequiredResources>
             </ResourceObjectPermission>
@@ -34,6 +35,14 @@ export default ({match}) => {
               <WtbEntityList />
             </RequiredResources>
         )} />
+        <Route path={match.url + '/entities/:id'} exact render={props => (
+            <ResourceObjectPermission match={props.match} resource="wtb_entities">
+              <RequiredResources resources={['wtb_brands', 'categories', 'users_with_staff_actions', 'websites']}>
+                <WtbEntityDetail />
+              </RequiredResources>
+            </ResourceObjectPermission>
+        )} />
+
       </Switch>
   )
 }

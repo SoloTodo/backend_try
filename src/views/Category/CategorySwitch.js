@@ -29,7 +29,7 @@ export default ({match}) => {
         )} />
         <Route path={match.url + '/:id/browse'} exact render={props => (
             <ResourceObjectPermission match={props.match} resource="categories">
-              <RequiredResources resources={['stores']}>
+              <RequiredResources resources={['stores', 'countries', 'currencies', 'store_types']}>
                 <CategoryDetailBrowse />
               </RequiredResources>
             </ResourceObjectPermission>
