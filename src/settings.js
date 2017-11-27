@@ -1,7 +1,7 @@
 // let endpoint = 'http://192.168.90.111:8000/api/';
 // let endpoint = 'http://192.168.1.100:8000/api/';
-// let endpoint = 'https://api.solotodo.com/';
-let endpoint = 'http://local.solotodo.com:8000/';
+let endpoint = 'https://api.solotodo.com/';
+// let endpoint = 'http://local.solotodo.com:8000/';
 // let endpoint = 'http://api.solotodo.com:8000/';
 
 export const settings = {
@@ -29,6 +29,7 @@ export const settings = {
     wtb_brands: endpoint + 'wtb/brands/',
     wtb_brand_update_logs: endpoint + 'wtb/brand_update_logs/',
     wtb_entities: endpoint + 'wtb/entities/',
+    category_columns: endpoint + 'category_columns/',
   },
   customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA
@@ -40,6 +41,8 @@ export const settings = {
   defaultLanguageCode: 'en',
   usdCurrencyUrl: endpoint + 'currencies/4/',
   categoryTemplateDetailPurposeId: 1,
+  categoryBrowsePurposeId: 1,
+  categoryProductsPurposeId: 2,
   ownWebsiteId: 1,
   ownWebsiteUrl: endpoint + 'websites/1/',
 };

@@ -105,7 +105,9 @@ class ApiForm extends Component {
 
       this.props.onFormValueChange(formValues);
 
-      if (!wasValid && isValid) {
+      const updateOnLoad = typeof(this.props.updateOnLoad) !== 'undefined' ? this.props.updateOnLoad : true;
+
+      if (!wasValid && isValid && updateOnLoad) {
         this.updateSearchResults();
       } else if (isValid && updateOnFinish) {
         this.updateSearchResults(true)

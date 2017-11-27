@@ -23,8 +23,8 @@ class CategoryDetailProducts extends Component {
       apiFormFieldChangeHandler: undefined,
       formValues: {},
       productsPage: undefined,
-      resultsAggs: {}
-
+      resultsAggs: {},
+      columns: undefined,
     }
   }
 
@@ -56,18 +56,17 @@ class CategoryDetailProducts extends Component {
   };
 
   componentDidMount() {
-    const countryUrls = this.props.stores.map(store => this.props.ApiResourceObject(store).country.url);
-    const preferredCountryUrl = this.props.preferredCountry.url;
+    const preferredCountry = this.props.preferredCountry;
+    const category = this.props.apiResourceObject;
 
     this.props.fetchAuth(settings.apiResourceEndpoints.category_specs_form_layouts + '?category=' + this.props.apiResourceObject.id)
         .then(all_form_layouts => {
           const processed_form_layouts = all_form_layouts
-              .filter(layout => layout.country === null || countryUrls.includes(layout.country))
               .map(layout => {
                 let priority = 0;
-                if (layout.country === preferredCountryUrl) {
+                if (layout.website === settings.ownWebsiteUrl) {
                   priority = 2
-                } else if (layout.country === null) {
+                } else if (layout.website === null) {
                   priority = 1
                 }
                 return {
@@ -81,13 +80,27 @@ class CategoryDetailProducts extends Component {
           this.setState({
             formLayout: processed_form_layouts[0] || null,
           })
+        });
+
+    // Obtain columns for the results
+
+    const columnEndpoints = `${settings.apiResourceEndpoints.category_columns}?category=${category.id}&purpose=${settings.categoryProductsPurposeId}`;
+    this.props.fetchAuth(columnEndpoints)
+        .then(json => {
+          const filteredColumns = preferredCountry ?
+              json.filter(column => !column.country || column.country === preferredCountry.url) :
+              json;
+
+          this.setState({
+            columns: filteredColumns
+          })
         })
   }
 
   render() {
     const formLayout = this.state.formLayout;
 
-    if (typeof(formLayout) === 'undefined') {
+    if (typeof(formLayout) === 'undefined' || !this.state.columns) {
       return <Loading />
     }
 
@@ -147,7 +160,7 @@ class CategoryDetailProducts extends Component {
 
             if (value) {
               for (const selectedValue of value) {
-                let valueInChoices = Boolean(filterChoices.filter(choice => choice.id === selectedValue.id).length);
+                let valueInChoices = Boolean(filterChoices.filter(choice => choice.id.toString() === selectedValue.id.toString()).length);
                 if (!valueInChoices) {
                   filterChoices.push({
                     ...selectedValue,
@@ -181,7 +194,8 @@ class CategoryDetailProducts extends Component {
 
               return {
                 ...choice,
-                name: `${filterChoiceIdToNameDict[choice.id]} (${aggSum})`
+                name: `${filterChoiceIdToNameDict[choice.id]}`,
+                doc_count: aggSum
               };
             });
           } else {
@@ -208,7 +222,8 @@ class CategoryDetailProducts extends Component {
             filterChoices = filterAggs.map(choice => {
               let result = {
                 ...choice,
-                name: `${filterChoiceIdToNameDict[choice.id]} (${aggSum})`
+                name: filterChoiceIdToNameDict[choice.id],
+                doc_count: aggSum
               };
 
               aggSum -= choice.doc_count;
@@ -298,6 +313,13 @@ class CategoryDetailProducts extends Component {
       },
     ];
 
+    for (const layoutColumn of this.state.columns) {
+      columns.push({
+        label: layoutColumn.label,
+        renderer: result => result.specs[layoutColumn.es_field] || <em>N/A</em>
+      })
+    }
+
     return (
         <div className="animated fadeIn">
           <ApiForm
@@ -316,6 +338,7 @@ class CategoryDetailProducts extends Component {
                     onChange={this.state.apiFormFieldChangeHandler}
                     columns={columns}
                     ordering={this.state.formValues.ordering}
+                    label={<FormattedMessage id="results" defaultMessage="Results"/>}
                 />
               </div>
               <div className="col-12 col-md-6 col-lg-4 col-xl-4">

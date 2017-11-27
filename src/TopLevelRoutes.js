@@ -109,4 +109,15 @@ export const sidebarLayout = [
       }
     ]
   },
+  {
+    title: <FormattedMessage id="reports" defaultMessage="Reports" />,
+    icon: "fa fa-file-excel-o",
+    entries: [
+      {
+        label: <FormattedMessage id="all_masculine" defaultMessage="All" />,
+        path: "/reports",
+        requiredPermission: "reports.backend_list_reports",
+      }
+    ]
+  },
 ];

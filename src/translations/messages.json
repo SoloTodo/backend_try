@@ -380,6 +380,16 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "reports",
+    "defaultMessage": "Reports",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
     "id": "name",
     "defaultMessage": "name",
     "filepath": "./src/views/Category/CategoryDetail.js"
@@ -440,6 +450,11 @@
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
   },
   {
+    "id": "results",
+    "defaultMessage": "Results",
+    "filepath": "./src/views/Category/CategoryDetailBrowse.js"
+  },
+  {
     "id": "filters",
     "defaultMessage": "Filters",
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
@@ -497,6 +512,11 @@
   {
     "id": "name",
     "defaultMessage": "Name",
+    "filepath": "./src/views/Category/CategoryDetailProducts.js"
+  },
+  {
+    "id": "results",
+    "defaultMessage": "Results",
     "filepath": "./src/views/Category/CategoryDetailProducts.js"
   },
   {
@@ -611,7 +631,7 @@
   },
   {
     "id": "hiding_associated_entity_warning",
-    "defaultMessage": "Please deassociate the the entity before hiding it",
+    "defaultMessage": "Please dissociate the the entity before hiding it",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -1510,6 +1530,11 @@
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
+    "id": "specs",
+    "defaultMessage": "Specs",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
     "id": "json_specs",
     "defaultMessage": "Specs (as JSON)",
     "filepath": "./src/views/Product/ProductDetail.js"
@@ -1845,19 +1870,69 @@
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
-    "id": "parameters",
-    "defaultMessage": "Parameters",
+    "id": "filters",
+    "defaultMessage": "Filters",
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
   },
   {
-    "id": "downloading_report",
-    "defaultMessage": "Downloading",
+    "id": "category",
+    "defaultMessage": "Category",
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
   },
   {
-    "id": "download_report",
-    "defaultMessage": "Download report",
+    "id": "all_feminine",
+    "defaultMessage": "All",
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "dont_convert",
+    "defaultMessage": "Don't convert",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "store_types",
+    "defaultMessage": "Store types",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "generate",
+    "defaultMessage": "Generate",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "generating",
+    "defaultMessage": "Generating",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "brands",
+    "defaultMessage": "Brands",
+    "filepath": "./src/views/Report/ReportList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Report/ReportList.js"
   },
   {
     "id": "name",
@@ -2375,6 +2450,11 @@
     "filepath": "./src/views/Wtb/WtbBrandDetail.js"
   },
   {
+    "id": "website",
+    "defaultMessage": "Website",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
     "id": "scraper",
     "defaultMessage": "Scraper",
     "filepath": "./src/views/Wtb/WtbBrandDetail.js"
@@ -2397,6 +2477,26 @@
   {
     "id": "entities",
     "defaultMessage": "Entities",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "visits_list",
+    "defaultMessage": "Visits (list)",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "visits_stats",
+    "defaultMessage": "Visits (stats)",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "leads_list",
+    "defaultMessage": "Leads (list)",
+    "filepath": "./src/views/Wtb/WtbBrandDetail.js"
+  },
+  {
+    "id": "leads_stats",
+    "defaultMessage": "Leads (stats)",
     "filepath": "./src/views/Wtb/WtbBrandDetail.js"
   },
   {
@@ -2468,6 +2568,171 @@
     "id": "name",
     "defaultMessage": "Name",
     "filepath": "./src/views/Wtb/WtbBrandList.js"
+  },
+  {
+    "id": "hiding_associated_entity_warning",
+    "defaultMessage": "Please deassociate the the entity before hiding it",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "changing_category_of_associated_entity_warning",
+    "defaultMessage": "Please dissociate the the entity before changing it's category",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_invisible_warning",
+    "defaultMessage": "Our staff has marked this entity as non-relevant, so it is ignored by our system. If this is not the case please contact us.",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_not_associated_info",
+    "defaultMessage": "This entity has not yet been processed by our staff. Please contact us if you want to prioritize it.",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_not_active_info",
+    "defaultMessage": "Please note that this entity is no loger listed in the website according to our system.",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "picture",
+    "defaultMessage": "Picture",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "options",
+    "defaultMessage": "Options",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "associate_to_prduct",
+    "defaultMessage": "Associate",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "visits_list",
+    "defaultMessage": "Visits (list)",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "visits_stats",
+    "defaultMessage": "Visits (stats)",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "leads_list",
+    "defaultMessage": "Leads (list)",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "leads_stats",
+    "defaultMessage": "Leads (stats)",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "general_information",
+    "defaultMessage": "General Information",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "brand",
+    "defaultMessage": "Brand",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "url",
+    "defaultMessage": "URL",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "key",
+    "defaultMessage": "Key",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "detection_date",
+    "defaultMessage": "Detection date",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "is_visible_question",
+    "defaultMessage": "Visible?",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "pricing_information",
+    "defaultMessage": "Pricing Information",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "dissociate",
+    "defaultMessage": "Dissociate",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "is_active_question",
+    "defaultMessage": "Is active?",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "staff_information",
+    "defaultMessage": "Staff Information",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "last_association",
+    "defaultMessage": "Last association",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_irreversible_category_change_title",
+    "defaultMessage": "Irreversible category change",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_irreversible_category_change_body",
+    "defaultMessage": "You don't have staff permissions over the category you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more.",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_irreversible_category_change_proceed",
+    "defaultMessage": "OK, Proceed either way",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "cancel",
+    "defaultMessage": "Cancel",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_dissociation_title",
+    "defaultMessage": "Confirm entity dissociation",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "entity_dissociation_body",
+    "defaultMessage": "Please confirm the dissociation of the entity",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
+  },
+  {
+    "id": "dissociating",
+    "defaultMessage": "Dissociating",
+    "filepath": "./src/views/Wtb/WtbEntityDetail.js"
   },
   {
     "id": "name",

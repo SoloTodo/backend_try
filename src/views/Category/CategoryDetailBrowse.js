@@ -29,7 +29,8 @@ class CategoryDetailBrowse extends Component {
       formValues: {},
       productsPage: undefined,
       resultsAggs: {},
-      priceRange: undefined
+      priceRange: undefined,
+      columns: undefined
     }
   }
 
@@ -61,8 +62,11 @@ class CategoryDetailBrowse extends Component {
   };
 
   componentDidMount() {
+    const category = this.props.apiResourceObject;
+    const preferredCountry = this.props.preferredCountry;
+
     // Obtain layout of the form fields
-    this.props.fetchAuth(settings.apiResourceEndpoints.category_specs_form_layouts + '?category=' + this.props.apiResourceObject.id)
+    this.props.fetchAuth(settings.apiResourceEndpoints.category_specs_form_layouts + '?category=' + category.id)
         .then(all_form_layouts => {
           const processed_form_layouts = all_form_layouts
               .map(layout => {
@@ -80,12 +84,23 @@ class CategoryDetailBrowse extends Component {
 
           processed_form_layouts.sort((a, b) => b.priority - a.priority);
 
+          const formLayout = processed_form_layouts[0] || null;
+
+          if (formLayout && preferredCountry) {
+            formLayout.fieldsets = formLayout.fieldsets.map(fieldset => ({
+                label: fieldset.label,
+                filters: fieldset.filters.filter(filter =>
+                  !filter.country || filter.country === preferredCountry.url
+                )
+            }))
+          }
+
           this.setState({
-            formLayout: processed_form_layouts[0] || null,
+            formLayout: formLayout,
           })
         });
 
-    const endpoint = `categories/${this.props.apiResourceObject.id}/browse/`;
+    const endpoint = `categories/${category.id}/browse/`;
 
     // Make an empty call to the endpoint to obtain the global min / max and 80th percentile values
     this.props.fetchAuth(endpoint)
@@ -97,13 +112,27 @@ class CategoryDetailBrowse extends Component {
               p80th: Math.floor(parseFloat(json.price_ranges.normal_price_usd['80th']))
             }
           });
+        });
+
+    // Obtain columns for the results
+
+    const columnEndpoints = `${settings.apiResourceEndpoints.category_columns}?category=${category.id}&purpose=${settings.categoryBrowsePurposeId}`;
+    this.props.fetchAuth(columnEndpoints)
+        .then(json => {
+          const filteredColumns = preferredCountry ?
+              json.filter(column => !column.country || column.country === preferredCountry.url) :
+              json;
+
+          this.setState({
+            columns: filteredColumns
+          })
         })
   }
 
   render() {
     const formLayout = this.state.formLayout;
 
-    if (typeof(formLayout) === 'undefined' || typeof(this.state.priceRange) === 'undefined') {
+    if (typeof(formLayout) === 'undefined' || typeof(this.state.priceRange) === 'undefined' || !this.state.columns) {
       return <Loading />
     }
 
@@ -357,10 +386,10 @@ class CategoryDetailBrowse extends Component {
       },
     ];
 
-    for (const layoutColumn of formLayout.columns) {
+    for (const layoutColumn of this.state.columns) {
       columns.push({
         label: layoutColumn.label,
-        renderer: result => result.productEntries[0].product.specs[layoutColumn.field] || <em>N/A</em>
+        renderer: result => result.productEntries[0].product.specs[layoutColumn.es_field] || <em>N/A</em>
       })
     }
 
@@ -504,6 +533,7 @@ class CategoryDetailBrowse extends Component {
                     onChange={this.state.apiFormFieldChangeHandler}
                     columns={columns}
                     ordering={this.state.formValues.ordering}
+                    label={<FormattedMessage id="results" defaultMessage="Results"/>}
                 />
               </div>
               <div className="col-12 col-md-6 col-lg-4 col-xl-4">

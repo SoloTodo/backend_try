@@ -1,32 +1,43 @@
 import React, {Component} from 'react'
 import {FormattedMessage} from "react-intl";
-import LaddaButton from "react-ladda";
 import {connect} from "react-redux";
 import {addApiResourceStateToPropsUtils} from "../../ApiResource";
-import {settings} from "../../settings";
+import ApiForm from "../../api_forms/ApiForm";
+import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
+import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 
 class ReportCurrentPrices extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      formValues: {},
+      apiFormFieldChangeHandler: undefined,
       downloadLink: undefined
     }
   }
 
-  handleClick = evt => {
+  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
     this.setState({
-      downloadLink: null
-    });
+      apiFormFieldChangeHandler
+    })
+  };
 
-    this.props.fetchAuth(settings.apiResourceEndpoints.reports + 'current_prices/')
-        .then(downloadLink => {
-          window.location = downloadLink.url;
+  handleFormValueChange = formValues => {
+    this.setState({formValues})
+  };
 
-          this.setState({
-            downloadLink
-          })
-        })
+  setDownloadLink = json => {
+    if (json) {
+      window.location = json.payload.url;
+      this.setState({
+        downloadLink: undefined
+      })
+    } else {
+      this.setState({
+        downloadLink: null
+      })
+    }
   };
 
   render() {
@@ -35,30 +46,104 @@ class ReportCurrentPrices extends Component {
         <div className="col-12">
           <div className="card">
             <div className="card-header">
-              <FormattedMessage id="parameters" defaultMessage="Parameters" />
+              <i className="glyphicons glyphicons-search">&nbsp;</i>
+              <FormattedMessage id="filters" defaultMessage={`Filters`} />
             </div>
-            <div className="card-block">
-              <div className="row">
-                <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                  <p>
-                    Descarga el reporte de precios actuales para la categoría seleccionada
-                  </p>
+            <ApiForm
+                endpoints={['reports/current_prices']}
+                fields={['category', 'stores', 'countries', 'store_types', 'currency']}
+                onResultsChange={this.setDownloadLink}
+                onFormValueChange={this.handleFormValueChange}
+                setFieldChangeHandler={this.setApiFormFieldChangeHandler}
+                updateOnLoad={false}>
+              <div className="card-block">
+                <div className="row api-form-filters">
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
+                      <FormattedMessage id="category" defaultMessage="Category" />
+                    </label>
+                    <ApiFormChoiceField
+                        name="category"
+                        required={true}
+                        choices={this.props.categories}
+                        placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        value={this.state.formValues.category}
+                    />
+                  </div>
 
-                  <LaddaButton
-                      loading={this.state.downloadLink === null}
-                      onClick={this.handleClick}
-                      className="btn btn-primary">
-                    {this.state.downloadLink === null ?
-                        <FormattedMessage id="downloading_report" defaultMessage="Downloading"/> :
-                        <FormattedMessage id="download_report" defaultMessage="Download report"/>
-                    }
-                  </LaddaButton>
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
+                      <FormattedMessage id="currency" defaultMessage="Currency" />
+                    </label>
+                    <ApiFormChoiceField
+                        name="currency"
+                        choices={this.props.currencies}
+                        placeholder={<FormattedMessage id="dont_convert" defaultMessage="Don't convert" />}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        value={this.state.formValues.currency}
+                    />
+                  </div>
+
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
+                      <FormattedMessage id="stores" defaultMessage='Stores' />
+                    </label>
+                    <ApiFormChoiceField
+                        name="stores"
+                        choices={this.props.stores}
+                        multiple={true}
+                        placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
+                        searchable={true}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        value={this.state.formValues.stores}
+                    />
+                  </div>
+
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
+                      <FormattedMessage id="countries" defaultMessage="Countries" />
+                    </label>
+                    <ApiFormChoiceField
+                        name="countries"
+                        choices={this.props.countries}
+                        multiple={true}
+                        placeholder={<FormattedMessage id="all_masculine" defaultMessage="All" />}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        value={this.state.formValues.countries}
+                    />
+                  </div>
+
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
+                      <FormattedMessage id="store_types" defaultMessage="Store types" />
+                    </label>
+                    <ApiFormChoiceField
+                        name="store_types"
+                        choices={this.props.store_types}
+                        multiple={true}
+                        placeholder={<FormattedMessage id="all_masculine" defaultMessage="All" />}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        value={this.state.formValues.store_types}
+                    />
+                  </div>
+
+                  <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
+                    <label htmlFor="submit">&nbsp;</label>
+                    <ApiFormSubmitButton
+                        label={<FormattedMessage id="generate" defaultMessage="Generate" />}
+                        loadingLabel={<FormattedMessage id="generating" defaultMessage="Generating" />}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        loading={this.state.downloadLink === null}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </ApiForm>
           </div>
         </div>
       </div>
+
     </div>
   }
 }
