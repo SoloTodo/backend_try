@@ -39,6 +39,11 @@ export const sidebarLayout = [
         requiredPermission: "solotodo.backend_list_entities",
       },
       {
+        label: <FormattedMessage id="pending_plural" defaultMessage="Pending" />,
+        path: "/entities/pending",
+        requiredPermission: "solotodo.backend_view_pending_entities",
+      },
+      {
         label: <FormattedMessage id="conflicts" defaultMessage="Conflicts" />,
         path: "/entities/conflicts",
         requiredPermission: "solotodo.backend_view_entity_conflicts",

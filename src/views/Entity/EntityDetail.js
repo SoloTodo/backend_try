@@ -70,14 +70,12 @@ class EntityDetail extends Component {
       }
     } else {
       if (!entity.is_visible) {
-        console.log('Invisibile!');
-
         toast.warn(<FormattedMessage
             id="entity_invisible_warning"
             defaultMessage="Our staff has marked this entity as non-relevant, so it is ignored by our system. If this is not the case please contact us."/>, {autoClose: false})
       }
 
-      if (entity.is_visible && entity.active_registry.is_available && !entity.product) {
+      if (entity.is_visible && entity.active_registry && entity.active_registry.is_available && !entity.product) {
         toast.info(<FormattedMessage
             id="entity_not_associated_info"
             defaultMessage="This entity has not yet been processed by our staff. Please contact us if you want to prioritize it."/>, {autoClose: false})
@@ -222,8 +220,8 @@ class EntityDetail extends Component {
       requestBody.reason = reason
     }
 
-    this.props.fetchAuth(`${this.props.apiResourceObject.url}association/`, {
-      method: 'DELETE',
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}dissociate/`, {
+      method: 'POST',
       body: JSON.stringify(requestBody)
     }).then(json => {
       this.saveEntityChanges(json);
@@ -714,7 +712,7 @@ class EntityDetail extends Component {
               <p>
                 <FormattedMessage id="entity_dissociation_body" defaultMessage="Please confirm the dissociation of the entity" />
               </p>
-              {this.props.apiResourceObject.last_association_user !== this.props.user.detail_url &&
+              {staffInfo && staffInfo.lastAssociationUserUrl !== this.props.user.detail_url &&
               <div>
                 <p>
                   <FormattedMessage id="entity_dissociation_different_user" defaultMessage="This entity was associated by a different user. If possible please leave a message for him/her about the reason for the dissociation" />

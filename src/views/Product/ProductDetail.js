@@ -184,11 +184,11 @@ class ProductDetail extends Component {
 
                     {product.category.permissions.includes('is_category_staff') &&
                     <li>
-                      <NavLink to={`${settings.endpoint}metamodel/instances/${product.instanceModelId}`}>
+                      <a href={`${settings.endpoint}metamodel/instances/${product.instanceModelId}`}>
                         <button type="button" className="btn btn-link">
                           <FormattedMessage id="edit" defaultMessage="Edit"/>
                         </button>
-                      </NavLink>
+                      </a>
                     </li>
                     }
 

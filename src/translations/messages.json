@@ -305,6 +305,11 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "associate",
+    "defaultMessage": "Associate",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -332,6 +337,11 @@
   {
     "id": "show_list_female",
     "defaultMessage": "Show all",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "pending_plural",
+    "defaultMessage": "Pending",
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
@@ -925,6 +935,126 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "product_currently_cloning",
+    "defaultMessage": "Cloning product, please wait!",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "associating_please_wait",
+    "defaultMessage": "Associating entity, please wait!",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "association_successful",
+    "defaultMessage": "The entity has been associated successfully",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "non_visible_entity_association",
+    "defaultMessage": "This entity is not visible, so it can't be associated. Mark it as visible if you want to associate it.",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "information",
+    "defaultMessage": "Information",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "cell_plan_name",
+    "defaultMessage": "Cell plan name",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "url",
+    "defaultMessage": "URL",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "part_number",
+    "defaultMessage": "Part number",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "ean",
+    "defaultMessage": "EAN",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "current_product",
+    "defaultMessage": "Current product",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "current_cell_plan",
+    "defaultMessage": "Current cell plan",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "form",
+    "defaultMessage": "Form",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "n_a",
+    "defaultMessage": "N/A",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "associate",
+    "defaultMessage": "Associate",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "view_product",
+    "defaultMessage": "View product",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "view_in_solotodo",
+    "defaultMessage": "View in SoloTodo",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "clone",
+    "defaultMessage": "Clone",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "description",
+    "defaultMessage": "Description",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "pictures",
+    "defaultMessage": "Pictures",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
     "id": "no_events_found",
     "defaultMessage": "No events found",
     "filepath": "./src/views/Entity/EntityDetailEvents.js"
@@ -1213,6 +1343,71 @@
     "id": "entities",
     "defaultMessage": "Entities",
     "filepath": "./src/views/Entity/EntityList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "cell_plan_name",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "associate",
+    "defaultMessage": "Associate",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "hide",
+    "defaultMessage": "Hide",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "keywords",
+    "defaultMessage": "Keywords",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Entity/EntityPending.js"
   },
   {
     "id": "date",
@@ -1925,8 +2120,8 @@
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
   },
   {
-    "id": "brands",
-    "defaultMessage": "Brands",
+    "id": "reports",
+    "defaultMessage": "Reportes",
     "filepath": "./src/views/Report/ReportList.js"
   },
   {
