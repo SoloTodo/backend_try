@@ -405,6 +405,16 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "users",
+    "defaultMessage": "Users",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
+    "id": "my_user",
+    "defaultMessage": "My user",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
     "id": "name",
     "defaultMessage": "name",
     "filepath": "./src/views/Category/CategoryDetail.js"
@@ -2478,6 +2488,91 @@
     "id": "no_registry_found",
     "defaultMessage": "No registry found",
     "filepath": "./src/views/Store/StoreUpdate.js"
+  },
+  {
+    "id": "email",
+    "defaultMessage": "E-mail",
+    "filepath": "./src/views/User/UserDetail.js"
+  },
+  {
+    "id": "full_name",
+    "defaultMessage": "Full name",
+    "filepath": "./src/views/User/UserDetail.js"
+  },
+  {
+    "id": "options",
+    "defaultMessage": "Options",
+    "filepath": "./src/views/User/UserDetail.js"
+  },
+  {
+    "id": "staff_summary",
+    "defaultMessage": "Staff summary",
+    "filepath": "./src/views/User/UserDetail.js"
+  },
+  {
+    "id": "latest_actions",
+    "defaultMessage": "Latest actions",
+    "filepath": "./src/views/User/UserDetail.js"
+  },
+  {
+    "id": "staff_summary",
+    "defaultMessage": "Staff summary",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "item",
+    "defaultMessage": "Item",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "count",
+    "defaultMessage": "Count",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "individual_amount",
+    "defaultMessage": "Individual amount",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "total_amount",
+    "defaultMessage": "Total amount",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "associated_entities",
+    "defaultMessage": "Associated entities",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "associated_wtb_entities",
+    "defaultMessage": "Associated WTB entities",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "created_products",
+    "defaultMessage": "Created products",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "total",
+    "defaultMessage": "Total",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "users",
+    "defaultMessage": "Users",
+    "filepath": "./src/views/User/UserList.js"
+  },
+  {
+    "id": "email",
+    "defaultMessage": "E-mail",
+    "filepath": "./src/views/User/UserList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/User/UserList.js"
   },
   {
     "id": "date",

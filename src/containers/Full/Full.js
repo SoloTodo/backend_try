@@ -22,6 +22,7 @@ import LeadSwitch from "../../views/Lead/LeadSwitch";
 import CategorySwitch from "../../views/Category/CategorySwitch";
 import VisitSwitch from "../../views/Visit/VisitSwitch";
 import WtbSwitch from "../../views/Wtb/WtbSwitch";
+import UserSwitch from "../../views/User/UserSwitch";
 
 
 class Full extends Component {
@@ -84,6 +85,10 @@ class Full extends Component {
 
                   <Route path="/reports" render={props => (
                       <ReportSwitch {...props} location={props.location}/>
+                  )} />
+
+                  <Route path="/users" render={props => (
+                      <UserSwitch {...props} location={props.location}/>
                   )} />
 
                   <Route path="/" exact render={props => <Redirect to="/dashboard"/>} />

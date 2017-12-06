@@ -18,6 +18,7 @@ export const settings = {
     store_update_logs: endpoint + 'store_update_logs/',
     entities: endpoint + 'entities/',
     entity_histories: endpoint + 'entity_histories/',
+    users: endpoint + 'users/',
     users_with_staff_actions: endpoint + 'users/with_staff_actions/',
     products: endpoint + 'products/',
     category_templates: endpoint + 'category_templates/',

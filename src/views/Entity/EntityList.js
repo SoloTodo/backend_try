@@ -230,7 +230,7 @@ class EntityList extends Component {
                         />
                       </div>
                       <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                        <label id="is_available_label" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>
+                        <label id="is_available_label" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>Enti
                         <ApiFormChoiceField
                             name="is_available"
                             id="is_available"

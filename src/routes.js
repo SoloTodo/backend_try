@@ -36,5 +36,8 @@ const routes = {
   '/wtb/entities/:id': params => ({apiResource: 'wtb_entities', apiResourceObjectId: params.id}),
   '/reports': 'reports',
   '/reports/current_prices': 'current_prices',
+  '/users': 'users',
+  '/users/:id': params => ({apiResource: 'users', apiResourceObjectId: params.id}),
+  '/users/:id/staff_summary': 'staff_summary',
 };
 export default routes;

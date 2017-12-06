@@ -4,7 +4,6 @@ import {FormattedMessage} from "react-intl";
 import {
   addApiResourceStateToPropsUtils
 } from "../../ApiResource";
-import {settings} from "../../settings";
 import {Link, NavLink} from "react-router-dom";
 import messages from "../../messages";
 import ApiForm from "../../api_forms/ApiForm";

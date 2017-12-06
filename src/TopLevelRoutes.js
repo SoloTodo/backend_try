@@ -130,4 +130,21 @@ export const sidebarLayout = [
       }
     ]
   },
+  {
+    title: <FormattedMessage id="users" defaultMessage="Users" />,
+    icon: "fa fa-users",
+    entries: [
+      {
+        label: <FormattedMessage id="all_masculine" defaultMessage="All" />,
+        path: "/users",
+        requiredPermission: "solotodo.backend_list_users",
+      },
+      {
+        label: <FormattedMessage id="my_user" defaultMessage="My user" />,
+        path: "/users/me",
+        requiredPermission: "solotodo.view_users_with_staff_actions",
+      },
+
+    ]
+  },
 ];
