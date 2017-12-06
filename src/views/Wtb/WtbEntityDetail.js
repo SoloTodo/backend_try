@@ -213,7 +213,7 @@ class WtbEntityDetail extends Component {
                 <div className="card-block">
                   <ul className="list-without-decoration subnavigation-links">
                     {hasStaffPermissions &&
-                    <li><NavLink to={'/entities/' + wtbEntity.id + '/associate'}>
+                    <li><NavLink to={'/wtb/entities/' + wtbEntity.id + '/associate'}>
                       <button type="button" className="btn btn-link">
                         <FormattedMessage id="associate_to_prduct" defaultMessage={`Associate`} />
                       </button>

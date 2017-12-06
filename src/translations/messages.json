@@ -390,6 +390,11 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "pending_entities",
+    "defaultMessage": "Pending entities",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
     "id": "reports",
     "defaultMessage": "Reports",
     "filepath": "./src/TopLevelRoutes.js"
@@ -940,6 +945,11 @@
     "filepath": "./src/views/Entity/EntityDetailAssociate.js"
   },
   {
+    "id": "please_select_a_different_product_cell_plan",
+    "defaultMessage": "Please select a different product / cell plan from the current ones",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
     "id": "associating_please_wait",
     "defaultMessage": "Associating entity, please wait!",
     "filepath": "./src/views/Entity/EntityDetailAssociate.js"
@@ -1017,11 +1027,6 @@
   {
     "id": "cell_plan",
     "defaultMessage": "Cell plan",
-    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
-  },
-  {
-    "id": "n_a",
-    "defaultMessage": "N/A",
     "filepath": "./src/views/Entity/EntityDetailAssociate.js"
   },
   {
@@ -2930,6 +2935,91 @@
     "filepath": "./src/views/Wtb/WtbEntityDetail.js"
   },
   {
+    "id": "product_currently_cloning",
+    "defaultMessage": "Cloning product, please wait!",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "please_select_a_different_product",
+    "defaultMessage": "Please select a different product from the current one",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "associating_please_wait",
+    "defaultMessage": "Associating entity, please wait!",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "association_successful",
+    "defaultMessage": "The entity has been associated successfully",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "non_visible_entity_association",
+    "defaultMessage": "This entity is not visible, so it can't be associated. Mark it as visible if you want to associate it.",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "information",
+    "defaultMessage": "Information",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "brand",
+    "defaultMessage": "Brand",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "url",
+    "defaultMessage": "URL",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "current_product",
+    "defaultMessage": "Current product",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "form",
+    "defaultMessage": "Form",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "associate",
+    "defaultMessage": "Associate",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "view_product",
+    "defaultMessage": "View product",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "view_in_solotodo",
+    "defaultMessage": "View in SoloTodo",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
+    "id": "clone",
+    "defaultMessage": "Clone",
+    "filepath": "./src/views/Wtb/WtbEntityDetailAssociate.js"
+  },
+  {
     "id": "name",
     "defaultMessage": "Name",
     "filepath": "./src/views/Wtb/WtbEntityList.js"
@@ -3003,5 +3093,65 @@
     "id": "entities",
     "defaultMessage": "Entities",
     "filepath": "./src/views/Wtb/WtbEntityList.js"
+  },
+  {
+    "id": "name",
+    "defaultMessage": "Name",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "brand",
+    "defaultMessage": "Brand",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "associate",
+    "defaultMessage": "Associate",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "hide",
+    "defaultMessage": "Hide",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "brands",
+    "defaultMessage": "Brands",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "keywords",
+    "defaultMessage": "Keywords",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "search",
+    "defaultMessage": "Search",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "searching",
+    "defaultMessage": "Searching",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
+  },
+  {
+    "id": "entities",
+    "defaultMessage": "Entities",
+    "filepath": "./src/views/Wtb/WtbEntityPending.js"
   }
 ]

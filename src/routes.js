@@ -31,6 +31,8 @@ const routes = {
   '/wtb/brands/:id': params => ({apiResource: 'wtb_brands', apiResourceObjectId: params.id}),
   '/wtb/brands/:id/update_logs': 'update_logs',
   '/wtb/entities': 'entities',
+  '/wtb/entities/pending': 'pending_plural',
+  '/wtb/entities/:id/associate': 'associate',
   '/wtb/entities/:id': params => ({apiResource: 'wtb_entities', apiResourceObjectId: params.id}),
   '/reports': 'reports',
   '/reports/current_prices': 'current_prices',

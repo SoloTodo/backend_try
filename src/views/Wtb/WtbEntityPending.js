@@ -5,7 +5,6 @@ import {
   addApiResourceStateToPropsUtils
 } from "../../ApiResource";
 import {settings} from "../../settings";
-import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
 import messages from "../../messages";
 import ApiForm from "../../api_forms/ApiForm";
@@ -17,14 +16,14 @@ import {
 } from "../../api_forms/utils";
 import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
 
-class EntityPending extends Component {
+class WtbEntityPending extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       formValues: {},
       apiFormFieldChangeHandler: undefined,
-      entities: undefined
+      wtbEntities: undefined
     }
   }
 
@@ -38,25 +37,25 @@ class EntityPending extends Component {
     this.setState({formValues})
   };
 
-  setEntities = json => {
+  setWtbEntities = json => {
     this.setState({
-      entities: json ? json.payload : null
+      wtbEntities: json ? json.payload : null
     })
   };
 
-  handleEntityHideClick = entity => {
-    this.props.fetchAuth(entity.url + 'toggle_visibility/', {
+  handleWtbEntityHideClick = wtbEntity => {
+    this.props.fetchAuth(wtbEntity.url + 'toggle_visibility/', {
       method: 'POST'
     });
 
-    const newEntities = {
-      ...this.state.entities,
-      count: this.state.entities.count - 1,
-      results: this.state.entities.results.filter(e => e.url !== entity.url)
+    const newWtbEntities = {
+      ...this.state.wtbEntities,
+      count: this.state.wtbEntities.count - 1,
+      results: this.state.wtbEntities.results.filter(e => e.url !== wtbEntity.url)
     };
 
     this.setState({
-      entities: newEntities
+      wtbEntities: newWtbEntities
     })
 
   };
@@ -65,58 +64,49 @@ class EntityPending extends Component {
     const columns = [
       {
         label: <FormattedMessage id="name" defaultMessage="Name" />,
-        ordering: 'name',
-        renderer: entity => <NavLink to={'/entities/' + entity.id}>{entity.name || <em>N/A</em>}</NavLink>
+        renderer: wtbEntity => <NavLink to={'/wtb/entities/' + wtbEntity.id}>{wtbEntity.name || <em>N/A</em>}</NavLink>
       },
       {
-        label: <FormattedMessage id="cell_plan_name" defaultMessage="Cell plan" />,
-        renderer: entity => entity.cellPlanName || <em>N/A</em>,
-        cssClasses: 'hidden-xs-down',
-        displayFilter: entities => entities.some(entity => entity.cellPlanName !== null)
-      },
-      {
-        label: <FormattedMessage id="store" defaultMessage="Store" />,
-        ordering: 'store',
-        renderer: entity => <span>
-          <Link to={'/stores/' + entity.store.id}>{entity.store.name}</Link>
-          <a href={entity.externalUrl} target="_blank" className="ml-2">
+        label: <FormattedMessage id="brand" defaultMessage="Brand" />,
+        renderer: wtbEntity => <span>
+          <Link to={'/wtb/brands/' + wtbEntity.brand.id}>{wtbEntity.brand.name}</Link>
+          <a href={wtbEntity.externalUrl} target="_blank" className="ml-2">
             <span className="glyphicons glyphicons-link">&nbsp;</span>
           </a>
         </span>
       },
       {
         label: <FormattedMessage id="category" defaultMessage="Category" />,
-        ordering: 'category',
-        renderer: entity => entity.category.name,
+        renderer: wtbEntity => wtbEntity.category.name,
       },
       {
         label: <FormattedMessage id="associate" defaultMessage="Associate" />,
-        renderer: entity => <a href={`/entities/${entity.id}/associate`} className="btn btn-secondary">
+        renderer: wtbEntity => <a href={`/wtb/entities/${wtbEntity.id}/associate`} className="btn btn-secondary">
           <FormattedMessage id="associate" defaultMessage="Associate" />
         </a>,
       },
       {
         label: <FormattedMessage id="hide" defaultMessage="Hide" />,
-        renderer: entity => <button type="button" className="btn btn-secondary" onClick={evt => this.handleEntityHideClick(entity)}>
+        renderer: wtbEntity => <button type="button" className="btn btn-secondary" onClick={evt => this.handleWtbEntityHideClick(wtbEntity)}>
           <FormattedMessage id="hide" defaultMessage="Hide" />
         </button>,
       },
     ];
 
-    const storeChoices = this.props.stores.filter(store => store.permissions.includes('is_store_staff'));
+    const wtbBrandChoices = this.props.wtb_brands.filter(wtbBrand => wtbBrand.permissions.includes('is_wtb_brand_staff'));
     const categoryChoices = this.props.categories.filter(category => category.permissions.includes('is_category_staff'));
 
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoints={["entities/pending/"]}
-              fields={['stores', 'categories', 'search', 'page', 'page_size', 'ordering']}
-              onResultsChange={this.setEntities}
+              endpoints={["wtb/entities/pending/"]}
+              fields={['wtb_brands', 'categories', 'search', 'page', 'page_size', 'ordering']}
+              onResultsChange={this.setWtbEntities}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <ApiFormChoiceField
                 name="ordering"
-                choices={createOrderingOptionChoices(['name', 'store', 'category'])}
+                choices={createOrderingOptionChoices(['name', 'wtb_brand', 'category'])}
                 hidden={true}
                 required={true}
                 value={this.state.formValues.ordering}
@@ -131,17 +121,16 @@ class EntityPending extends Component {
                   <div className="card-block">
                     <div className="row entity-form-controls">
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <label htmlFor="stores">
-                          <FormattedMessage id="stores" defaultMessage={`Stores`} />
+                        <label htmlFor="wtb_brands">
+                          <FormattedMessage id="brands" defaultMessage="Brands" />
                         </label>
                         <ApiFormChoiceField
-                            name="stores"
-                            id="stores"
-                            choices={storeChoices}
+                            name="wtb_brands"
+                            id="wtb_brands"
+                            choices={wtbBrandChoices}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            value={this.state.formValues.stores}
+                            value={this.state.formValues.wtb_brands}
                             placeholder={messages.all_feminine}
 
                         />
@@ -155,7 +144,7 @@ class EntityPending extends Component {
                             id="categories"
                             choices={categoryChoices}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={true}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.categories}
                             placeholder={messages.all_feminine}
@@ -177,7 +166,7 @@ class EntityPending extends Component {
                             label={<FormattedMessage id="search" defaultMessage='Search' />}
                             loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.entities === null}
+                            loading={this.state.wtbEntities === null}
                         />
                       </div>
                     </div>
@@ -192,7 +181,7 @@ class EntityPending extends Component {
                     page_size_choices={[50, 100, 200]}
                     page={this.state.formValues.page}
                     page_size={this.state.formValues.page_size}
-                    data={this.state.entities}
+                    data={this.state.wtbEntities}
                     onChange={this.state.apiFormFieldChangeHandler}
                     columns={columns}
                     ordering={this.state.formValues.ordering}
@@ -205,13 +194,5 @@ class EntityPending extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
-    breakpoint: state.breakpoint
-  }
-}
-
 export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(EntityPending);
+    addApiResourceStateToPropsUtils())(WtbEntityPending);

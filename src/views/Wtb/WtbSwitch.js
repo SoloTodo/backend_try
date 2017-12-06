@@ -7,6 +7,8 @@ import WtbBrandDetail from "./WtbBrandDetail";
 import WtbBrandDetailUpdateLogs from "./WtbBrandDetailUpdateLogs";
 import WtbEntityList from "./WtbEntityList";
 import WtbEntityDetail from "./WtbEntityDetail";
+import WtbEntityDetailAssociate from "./WtbEntityDetailAssociate";
+import WtbEntityPending from "./WtbEntityPending";
 
 export default ({match}) => {
   return (
@@ -35,10 +37,22 @@ export default ({match}) => {
               <WtbEntityList />
             </RequiredResources>
         )} />
+        <Route path={match.url + '/entities/pending'} exact render={props => (
+            <RequiredResources resources={['wtb_brands', 'categories']}>
+              <WtbEntityPending />
+            </RequiredResources>
+        )} />
         <Route path={match.url + '/entities/:id'} exact render={props => (
             <ResourceObjectPermission match={props.match} resource="wtb_entities">
               <RequiredResources resources={['wtb_brands', 'categories', 'users_with_staff_actions', 'websites']}>
                 <WtbEntityDetail />
+              </RequiredResources>
+            </ResourceObjectPermission>
+        )} />
+        <Route path={match.url + '/entities/:id/associate'} exact render={props => (
+            <ResourceObjectPermission match={props.match} resource="wtb_entities">
+              <RequiredResources resources={['wtb_brands', 'categories', 'websites']}>
+                <WtbEntityDetailAssociate />
               </RequiredResources>
             </ResourceObjectPermission>
         )} />

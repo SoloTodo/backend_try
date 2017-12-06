@@ -111,7 +111,12 @@ export const sidebarLayout = [
         label: <FormattedMessage id="entities" defaultMessage="Entities" />,
         path: "/wtb/entities",
         requiredPermission: "wtb.backend_view_wtb",
-      }
+      },
+      {
+        label: <FormattedMessage id="pending_entities" defaultMessage="Pending entities" />,
+        path: "/wtb/entities/pending",
+        requiredPermission: "wtb.backend_view_pending_wtb_entities",
+      },
     ]
   },
   {
