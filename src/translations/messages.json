@@ -2510,9 +2510,84 @@
     "filepath": "./src/views/User/UserDetail.js"
   },
   {
-    "id": "latest_actions",
-    "defaultMessage": "Latest actions",
+    "id": "staff_actions",
+    "defaultMessage": "Staff actions",
     "filepath": "./src/views/User/UserDetail.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "updating",
+    "defaultMessage": "Updating",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "handled_entities",
+    "defaultMessage": "Handled entities",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "entity",
+    "defaultMessage": "Entity",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "date",
+    "defaultMessage": "Date",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "created_products",
+    "defaultMessage": "Created products",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "associated_wtb_entities",
+    "defaultMessage": "Associated WTB entities",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "wtb_entity",
+    "defaultMessage": "WTB Entity",
+    "filepath": "./src/views/User/UserDetailStaffActions.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "update",
+    "defaultMessage": "Update",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
+  },
+  {
+    "id": "updating",
+    "defaultMessage": "Updating",
+    "filepath": "./src/views/User/UserDetailStaffSummary.js"
   },
   {
     "id": "staff_summary",

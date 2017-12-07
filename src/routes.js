@@ -39,5 +39,6 @@ const routes = {
   '/users': 'users',
   '/users/:id': params => ({apiResource: 'users', apiResourceObjectId: params.id}),
   '/users/:id/staff_summary': 'staff_summary',
+  '/users/:id/staff_actions': 'staff_actions',
 };
 export default routes;

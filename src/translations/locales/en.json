@@ -103,6 +103,7 @@
   "generate": "Generate",
   "generating": "Generating",
   "grouping": "Grouping",
+  "handled_entities": "Handled entities",
   "header_currency_title": "Currency",
   "header_language_title": "Language",
   "header_number_format_title": "Number format",
@@ -138,7 +139,6 @@
   "last_updated": "Last updated",
   "last_updated_from_to": "Last updated (from / to)",
   "last_updated_tooltip": "Filter the products that were last updated between the given dates",
-  "latest_actions": "Latest actions",
   "leads": "Leads",
   "leads_list": "Leads (list)",
   "leads_stats": "Leads (stats)",
@@ -219,6 +219,7 @@
   "sign_up_title": "Sign up",
   "sku": "SKU",
   "specs": "Specs",
+  "staff_actions": "Staff actions",
   "staff_information": "Staff Information",
   "staff_summary": "Staff summary",
   "start": "Start",
@@ -265,5 +266,6 @@
   "website": "Website",
   "websites": "Websites",
   "where_to_buy": "Where to Buy",
+  "wtb_entity": "WTB Entity",
   "yes": "Yes"
 }

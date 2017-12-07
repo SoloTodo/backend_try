@@ -5,6 +5,7 @@ import UserList from "./UserList";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import UserDetail from "./UserDetail";
 import UserDetailStaffSummary from "./UserDetailStaffSummary";
+import UserDetailStaffActions from "./UserDetailStaffActions";
 
 export default ({match}) => {
   return (
@@ -25,6 +26,11 @@ export default ({match}) => {
                 <UserDetailStaffSummary />
               </ResourceObjectPermission>
             </RequiredResources>
+        )} />
+        <Route path={match.url + '/:id/staff_actions'} exact render={props => (
+            <ResourceObjectPermission match={props.match} resource="users">
+              <UserDetailStaffActions />
+            </ResourceObjectPermission>
         )} />
       </Switch>
   )

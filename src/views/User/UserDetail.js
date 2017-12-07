@@ -46,9 +46,9 @@ class UserDetail extends Component {
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to={this.props.match.url + '/latest_actions'}>
+                      <NavLink to={this.props.match.url + '/staff_actions'}>
                         <button type="button" className="btn btn-link">
-                          <FormattedMessage id="latest_actions" defaultMessage="Latest actions" />
+                          <FormattedMessage id="staff_actions" defaultMessage="Staff actions" />
                         </button>
                       </NavLink>
                     </li>

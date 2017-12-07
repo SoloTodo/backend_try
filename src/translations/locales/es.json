@@ -103,6 +103,7 @@
   "generate": "Generar",
   "generating": "Generando",
   "grouping": "Agrupamiento",
+  "handled_entities": "Entidades trabajadas",
   "header_currency_title": "Moneda",
   "header_language_title": "Idioma",
   "header_number_format_title": "Formato número",
@@ -138,7 +139,6 @@
   "last_updated": "Última actualización",
   "last_updated_from_to": "Última actualización (desde / hasta)",
   "last_updated_tooltip": "Filtra los productos por la fecha en que fueron editados por última vez",
-  "latest_actions": "Últimas acciones",
   "leads": "Leads",
   "leads_list": "Leads (listado)",
   "leads_stats": "Leads (estadísticas)",
@@ -219,6 +219,7 @@
   "sign_up_title": "Registro",
   "sku": "SKU",
   "specs": "Especificaciones",
+  "staff_actions": "Acciones staff",
   "staff_information": "Información staff",
   "staff_summary": "Resumen staff",
   "start": "Inicio",
@@ -265,5 +266,6 @@
   "website": "Sitio",
   "websites": "Sitios",
   "where_to_buy": "Donde Comprar",
+  "wtb_entity": "Entidad WTB",
   "yes": "Sí"
 }
