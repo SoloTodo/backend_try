@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import {
   addApiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import Loading from "../../components/Loading";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import OrderTable from "../../components/OrderTable";
 import {settings} from "../../settings";
-import {listToObject} from "../../utils";
+import {listToObject} from "solotodo-react-utils";
 import {Link} from "react-router-dom";
 
 class ProductDetailPricesTable extends Component {

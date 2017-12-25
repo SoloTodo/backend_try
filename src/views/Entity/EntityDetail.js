@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
@@ -14,7 +14,7 @@ import Select from 'react-select';
 import trim from 'lodash/trim';
 import ImageGallery from 'react-image-gallery';
 import {settings} from "../../settings";
-import {formatCurrency, formatDateStr} from "../../utils";
+import {formatCurrency, formatDateStr} from "solotodo-react-utils";
 import imageNotAvailable from '../../images/image-not-available.svg';
 import './EntityDetail.css'
 import {createOption, createOptions} from "../../form_utils";

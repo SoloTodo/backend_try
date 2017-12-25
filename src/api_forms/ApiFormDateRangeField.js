@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import changeCase from 'change-case'
 import moment from "moment";
 import './ApiFormDateRangeField.css'
-import {parseDateToCurrentTz} from "../utils";
+import {parseDateToCurrentTz} from "solotodo-react-utils";
 
 class ApiFormDateRangeField extends Component {
   componentDidMount() {

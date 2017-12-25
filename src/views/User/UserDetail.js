@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
 

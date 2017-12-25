@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
-import {formatDateStr} from "../../utils";
+import {formatDateStr} from "solotodo-react-utils";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";

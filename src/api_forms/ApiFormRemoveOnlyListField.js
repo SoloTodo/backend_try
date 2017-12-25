@@ -3,8 +3,8 @@ import queryString from 'query-string';
 import changeCase from 'change-case'
 import {settings as setting} from "../settings";
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../ApiResource";
-import {listToObject} from "../utils";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {listToObject} from "solotodo-react-utils";
 import {NavLink} from "react-router-dom";
 import './ApiFormRemoveOnlyListField.css'
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import ProductDetailPricesTable from "./ProductDetailPricesTable";

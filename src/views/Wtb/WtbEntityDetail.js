@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
@@ -11,7 +11,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import {settings} from "../../settings";
-import {formatDateStr} from "../../utils";
+import {formatDateStr} from "solotodo-react-utils";
 import './WtbEntityDetail.css'
 import {createOption, createOptions} from "../../form_utils";
 

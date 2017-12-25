@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import moment from "moment";
 import ApiForm from "../../api_forms/ApiForm";
 import {settings} from "../../settings";
 import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
-import {listToObject} from "../../utils";
+import {listToObject} from "solotodo-react-utils";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import messages from "../../messages";
 import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";

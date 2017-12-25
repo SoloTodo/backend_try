@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import './ApiForm.css'
 import {withRouter} from "react-router-dom";
-import {listToObject} from "../utils";
-import {addApiResourceStateToPropsUtils} from "../ApiResource";
+import {listToObject} from "solotodo-react-utils";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {connect} from "react-redux";
 
 class ApiForm extends Component {

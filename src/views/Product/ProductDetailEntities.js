@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import connect from "react-redux/es/connect/connect";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import moment from "moment";
 import Loading from "../../components/Loading";
 import {FormattedMessage} from "react-intl";

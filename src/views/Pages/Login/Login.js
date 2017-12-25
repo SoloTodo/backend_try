@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { settings } from '../../../settings'
-import {filterApiResourceObjectsByType} from "../../../ApiResource";
+import {filterApiResourceObjectsByType} from "solotodo-react-utils";
 import {initialUserLoad} from "../../../App";
 
 class Login extends Component {

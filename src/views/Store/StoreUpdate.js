@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";

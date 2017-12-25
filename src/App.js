@@ -9,14 +9,15 @@ import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
 import Login from './views/Pages/Login/';
 import { settings } from './settings';
+import { defaultProperty } from './utils';
 import {
-  navigatorLanguage, fetchAuth, defaultProperty,
+  ApiResourceObject,
+  fetchApiResource,
+  filterApiResourceObjectsByType,
+  navigatorLanguage,
+  fetchAuth,
   setLocale
-} from './utils';
-import {
-  fetchApiResource, filterApiResourceObjectsByType
-} from './ApiResource';
-import ApiResourceObject from "./ApiResource";
+} from 'solotodo-react-utils';
 import Page404 from "./views/Pages/Page404/Page404";
 
 import 'react-select/dist/react-select.css';

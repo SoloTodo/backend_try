@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
-import {filterApiResourceObjectsByType} from "../../ApiResource";
+import {filterApiResourceObjectsByType} from "solotodo-react-utils";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
-import {formatDateStr} from "../../utils";
+import {formatDateStr} from "solotodo-react-utils";
 import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import {
   createOrderingOptionChoices,

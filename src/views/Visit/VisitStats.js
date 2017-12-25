@@ -3,7 +3,7 @@ import ApiForm from "../../api_forms/ApiForm";
 import {settings} from "../../settings";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import moment from "moment";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
@@ -13,7 +13,7 @@ import {NavLink} from "react-router-dom";
 import './VisitStats.css'
 import LeadStatsTimelapse from "../Lead/LeadStatsTimelapse";
 import {createPageSizeChoices} from "../../api_forms/utils";
-import {listToObject} from "../../utils";
+import {listToObject} from "solotodo-react-utils";
 import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
 import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import ApiFormRemoveOnlyListField from "../../api_forms/ApiFormRemoveOnlyListField";

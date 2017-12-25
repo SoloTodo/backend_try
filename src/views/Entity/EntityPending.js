@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
   addApiResourceStateToPropsUtils
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import {settings} from "../../settings";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";

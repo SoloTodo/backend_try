@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
-import {listToObject} from "../../utils";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {listToObject} from "solotodo-react-utils";
 
 class WtbBrandDetail extends Component {
   render() {

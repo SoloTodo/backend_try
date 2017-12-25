@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
-import {formatCurrency} from "../../utils";
+import {formatCurrency} from "solotodo-react-utils";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import moment from "moment";

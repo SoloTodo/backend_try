@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {convertToDecimal, listToObject} from "../../utils";
+import {convertToDecimal, listToObject} from "solotodo-react-utils";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";

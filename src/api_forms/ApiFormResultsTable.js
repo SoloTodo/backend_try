@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import Loading from "../components/Loading";
 import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import './ApiFormResultsTable.css'
 import ApiFormOrderingColumn from "./ApiFormOrderingColumn";
 

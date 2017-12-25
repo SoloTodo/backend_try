@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {fillTimeLapse, parseDateToCurrentTz} from "../../utils";
+import {fillTimeLapse, parseDateToCurrentTz} from "solotodo-react-utils";
 import {chartColors} from "../../colors";
 import {Line} from "react-chartjs-2";
 import Loading from "../../components/Loading";

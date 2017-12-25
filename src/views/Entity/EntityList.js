@@ -3,11 +3,11 @@ import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
   addApiResourceStateToPropsUtils
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import {settings} from "../../settings";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
-import {booleanChoices, formatCurrency} from "../../utils";
+import {formatCurrency} from "solotodo-react-utils";
 import messages from "../../messages";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
@@ -17,6 +17,7 @@ import {
   createOrderingOptionChoices
 } from "../../api_forms/utils";
 import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
+import {booleanChoices} from "../../utils";
 
 class EntityList extends Component {
   constructor(props) {

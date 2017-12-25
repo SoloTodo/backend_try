@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "../ApiResource";
+} from "solotodo-react-utils";
 import {settings} from "../settings";
 import Loading from "../components/Loading";
 import {FormattedMessage} from "react-intl";

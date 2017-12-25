@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import connect from "react-redux/es/connect/connect";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";

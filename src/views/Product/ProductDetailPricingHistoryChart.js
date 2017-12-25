@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import Loading from "../../components/Loading";
 import {Line} from 'react-chartjs-2';
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import connect from "react-redux/es/connect/connect";
 import {chartColors, lightenDarkenColor} from "../../colors"
-import {convertToDecimal, formatCurrency} from "../../utils";
+import {convertToDecimal, formatCurrency} from "solotodo-react-utils";
 import {injectIntl} from "react-intl";
 import './ProductDetailPricingHistoryChart.css'
 import moment from "moment";

@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "./ApiResource";
+} from "solotodo-react-utils";
 import Loading from "./components/Loading";
 
 class RequiredResources extends Component {

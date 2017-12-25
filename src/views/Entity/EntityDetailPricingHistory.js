@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {convertToDecimal} from "../../utils";
+import {convertToDecimal} from "solotodo-react-utils";
 import {settings} from "../../settings";
 import ApiForm from "../../api_forms/ApiForm";
 import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";

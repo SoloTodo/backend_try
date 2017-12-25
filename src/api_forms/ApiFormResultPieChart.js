@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Pie} from "react-chartjs-2";
 import {connect} from "react-redux";
 import Loading from "../components/Loading";
-import {addApiResourceStateToPropsUtils} from "../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {chartColors} from "../colors";
 
 class ApiFormResultPieChart extends Component {

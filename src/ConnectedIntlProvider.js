@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 
 import { localeData } from './translations/locales/index';
 import { settings } from './settings';
-import {apiResourceObjectForeignKey} from "./ApiResource";
+import {apiResourceObjectForeignKey} from "solotodo-react-utils";
 
 // REF https://github.com/yahoo/react-intl/issues/243
 

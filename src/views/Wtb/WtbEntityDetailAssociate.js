@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {FormattedMessage, injectIntl} from "react-intl";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {connect} from "react-redux";
 import {NavLink, Redirect} from "react-router-dom";
 import { toast } from 'react-toastify';

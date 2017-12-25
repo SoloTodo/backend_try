@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
 import {Redirect} from "react-router-dom";

@@ -9,7 +9,7 @@ import Dashboard from '../../views/Dashboard/';
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "../../ApiResource";
+} from "solotodo-react-utils";
 import {settings} from "../../settings";
 import UserPermissionFilter from "../../auth/UserPermissionFilter";
 import Page404 from "../../views/Pages/Page404/Page404";

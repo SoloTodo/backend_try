@@ -7,8 +7,8 @@ import {Handle} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import RcPriceRange from "./RcPriceRange";
-import ApiResourceObject from "../ApiResource";
-import {formatCurrency} from "../utils";
+import { ApiResourceObject } from "solotodo-react-utils";
+import {formatCurrency} from "solotodo-react-utils";
 
 
 class ApiFormPriceRangeField extends Component {

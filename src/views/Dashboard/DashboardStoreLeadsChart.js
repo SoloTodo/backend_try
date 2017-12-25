@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
-import {addApiResourceStateToPropsUtils} from "../../ApiResource";
+import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
 import {connect} from "react-redux";
 import {settings} from "../../settings";
 import moment from "moment";
-import {fillTimeLapse} from "../../utils";
+import {fillTimeLapse} from "solotodo-react-utils";
 import Loading from "../../components/Loading";
 import {chartColors} from "../../colors";
 import {Line} from "react-chartjs-2";
