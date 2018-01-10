@@ -1,21 +1,27 @@
 import React, {Component} from 'react';
-import ApiForm from "../../api_forms/ApiForm";
+import {
+  addApiResourceStateToPropsUtils,
+} from '../../react-utils/ApiResource'
+import {
+  createPageSizeChoices,
+  ApiForm,
+  ApiFormDateRangeField,
+  ApiFormChoiceField,
+  ApiFormSubmitButton,
+  ApiFormPaginationField,
+  ApiFormResultsTable,
+  ApiFormRemoveOnlyListField,
+  ApiFormResultPieChart
+} from '../../react-utils/api_forms'
+import {
+  listToObject,
+} from '../../react-utils/utils'
 import {settings} from "../../settings";
 import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
-import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import moment from "moment";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import Loading from "../../components/Loading";
 import {NavLink} from "react-router-dom";
-import {createPageSizeChoices} from "../../api_forms/utils";
-import {listToObject} from "solotodo-react-utils";
-import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
-import ApiFormRemoveOnlyListField from "../../api_forms/ApiFormRemoveOnlyListField";
-import ApiFormResultPieChart from "../../api_forms/ApiFormResultPieChart";
 
 class EntityEstimatedSales extends Component {
   constructor(props) {

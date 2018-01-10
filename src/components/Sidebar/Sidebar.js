@@ -7,10 +7,10 @@ import {
   addApiResourceStateToPropsUtils,
   apiResourceObjectForeignKey,
   filterApiResourceObjectsByType
-} from 'solotodo-react-utils';
+} from '../../react-utils/ApiResource';
 import './sidebar.css';
 import {settings} from "../../settings";
-import {setLocale} from "solotodo-react-utils";
+import {setLocale} from "../../react-utils/utils";
 
 
 class Sidebar extends Component {

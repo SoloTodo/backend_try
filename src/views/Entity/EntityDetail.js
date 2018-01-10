@@ -3,7 +3,11 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "solotodo-react-utils";
+} from "../../react-utils/ApiResource";
+import {
+  createOption,
+  createOptions,
+} from "../../react-utils/form_utils";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
@@ -14,10 +18,9 @@ import Select from 'react-select';
 import trim from 'lodash/trim';
 import ImageGallery from 'react-image-gallery';
 import {settings} from "../../settings";
-import {formatCurrency, formatDateStr} from "solotodo-react-utils";
+import {formatCurrency, formatDateStr} from "../../react-utils/utils";
 import imageNotAvailable from '../../images/image-not-available.svg';
 import './EntityDetail.css'
-import {createOption, createOptions} from "../../form_utils";
 import moment from "moment";
 
 const DISSOCIATING_STATES = {

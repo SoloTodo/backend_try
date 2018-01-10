@@ -1,17 +1,24 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {
+  listToObject,
+} from "../../react-utils/utils";
+import {
+  addApiResourceStateToPropsUtils,
+} from "../../react-utils/ApiResource";
+import {
+  ApiForm,
+  ApiFormResultTableWithPagination,
+  ApiFormChoiceField,
+  ApiFormSubmitButton,
+  ApiFormRemoveOnlyListField
+} from "../../react-utils/api_forms";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import moment from "moment";
-import ApiForm from "../../api_forms/ApiForm";
 import {settings} from "../../settings";
-import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
-import {listToObject} from "solotodo-react-utils";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import messages from "../../messages";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import {NavLink} from "react-router-dom";
-import ApiFormRemoveOnlyListField from "../../api_forms/ApiFormRemoveOnlyListField";
+
 
 class VisitList extends Component {
   constructor(props) {

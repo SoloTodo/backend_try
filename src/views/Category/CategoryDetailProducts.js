@@ -1,17 +1,19 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
 import connect from "react-redux/es/connect/connect";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
+import {
+  ApiForm,
+  ApiFormChoiceField,
+  ApiFormResultTableWithPagination,
+  ApiFormTextField,
+  ApiFormDiscreteRangeField,
+  ApiFormContinuousRangeField
+} from '../../react-utils/api_forms'
 import {FormattedMessage} from "react-intl";
-import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
 import {NavLink, Redirect} from "react-router-dom";
-import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import "./CategoryDetailProducts.css"
-import ApiFormDiscreteRangeField from "../../api_forms/ApiFormDiscreteRangeField";
-import ApiFormContinuousRangeField from "../../api_forms/ApiFormContinouousRangeField";
 import { toast } from 'react-toastify';
 
 class CategoryDetailProducts extends Component {

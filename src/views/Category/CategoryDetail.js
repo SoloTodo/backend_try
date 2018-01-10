@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import CategoryDetailMenu from "./CategoryDetailMenu";

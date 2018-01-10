@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {convertToDecimal, listToObject} from "solotodo-react-utils";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
+import {
+  convertToDecimal,
+  listToObject,
+} from "../../react-utils/utils";
+import {
+  ApiForm,
+  ApiFormDateRangeField,
+  ApiFormChoiceField,
+  ApiFormSubmitButton,
+  ApiFormResultsTable
+} from "../../react-utils/api_forms";
 import ProductDetailPricingHistoryChart from "./ProductDetailPricingHistoryChart";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import {UncontrolledTooltip} from "reactstrap";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import {NavLink} from "react-router-dom";
 
 class ProductDetailPricingHistory extends Component {

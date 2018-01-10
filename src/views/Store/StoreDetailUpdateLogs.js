@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
-import {formatDateStr} from "solotodo-react-utils";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
-import ApiFormPaginationField from "../../api_forms/ApiFormPaginationField";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
+import {
+  formatDateStr,
+} from "../../react-utils/utils";
+import {
+  ApiForm,
+  ApiFormResultsTable,
+  ApiFormPaginationField,
+  ApiFormChoiceField
+} from "../../react-utils/api_forms";
 
 class StoreDetailUpdateLogs extends Component {
   constructor(props) {

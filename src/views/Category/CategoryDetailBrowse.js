@@ -1,23 +1,26 @@
 import React, {Component} from 'react'
 import {
   addApiResourceStateToPropsUtils,
-} from "solotodo-react-utils";
+} from "../../react-utils/ApiResource";
 import connect from "react-redux/es/connect/connect";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import {FormattedMessage} from "react-intl";
-import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
+import {
+  ApiForm,
+  ApiFormChoiceField,
+  ApiFormResultTableWithPagination,
+  ApiFormTextField,
+  ApiFormDiscreteRangeField,
+  ApiFormContinuousRangeField,
+  ApiFormPriceRangeField
+} from "../../react-utils/api_forms";
+
 import {NavLink, Redirect} from "react-router-dom";
 import {injectIntl} from "react-intl";
-import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import "./CategoryDetailBrowse.css"
-import ApiFormDiscreteRangeField from "../../api_forms/ApiFormDiscreteRangeField";
-import ApiFormContinuousRangeField from "../../api_forms/ApiFormContinouousRangeField";
 import { toast } from 'react-toastify';
 import messages from "../../messages";
-import ApiFormPriceRangeField from "../../api_forms/ApiFormPriceRangeField";
 
 class CategoryDetailBrowse extends Component {
   constructor(props) {

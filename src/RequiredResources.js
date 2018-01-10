@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
+import Loading from "./components/Loading";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "solotodo-react-utils";
-import Loading from "./components/Loading";
+} from "./react-utils/ApiResource";
 
 class RequiredResources extends Component {
   componentDidMount() {

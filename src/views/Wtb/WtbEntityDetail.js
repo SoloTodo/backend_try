@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
+  createOption,
+  createOptions
+} from "../../react-utils/form_utils";
+import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
-} from "solotodo-react-utils";
+  addApiResourceStateToPropsUtils,
+} from "../../react-utils/ApiResource";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
@@ -11,9 +15,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import {settings} from "../../settings";
-import {formatDateStr} from "solotodo-react-utils";
+import {formatDateStr} from "../../react-utils/utils";
 import './WtbEntityDetail.css'
-import {createOption, createOptions} from "../../form_utils";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,

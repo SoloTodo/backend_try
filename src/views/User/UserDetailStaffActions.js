@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {
+  addApiResourceStateToPropsUtils,
+} from "../../react-utils/ApiResource";
+import {
+  ApiForm,
+  ApiFormDateRangeField,
+  ApiFormSubmitButton,
+} from "../../react-utils/api_forms";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import moment from "moment";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import {NavLink} from "react-router-dom";
-
 
 
 class UserDetailStaffActions extends Component {

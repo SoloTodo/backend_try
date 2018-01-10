@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {
+  addApiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
+import {chartColors} from "../../react-utils/colors";
 import {connect} from "react-redux";
 import {settings} from "../../settings";
 import moment from "moment";
-import {fillTimeLapse} from "solotodo-react-utils";
+import {fillTimeLapse} from "../../react-utils/utils";
 import Loading from "../../components/Loading";
-import {chartColors} from "../../colors";
 import {Line} from "react-chartjs-2";
 import './DashboardStoreLeadsChart.css'
 import {Link} from "react-router-dom";

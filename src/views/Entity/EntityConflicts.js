@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
-import ApiForm from "../../api_forms/ApiForm";
+import {
+  ApiForm,
+  ApiFormChoiceField,
+  ApiFormSubmitButton,
+  ApiFormResultsTable
+} from '../../react-utils/api_forms'
 import {FormattedMessage} from "react-intl";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
 import messages from "../../messages";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import {settings} from "../../settings";
 import NavLink from "react-router-dom/es/NavLink";
 

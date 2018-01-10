@@ -1,10 +1,14 @@
 import React, {Component} from 'react'
 import connect from "react-redux/es/connect/connect";
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {
+  addApiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
+import {
+  ApiFormResultsTable
+} from "../../react-utils/api_forms";
 import moment from "moment";
 import Loading from "../../components/Loading";
 import {FormattedMessage} from "react-intl";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 import {NavLink} from "react-router-dom";
 
 class ProductDetailEntities extends Component {

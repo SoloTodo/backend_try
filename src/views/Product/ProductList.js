@@ -2,17 +2,21 @@ import React, {Component} from 'react';
 import {NavLink} from "react-router-dom";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
-import {filterApiResourceObjectsByType} from "solotodo-react-utils";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
-import {formatDateStr} from "solotodo-react-utils";
-import ApiFormTextField from "../../api_forms/ApiFormTextField";
 import {
   createOrderingOptionChoices,
-} from "../../api_forms/utils";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
-import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
+  ApiForm,
+  ApiFormChoiceField,
+  ApiFormDateRangeField,
+  ApiFormTextField,
+  ApiFormSubmitButton,
+  ApiFormResultTableWithPagination
+} from "../../react-utils/api_forms";
+import {
+  formatDateStr,
+} from "../../react-utils/utils";
+import {
+  filterApiResourceObjectsByType,
+} from "../../react-utils/ApiResource";
 
 class ProductList extends Component {
   constructor(props) {

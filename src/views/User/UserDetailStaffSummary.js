@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {
+  formatCurrency,
+} from "../../react-utils/utils";
+import {
+  addApiResourceStateToPropsUtils,
+} from "../../react-utils/ApiResource";
+import {
+  ApiForm,
+  ApiFormDateRangeField,
+  ApiFormSubmitButton
+} from "../../react-utils/api_forms";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
-import {formatCurrency} from "solotodo-react-utils";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
 import moment from "moment";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
-
 
 
 class UserDetailStaffSummary extends Component {

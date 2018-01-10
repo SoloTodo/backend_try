@@ -2,20 +2,21 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
-  addApiResourceStateToPropsUtils
-} from "solotodo-react-utils";
+  addApiResourceStateToPropsUtils,
+} from "../../react-utils/ApiResource";
+import {
+  createOrderingOptionChoices,
+  ApiForm,
+  ApiFormChoiceField,
+  ApiFormTextField,
+  ApiFormSubmitButton,
+  ApiFormResultTableWithPagination
+} from "../../react-utils/api_forms";
 import './WtbEntityList.css'
 import {NavLink} from "react-router-dom";
 import {booleanChoices} from "../../utils";
 import messages from "../../messages";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
-import ApiFormTextField from "../../api_forms/ApiFormTextField";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
-import {
-  createOrderingOptionChoices
-} from "../../api_forms/utils";
-import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
+
 
 class WtbEntityList extends Component {
   constructor(props) {

@@ -10,14 +10,20 @@ import Full from './containers/Full/'
 import Login from './views/Pages/Login/';
 import { settings } from './settings';
 import { defaultProperty } from './utils';
+
+import {
+  navigatorLanguage,
+  fetchAuth,
+  setLocale
+} from './react-utils/utils';
+
 import {
   ApiResourceObject,
   fetchApiResource,
   filterApiResourceObjectsByType,
-  navigatorLanguage,
-  fetchAuth,
-  setLocale
-} from 'solotodo-react-utils';
+} from "./react-utils/ApiResource";
+
+
 import Page404 from "./views/Pages/Page404/Page404";
 
 import 'react-select/dist/react-select.css';

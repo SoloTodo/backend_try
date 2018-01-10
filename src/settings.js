@@ -1,8 +1,8 @@
-import { apiSettings } from 'solotodo-react-utils'
+import {apiSettings} from "./react-utils/settings";
 
 export const settings = {
   ...apiSettings,
-  customIp: '190.215.123.220',  // Chile
+  // customIp: '190.215.123.220',  // Chile
   // customIp: '45.79.7.141',  // USA
   defaults: {
     languages: 1,

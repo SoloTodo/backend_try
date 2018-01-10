@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
-} from "solotodo-react-utils";
+  addApiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
 import {Redirect} from "react-router-dom";

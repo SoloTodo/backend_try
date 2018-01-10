@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
 import Loading from "../../components/Loading";
 import {Line} from 'react-chartjs-2';
-import {addApiResourceStateToPropsUtils} from "solotodo-react-utils";
+import {
+  addApiResourceStateToPropsUtils,
+} from "../../react-utils/ApiResource";
+import {
+  chartColors,
+  lightenDarkenColor
+} from "../../react-utils/colors";
 import connect from "react-redux/es/connect/connect";
-import {chartColors, lightenDarkenColor} from "../../colors"
-import {formatCurrency} from "solotodo-react-utils";
+import {formatCurrency} from "../../react-utils/utils";
 import {settings} from "../../settings";
 import {injectIntl} from "react-intl";
 import './EntityDetailPricingHistoryChart.css'

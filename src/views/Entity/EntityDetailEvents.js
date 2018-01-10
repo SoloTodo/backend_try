@@ -3,12 +3,12 @@ import {connect} from "react-redux";
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
-} from "solotodo-react-utils";
+} from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
 import { Markdown } from 'react-showdown';
 import Loading from "../../components/Loading";
-import {formatDateStr} from "solotodo-react-utils";
+import {formatDateStr} from "../../react-utils/utils";
 import messages from "../../messages";
 import './EntityDetailEvents.css'
 

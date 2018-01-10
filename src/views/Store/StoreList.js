@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import {
-  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
-} from 'solotodo-react-utils';
+  addApiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
+} from '../../react-utils/ApiResource';
+import {
+  createOrderingOptionChoices,
+  ApiForm,
+  ApiFormChoiceField,
+  ApiFormSubmitButton,
+  ApiFormResultsTable
+} from '../../react-utils/api_forms';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import NavLink from "react-router-dom/es/NavLink";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import messages from "../../messages";
 import {booleanChoices} from "../../utils";
-import {
-  createOrderingOptionChoices
-} from "../../api_forms/utils";
-import ApiFormResultsTable from "../../api_forms/ApiFormResultsTable";
 
 
 class StoreList extends Component {

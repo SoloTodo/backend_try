@@ -1,0 +1,6 @@
+[submodule "src/solotodo_react_utils"]
+	path = src/solotodo_react_utils
+	url = https://github.com/SoloTodo/solotodo_react_utils
+[submodule "src/react-utils"]
+	path = src/react-utils
+	url = https://github.com/SoloTodo/solotodo_react_utils

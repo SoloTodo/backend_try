@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
-  addApiResourceStateToPropsUtils, filterApiResourceObjectsByType
-} from "solotodo-react-utils";
+  addApiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {convertToDecimal} from "solotodo-react-utils";
+import {convertToDecimal} from "../../react-utils/utils";
 import {settings} from "../../settings";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormDateRangeField from "../../api_forms/ApiFormDateRangeField";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
+import {
+  ApiForm,
+  ApiFormDateRangeField,
+  ApiFormChoiceField,
+  ApiFormSubmitButton
+} from '../../react-utils/api_forms'
 import { toast } from 'react-toastify';
 import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import {UncontrolledTooltip} from "reactstrap";
 
 class EntityDetailPricingHistory extends Component {

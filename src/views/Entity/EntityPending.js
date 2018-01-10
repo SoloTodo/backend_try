@@ -3,19 +3,19 @@ import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
   addApiResourceStateToPropsUtils
-} from "solotodo-react-utils";
+} from "../../react-utils/ApiResource";
 import {settings} from "../../settings";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
 import messages from "../../messages";
-import ApiForm from "../../api_forms/ApiForm";
-import ApiFormChoiceField from "../../api_forms/ApiFormChoiceField";
-import ApiFormTextField from "../../api_forms/ApiFormTextField";
-import ApiFormSubmitButton from "../../api_forms/ApiFormSubmitButton";
 import {
-  createOrderingOptionChoices
-} from "../../api_forms/utils";
-import ApiFormResultTableWithPagination from "../../api_forms/ApiFormResultTableWithPagination";
+  createOrderingOptionChoices,
+  ApiForm,
+  ApiFormChoiceField,
+  ApiFormTextField,
+  ApiFormSubmitButton,
+  ApiFormResultTableWithPagination
+} from '../../react-utils/api_forms'
 
 class EntityPending extends Component {
   constructor(props) {
