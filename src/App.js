@@ -105,7 +105,12 @@ export function initialUserLoad(authToken, languages, countries, currencies, num
 
         return rawUser;
       }
-  )
+  ).catch(err => {
+    dispatch({
+      type: 'setAuthToken',
+      authToken: null
+    });
+  })
 }
 
 

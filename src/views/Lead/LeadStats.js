@@ -142,7 +142,6 @@ class LeadStats extends Component {
           {
             label: <FormattedMessage id="category" defaultMessage="Category" />,
             renderer: entry => {
-              console.log(entry.product)
               const category = categoriesDict[entry.product.category];
               return <NavLink to={'/categories/' + category.id}>{category.name}</NavLink>
             }
