@@ -119,7 +119,7 @@ class CategoryDetailBrowse extends Component {
 
     // Obtain columns for the results
 
-    const columnEndpoints = `${settings.apiResourceEndpoints.category_columns}?category=${category.id}&purpose=${settings.categoryBrowsePurposeId}`;
+    const columnEndpoints = `${settings.apiResourceEndpoints.category_columns}?categories=${category.id}&purposes=${settings.categoryBrowsePurposeId}`;
     this.props.fetchAuth(columnEndpoints)
         .then(json => {
           const filteredColumns = preferredCountry ?
