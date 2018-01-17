@@ -3,7 +3,6 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import omit from 'lodash/omit';
 import { polyfill } from 'smoothscroll-polyfill'
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/'
@@ -32,6 +31,10 @@ import 'react-image-gallery/styles/css/image-gallery.css';
 import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
 import UserPermissionFilter from "./auth/UserPermissionFilter";
 import {ToastContainer} from "react-toastify";
+import {
+  apiResourceObjectsReducer,
+  authTokenReducer, loadedResourcesReducer
+} from "./react-utils/redux-utils";
 
 
 export function initialUserLoad(authToken, languages, countries, currencies, numberFormats, dispatch) {
@@ -119,9 +122,9 @@ class App extends Component {
     super(props);
 
     this.store = createStore(combineReducers({
-      authToken: this.authTokenReducer,
-      apiResourceObjects: this.apiResourceObjectsReducer,
-      loadedResources: this.loadedResourcesReducer,
+      authToken: authTokenReducer,
+      apiResourceObjects: apiResourceObjectsReducer,
+      loadedResources: loadedResourcesReducer,
       breakpoint: breakpointReducer
     }));
 
@@ -156,74 +159,6 @@ class App extends Component {
     }
 
   }
-
-  apiResourceObjectsReducer = (state={}, action) => {
-    if (action.type === 'addApiResourceObjects' || action.type === 'addApiResource') {
-      let newApiResourceObjects = {};
-      for (const newApiResourceObject of action.apiResourceObjects) {
-        newApiResourceObjects[newApiResourceObject.url] = newApiResourceObject
-      }
-
-      return {...state, ...newApiResourceObjects}
-    }
-
-    if (action.type === 'addApiResourceObject') {
-      return {
-        ...state,
-        [action.apiResource.url]: action.apiResource
-      }
-    }
-
-    if (action.type === 'updateApiResourceObject') {
-      const previousValue = state[action.apiResourceObject.url];
-      const newValue = {...previousValue, ...action.apiResourceObject};
-
-      return {...state, ...{[action.apiResourceObject.url]: newValue}}
-    }
-
-    if (action.type === 'setAuthToken') {
-      // User changed, delete all API resources that include permissions,
-      // this includes the user itself
-      let filteredResources = {...state};
-      Object.values(state)
-          .filter(x => Boolean(x.permissions))
-          .map(x => delete filteredResources[x.url]);
-      return filteredResources
-    }
-
-    if (action.type === 'deleteApiResourceObject') {
-      return omit(state, [action.url])
-    }
-
-    return state
-  };
-
-  authTokenReducer = (state, action) => {
-    if (typeof state === 'undefined') {
-      return window.localStorage.getItem('authToken');
-    }
-
-    if (action.type === 'setAuthToken') {
-      if (state !== action.authToken) {
-        if (action.authToken) {
-          window.localStorage.setItem('authToken', action.authToken)
-        } else {
-          window.localStorage.removeItem('authToken')
-        }
-      }
-      return action.authToken
-    }
-
-    return state
-  };
-
-  loadedResourcesReducer = (state=[], action) => {
-    if (action.type === 'addApiResource') {
-      return [...state, action.resource]
-    }
-
-    return state
-  };
 
   render() {
     let history = createBrowserHistory();
