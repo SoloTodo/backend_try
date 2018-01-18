@@ -17,6 +17,7 @@ import {
 import ProductDetailPricingHistoryChart from "./ProductDetailPricingHistoryChart";
 import {UncontrolledTooltip} from "reactstrap";
 import {NavLink} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
 
 class ProductDetailPricingHistory extends Component {
   constructor(props) {
@@ -305,5 +306,5 @@ class ProductDetailPricingHistory extends Component {
 }
 
 export default injectIntl(connect(
-    addApiResourceStateToPropsUtils()
+    addApiResourceStateToPropsUtils(backendStateToPropsUtils)
 )(ProductDetailPricingHistory));

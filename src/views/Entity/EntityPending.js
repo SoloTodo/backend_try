@@ -4,7 +4,6 @@ import {FormattedMessage} from "react-intl";
 import {
   addApiResourceStateToPropsUtils
 } from "../../react-utils/ApiResource";
-import {settings} from "../../settings";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
 import messages from "../../messages";
@@ -16,6 +15,7 @@ import {
   ApiFormSubmitButton,
   ApiFormResultTableWithPagination
 } from '../../react-utils/api_forms'
+import {backendStateToPropsUtils} from "../../utils";
 
 class EntityPending extends Component {
   constructor(props) {
@@ -207,9 +207,8 @@ class EntityPending extends Component {
 
 function mapStateToProps(state) {
   return {
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
-    breakpoint: state.breakpoint
+    breakpoint: state.breakpoint,
+    ...backendStateToPropsUtils(state),
   }
 }
 

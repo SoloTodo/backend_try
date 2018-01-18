@@ -10,10 +10,10 @@ import {
 } from "../../react-utils/colors";
 import connect from "react-redux/es/connect/connect";
 import {formatCurrency} from "../../react-utils/utils";
-import {settings} from "../../settings";
 import {injectIntl} from "react-intl";
 import './EntityDetailPricingHistoryChart.css'
 import moment from "moment";
+import {backendStateToPropsUtils} from "../../utils";
 
 class EntityDetailPricingHistoryChart extends Component {
   preparePricingHistoryChartData() {
@@ -301,12 +301,6 @@ class EntityDetailPricingHistoryChart extends Component {
 
 }
 
-function mapStateToProps(state) {
-  return {
-    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format]
-  }
-}
-
 export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(EntityDetailPricingHistoryChart));
+    addApiResourceStateToPropsUtils(backendStateToPropsUtils))(EntityDetailPricingHistoryChart));
 

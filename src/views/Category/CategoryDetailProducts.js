@@ -15,6 +15,7 @@ import {FormattedMessage} from "react-intl";
 import {NavLink, Redirect} from "react-router-dom";
 import "./CategoryDetailProducts.css"
 import { toast } from 'react-toastify';
+import {backendStateToPropsUtils} from "../../utils";
 
 class CategoryDetailProducts extends Component {
   constructor(props) {
@@ -370,11 +371,5 @@ class CategoryDetailProducts extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-
-  }
-}
-
 export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(CategoryDetailProducts);
+    addApiResourceStateToPropsUtils(backendStateToPropsUtils))(CategoryDetailProducts);

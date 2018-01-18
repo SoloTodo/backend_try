@@ -4,7 +4,6 @@ import {FormattedMessage} from "react-intl";
 import {
   addApiResourceStateToPropsUtils
 } from "../../react-utils/ApiResource";
-import {settings} from "../../settings";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
 import {formatCurrency} from "../../react-utils/utils";
@@ -17,7 +16,7 @@ import {
   ApiFormSubmitButton,
   ApiFormResultTableWithPagination
 } from '../../react-utils/api_forms'
-import {booleanChoices} from "../../utils";
+import {backendStateToPropsUtils, booleanChoices} from "../../utils";
 
 class EntityList extends Component {
   constructor(props) {
@@ -231,7 +230,7 @@ class EntityList extends Component {
                         />
                       </div>
                       <div className="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                        <label id="is_available_label" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>Enti
+                        <label id="is_available_label" htmlFor="is_available"><FormattedMessage id="is_available_question" defaultMessage={`Available?`} /></label>
                         <ApiFormChoiceField
                             name="is_available"
                             id="is_available"
@@ -326,9 +325,8 @@ class EntityList extends Component {
 
 function mapStateToProps(state) {
   return {
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
-    breakpoint: state.breakpoint
+    breakpoint: state.breakpoint,
+    ...backendStateToPropsUtils(state)
   }
 }
 

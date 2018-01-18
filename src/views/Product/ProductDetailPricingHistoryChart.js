@@ -14,6 +14,7 @@ import {
 import {injectIntl} from "react-intl";
 import './ProductDetailPricingHistoryChart.css'
 import moment from "moment";
+import {backendStateToPropsUtils} from "../../utils";
 
 class ProductDetailPricingHistoryChart extends Component {
   preparePricingHistoryChartData() {
@@ -199,5 +200,5 @@ class ProductDetailPricingHistoryChart extends Component {
 }
 
 export default injectIntl(connect(
-    addApiResourceStateToPropsUtils())(ProductDetailPricingHistoryChart));
+    addApiResourceStateToPropsUtils(backendStateToPropsUtils))(ProductDetailPricingHistoryChart));
 

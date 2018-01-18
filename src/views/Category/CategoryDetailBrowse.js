@@ -21,6 +21,9 @@ import {injectIntl} from "react-intl";
 import "./CategoryDetailBrowse.css"
 import { toast } from 'react-toastify';
 import messages from "../../messages";
+import {
+  backendStateToPropsUtils
+} from "../../utils";
 
 class CategoryDetailBrowse extends Component {
   constructor(props) {
@@ -568,6 +571,7 @@ class CategoryDetailBrowse extends Component {
 
 function mapStateToProps(state) {
   return {
+    ...backendStateToPropsUtils(state),
     breakpoint: state.breakpoint,
   }
 }

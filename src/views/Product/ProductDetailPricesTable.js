@@ -7,9 +7,9 @@ import Loading from "../../components/Loading";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import OrderTable from "../../components/OrderTable";
-import {settings} from "../../settings";
 import {listToObject} from "../../react-utils/utils";
 import {Link} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
 
 class ProductDetailPricesTable extends Component {
   constructor(props) {
@@ -193,7 +193,7 @@ class ProductDetailPricesTable extends Component {
 function mapStateToProps(state) {
   return {
     currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
+    ...backendStateToPropsUtils(state)
   }
 }
 

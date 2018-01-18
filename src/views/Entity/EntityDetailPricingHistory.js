@@ -7,7 +7,6 @@ import {
 import moment from 'moment';
 import {FormattedMessage, injectIntl} from "react-intl";
 import {convertToDecimal} from "../../react-utils/utils";
-import {settings} from "../../settings";
 import {
   ApiForm,
   ApiFormDateRangeField,
@@ -17,6 +16,7 @@ import {
 import { toast } from 'react-toastify';
 import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
 import {UncontrolledTooltip} from "reactstrap";
+import {backendStateToPropsUtils} from "../../utils";
 
 class EntityDetailPricingHistory extends Component {
   constructor(props) {
@@ -192,7 +192,7 @@ class EntityDetailPricingHistory extends Component {
 function mapStateToProps(state) {
   return {
     currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
+    ...backendStateToPropsUtils(state)
   }
 }
 

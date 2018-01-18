@@ -5,22 +5,19 @@ import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { polyfill } from 'smoothscroll-polyfill'
 import ConnectedIntlProvider from './ConnectedIntlProvider';
-import Full from './containers/Full/'
-import Login from './views/Pages/Login/';
+import Full from './containers/Full/Full';
+import Login from './views/Pages/Login/Login';
 import { settings } from './settings';
 import { defaultProperty } from './utils';
 
 import {
   navigatorLanguage,
   fetchAuth,
-  setLocale
+  setLocale,
+  loadResources
 } from './react-utils/utils';
 
-import {
-  ApiResourceObject,
-  fetchApiResource,
-  filterApiResourceObjectsByType,
-} from "./react-utils/ApiResource";
+import { ApiResourceObject } from "./react-utils/ApiResource";
 
 
 import Page404 from "./views/Pages/Page404/Page404";
@@ -37,10 +34,14 @@ import {
 } from "./react-utils/redux-utils";
 
 
-export function initialUserLoad(authToken, languages, countries, currencies, numberFormats, dispatch) {
+export function initialUserLoad(authToken, dispatch, apiResourceObjects) {
+  if (!authToken) {
+    return;
+  }
+
   return fetchAuth(authToken, settings.ownUserUrl).then(
       rawUser => {
-        // Check if the token was valid
+        // Check if the token was invalid
         if (rawUser.detail) {
           dispatch({
             type: 'setAuthToken',
@@ -53,13 +54,7 @@ export function initialUserLoad(authToken, languages, countries, currencies, num
           apiResourceObject: rawUser
         });
 
-        let apiResourceObjects = {};
-
-        for (let resource of [languages, countries, currencies, numberFormats]) {
-          for (let obj of resource) {
-            apiResourceObjects[obj.url] = obj;
-          }
-        }
+        const languages = apiResourceObjects.languages;
 
         const user = new ApiResourceObject(rawUser, apiResourceObjects);
 
@@ -108,7 +103,7 @@ export function initialUserLoad(authToken, languages, countries, currencies, num
 
         return rawUser;
       }
-  ).catch(err => {
+  ).catch(() => {
     dispatch({
       type: 'setAuthToken',
       authToken: null
@@ -134,30 +129,7 @@ class App extends Component {
 
   componentDidMount() {
     const requiredResources = ['languages', 'currencies', 'countries', 'store_types', 'number_formats'];
-
-    for (let resource of requiredResources) {
-      fetchApiResource(resource, this.store.dispatch)
-          .then(() => {
-            const state = this.store.getState();
-            const apiResourceObjects = state.apiResourceObjects;
-
-            const groupedApiResources = requiredResources.reduce((ongoing, resource) => ({
-              ...ongoing,
-              [resource]: filterApiResourceObjectsByType(apiResourceObjects, resource)
-            }), {});
-
-            if (state.authToken && requiredResources.every(resource => groupedApiResources[resource].length > 0)) {
-              initialUserLoad(
-                  state.authToken,
-                  groupedApiResources.languages,
-                  groupedApiResources.countries,
-                  groupedApiResources.currencies,
-                  groupedApiResources.number_formats,
-                  this.store.dispatch)
-            }
-          })
-    }
-
+    loadResources(requiredResources, this.store, initialUserLoad)
   }
 
   render() {

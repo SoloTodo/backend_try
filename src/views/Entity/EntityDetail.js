@@ -17,11 +17,11 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 import trim from 'lodash/trim';
 import ImageGallery from 'react-image-gallery';
-import {settings} from "../../settings";
 import {formatCurrency, formatDateStr} from "../../react-utils/utils";
 import imageNotAvailable from '../../images/image-not-available.svg';
 import './EntityDetail.css'
 import moment from "moment";
+import {backendStateToPropsUtils} from "../../utils";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -756,14 +756,6 @@ class EntityDetail extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
-    user: state.apiResourceObjects[settings.ownUserUrl],
-  }
-}
-
 export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceStateToPropsUtils(backendStateToPropsUtils),
     addApiResourceDispatchToPropsUtils())(EntityDetail));

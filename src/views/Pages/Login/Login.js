@@ -93,7 +93,7 @@ class Login extends Component {
           })
           .then(json => {
             if (json.token) {
-              this.props.setAuthToken(json.token, this.props.languages, this.props.countries, this.props.currencies, this.props.number_formats);
+              this.props.setAuthToken(json.token, this.props.apiResourceObjects);
             }
           })
     }
@@ -169,6 +169,7 @@ let mapStateToProps = (state) => {
   const apiResourceObjects = state.apiResourceObjects;
   return {
     isLoggedIn: Boolean(state.authToken),
+    apiResourceObjects: apiResourceObjects,
     languages: filterApiResourceObjectsByType(apiResourceObjects, 'languages'),
     currencies: filterApiResourceObjectsByType(apiResourceObjects, 'currencies'),
     countries: filterApiResourceObjectsByType(apiResourceObjects, 'countries'),
@@ -178,13 +179,13 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    setAuthToken : (authToken, languages, countries, currencies, number_formats) => {
+    setAuthToken : (authToken, apiResourceObjects) => {
       dispatch({
         type: 'setAuthToken',
         authToken
       });
-      initialUserLoad(authToken, languages, countries, currencies,
-          number_formats, dispatch)
+
+      initialUserLoad(authToken, dispatch, apiResourceObjects);
     }
   }
 };

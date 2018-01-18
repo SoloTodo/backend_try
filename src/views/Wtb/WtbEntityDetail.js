@@ -14,9 +14,9 @@ import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
-import {settings} from "../../settings";
 import {formatDateStr} from "../../react-utils/utils";
 import './WtbEntityDetail.css'
+import {backendStateToPropsUtils} from "../../utils";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -451,14 +451,6 @@ class WtbEntityDetail extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    preferredCurrency: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_currency],
-    preferredNumberFormat: state.apiResourceObjects[state.apiResourceObjects[settings.ownUserUrl].preferred_number_format],
-    user: state.apiResourceObjects[settings.ownUserUrl],
-  }
-}
-
 export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
+    addApiResourceStateToPropsUtils(backendStateToPropsUtils),
     addApiResourceDispatchToPropsUtils())(WtbEntityDetail));
