@@ -1,7 +1,7 @@
 import React from 'react'
 import {Route, Switch} from "react-router-dom";
 import StoreList from "./StoreList";
-import RequiredResources from "../../RequiredResources";
+import RequiredResources from "../../react-utils/components/RequiredResources";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import StoreDetail from "./StoreDetail";
 import StoreDetailUpdateLogs from "./StoreDetailUpdateLogs";

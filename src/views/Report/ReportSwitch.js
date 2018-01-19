@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, Switch} from "react-router-dom";
-import RequiredResources from "../../RequiredResources";
+import RequiredResources from "../../react-utils/components/RequiredResources";
 import ReportCurrentPrices from "./ReportCurrentPrices";
 import ReportList from "./ReportList";
 

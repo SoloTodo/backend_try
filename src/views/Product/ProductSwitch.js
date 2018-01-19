@@ -1,7 +1,7 @@
 import React from 'react'
 import {Route, Switch} from "react-router-dom";
 import ProductList from "./ProductList";
-import RequiredResources from "../../RequiredResources";
+import RequiredResources from "../../react-utils/components/RequiredResources";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import ProductDetail from "./ProductDetail";
 import ProductDetailEntities from "./ProductDetailEntities";

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, Switch} from "react-router-dom";
-import RequiredResources from "../../RequiredResources";
+import RequiredResources from "../../react-utils/components/RequiredResources";
 import UserList from "./UserList";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import UserDetail from "./UserDetail";

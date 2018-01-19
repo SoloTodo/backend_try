@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, Switch} from "react-router-dom";
-import RequiredResources from "../../RequiredResources";
+import RequiredResources from "../../react-utils/components/RequiredResources";
 import WtbBrandList from "./WtbBrandList";
 import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import WtbBrandDetail from "./WtbBrandDetail";

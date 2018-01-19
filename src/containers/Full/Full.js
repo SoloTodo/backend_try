@@ -16,7 +16,7 @@ import Page404 from "../../views/Pages/Page404/Page404";
 import StoreSwitch from "../../views/Store/StoreSwitch";
 import EntitySwitch from "../../views/Entity/EntitySwitch";
 import ProductSwitch from "../../views/Product/ProductSwitch";
-import RequiredResources from "../../RequiredResources";
+import RequiredResources from "../../react-utils/components/RequiredResources";
 import ReportSwitch from "../../views/Report/ReportSwitch";
 import LeadSwitch from "../../views/Lead/LeadSwitch";
 import CategorySwitch from "../../views/Category/CategorySwitch";
