@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import { Switch, Route, Redirect } from 'react-router-dom'
-import Header from '../../components/Header/';
-import Sidebar from '../../components/Sidebar/';
-import Breadcrumbs from '../../components/Breadcrumbs/';
-import Aside from '../../components/Aside/';
-import Dashboard from '../../views/Dashboard/';
+import Header from '../../components/Header/Header';
+import Sidebar from '../../components/Sidebar/Sidebar';
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
+import Aside from '../../components/Aside/Aside';
+import Dashboard from '../../views/Dashboard/Dashboard';
 import {
   addApiResourceDispatchToPropsUtils,
   addApiResourceStateToPropsUtils
 } from "../../react-utils/ApiResource";
 import {settings} from "../../settings";
 import UserPermissionFilter from "../../auth/UserPermissionFilter";
-import Page404 from "../../views/Pages/Page404/Page404";
 import StoreSwitch from "../../views/Store/StoreSwitch";
 import EntitySwitch from "../../views/Entity/EntitySwitch";
 import ProductSwitch from "../../views/Product/ProductSwitch";
@@ -23,6 +22,7 @@ import CategorySwitch from "../../views/Category/CategorySwitch";
 import VisitSwitch from "../../views/Visit/VisitSwitch";
 import WtbSwitch from "../../views/Wtb/WtbSwitch";
 import UserSwitch from "../../views/User/UserSwitch";
+import Page404 from "../../views/Pages/Page404/Page404";
 
 
 class Full extends Component {

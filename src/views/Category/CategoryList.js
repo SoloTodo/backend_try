@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
+import {connect} from "react-redux";
+import {
+  filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 
 class CategoryList extends Component {
   render() {
@@ -22,7 +26,7 @@ class CategoryList extends Component {
                     {this.props.categories.map(category => (
                         <tr key={category.id}>
                           <td>{category.id}</td>
-                          <td><NavLink to={'/categories/' + category.id}>{category.name}</NavLink></td>
+                          <td className="col-12"><NavLink to={'/categories/' + category.id}>{category.name}</NavLink></td>
                         </tr>
                     ))}
                     </tbody>
@@ -37,4 +41,10 @@ class CategoryList extends Component {
   }
 }
 
-export default CategoryList;
+function mapStateToProps(state) {
+  return {
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+  }
+}
+
+export default connect(mapStateToProps)(CategoryList);

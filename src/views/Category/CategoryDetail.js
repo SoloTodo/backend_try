@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import CategoryDetailMenu from "./CategoryDetailMenu";
@@ -32,4 +34,12 @@ class CategoryDetail extends Component {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(CategoryDetail);
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject
+  }
+}
+
+export default connect(mapStateToProps)(CategoryDetail);

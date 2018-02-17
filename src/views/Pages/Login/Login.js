@@ -3,8 +3,8 @@ import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { settings } from '../../../settings'
-import {filterApiResourceObjectsByType} from "../../../react-utils/ApiResource";
-import {initialUserLoad} from "../../../App";
+import {fetchAuth} from "../../../react-utils/utils";
+import {toast} from 'react-toastify';
 
 class Login extends Component {
   constructor(props) {
@@ -73,29 +73,21 @@ class Login extends Component {
     let passwordValid = this.handlePasswordBlur();
 
     if (emailValid && passwordValid) {
-      let formData = new FormData();
+      const formData = JSON.stringify({
+        username: this.state.email,
+        password: this.state.password,
+      });
 
-      formData.append('username', this.state.email);
-      formData.append('password', this.state.password);
-
-      return fetch(`${settings.endpoint}obtain-auth-token/`, {
+      return fetchAuth(null, `${settings.endpoint}obtain-auth-token/`, {
         method: 'POST',
         body: formData
+      }).then(json => {
+        if (json.token) {
+          this.props.setAuthToken(json.token, this.props.apiResourceObjects);
+        }
+      }).catch(err => {
+        toast.error(<FormattedMessage id="login_error" defaultMessage="Unable to login with the given email / password" />);
       })
-          .then(response => {
-            if (response.ok) {
-              return response.json()
-            } else {
-              return {
-                token: null
-              }
-            }
-          })
-          .then(json => {
-            if (json.token) {
-              this.props.setAuthToken(json.token, this.props.apiResourceObjects);
-            }
-          })
     }
   };
 
@@ -139,7 +131,7 @@ class Login extends Component {
                         </div>
                         <div className="row">
                           <div className="col-6">
-                            <button type="submit" disabled={!this.props.languages || !this.props.currencies || !this.props.countries} className="btn btn-primary px-4"><FormattedMessage id="login_button" defaultMessage={`Login`} /></button>
+                            <button type="submit" className="btn btn-primary px-4"><FormattedMessage id="login_button" defaultMessage={`Login`} /></button>
                           </div>
                           <div className="col-6 text-right">
                             <button type="button" className="btn btn-link px-0"><FormattedMessage id="forgot_password" defaultMessage={`Forgot password?`} /></button>
@@ -167,13 +159,10 @@ class Login extends Component {
 
 let mapStateToProps = (state) => {
   const apiResourceObjects = state.apiResourceObjects;
+
   return {
     isLoggedIn: Boolean(state.authToken),
     apiResourceObjects: apiResourceObjects,
-    languages: filterApiResourceObjectsByType(apiResourceObjects, 'languages'),
-    currencies: filterApiResourceObjectsByType(apiResourceObjects, 'currencies'),
-    countries: filterApiResourceObjectsByType(apiResourceObjects, 'countries'),
-    number_formats: filterApiResourceObjectsByType(apiResourceObjects, 'number_formats')
   }
 };
 
@@ -184,8 +173,6 @@ let mapDispatchToProps = (dispatch) => {
         type: 'setAuthToken',
         authToken
       });
-
-      initialUserLoad(authToken, dispatch, apiResourceObjects);
     }
   }
 };

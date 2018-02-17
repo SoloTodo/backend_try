@@ -2,10 +2,10 @@ import React from 'react'
 import {Route, Switch} from "react-router-dom";
 import RequiredResources from "../../react-utils/components/RequiredResources";
 import CategoryDetailProducts from "./CategoryDetailProducts";
-import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import CategoryDetail from "./CategoryDetail";
 import CategoryList from "./CategoryList";
 import CategoryDetailBrowse from "./CategoryDetailBrowse";
+import ResourceObjectPermission from "../../react-utils/components/ResourceObjectPermission";
 
 export default ({match}) => {
   return (
@@ -16,23 +16,17 @@ export default ({match}) => {
             </RequiredResources>
         )} />
         <Route path={match.url + '/:id'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="categories">
-              <CategoryDetail />
-            </ResourceObjectPermission>
+            <ResourceObjectPermission match={props.match} resource="categories" component={CategoryDetail} />
         )} />
         <Route path={match.url + '/:id/products'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="categories">
-              <RequiredResources resources={['stores']}>
-                <CategoryDetailProducts />
-              </RequiredResources>
-            </ResourceObjectPermission>
+            <RequiredResources resources={['stores']}>
+              <ResourceObjectPermission match={props.match} resource="categories" component={CategoryDetailProducts} />
+            </RequiredResources>
         )} />
         <Route path={match.url + '/:id/browse'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="categories">
-              <RequiredResources resources={['stores', 'countries', 'currencies', 'store_types']}>
-                <CategoryDetailBrowse />
-              </RequiredResources>
-            </ResourceObjectPermission>
+            <RequiredResources resources={['stores', 'countries']}>
+              <ResourceObjectPermission match={props.match} resource="categories" component={CategoryDetailBrowse} />
+            </RequiredResources>
         )} />
       </Switch>
   )

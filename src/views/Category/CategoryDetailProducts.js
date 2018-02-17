@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import connect from "react-redux/es/connect/connect";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
@@ -266,6 +268,7 @@ class CategoryDetailProducts extends Component {
                 step={filter.continuous_range_step}
                 unit={filter.continuous_range_unit}
                 updateResultsOnChange={true}
+                resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           } else {
             // Discrete (screen size...)
@@ -292,6 +295,7 @@ class CategoryDetailProducts extends Component {
                 choices={filterChoices}
                 value={this.state.formValues[filter.name]}
                 updateResultsOnChange={true}
+                resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           }
         }
@@ -371,5 +375,15 @@ class CategoryDetailProducts extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(backendStateToPropsUtils))(CategoryDetailProducts);
+
+function mapStateToProps(state) {
+  const {fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {preferredCountry} = backendStateToPropsUtils(state);
+
+  return {
+    fetchAuth,
+    preferredCountry,
+  }
+}
+
+export default connect(mapStateToProps)(CategoryDetailProducts);

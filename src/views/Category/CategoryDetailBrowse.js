@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
 import connect from "react-redux/es/connect/connect";
 import {settings} from "../../settings";
@@ -106,7 +107,7 @@ class CategoryDetailBrowse extends Component {
           })
         });
 
-    const endpoint = `categories/${category.id}/browse/`;
+    const endpoint = this.apiEndpoint();
 
     // Make an empty call to the endpoint to obtain the global min / max and 80th percentile values
     this.props.fetchAuth(endpoint)
@@ -134,6 +135,10 @@ class CategoryDetailBrowse extends Component {
           })
         })
   }
+
+  apiEndpoint = () => {
+    return `categories/${this.props.apiResourceObject.id}/browse/`;
+  };
 
   render() {
     const formLayout = this.state.formLayout;
@@ -330,6 +335,7 @@ class CategoryDetailBrowse extends Component {
                 step={filter.continuous_range_step}
                 unit={filter.continuous_range_unit}
                 updateResultsOnChange={true}
+                resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           } else {
             // Discrete (screen size...)
@@ -356,6 +362,7 @@ class CategoryDetailBrowse extends Component {
                 choices={filterChoices}
                 value={this.state.formValues[filter.name]}
                 updateResultsOnChange={true}
+                resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           }
         }
@@ -403,7 +410,7 @@ class CategoryDetailBrowse extends Component {
     const countries = this.props.countries.filter(country => countryUrls.includes(country.url));
 
     const storeTypeUrls = this.props.stores.map(store => store.type);
-    const storeTypes = this.props.store_types.filter(storeType => storeTypeUrls.includes(storeType.url));
+    const storeTypes = this.props.storeTypes.filter(storeType => storeTypeUrls.includes(storeType.url));
 
     const orderingChoices = [
       {
@@ -444,13 +451,14 @@ class CategoryDetailBrowse extends Component {
           name: `${orderingChoice.label} (${this.props.intl.formatMessage({id: 'descending'})})`
         })
       }
-
     }
+
+    const apiEndpoint = this.apiEndpoint();
 
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoints={[`categories/${this.props.apiResourceObject.id}/browse/`]}
+              endpoints={[apiEndpoint]}
               fields={apiFormFields}
               onResultsChange={this.setProductsPage}
               onFormValueChange={this.handleFormValueChange}
@@ -473,7 +481,7 @@ class CategoryDetailBrowse extends Component {
                             id="stores"
                             choices={this.props.stores}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.stores}
                             placeholder={messages.all_feminine}
@@ -570,11 +578,22 @@ class CategoryDetailBrowse extends Component {
 }
 
 function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {preferredCountry, preferredCurrency, preferredNumberFormat, formatCurrency} = backendStateToPropsUtils(state);
+
   return {
-    ...backendStateToPropsUtils(state),
-    breakpoint: state.breakpoint,
+    ApiResourceObject,
+    fetchAuth,
+    preferredCountry,
+    preferredCurrency,
+    preferredNumberFormat,
+    formatCurrency,
+    currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    storeTypes: filterApiResourceObjectsByType(state.apiResourceObjects, 'store_types'),
+    countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
+    isExtraSmall: state.breakpoint.isExtraSmall
   }
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(CategoryDetailBrowse));
+export default injectIntl(connect(mapStateToProps)(CategoryDetailBrowse));

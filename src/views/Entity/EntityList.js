@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
-  addApiResourceStateToPropsUtils
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
@@ -13,7 +14,6 @@ import {
   ApiForm,
   ApiFormChoiceField,
   ApiFormTextField,
-  ApiFormSubmitButton,
   ApiFormResultTableWithPagination
 } from '../../react-utils/api_forms'
 import {backendStateToPropsUtils, booleanChoices} from "../../utils";
@@ -207,7 +207,7 @@ class EntityList extends Component {
                             id="stores"
                             choices={this.props.stores}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.stores}
                             placeholder={messages.all_feminine}
@@ -223,7 +223,7 @@ class EntityList extends Component {
                             id="categories"
                             choices={this.props.categories}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.categories}
                             placeholder={messages.all_feminine}
@@ -291,12 +291,6 @@ class EntityList extends Component {
                       </div>
                       <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
                         <label htmlFor="submit" className="hidden-xs-down hidden-lg-up">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="search" defaultMessage='Search' />}
-                            loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.entities === null}
-                        />
                       </div>
                     </div>
                   </div>
@@ -324,11 +318,17 @@ class EntityList extends Component {
 }
 
 function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {preferredCurrency, preferredNumberFormat } = backendStateToPropsUtils(state);
+
   return {
-    breakpoint: state.breakpoint,
-    ...backendStateToPropsUtils(state)
+    ApiResourceObject,
+    preferredCurrency,
+    preferredNumberFormat,
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    isExtraSmall: state.breakpoint.isExtraSmall
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(EntityList);
+export default connect(mapStateToProps)(EntityList);
