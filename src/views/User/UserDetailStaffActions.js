@@ -1,8 +1,4 @@
 import React, { Component } from 'react';
-import {connect} from "react-redux";
-import {
-  addApiResourceStateToPropsUtils,
-} from "../../react-utils/ApiResource";
 import {
   ApiForm,
   ApiFormDateRangeField,
@@ -179,4 +175,4 @@ class UserDetailStaffActions extends Component {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(UserDetailStaffActions);
+export default UserDetailStaffActions;

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
 
@@ -50,4 +52,12 @@ class StoreDetail extends Component {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(StoreDetail);
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject
+  }
+}
+
+export default connect(mapStateToProps)(StoreDetail);

@@ -5,8 +5,8 @@ import {
   createOptions
 } from "../../react-utils/form_utils";
 import {
-  addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
@@ -16,7 +16,6 @@ import { toast } from 'react-toastify';
 import Select from 'react-select';
 import {formatDateStr} from "../../react-utils/utils";
 import './WtbEntityDetail.css'
-import {backendStateToPropsUtils} from "../../utils";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -25,22 +24,33 @@ const DISSOCIATING_STATES = {
 };
 
 class WtbEntityDetail extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
+  initialState = {
       changingVisibility: false,
       categoryForChange: null,
       dissociatingState: DISSOCIATING_STATES.STAND_BY,
       staffInfo: undefined
-    }
+    };
+
+  constructor(props) {
+    super(props);
+    this.state = {...this.initialState}
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
-    const wtbEntity = this.props.apiResourceObject;
+    this.componentUpdate(this.props.apiResourceObject)
+  }
 
-    const userHasStaffPermissions = this.userHasStaffPermissions();
+  componentWillReceiveProps(nextProps) {
+    const currentWtbEntity = this.props.apiResourceObject;
+    const nextWtbEntity = nextProps.apiResourceObject;
+
+    if (currentWtbEntity.id !== nextWtbEntity.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextWtbEntity))
+    }
+  }
+
+  componentUpdate(wtbEntity) {
+    const userHasStaffPermissions = this.userHasStaffPermissions(wtbEntity);
 
     if (!userHasStaffPermissions) {
       if (!wtbEntity.is_visible) {
@@ -72,13 +82,6 @@ class WtbEntityDetail extends Component {
     }
   }
 
-  saveWtbEntityChanges = (changedWtbEntity) => {
-    this.props.dispatch({
-      type: 'updateApiResourceObject',
-      apiResourceObject: changedWtbEntity
-    });
-  };
-
   handleVisibilityToggle = (event) => {
     this.setState({
       changingVisibility: true
@@ -86,7 +89,7 @@ class WtbEntityDetail extends Component {
       this.props.fetchAuth(`${this.props.apiResourceObject.url}toggle_visibility/`, {
         method: 'POST'
       }).then(json => {
-        this.saveWtbEntityChanges(json);
+        this.props.updateWtbEntity(json);
         this.setState({
           changingVisibility: false
         });
@@ -128,7 +131,7 @@ class WtbEntityDetail extends Component {
     this.props.fetchAuth(`${this.props.apiResourceObject.url}dissociate/`, {
       method: 'POST'
     }).then(json => {
-      this.saveWtbEntityChanges(json);
+      this.props.updateWtbEntity(json);
       this.setState({
         dissociatingState: DISSOCIATING_STATES.STAND_BY,
       });
@@ -136,7 +139,7 @@ class WtbEntityDetail extends Component {
   };
 
   userHasStaffPermissionOverSelectedCategory = () => {
-    return this.state.categoryForChange.permissions.includes('category_entities_staff')
+    return this.state.categoryForChange.permissions.includes('is_category_staff')
   };
 
   handleChangeCategory = newCategoryChoice => {
@@ -175,16 +178,16 @@ class WtbEntityDetail extends Component {
     })
   };
 
-  userHasStaffPermissions = () => {
-    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
-    return entity.category.permissions.includes('category_entities_staff') &&
+  userHasStaffPermissions = wtbEntity => {
+    const entity = this.props.ApiResourceObject(wtbEntity);
+    return entity.category.permissions.includes('is_category_staff') &&
         entity.brand.permissions.includes('is_wtb_brand_staff');
   };
 
   render() {
     const wtbEntity = this.props.ApiResourceObject(this.props.apiResourceObject);
 
-    const hasStaffPermissions = this.userHasStaffPermissions();
+    const hasStaffPermissions = this.userHasStaffPermissions(this.props.apiResourceObject);
 
     const visibilitySwitchEnabled = !this.state.changingVisibility && !wtbEntity.product;
     const categorySelectEnabled = !this.state.categoryForChange && !wtbEntity.product;
@@ -451,6 +454,28 @@ class WtbEntityDetail extends Component {
   }
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(backendStateToPropsUtils),
-    addApiResourceDispatchToPropsUtils())(WtbEntityDetail));
+function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth, fetchApiResourceObject} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+    fetchAuth,
+    fetchApiResourceObject,
+    wtb_brands: filterApiResourceObjectsByType(state.apiResourceObjects, 'wtb_brands'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    updateWtbEntity: wtbEntity => {
+      dispatch({
+        type: 'updateApiResourceObject',
+        apiResourceObject: wtbEntity
+      });
+    }
+  }
+}
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(WtbEntityDetail));

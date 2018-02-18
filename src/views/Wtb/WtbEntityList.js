@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
-  addApiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
 import {
   createOrderingOptionChoices,
@@ -128,7 +128,7 @@ class WtbEntityList extends Component {
                             id="brands"
                             choices={this.props.wtb_brands}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.brands}
                             placeholder={messages.all_feminine}
@@ -144,7 +144,7 @@ class WtbEntityList extends Component {
                             id="categories"
                             choices={this.props.categories}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.categories}
                             placeholder={messages.all_feminine}
@@ -225,9 +225,10 @@ class WtbEntityList extends Component {
 
 function mapStateToProps(state) {
   return {
-    breakpoint: state.breakpoint
+    wtb_brands: filterApiResourceObjectsByType(state.apiResourceObjects, 'wtb_brands'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    isExtraSmall: state.breakpoint.isExtraSmall
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(WtbEntityList);
+export default connect(mapStateToProps)(WtbEntityList);

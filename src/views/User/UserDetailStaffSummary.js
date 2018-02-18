@@ -4,7 +4,7 @@ import {
   formatCurrency,
 } from "../../react-utils/utils";
 import {
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
 } from "../../react-utils/ApiResource";
 import {
   ApiForm,
@@ -49,7 +49,7 @@ class UserDetailStaffSummary extends Component {
     const user = this.props.apiResourceObject;
     const endpoint = `${settings.apiResourceEndpoints.users}${user.id}/staff_summary/`;
 
-    const clpCurrency = this.props.ApiResourceObject(this.props.currencies.filter(currency => currency.iso_code === 'CLP')[0]);
+    const clpCurrency = this.props.ApiResourceObject(this.props.clpCurrency);
 
     const formatClpCurrency = value => formatCurrency(value, clpCurrency, null, '.', ',');
 
@@ -198,4 +198,13 @@ class UserDetailStaffSummary extends Component {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(UserDetailStaffSummary);
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+    clpCurrency: state.apiResourceObjects[settings.clpCurrencyUrl]
+  }
+}
+
+export default connect(mapStateToProps)(UserDetailStaffSummary);

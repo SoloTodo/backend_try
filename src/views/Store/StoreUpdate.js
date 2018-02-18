@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
-  addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
@@ -150,7 +150,7 @@ class StoreUpdate extends Component {
   };
 
   render() {
-    if (!this.state.availableStores || !this.props.categories) {
+    if (!this.state.availableStores) {
       return <Loading />
     }
 
@@ -317,6 +317,15 @@ class StoreUpdate extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(),
-    addApiResourceDispatchToPropsUtils())(StoreUpdate);
+function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+    fetchAuth,
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+  }
+}
+
+export default connect(mapStateToProps)(StoreUpdate);

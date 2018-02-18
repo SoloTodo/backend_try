@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-import {connect} from "react-redux";
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import Aside from '../../components/Aside/Aside';
 import Dashboard from '../../views/Dashboard/Dashboard';
-import {
-  addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
-} from "../../react-utils/ApiResource";
-import {settings} from "../../settings";
 import UserPermissionFilter from "../../auth/UserPermissionFilter";
 import StoreSwitch from "../../views/Store/StoreSwitch";
 import EntitySwitch from "../../views/Entity/EntitySwitch";
@@ -103,14 +97,4 @@ class Full extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    user: state.apiResourceObjects[settings.ownUserUrl],
-    apiResourceObjects: state.apiResourceObjects
-  }
-}
-
-
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(Full);
+export default Full;

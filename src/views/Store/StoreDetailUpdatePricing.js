@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
-  addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
@@ -12,20 +11,34 @@ import { toast } from 'react-toastify';
 import Loading from "../../components/Loading";
 
 
-
 class StoreDetailUpdatePricing extends Component {
+  initialState = {
+    formData: undefined,
+    categoryChoices: undefined,
+    updateTaskId: undefined,
+    updateLogId: undefined
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      formData: undefined,
-      categoryChoices: undefined,
-      updateTaskId: undefined,
-      updateLogId: undefined
-    }
+    this.state = {...this.initialState}
   }
 
   componentDidMount() {
-    const store = this.props.ApiResourceObject(this.props.apiResourceObject);
+    this.componentUpdate(this.props.apiResourceObject)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentStore = this.props.apiResourceObject;
+    const nextStore = nextProps.apiResourceObject;
+
+    if (currentStore.id !== nextStore.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextStore))
+    }
+  }
+
+  componentUpdate(store) {
+    store = this.props.ApiResourceObject(store);
 
     this.props.fetchAuth(`${store.url}scraper/`).then(formData => {
       this.setState({
@@ -192,11 +205,13 @@ class StoreDetailUpdatePricing extends Component {
 }
 
 function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+
   return {
-    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
+    ApiResourceObject,
+    fetchAuth,
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
-    addApiResourceDispatchToPropsUtils())(StoreDetailUpdatePricing);
+export default connect(mapStateToProps)(StoreDetailUpdatePricing);

@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils, filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import {listToObject} from "../../react-utils/utils";
 
 class WtbBrandDetail extends Component {
@@ -13,7 +15,7 @@ class WtbBrandDetail extends Component {
     return (
         <div className="animated fadeIn">
           <div className="row">
-            <div className="col-sm-6 col-md-4">
+            <div className="col-sm-6 col-md-8">
               <div className="card">
                 <div className="card-header">
                   <FormattedMessage id="detail" defaultMessage="Detail" />
@@ -114,6 +116,13 @@ class WtbBrandDetail extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils()
-)(WtbBrandDetail);
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+  }
+}
+
+export default connect(mapStateToProps)(WtbBrandDetail);

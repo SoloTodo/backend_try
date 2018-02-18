@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import Loading from "../../components/Loading";
@@ -205,11 +205,18 @@ class ProductDetailPricesTable extends Component {
 }
 
 function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {preferredCurrency, convertToPreferredCurrency, formatCurrency} = backendStateToPropsUtils(state);
+
   return {
+    ApiResourceObject,
+    fetchAuth,
+    preferredCurrency,
+    convertToPreferredCurrency,
+    formatCurrency,
     currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
-    ...backendStateToPropsUtils(state)
   }
 }
 
 
-export default connect(addApiResourceStateToPropsUtils(mapStateToProps))(ProductDetailPricesTable);
+export default connect(mapStateToProps)(ProductDetailPricesTable);

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
 import {
-  addApiResourceStateToPropsUtils
+  apiResourceStateToPropsUtils
 } from "../../react-utils/ApiResource";
 import {chartColors} from "../../react-utils/colors";
 import {connect} from "react-redux";
@@ -12,6 +12,7 @@ import Loading from "../../components/Loading";
 import {Line} from "react-chartjs-2";
 import './DashboardStoreLeadsChart.css'
 import {Link} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
 
 class DashboardStoreLeadsChart extends Component {
   constructor(props) {
@@ -135,12 +136,16 @@ class DashboardStoreLeadsChart extends Component {
   }
 }
 
+
 function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {user} = backendStateToPropsUtils(state);
+
   return {
-    user: state.apiResourceObjects[settings.ownUserUrl],
+    ApiResourceObject,
+    fetchAuth,
+    user
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps),
-)(DashboardStoreLeadsChart);
+export default connect(mapStateToProps)(DashboardStoreLeadsChart);

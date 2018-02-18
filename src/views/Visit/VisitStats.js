@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {settings} from "../../settings";
-import {FormattedMessage, injectIntl} from "react-intl";
+import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
 import {
   listToObject,
 } from "../../react-utils/utils";
 import {
-  addApiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
 import {
   createPageSizeChoices,
@@ -294,6 +294,12 @@ class VisitStats extends Component {
   }
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils()
-)(VisitStats));
+
+function mapStateToProps(state) {
+  return {
+    websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+  }
+}
+
+export default connect(mapStateToProps)(VisitStats);

@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
 import {settings} from "../../settings";
 
 class UserList extends Component {
   render() {
-    const users = this.props.filterApiResourceObjectsByType('users')
-        .filter(user => user.url !== settings.ownUserUrl && user.is_staff);
-
     return (
         <div className="animated fadeIn">
           <div className="row">
@@ -33,7 +32,7 @@ class UserList extends Component {
 
                     <tbody>
 
-                    {users.map(user => (
+                    {this.props.users.map(user => (
                         <tr key={user.id}>
                           <td>
                             <NavLink to={`/users/${user.id}`}>{user.email}</NavLink>
@@ -54,6 +53,11 @@ class UserList extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(),
-    )(UserList);
+function mapStateToProps(state) {
+  return {
+    users: filterApiResourceObjectsByType(state.apiResourceObjects, 'users')
+        .filter(user => user.url !== settings.ownUserUrl && user.is_staff)
+  }
+}
+
+export default connect(mapStateToProps)(UserList);

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
 
@@ -61,4 +63,12 @@ class UserDetail extends Component {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils())(UserDetail);
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+  }
+}
+
+export default connect(mapStateToProps)(UserDetail);

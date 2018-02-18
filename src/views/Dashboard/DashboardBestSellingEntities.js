@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import {settings} from "../../settings";
 import {FormattedMessage} from "react-intl";
 import Loading from "../../components/Loading";
@@ -80,7 +82,13 @@ class DashboardBestSellingEntities extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(),
-)(DashboardBestSellingEntities);
+function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
 
+  return {
+    ApiResourceObject,
+    fetchAuth
+  }
+}
+
+export default connect(mapStateToProps)(DashboardBestSellingEntities);

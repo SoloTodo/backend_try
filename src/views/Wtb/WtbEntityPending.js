@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
 import {
   createOrderingOptionChoices,
@@ -183,5 +184,15 @@ class WtbEntityPending extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils())(WtbEntityPending);
+
+function mapStateToProps(state) {
+  const {fetchAuth} = apiResourceStateToPropsUtils(state);
+
+  return {
+    fetchAuth,
+    wtb_brands: filterApiResourceObjectsByType(state.apiResourceObjects, 'wtb_brands'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+  }
+}
+
+export default connect(mapStateToProps)(WtbEntityPending);

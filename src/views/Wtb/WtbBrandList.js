@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
+import {connect} from "react-redux";
+import {filterApiResourceObjectsByType} from "../../react-utils/ApiResource";
 
 class WtbBrandList extends Component {
   render() {
@@ -46,4 +48,10 @@ class WtbBrandList extends Component {
   }
 }
 
-export default WtbBrandList
+function mapStateToProps(state) {
+  return {
+    wtb_brands: filterApiResourceObjectsByType(state.apiResourceObjects, 'wtb_brands'),
+  }
+}
+
+export default connect(mapStateToProps)(WtbBrandList);

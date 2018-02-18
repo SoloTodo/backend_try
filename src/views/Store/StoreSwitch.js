@@ -34,8 +34,7 @@ export default ({match}) => {
         )} />
         <Route path={match.url + '/:id/update_pricing'} exact render={props => (
             <RequiredResources resources={['categories']}>
-              <ResourceObjectPermission match={props.match} resource="stores" permission="update_store_pricing" component={StoreDetailUpdatePricing}>
-              </ResourceObjectPermission>
+              <ResourceObjectPermission match={props.match} resource="stores" permission="update_store_pricing" component={StoreDetailUpdatePricing} />
             </RequiredResources>
         )} />
       </Switch>

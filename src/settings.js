@@ -10,6 +10,7 @@ export const settings = {
   },
   defaultLanguageCode: 'en',
   usdCurrencyUrl: apiSettings.endpoint + 'currencies/4/',
+  clpCurrencyUrl: apiSettings.endpoint + 'currencies/1/',
   categoryTemplateDetailPurposeId: 1,
   categoryBrowsePurposeId: 1,
   categoryProductsPurposeId: 2,

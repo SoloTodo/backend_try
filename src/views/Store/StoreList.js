@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  addApiResourceStateToPropsUtils,
   filterApiResourceObjectsByType,
 } from '../../react-utils/ApiResource';
 import {
@@ -176,4 +175,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(addApiResourceStateToPropsUtils(mapStateToProps))(StoreList);
+export default connect(mapStateToProps)(StoreList);

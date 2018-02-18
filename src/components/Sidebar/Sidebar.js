@@ -4,13 +4,12 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { sidebarLayout } from '../../TopLevelRoutes';
 import {
-  addApiResourceStateToPropsUtils,
-  apiResourceObjectForeignKey,
+  apiResourceObjectForeignKey, apiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
 } from '../../react-utils/ApiResource';
 import './sidebar.css';
-import {settings} from "../../settings";
 import {setLocale} from "../../react-utils/utils";
+import {backendStateToPropsUtils} from "../../utils";
 
 
 class Sidebar extends Component {
@@ -103,17 +102,20 @@ class Sidebar extends Component {
 }
 
 let mapStateToProps = (state) => {
-  const user = state.apiResourceObjects[settings.ownUserUrl] || {};
+  const {ApiResourceObject, authToken} = apiResourceStateToPropsUtils(state);
+  const {user} = backendStateToPropsUtils(state);
+
   const apiResourceObjects = state.apiResourceObjects;
   return {
+    ApiResourceObject,
+    user,
+    authToken,
     languages: filterApiResourceObjectsByType(apiResourceObjects, 'languages'),
     language: apiResourceObjectForeignKey(user, 'preferred_language', state),
     currencies: filterApiResourceObjectsByType(apiResourceObjects, 'currencies'),
     currency: apiResourceObjectForeignKey(user, 'preferred_currency', state),
     numberFormats: filterApiResourceObjectsByType(apiResourceObjects, 'number_formats'),
     numberFormat: apiResourceObjectForeignKey(user, 'preferred_number_format', state),
-    authToken: state.authToken,
-    user: user
   };
 };
 
@@ -133,4 +135,4 @@ let mapDispatchToProps = (dispatch) => {
   }
 };
 
-export default connect(addApiResourceStateToPropsUtils(mapStateToProps), mapDispatchToProps)(Sidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

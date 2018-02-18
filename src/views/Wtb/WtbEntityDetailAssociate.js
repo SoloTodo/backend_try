@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {FormattedMessage, injectIntl} from "react-intl";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
 import {NavLink, Redirect} from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -231,6 +233,13 @@ class WtbEntityDetailAssociate extends Component {
 }
 
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils())(WtbEntityDetailAssociate));
+function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
 
+  return {
+    ApiResourceObject,
+    fetchAuth,
+  }
+}
+
+export default injectIntl(connect(mapStateToProps)(WtbEntityDetailAssociate));

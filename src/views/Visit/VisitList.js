@@ -3,7 +3,8 @@ import {
   listToObject,
 } from "../../react-utils/utils";
 import {
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
 import {
   ApiForm,
@@ -17,6 +18,7 @@ import moment from "moment";
 import {settings} from "../../settings";
 import messages from "../../messages";
 import {NavLink} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
 
 
 class VisitList extends Component {
@@ -117,7 +119,7 @@ class VisitList extends Component {
                             id="categories"
                             choices={categories}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.categories}
                             placeholder={messages.all_feminine}
@@ -184,12 +186,18 @@ class VisitList extends Component {
   }
 }
 
+
 function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {user } = backendStateToPropsUtils(state);
+
   return {
-    user: state.apiResourceObjects[settings.ownUserUrl],
-    breakpoint: state.breakpoint
+    ApiResourceObject,
+    user,
+    websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    isExtraSmall: state.breakpoint.isExtraSmall
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(VisitList);
+export default connect(mapStateToProps)(VisitList);
