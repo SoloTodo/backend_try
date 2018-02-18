@@ -72,8 +72,8 @@ class EntityConflicts extends Component {
       },
     ];
 
-    const stores = this.props.stores.filter(store => store.permissions.includes('is_store_staff'));
-    const categories = this.props.categories.filter(category => category.permissions.includes('is_category_staff'));
+    const stores = this.props.stores;
+    const categories = this.props.categories;
 
     return <div className="animated fadeIn">
       <ApiForm
@@ -146,8 +146,10 @@ class EntityConflicts extends Component {
 
 function mapStateToProps(state) {
   return {
-    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores')
+        .filter(store => store.permissions.includes('is_store_staff')),
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
+        .filter(category => category.permissions.includes('is_category_staff'))
   }
 }
 

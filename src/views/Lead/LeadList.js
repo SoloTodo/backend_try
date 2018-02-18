@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import moment from "moment";
@@ -10,12 +12,12 @@ import {
   ApiForm,
   ApiFormResultTableWithPagination,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormRemoveOnlyListField
 } from '../../react-utils/api_forms';
 import {settings} from "../../settings";
 import messages from "../../messages";
 import {NavLink} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
 
 class LeadList extends Component {
   constructor(props) {
@@ -132,7 +134,7 @@ class LeadList extends Component {
                             id="stores"
                             choices={stores}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.stores}
                             placeholder={messages.all_feminine}
@@ -148,7 +150,7 @@ class LeadList extends Component {
                             id="categories"
                             choices={categories}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.categories}
                             placeholder={messages.all_feminine}
@@ -167,15 +169,6 @@ class LeadList extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.websites}
                             placeholder={messages.all_feminine}
-                        />
-                      </div>
-                      <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
-                        <label htmlFor="submit" className="hidden-xs-down hidden-lg-up">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="search" defaultMessage='Search' />}
-                            loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.leads === null}
                         />
                       </div>
                     </div>
@@ -237,11 +230,15 @@ class LeadList extends Component {
 }
 
 function mapStateToProps(state) {
+  const {user} = backendStateToPropsUtils(state);
+
   return {
-    user: state.apiResourceObjects[settings.ownUserUrl],
-    breakpoint: state.breakpoint
+    user,
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
+    isExtraSmall: state.breakpoint.isExtraSmall
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(LeadList);
+export default connect(mapStateToProps)(LeadList);

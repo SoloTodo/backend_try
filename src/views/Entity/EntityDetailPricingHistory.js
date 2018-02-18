@@ -11,7 +11,6 @@ import {
   ApiForm,
   ApiFormDateRangeField,
   ApiFormChoiceField,
-  ApiFormSubmitButton
 } from '../../react-utils/api_forms'
 import { toast } from 'react-toastify';
 import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
@@ -158,15 +157,6 @@ class EntityDetailPricingHistory extends Component {
                         searchable={false}
                         value={this.state.formValues.currency}
                         onChange={this.state.apiFormFieldChangeHandler}
-                    />
-                  </div>
-                  <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <label className="hidden-xs-down">&nbsp;</label>
-                    <ApiFormSubmitButton
-                        label={<FormattedMessage id="search" defaultMessage='Search' />}
-                        loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                        loading={this.state.chart === null}
                     />
                   </div>
                 </div>

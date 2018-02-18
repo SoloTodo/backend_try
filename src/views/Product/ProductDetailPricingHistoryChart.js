@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import Loading from "../../components/Loading";
 import {Line} from 'react-chartjs-2';
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import connect from "react-redux/es/connect/connect";
 import {
   convertToDecimal,
@@ -11,7 +13,6 @@ import {
   chartColors,
   lightenDarkenColor
 } from "../../react-utils/colors";
-import {injectIntl} from "react-intl";
 import './ProductDetailPricingHistoryChart.css'
 import moment from "moment";
 import {backendStateToPropsUtils} from "../../utils";
@@ -199,6 +200,15 @@ class ProductDetailPricingHistoryChart extends Component {
 
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(backendStateToPropsUtils))(ProductDetailPricingHistoryChart));
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {formatCurrency, preferredNumberFormat } = backendStateToPropsUtils(state);
 
+  return {
+    ApiResourceObject,
+    formatCurrency,
+    preferredNumberFormat,
+  }
+}
+
+export default connect(mapStateToProps)(ProductDetailPricingHistoryChart);

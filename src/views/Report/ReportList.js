@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
+import {filterApiResourceObjectsByType} from "../../react-utils/ApiResource";
+import {connect} from "react-redux";
 
 class ReportList extends Component {
   render() {
@@ -42,4 +44,10 @@ class ReportList extends Component {
   }
 }
 
-export default ReportList
+function mapStateToProps(state) {
+  return {
+    reports: filterApiResourceObjectsByType(state.apiResourceObjects, 'reports')
+  }
+}
+
+export default connect(mapStateToProps)(ReportList);

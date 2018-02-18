@@ -8,7 +8,6 @@ import {
   ApiFormChoiceField,
   ApiFormDateRangeField,
   ApiFormTextField,
-  ApiFormSubmitButton,
   ApiFormResultTableWithPagination
 } from "../../react-utils/api_forms";
 import {
@@ -123,7 +122,7 @@ class ProductList extends Component {
                             name="categories"
                             choices={categories}
                             placeholder={<FormattedMessage id="all_feminine" defaultMessage={`All`} />}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.categories}
                         />
@@ -137,7 +136,7 @@ class ProductList extends Component {
                             tooltipContent={availabilityCountriesTooltipContent}
                             choices={this.props.countries}
                             placeholder={<FormattedMessage id="do_not_apply" defaultMessage={`Do not apply`} />}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.availabilityCountries}
                         />
@@ -151,7 +150,7 @@ class ProductList extends Component {
                             tooltipContent={availabilityStoresTooltipContent}
                             choices={stores}
                             placeholder={<FormattedMessage id="do_not_apply" defaultMessage={`Do not apply`} />}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.availabilityStores}
                         />
@@ -190,15 +189,6 @@ class ProductList extends Component {
                             value={this.state.formValues.lastUpdated}
                         />
                       </div>
-                      <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
-                        <label htmlFor="submit" className="hidden-xs-down hidden-lg-up">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="search" defaultMessage='Search' />}
-                            loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.products === null}
-                        />
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -225,8 +215,10 @@ class ProductList extends Component {
 
 function mapStateToProps(state) {
   return {
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
     countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
-    breakpoint: state.breakpoint
+    isExtraSmall: state.breakpoint.isExtraSmall
   }
 }
 

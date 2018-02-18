@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {settings} from "../../settings";
-import {FormattedMessage, injectIntl} from "react-intl";
+import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
 import {
   createPageSizeChoices,
   ApiForm,
   ApiFormDateRangeField,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormPaginationField,
   ApiFormResultsTable,
   ApiFormRemoveOnlyListField,
@@ -17,7 +16,7 @@ import {
   listToObject,
 } from "../../react-utils/utils";
 import {
-  addApiResourceStateToPropsUtils
+  filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import moment from "moment";
 import Loading from "../../components/Loading";
@@ -269,7 +268,7 @@ class LeadStats extends Component {
                         />
                       </div>
 
-                      <div className="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-4">
+                      <div className="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <label htmlFor="timestamp">
                           <FormattedMessage id="date_range_from_to" defaultMessage="Date range (from / to)" />
                         </label>
@@ -295,16 +294,6 @@ class LeadStats extends Component {
                             value={this.state.formValues.grouping}
                             onChange={this.state.apiFormFieldChangeHandler}
                             additionalApiFields={['ordering']}
-                        />
-                      </div>
-
-                      <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <label className="hidden-xs-down">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="update" defaultMessage='Update' />}
-                            loadingLabel={<FormattedMessage id="updating" defaultMessage='Updating'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.leadStats === null}
                         />
                       </div>
                     </div>
@@ -392,6 +381,12 @@ class LeadStats extends Component {
   }
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils()
-)(LeadStats));
+function mapStateToProps(state) {
+  return {
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
+  }
+}
+
+export default connect(mapStateToProps)(LeadStats);

@@ -9,7 +9,6 @@ import {
   ApiForm,
   ApiFormResultTableWithPagination,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormRemoveOnlyListField
 } from "../../react-utils/api_forms";
 import {connect} from "react-redux";
@@ -137,15 +136,6 @@ class VisitList extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.websites}
                             placeholder={messages.all_feminine}
-                        />
-                      </div>
-                      <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
-                        <label htmlFor="submit" className="hidden-xs-down hidden-lg-up">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="search" defaultMessage='Search' />}
-                            loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.visits === null}
                         />
                       </div>
                     </div>

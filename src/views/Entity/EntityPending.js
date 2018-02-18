@@ -13,7 +13,6 @@ import {
   ApiForm,
   ApiFormChoiceField,
   ApiFormTextField,
-  ApiFormSubmitButton,
   ApiFormResultTableWithPagination
 } from '../../react-utils/api_forms'
 
@@ -103,8 +102,8 @@ class EntityPending extends Component {
       },
     ];
 
-    const storeChoices = this.props.stores.filter(store => store.permissions.includes('is_store_staff'));
-    const categoryChoices = this.props.categories.filter(category => category.permissions.includes('is_category_staff'));
+    const storeChoices = this.props.stores;
+    const categoryChoices = this.props.categories;
 
     return (
         <div className="animated fadeIn">
@@ -171,15 +170,6 @@ class EntityPending extends Component {
                             value={this.state.formValues.search}
                         />
                       </div>
-                      <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
-                        <label htmlFor="submit" className="hidden-xs-down hidden-lg-up">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="search" defaultMessage='Search' />}
-                            loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.entities === null}
-                        />
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -211,8 +201,10 @@ function mapStateToProps(state) {
 
   return {
     fetchAuth,
-    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
-    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores')
+        .filter(store => store.permissions.includes('is_store_staff')),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
+        .filter(category => category.permissions.includes('is_category_staff')),
     isExtraSmall: state.breakpoint.isExtraSmall
   }
 }

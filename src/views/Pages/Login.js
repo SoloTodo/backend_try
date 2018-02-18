@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
-import { settings } from '../../../settings'
-import {fetchAuth} from "../../../react-utils/utils";
+import { settings } from '../../settings'
+import {fetchAuth} from "../../react-utils/utils";
 import {toast} from 'react-toastify';
 
 class Login extends Component {

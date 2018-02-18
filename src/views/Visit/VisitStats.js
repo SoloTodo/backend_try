@@ -13,7 +13,6 @@ import {
   ApiForm,
   ApiFormDateRangeField,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormPaginationField,
   ApiFormResultsTable,
   ApiFormRemoveOnlyListField,
@@ -220,16 +219,6 @@ class VisitStats extends Component {
                             value={this.state.formValues.grouping}
                             onChange={this.state.apiFormFieldChangeHandler}
                             additionalApiFields={['ordering']}
-                        />
-                      </div>
-
-                      <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <label className="hidden-xs-down">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="update" defaultMessage='Update' />}
-                            loadingLabel={<FormattedMessage id="updating" defaultMessage='Updating'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.visitStats === null}
                         />
                       </div>
                     </div>

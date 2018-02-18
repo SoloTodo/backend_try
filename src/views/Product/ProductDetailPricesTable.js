@@ -12,17 +12,31 @@ import {Link} from "react-router-dom";
 import {backendStateToPropsUtils} from "../../utils";
 
 class ProductDetailPricesTable extends Component {
+  initialState = {
+    availableEntities: undefined
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      availableEntities: undefined
-    }
+    this.state = {...this.initialState}
   }
 
   componentDidMount() {
+    this.componentUpdate(this.props.product)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentProduct = this.props.product;
+    const nextProduct = nextProps.product;
+
+    if (currentProduct.id !== nextProduct.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextProduct));
+    }
+  }
+
+  componentUpdate(product) {
     this.props
-        .fetchAuth(this.props.product.url + 'entities/')
+        .fetchAuth(product.url + 'entities/')
         .then(entities => {
           this.setState({
             availableEntities: entities.filter(entity => entity.active_registry && entity.active_registry.is_available)

@@ -10,7 +10,6 @@ import {
   ApiForm,
   ApiFormChoiceField,
   ApiFormTextField,
-  ApiFormSubmitButton
 } from "../../react-utils/api_forms";
 import {Link, NavLink} from "react-router-dom";
 import messages from "../../messages";
@@ -157,15 +156,6 @@ class WtbEntityPending extends Component {
                             name="search"
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.search}
-                        />
-                      </div>
-                      <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
-                        <label htmlFor="submit" className="hidden-xs-down hidden-lg-up">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="search" defaultMessage='Search' />}
-                            loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.wtbEntities === null}
                         />
                       </div>
                     </div>

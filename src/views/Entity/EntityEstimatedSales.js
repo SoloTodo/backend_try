@@ -100,8 +100,8 @@ class EntityEstimatedSales extends Component {
     let resultComponent = null;
     const resultGrouping = this.state.resultFormValues ? this.state.resultFormValues.grouping.id : null;
 
-    const categories = this.props.categories.filter(category => category.permissions.includes('view_category_stocks'));
-    const stores = this.props.stores.filter(store => store.permissions.includes('view_store_stocks'));
+    const categories = this.props.categories;
+    const stores = this.props.stores;
 
     const categoriesDict = listToObject(categories, 'url');
     let displayPaginationControls = false;
@@ -402,8 +402,10 @@ function mapStateToProps(state) {
 
   return {
     formatCurrency,
-    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
-    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
+        .filter(category => category.permissions.includes('view_category_stocks')),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores')
+        .filter(store => store.permissions.includes('view_store_stocks')),
   }
 }
 

@@ -6,7 +6,6 @@ import {
 import {
   ApiForm,
   ApiFormDateRangeField,
-  ApiFormSubmitButton,
 } from "../../react-utils/api_forms";
 import {FormattedMessage} from "react-intl";
 import {settings} from "../../settings";
@@ -84,15 +83,6 @@ class UserDetailStaffActions extends Component {
                           onChange={this.state.apiFormFieldChangeHandler}
                       />
                     </div>
-                    <div className="col-12 col-sm-6">
-                        <label htmlFor="submit">&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="update" defaultMessage='Update' />}
-                            loadingLabel={<FormattedMessage id="updating" defaultMessage='Updating'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.staffActions === null}
-                        />
-                      </div>
                   </div>
                 </div>
               </div>

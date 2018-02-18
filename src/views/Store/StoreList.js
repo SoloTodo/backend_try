@@ -7,7 +7,6 @@ import {
   createOrderingOptionChoices,
   ApiForm,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormResultsTable
 } from '../../react-utils/api_forms';
 import {connect} from "react-redux";
@@ -145,16 +144,6 @@ class StoreList extends Component {
                   value={this.state.formValues.ordering}
                   onChange={this.state.apiFormFieldChangeHandler}
               />
-
-              <div className="mt-2 col-12 col-sm-4 col-xl-3">
-                <label htmlFor="submit">&nbsp;</label>
-                <ApiFormSubmitButton
-                    label={<FormattedMessage id="search" defaultMessage='Search' />}
-                    loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                    onChange={this.state.apiFormFieldChangeHandler}
-                    loading={this.state.stores === null}
-                />
-              </div>
             </div>
           </div>
         </div>

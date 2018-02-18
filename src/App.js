@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import {ToastContainer} from "react-toastify";
 import { polyfill } from 'smoothscroll-polyfill'
 import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
+import GoogleAnalytics from 'react-ga';
 
 import {
   ApiResourceObject,
@@ -17,9 +18,17 @@ import {
   setLocale,
 } from './react-utils/utils';
 
+import {
+  apiResourceObjectsReducer,
+  authTokenReducer, loadedResourcesReducer
+} from "./react-utils/redux-utils";
+import RequiredResources from "./react-utils/components/RequiredResources";
+import UserLoader from "./react-utils/components/UserLoader";
+import withTracker from "./react-utils/components/GoogleAnalyticsTracker";
+
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/Full';
-import Login from './views/Pages/Login/Login';
+import Login from './views/Pages/Login';
 import { settings } from './settings';
 import { defaultProperty } from './utils';
 import UserPermissionFilter from "./auth/UserPermissionFilter";
@@ -27,13 +36,6 @@ import UserPermissionFilter from "./auth/UserPermissionFilter";
 import 'react-select/dist/react-select.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
-
-import {
-  apiResourceObjectsReducer,
-  authTokenReducer, loadedResourcesReducer
-} from "./react-utils/redux-utils";
-import RequiredResources from "./react-utils/components/RequiredResources";
-import UserLoader from "./react-utils/components/UserLoader";
 
 class App extends Component {
   constructor(props) {
@@ -48,6 +50,8 @@ class App extends Component {
 
     syncBreakpointWithStore(this.store);
     polyfill();
+    GoogleAnalytics.initialize(settings.googleAnalyticsId);
+    this.TrackedUserLoader = withTracker(UserLoader);
   }
 
   handleUserLoad = rawUser => {
@@ -103,6 +107,8 @@ class App extends Component {
 
   render() {
     let history = createBrowserHistory();
+    const TrackedUserLoader = this.TrackedUserLoader;
+
     return (
         <Provider store={this.store}>
           <ConnectedIntlProvider>
@@ -124,11 +130,11 @@ class App extends Component {
                     <Route exact path="/login" name="Login Page"
                            component={Login}/>
                     <Route path="/" render={props => (
-                        <UserLoader callback={this.handleUserLoad}>
+                        <TrackedUserLoader callback={this.handleUserLoad} {...props}>
                           <UserPermissionFilter redirectPath="/login">
                             <Full location={props.location}/>
                           </UserPermissionFilter>
-                        </UserLoader>
+                        </TrackedUserLoader>
                     )} />
                   </Switch>
                 </BrowserRouter>

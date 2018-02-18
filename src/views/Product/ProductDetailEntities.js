@@ -1,28 +1,41 @@
 import React, {Component} from 'react'
 import connect from "react-redux/es/connect/connect";
 import {
-  addApiResourceStateToPropsUtils
-} from "../../react-utils/ApiResource";
-import {
   ApiFormResultsTable
 } from "../../react-utils/api_forms";
 import moment from "moment";
 import Loading from "../../components/Loading";
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
+import {apiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
 
 class ProductDetailEntities extends Component {
+  initialState = {
+    entities: undefined
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      entities: undefined
-    }
+    this.state = {...this.initialState}
   }
 
   componentDidMount() {
+    this.componentUpdate(this.props.apiResourceObject)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentProduct = this.props.apiResourceObject;
+    const nextProduct = nextProps.apiResourceObject;
+
+    if (currentProduct.id !== nextProduct.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextProduct));
+    }
+  }
+
+  componentUpdate(product) {
     this.props
-        .fetchAuth(this.props.apiResourceObject.url + 'entities/')
+        .fetchAuth(product.url + 'entities/')
         .then(entities => {
           entities.sort((a, b) => moment(a.last_pricing_update).isBefore(moment(b.last_pricing_update)));
 
@@ -64,7 +77,7 @@ class ProductDetailEntities extends Component {
         displayFilter: entities => entities.some(entity => entity.partNumber),
         renderer: entity => entity.partNumber || <em>N/A</em>
       },
-        {
+      {
         label: <FormattedMessage id="ean" defaultMessage="EAN"/>,
         displayFilter: entities => entities.some(entity => entity.ean),
         renderer: entity => entity.ean || <em>N/A</em>
@@ -79,7 +92,7 @@ class ProductDetailEntities extends Component {
         displayFilter: entities => entities.some(entity => entity.cellPlan),
         renderer: entity => entity.cellPlan ? <NavLink to={`/products/${entity.cellPlan.id}`}>{entity.cellPlan.name}</NavLink> : <em>N/A</em>
       },
-        {
+      {
         label: <FormattedMessage id="last_update" defaultMessage="Last update"/>,
         renderer: entity => moment(entity.lastPricingUpdate).format('lll')
       },
@@ -97,7 +110,7 @@ class ProductDetailEntities extends Component {
             'glyphicons glyphicons-unchecked'}/>,
         cssClasses: 'center-aligned',
       },
-        {
+      {
         label: <FormattedMessage id="currency" defaultMessage="Currency" />,
         renderer: entity => entity.currency.isoCode,
       },
@@ -115,9 +128,9 @@ class ProductDetailEntities extends Component {
             <em>N/A</em>,
         cssClasses: 'right-aligned',
       },
-        {
+      {
         label: <FormattedMessage id="cell_monthly_payment" defaultMessage="Cell monthly payment" />,
-          displayFilter: entities => entities.some(entity => entity.activeRegistry && entity.activeRegistry.cell_monthly_payment),
+        displayFilter: entities => entities.some(entity => entity.activeRegistry && entity.activeRegistry.cell_monthly_payment),
         renderer: entity => entity.activeRegistry && entity.activeRegistry.cell_monthly_payment ?
             this.props.formatCurrency(entity.activeRegistry.cell_monthly_payment) :
             <em>N/A</em>,
@@ -147,5 +160,14 @@ class ProductDetailEntities extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils())(ProductDetailEntities);
+function mapStateToProps(state) {
+  const {fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {formatCurrency} = backendStateToPropsUtils(state);
+
+  return {
+    fetchAuth,
+    formatCurrency
+  }
+}
+
+export default injectIntl(connect(mapStateToProps)(ProductDetailEntities));

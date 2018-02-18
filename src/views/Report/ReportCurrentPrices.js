@@ -7,7 +7,7 @@ import {
   ApiFormSubmitButton
 } from "../../react-utils/api_forms";
 import {
-  addApiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
 
 class ReportCurrentPrices extends Component {
@@ -152,6 +152,14 @@ class ReportCurrentPrices extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils()
-)(ReportCurrentPrices);
+function mapStateToProps(state) {
+  return {
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
+    store_types: filterApiResourceObjectsByType(state.apiResourceObjects, 'store_types'),
+    countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
+  }
+}
+
+export default connect(mapStateToProps)(ReportCurrentPrices);

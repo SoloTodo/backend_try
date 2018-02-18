@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils, filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import moment from 'moment';
-import {FormattedMessage, injectIntl} from "react-intl";
+import {FormattedMessage} from "react-intl";
 import {
   convertToDecimal,
   listToObject,
@@ -11,7 +13,6 @@ import {
   ApiForm,
   ApiFormDateRangeField,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormResultsTable
 } from "../../react-utils/api_forms";
 import ProductDetailPricingHistoryChart from "./ProductDetailPricingHistoryChart";
@@ -261,16 +262,6 @@ class ProductDetailPricingHistory extends Component {
                         onChange={this.state.apiFormFieldChangeHandler}
                     />
                   </div>
-
-                  <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <label className="hidden-xs-down">&nbsp;</label>
-                    <ApiFormSubmitButton
-                        label={<FormattedMessage id="search" defaultMessage='Search' />}
-                        loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                        loading={this.state.chart === null}
-                    />
-                  </div>
                 </div>
               </div>
             </div>
@@ -305,6 +296,18 @@ class ProductDetailPricingHistory extends Component {
   }
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(backendStateToPropsUtils)
-)(ProductDetailPricingHistory));
+
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {preferredCurrency} = backendStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+    preferredCurrency,
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
+    currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
+  }
+}
+
+export default connect(mapStateToProps)(ProductDetailPricingHistory);

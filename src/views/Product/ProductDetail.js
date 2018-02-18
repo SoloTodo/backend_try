@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils, filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import {settings} from "../../settings";
 import Loading from "../../components/Loading";
 import ProductDetailPricesTable from "./ProductDetailPricesTable";
@@ -16,20 +18,34 @@ import {
 } from "reactstrap";
 
 class ProductDetail extends Component {
+  initialState = {
+    renderedSpecs: undefined,
+    websiteDropDownOpen: false,
+    specsModalOpen: false,
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      renderedSpecs: undefined,
-      websiteDropDownOpen: false,
-      specsModalOpen: false,
-    }
+    this.state = {...this.initialState}
   }
 
   componentWillMount() {
-    const product = this.props.ApiResourceObject(this.props.apiResourceObject);
+    this.componentUpdate(this.props.apiResourceObject);
+  }
 
-    const specsTemplateUrl = `${settings.apiResourceEndpoints.category_templates}?website=${settings.websiteId}&purpose=${settings.categoryTemplateDetailPurposeId}&category=${product.category.id}`;
+  componentWillReceiveProps(nextProps) {
+    const currentProduct = this.props.apiResourceObject;
+    const nextProduct = nextProps.apiResourceObject;
+
+    if (currentProduct.id !== nextProduct.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextProduct));
+    }
+  }
+
+  componentUpdate(product) {
+    product = this.props.ApiResourceObject(product);
+
+    const specsTemplateUrl = `${settings.apiResourceEndpoints.category_templates}?website=${settings.ownWebsiteId}&purpose=${settings.categoryTemplateDetailPurposeId}&category=${product.category.id}`;
 
     this.props.fetchAuth(specsTemplateUrl)
         .then(categoryTemplates => {
@@ -256,5 +272,14 @@ class ProductDetail extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils())(ProductDetail);
+function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+    fetchAuth,
+    websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
+  }
+}
+
+export default connect(mapStateToProps)(ProductDetail);

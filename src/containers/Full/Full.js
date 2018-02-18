@@ -22,7 +22,7 @@ import CategorySwitch from "../../views/Category/CategorySwitch";
 import VisitSwitch from "../../views/Visit/VisitSwitch";
 import WtbSwitch from "../../views/Wtb/WtbSwitch";
 import UserSwitch from "../../views/User/UserSwitch";
-import Page404 from "../../views/Pages/Page404/Page404";
+import Page404 from "../../views/Pages/Page404";
 
 
 class Full extends Component {
