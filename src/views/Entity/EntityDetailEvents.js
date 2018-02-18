@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
-  addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
+  apiResourceStateToPropsUtils
 } from "../../react-utils/ApiResource";
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import { Markdown } from 'react-showdown';
 import Loading from "../../components/Loading";
@@ -14,17 +13,29 @@ import './EntityDetailEvents.css'
 
 
 class EntityDetailEvents extends Component {
+  initialState = {
+    events: undefined
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      events: undefined
-    }
+    this.state = {...this.initialState}
   }
 
   componentDidMount() {
-    const entity = this.props.apiResourceObject;
+    this.componentUpdate(this.props.apiResourceObject);
+  }
 
+  componentWillReceiveProps(nextProps) {
+    const currentEntity = this.props.apiResourceObject;
+    const nextEntity = nextProps.apiResourceObject;
+
+    if (currentEntity.id !== nextEntity.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextEntity))
+    }
+  }
+
+  componentUpdate(entity) {
     this.props.fetchAuth(`${entity.url}events/`).then(
         json => this.setState({events: json})
     )
@@ -110,6 +121,13 @@ class EntityDetailEvents extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(),
-    addApiResourceDispatchToPropsUtils())(EntityDetailEvents);
+
+function mapStateToProps(state) {
+  const {fetchAuth} = apiResourceStateToPropsUtils(state);
+
+  return {
+    fetchAuth,
+  }
+}
+
+export default injectIntl(connect(mapStateToProps)(EntityDetailEvents));

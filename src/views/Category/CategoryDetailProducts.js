@@ -18,53 +18,41 @@ import {NavLink, Redirect} from "react-router-dom";
 import "./CategoryDetailProducts.css"
 import { toast } from 'react-toastify';
 import {backendStateToPropsUtils} from "../../utils";
+import {areObjectsEqual} from "../../react-utils/utils";
 
 class CategoryDetailProducts extends Component {
+  initialState = {
+    formLayout: undefined,
+    apiFormFieldChangeHandler: undefined,
+    formValues: {},
+    productsPage: undefined,
+    resultsAggs: {},
+    columns: undefined,
+  };
+
   constructor(props) {
     super(props);
+    this.state = {...this.initialState}
+  }
 
-    this.state = {
-      formLayout: undefined,
-      apiFormFieldChangeHandler: undefined,
-      formValues: {},
-      productsPage: undefined,
-      resultsAggs: {},
-      columns: undefined,
+  componentDidMount() {
+    this.componentUpdate(this.props.apiResourceObject, this.props.preferredCountry)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const oldCategory = this.props.apiResourceObject;
+    const newCategory = nextProps.apiResourceObject;
+
+    const oldPreferredCountry = this.props.preferredCountry;
+    const newPreferredCountry = nextProps.preferredCountry;
+
+    if (oldCategory.id !== newCategory.id || !areObjectsEqual(oldPreferredCountry, newPreferredCountry)) {
+      this.setState(this.initialState, () => this.componentUpdate(newCategory, newPreferredCountry))
     }
   }
 
-  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
-    this.setState({
-      apiFormFieldChangeHandler
-    })
-  };
-
-  handleFormValueChange = formValues => {
-    this.setState({formValues})
-  };
-
-  setProductsPage = json => {
-    if (json) {
-      this.setState({
-        productsPage: {
-          count: json.payload.count,
-          results: json.payload.results
-        },
-        resultsAggs: json.payload.aggs
-      })
-    } else {
-      // Keep the old resultsAggs to prevent the form fields from resetting so much
-      this.setState({
-        productsPage: null
-      })
-    }
-  };
-
-  componentDidMount() {
-    const preferredCountry = this.props.preferredCountry;
-    const category = this.props.apiResourceObject;
-
-    this.props.fetchAuth(settings.apiResourceEndpoints.category_specs_form_layouts + '?category=' + this.props.apiResourceObject.id)
+  componentUpdate(category, preferredCountry) {
+    this.props.fetchAuth(settings.apiResourceEndpoints.category_specs_form_layouts + '?category=' + category.id)
         .then(all_form_layouts => {
           const processed_form_layouts = all_form_layouts
               .map(layout => {
@@ -102,6 +90,33 @@ class CategoryDetailProducts extends Component {
         })
   }
 
+  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
+    this.setState({
+      apiFormFieldChangeHandler
+    })
+  };
+
+  handleFormValueChange = formValues => {
+    this.setState({formValues})
+  };
+
+  setProductsPage = json => {
+    if (json) {
+      this.setState({
+        productsPage: {
+          count: json.payload.count,
+          results: json.payload.results
+        },
+        resultsAggs: json.payload.aggs
+      })
+    } else {
+      // Keep the old resultsAggs to prevent the form fields from resetting so much
+      this.setState({
+        productsPage: null
+      })
+    }
+  };
+
   render() {
     const formLayout = this.state.formLayout;
 
@@ -136,7 +151,6 @@ class CategoryDetailProducts extends Component {
             onChange={this.state.apiFormFieldChangeHandler}
             value={this.state.formValues.search}
             debounceTimeout={500}
-            updateResultsOnChange={true}
         />
       }]
     }];
@@ -186,7 +200,6 @@ class CategoryDetailProducts extends Component {
               onChange={this.state.apiFormFieldChangeHandler}
               value={value}
               multiple={true}
-              updateResultsOnChange={true}
           />
         } else if (filter.type === 'lte') {
           let filterChoices = undefined;
@@ -216,7 +229,6 @@ class CategoryDetailProducts extends Component {
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues[filter.name]}
-              updateResultsOnChange={true}
           />
         } else if (filter.type === 'gte') {
           let filterChoices = undefined;
@@ -248,7 +260,6 @@ class CategoryDetailProducts extends Component {
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues[filter.name]}
-              updateResultsOnChange={true}
           />
         } else if (filter.type === 'range') {
           if (filter.continuous_range_step) {
@@ -267,7 +278,6 @@ class CategoryDetailProducts extends Component {
                 value={this.state.formValues[filter.name]}
                 step={filter.continuous_range_step}
                 unit={filter.continuous_range_unit}
-                updateResultsOnChange={true}
                 resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           } else {
@@ -294,7 +304,6 @@ class CategoryDetailProducts extends Component {
                 onChange={this.state.apiFormFieldChangeHandler}
                 choices={filterChoices}
                 value={this.state.formValues[filter.name]}
-                updateResultsOnChange={true}
                 resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           }

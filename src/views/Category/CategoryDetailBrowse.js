@@ -25,20 +25,22 @@ import messages from "../../messages";
 import {
   backendStateToPropsUtils
 } from "../../utils";
+import {areObjectsEqual} from "../../react-utils/utils";
 
 class CategoryDetailBrowse extends Component {
+  initialState = {
+    formLayout: undefined,
+    apiFormFieldChangeHandler: undefined,
+    formValues: {},
+    productsPage: undefined,
+    resultsAggs: {},
+    priceRange: undefined,
+    columns: undefined
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      formLayout: undefined,
-      apiFormFieldChangeHandler: undefined,
-      formValues: {},
-      productsPage: undefined,
-      resultsAggs: {},
-      priceRange: undefined,
-      columns: undefined
-    }
+    this.state = {...this.initialState}
   }
 
   setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
@@ -69,9 +71,22 @@ class CategoryDetailBrowse extends Component {
   };
 
   componentDidMount() {
-    const category = this.props.apiResourceObject;
-    const preferredCountry = this.props.preferredCountry;
+    this.componentUpdate(this.props.apiResourceObject, this.props.preferredCountry)
+  }
 
+  componentWillReceiveProps(nextProps) {
+    const oldCategory = this.props.apiResourceObject;
+    const newCategory = nextProps.apiResourceObject;
+
+    const oldPreferredCountry = this.props.preferredCountry;
+    const newPreferredCountry = nextProps.preferredCountry;
+
+    if (oldCategory.id !== newCategory.id || !areObjectsEqual(oldPreferredCountry, newPreferredCountry)) {
+      this.setState(this.initialState, () => this.componentUpdate(newCategory, newPreferredCountry))
+    }
+  }
+
+  componentUpdate(category, preferredCountry) {
     // Obtain layout of the form fields
     this.props.fetchAuth(settings.apiResourceEndpoints.category_specs_form_layouts + '?category=' + category.id)
         .then(all_form_layouts => {
@@ -95,10 +110,10 @@ class CategoryDetailBrowse extends Component {
 
           if (formLayout && preferredCountry) {
             formLayout.fieldsets = formLayout.fieldsets.map(fieldset => ({
-                label: fieldset.label,
-                filters: fieldset.filters.filter(filter =>
+              label: fieldset.label,
+              filters: fieldset.filters.filter(filter =>
                   !filter.country || filter.country === preferredCountry.url
-                )
+              )
             }))
           }
 
@@ -187,7 +202,6 @@ class CategoryDetailBrowse extends Component {
               currency={usdCurrency}
               conversionCurrency={this.props.preferredCurrency}
               numberFormat={this.props.preferredNumberFormat}
-              updateResultsOnChange={true}
           />
         }]
       },
@@ -202,7 +216,6 @@ class CategoryDetailBrowse extends Component {
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues.search}
               debounceTimeout={500}
-              updateResultsOnChange={true}
           />
         }]
       }
@@ -253,7 +266,6 @@ class CategoryDetailBrowse extends Component {
               onChange={this.state.apiFormFieldChangeHandler}
               value={value}
               multiple={true}
-              updateResultsOnChange={true}
           />
         } else if (filter.type === 'lte') {
           let filterChoices = undefined;
@@ -283,7 +295,6 @@ class CategoryDetailBrowse extends Component {
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues[filter.name]}
-              updateResultsOnChange={true}
           />
         } else if (filter.type === 'gte') {
           let filterChoices = undefined;
@@ -315,7 +326,6 @@ class CategoryDetailBrowse extends Component {
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
               value={this.state.formValues[filter.name]}
-              updateResultsOnChange={true}
           />
         } else if (filter.type === 'range') {
           if (filter.continuous_range_step) {
@@ -334,7 +344,6 @@ class CategoryDetailBrowse extends Component {
                 value={this.state.formValues[filter.name]}
                 step={filter.continuous_range_step}
                 unit={filter.continuous_range_unit}
-                updateResultsOnChange={true}
                 resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           } else {
@@ -361,7 +370,6 @@ class CategoryDetailBrowse extends Component {
                 onChange={this.state.apiFormFieldChangeHandler}
                 choices={filterChoices}
                 value={this.state.formValues[filter.name]}
-                updateResultsOnChange={true}
                 resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           }
@@ -485,7 +493,6 @@ class CategoryDetailBrowse extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.stores}
                             placeholder={messages.all_feminine}
-                            updateResultsOnChange={true}
                         />
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -500,7 +507,6 @@ class CategoryDetailBrowse extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.countries}
                             placeholder={messages.all_masculine}
-                            updateResultsOnChange={true}
                         />
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -515,7 +521,6 @@ class CategoryDetailBrowse extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.store_types}
                             placeholder={messages.all_masculine}
-                            updateResultsOnChange={true}
                         />
                       </div>
                       <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -529,7 +534,6 @@ class CategoryDetailBrowse extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.ordering}
                             required={true}
-                            updateResultsOnChange={true}
                         />
                       </div>
                     </div>

@@ -19,15 +19,15 @@ export const booleanChoices = [
 ];
 
 export function backendStateToPropsUtils(state, ownProps) {
-  const user = state.apiResourceObjects[apiSettings.ownUserUrl];
-  const preferredNumberFormat = state.apiResourceObjects[user.preferred_number_format];
-  const preferredCurrency = state.apiResourceObjects[user.preferred_currency];
+  const user = state.apiResourceObjects[apiSettings.ownUserUrl] || null;
+  const preferredNumberFormat = state.apiResourceObjects[user.preferred_number_format] || null;
+  const preferredCurrency = state.apiResourceObjects[user.preferred_currency] || null;
 
   return {
     user,
     preferredCurrency,
     preferredNumberFormat,
-    preferredCountry: state.apiResourceObjects[user.preferred_country],
+    preferredCountry: state.apiResourceObjects[user.preferred_country] || null,
     formatCurrency: (value, currency=null, convertToPreferredCurrency=false) => {
       if (!currency) {
         currency = preferredCurrency

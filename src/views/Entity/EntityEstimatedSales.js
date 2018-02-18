@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {
-  addApiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType,
 } from '../../react-utils/ApiResource'
 import {
   createPageSizeChoices,
   ApiForm,
   ApiFormDateRangeField,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormPaginationField,
   ApiFormResultsTable,
   ApiFormRemoveOnlyListField,
@@ -22,6 +21,7 @@ import {connect} from "react-redux";
 import moment from "moment";
 import Loading from "../../components/Loading";
 import {NavLink} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
 
 class EntityEstimatedSales extends Component {
   constructor(props) {
@@ -45,18 +45,10 @@ class EntityEstimatedSales extends Component {
     this.setState({formValues})
   };
 
-  setResults = (bundle) => {
-    if (!bundle) {
-      this.setState({
-        estimatedSales: null,
-        resultsGrouping: null,
-      });
-      return;
-    }
-
+  setResults = bundle => {
     this.setState({
-      estimatedSales: bundle.payload,
-      resultFormValues: bundle.fieldValues
+      estimatedSales: bundle ? bundle.payload : null,
+      resultFormValues: bundle ? bundle.fieldValues : null
     })
   };
 
@@ -125,7 +117,7 @@ class EntityEstimatedSales extends Component {
                 column_header={this.state.resultFormValues.ordering.name}
                 column_value_formatter={value => this.props.formatCurrency(value)}
             />;
-          break;
+        break;
       case 'store':
         resultComponent =
             <ApiFormResultPieChart
@@ -136,7 +128,7 @@ class EntityEstimatedSales extends Component {
                 column_header={this.state.resultFormValues.ordering.name}
                 column_value_formatter={value => this.props.formatCurrency(value)}
             />;
-          break;
+        break;
       case 'product':
         displayPaginationControls = true;
         const productColumns = [
@@ -229,14 +221,14 @@ class EntityEstimatedSales extends Component {
 
     const paginationVisibilityClass = displayPaginationControls ? '' : ' hidden-xs-up';
 
-    const displayEntitiesFilter = this.state.formValues.entities && this.state.formValues.entities.length;
+    const displayEntitiesFilter = this.state.formValues.ids && this.state.formValues.ids.length;
     const displayProductsFilter = this.state.formValues.products && this.state.formValues.products.length;
 
     return (
         <div className="animated fadeIn d-flex flex-column">
           <ApiForm
               endpoints={[settings.apiResourceEndpoints.entities + 'estimated_sales/']}
-              fields={['grouping', 'ordering', 'stores', 'timestamp', 'categories', 'entities', 'products', 'page', 'page_size']}
+              fields={['grouping', 'ordering', 'stores', 'timestamp', 'categories', 'ids', 'products', 'page', 'page_size']}
               onResultsChange={this.setResults}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -322,16 +314,6 @@ class EntityEstimatedSales extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                         />
                       </div>
-
-                      <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <label>&nbsp;</label>
-                        <ApiFormSubmitButton
-                            label={<FormattedMessage id="update" defaultMessage='Update' />}
-                            loadingLabel={<FormattedMessage id="updating" defaultMessage='Updating'/>}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            loading={this.state.estimatedSales === null}
-                        />
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -349,12 +331,10 @@ class EntityEstimatedSales extends Component {
                           <FormattedMessage id="entities" defaultMessage="Entities" />
                         </label>
                         <ApiFormRemoveOnlyListField
-                            name="entities"
-                            id="entities"
-                            value={this.state.formValues.entities}
+                            name="ids"
+                            value={this.state.formValues.ids}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="entities"
-                            updateResultsOnChange={true}
                         />
                       </div>
                       <div className={`col-12 col-sm-6 ${displayProductsFilter ? '' : ' hidden-xs-up'}`}>
@@ -367,7 +347,6 @@ class EntityEstimatedSales extends Component {
                             value={this.state.formValues.products}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="products"
-                            updateResultsOnChange={true}
                         />
                       </div>
                     </div>
@@ -391,7 +370,6 @@ class EntityEstimatedSales extends Component {
                                 onChange={this.state.apiFormFieldChangeHandler}
                                 value={this.state.formValues.page_size}
                                 required={true}
-                                updateResultsOnChange={true}
                                 searchable={false}
                             />
                           </div>
@@ -419,6 +397,15 @@ class EntityEstimatedSales extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils()
-)(EntityEstimatedSales);
+function mapStateToProps(state) {
+  const {formatCurrency } = backendStateToPropsUtils(state);
+
+  return {
+    formatCurrency,
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+  }
+}
+
+
+export default connect(mapStateToProps)(EntityEstimatedSales);

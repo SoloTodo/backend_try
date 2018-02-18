@@ -84,7 +84,7 @@ class StoreDetailUpdatePricing extends Component {
       });
 
       return (
-          <Redirect to={{
+          <Redirect push to={{
             pathname: `/stores/${store.id}/update_logs`,
           }} />
       )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import moment from 'moment';
@@ -190,12 +190,14 @@ class EntityDetailPricingHistory extends Component {
 }
 
 function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {preferredCurrency} = backendStateToPropsUtils(state);
+
   return {
+    ApiResourceObject,
+    preferredCurrency,
     currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
-    ...backendStateToPropsUtils(state)
   }
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(mapStateToProps)
-)(EntityDetailPricingHistory));
+export default injectIntl(connect(mapStateToProps)(EntityDetailPricingHistory));

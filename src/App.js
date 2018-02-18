@@ -3,30 +3,31 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import {ToastContainer} from "react-toastify";
 import { polyfill } from 'smoothscroll-polyfill'
-import ConnectedIntlProvider from './ConnectedIntlProvider';
-import Full from './containers/Full/Full';
-import Login from './views/Pages/Login/Login';
-import { settings } from './settings';
-import { defaultProperty } from './utils';
-
-import {
-  navigatorLanguage,
-  setLocale,
-} from './react-utils/utils';
+import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
 
 import {
   ApiResourceObject,
   filterApiResourceObjectsByType
 } from "./react-utils/ApiResource";
 
+import {
+  navigatorLanguage,
+  setLocale,
+} from './react-utils/utils';
+
+import ConnectedIntlProvider from './ConnectedIntlProvider';
+import Full from './containers/Full/Full';
+import Login from './views/Pages/Login/Login';
+import { settings } from './settings';
+import { defaultProperty } from './utils';
+import UserPermissionFilter from "./auth/UserPermissionFilter";
 
 import 'react-select/dist/react-select.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
-import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
-import UserPermissionFilter from "./auth/UserPermissionFilter";
-import {ToastContainer} from "react-toastify";
+
 import {
   apiResourceObjectsReducer,
   authTokenReducer, loadedResourcesReducer

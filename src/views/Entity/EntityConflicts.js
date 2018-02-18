@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  filterApiResourceObjectsByType
+} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
 import {
   ApiForm,
   ApiFormChoiceField,
-  ApiFormSubmitButton,
   ApiFormResultsTable
 } from '../../react-utils/api_forms'
 import {FormattedMessage} from "react-intl";
@@ -103,7 +104,7 @@ class EntityConflicts extends Component {
                     placeholder={messages.all_feminine}
                 />
               </div>
-              <div className="col-12 col-md-6 col-xl-3">
+              <div className="col-12 col-md-6 col-xl-4">
                 <label htmlFor="categories">
                   <FormattedMessage id="categories" defaultMessage="Categories" />
                 </label>
@@ -117,16 +118,6 @@ class EntityConflicts extends Component {
                     onChange={this.state.apiFormFieldChangeHandler}
                     value={this.state.formValues.categories}
                     placeholder={messages.all_masculine}
-                />
-              </div>
-
-              <div className="mt-2 col-12 col-sm-4 col-xl-3">
-                <label htmlFor="submit">&nbsp;</label>
-                <ApiFormSubmitButton
-                    label={<FormattedMessage id="search" defaultMessage='Search' />}
-                    loadingLabel={<FormattedMessage id="searching" defaultMessage='Searching'/>}
-                    onChange={this.state.apiFormFieldChangeHandler}
-                    loading={this.state.conflicts === null}
                 />
               </div>
             </div>
@@ -153,5 +144,11 @@ class EntityConflicts extends Component {
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils())(EntityConflicts);
+function mapStateToProps(state) {
+  return {
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
+  }
+}
+
+export default connect(mapStateToProps)(EntityConflicts);

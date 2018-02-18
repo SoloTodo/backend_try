@@ -254,7 +254,6 @@ class VisitStats extends Component {
                             value={this.state.formValues.products}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="products"
-                            updateResultsOnChange={true}
                         />
                       </div>
                     </div>
@@ -279,7 +278,6 @@ class VisitStats extends Component {
                                 onChange={this.state.apiFormFieldChangeHandler}
                                 value={this.state.formValues.page_size}
                                 required={true}
-                                updateResultsOnChange={true}
                                 searchable={false}
                             />
                           </div>

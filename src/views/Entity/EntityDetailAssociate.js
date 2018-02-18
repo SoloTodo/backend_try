@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import { Markdown } from 'react-showdown';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {addApiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {
+  apiResourceStateToPropsUtils
+} from "../../react-utils/ApiResource";
 import {connect} from "react-redux";
 import {NavLink, Redirect} from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -10,19 +12,33 @@ import imageNotAvailable from '../../images/image-not-available.svg';
 import {settings} from "../../settings";
 
 class EntityDetailAssociate extends Component {
+  initialState = {
+    productChoices: [],
+    cellPlanChoices: [],
+    selectedProductId: '',
+    finishedAssociating: false,
+    keywords: ''
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      productChoices: [],
-      cellPlanChoices: [],
-      selectedProductId: '',
-      finishedAssociating: false
-    }
+    this.state = {...this.initialState};
   }
 
   componentDidMount() {
-    const entity = this.props.apiResourceObject;
+    this.componentUpdate(this.props.apiResourceObject);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentEntity = this.props.apiResourceObject;
+    const nextEntity = nextProps.apiResourceObject;
+
+    if (currentEntity.id !== nextEntity.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextEntity));
+    }
+  }
+
+  componentUpdate(entity) {
     const endpoint = `${entity.url}cell_plan_choices/`;
 
     this.props.fetchAuth(endpoint).then(cellPlanChoices => {
@@ -35,10 +51,8 @@ class EntityDetailAssociate extends Component {
   handleProductSearchSubmit = evt => {
     evt.preventDefault();
 
-    const keywords = document.getElementById('search').value;
-
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
-    const endpoint = `${entity.category.url}products/?page_size=200&search=${encodeURIComponent(keywords)}`;
+    const endpoint = `${entity.category.url}products/?page_size=200&search=${encodeURIComponent(this.state.keywords)}`;
 
     this.props.fetchAuth(endpoint).then(json => {
       const productChoices = json.results;
@@ -130,7 +144,7 @@ class EntityDetailAssociate extends Component {
           id="association_successful"
           defaultMessage="The entity has been associated successfully" />);
 
-      return <Redirect to={{
+      return <Redirect push to={{
         pathname: '/entities/pending',
         search: '?categories=' + entity.category.id
       }} />
@@ -161,6 +175,7 @@ class EntityDetailAssociate extends Component {
 
     return (
         <div className="animated fadeIn">
+          <NavLink to="/entities/18279/associate">Break</NavLink>
           <div className="row">
             <div className="col-12">
               <div className="card">
@@ -229,7 +244,7 @@ class EntityDetailAssociate extends Component {
                 <div className="card-block">
                   <form onSubmit={this.handleProductSearchSubmit}>
                     <div className="form-group">
-                      <input autoComplete="off" type="text" id="search" className="form-control" placeholder={this.props.intl.formatMessage({id: 'keywords'})} />
+                      <input autoComplete="off" type="text" id="search" className="form-control" placeholder={this.props.intl.formatMessage({id: 'keywords'})} value={this.state.keywords} onChange={evt => this.setState({keywords: evt.target.value})} />
                     </div>
                   </form>
 
@@ -332,7 +347,13 @@ class EntityDetailAssociate extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils())(EntityDetailAssociate));
+  return {
+    ApiResourceObject,
+    fetchAuth,
+  }
+}
 
+export default injectIntl(connect(mapStateToProps)(EntityDetailAssociate));

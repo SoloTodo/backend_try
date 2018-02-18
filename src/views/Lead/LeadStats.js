@@ -329,7 +329,6 @@ class LeadStats extends Component {
                             value={this.state.formValues.entities}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="entities"
-                            updateResultsOnChange={true}
                         />
                       </div>
                       <div className={`col-12 col-sm-6 ${displayProductsFilter ? '' : ' hidden-xs-up'}`}>
@@ -342,7 +341,6 @@ class LeadStats extends Component {
                             value={this.state.formValues.products}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="products"
-                            updateResultsOnChange={true}
                         />
                       </div>
                     </div>
@@ -367,7 +365,6 @@ class LeadStats extends Component {
                                 onChange={this.state.apiFormFieldChangeHandler}
                                 value={this.state.formValues.page_size}
                                 required={true}
-                                updateResultsOnChange={true}
                                 searchable={false}
                             />
                           </div>

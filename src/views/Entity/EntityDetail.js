@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 import {
-  addApiResourceDispatchToPropsUtils,
-  addApiResourceStateToPropsUtils
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import {
   createOption,
@@ -30,37 +30,64 @@ const DISSOCIATING_STATES = {
 };
 
 class EntityDetail extends Component {
+  initialState = {
+    updatingPricing: false,
+    changingVisibility: false,
+    categoryForChange: null,
+    dissociatingState: DISSOCIATING_STATES.STAND_BY,
+    dissociationReason: '',
+    stock: undefined,
+    staffInfo: undefined
+  };
+
   constructor(props) {
     super(props);
 
-    this.state = {
-      updatingPricing: false,
-      changingVisibility: false,
-      categoryForChange: null,
-      dissociatingState: DISSOCIATING_STATES.STAND_BY,
-      dissociationReason: '',
-      stock: undefined,
-      staffInfo: undefined
-    }
+    this.state = {...this.initialState}
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
-    const entity = this.props.apiResourceObject;
+    this.componentUpdate(this.props.apiResourceObject, this.props.user)
+  }
 
+  componentWillReceiveProps(nextProps) {
+    const currentEntity = this.props.apiResourceObject;
+    const nextEntity = nextProps.apiResourceObject;
+
+    const currentUser = this.props.user;
+    const nextUser = nextProps.user;
+
+    if (currentEntity.id !== nextEntity.id || currentUser.id !== nextUser.id) {
+      this.setState(this.initialState, () => this.componentUpdate(nextEntity, nextUser));
+    }
+
+    // Pricing update notification
+    const currentLastPricingUpdate = moment(currentEntity.last_pricing_update);
+    const nextLastPricingUpdate = moment(nextEntity.last_pricing_update);
+
+    if (currentEntity.id === nextEntity.id && currentLastPricingUpdate.isBefore(nextLastPricingUpdate)) {
+      toast.success(<FormattedMessage
+          id="entity_information_updated_successfully"
+          defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />, {
+        autoClose: false
+      })
+    }
+  }
+
+  componentUpdate(entity, user) {
     // If the user is staff:
     // if some other staff has been editing this entity in the last 10 minutes, show a warning
     // Othjerwise register the staff entry
     let registerStaffAccess = false;
 
-    const userHasStaffPermissions = this.userHasStaffPermissions();
+    const userHasStaffPermissions = this.userHasStaffPermissions(entity);
 
     if (userHasStaffPermissions) {
       if (entity.last_staff_access) {
         const lastStaffAccess = moment(entity.last_staff_access);
         const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccess));
         if (durationSinceLastStaffAccess.asMinutes() < 10) {
-          if (entity.last_staff_access_user !== this.props.user.detail_url) {
+          if (entity.last_staff_access_user !== user.detail_url) {
             toast.warn(<FormattedMessage
                 id="entity_staff_overlap_warning"
                 defaultMessage="Someone has been working here recently. Be mindful!"/>, {autoClose: false})
@@ -72,6 +99,8 @@ class EntityDetail extends Component {
         registerStaffAccess = true;
       }
     } else {
+      // If the user is not staff, show warnings when the entity is not visible, nos availalble, or pending
+
       if (!entity.is_visible) {
         toast.warn(<FormattedMessage
             id="entity_invisible_warning"
@@ -94,11 +123,11 @@ class EntityDetail extends Component {
     if (registerStaffAccess) {
       this.props.fetchAuth(`${entity.url}register_staff_access/`, {method: 'POST'})
           .then(json => {
-            this.saveEntityChanges(json)
+            this.props.updateEntity(json);
           })
     }
 
-    if (this.userHasStockPermissions()) {
+    if (this.userHasStockPermissions(entity)) {
       if (entity.active_registry && entity.active_registry.is_available) {
         const endpoint = entity.active_registry.url + 'stock/';
         this.props.fetchAuth(endpoint).then(json => {
@@ -124,30 +153,6 @@ class EntityDetail extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentEntity = this.props.ApiResourceObject(this.props.apiResourceObject);
-    const nextEntity = this.props.ApiResourceObject(nextProps.apiResourceObject);
-
-    // Pricing update notification
-    const currentLastPricingUpdate = moment(currentEntity.lastPricingUpdate);
-    const nextLastPricingUpdate = moment(nextEntity.lastPricingUpdate);
-
-    if (currentLastPricingUpdate.isBefore(nextLastPricingUpdate)) {
-      toast.success(<FormattedMessage
-          id="entity_information_updated_successfully"
-          defaultMessage="Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff." />, {
-        autoClose: false
-      })
-    }
-  }
-
-  saveEntityChanges = (changedEntity) => {
-    this.props.dispatch({
-      type: 'updateApiResourceObject',
-      apiResourceObject: changedEntity
-    });
-  };
-
   updatePricingInformation = () => {
     this.setState({
       updatingPricing: true
@@ -160,7 +165,7 @@ class EntityDetail extends Component {
         updatingPricing: false
       });
       if (json.url) {
-        this.saveEntityChanges(json);
+        this.props.updateEntity(json);
       } else {
         // Something wrong happened
         toast.error(<FormattedMessage id="entity_information_updated_error" defaultMessage="There was a problem updating the entity, it has been notified to our staff" />, {
@@ -177,7 +182,7 @@ class EntityDetail extends Component {
       this.props.fetchAuth(`${this.props.apiResourceObject.url}toggle_visibility/`, {
         method: 'POST'
       }).then(json => {
-        this.saveEntityChanges(json);
+        this.props.updateEntity(json);
         this.setState({
           changingVisibility: false
         });
@@ -227,7 +232,7 @@ class EntityDetail extends Component {
       method: 'POST',
       body: JSON.stringify(requestBody)
     }).then(json => {
-      this.saveEntityChanges(json);
+      this.props.updateEntity(json);
       this.setState({
         dissociatingState: DISSOCIATING_STATES.STAND_BY,
         dissociationReason: ''
@@ -236,7 +241,7 @@ class EntityDetail extends Component {
   };
 
   userHasStaffPermissionOverSelectedCategory = () => {
-    return this.state.categoryForChange.permissions.includes('category_entities_staff')
+    return this.state.categoryForChange.permissions.includes('is_category_staff')
   };
 
   handleChangeCategory = newCategoryChoice => {
@@ -275,15 +280,18 @@ class EntityDetail extends Component {
     })
   };
 
-  userHasStockPermissions = () => {
-    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
+  userHasStockPermissions = entity => {
+    entity = entity || this.props.apiResourceObject;
+    entity = this.props.ApiResourceObject(entity);
+
     return entity.category.permissions.includes('view_category_stocks') &&
         entity.store.permissions.includes('view_store_stocks');
   };
 
-  userHasStaffPermissions = () => {
-    const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
-    return entity.category.permissions.includes('category_entities_staff') &&
+  userHasStaffPermissions = entity => {
+    entity = entity || this.props.apiResourceObject;
+    entity = this.props.ApiResourceObject(entity);
+    return entity.category.permissions.includes('is_category_staff') &&
         entity.store.permissions.includes('is_store_staff');
   };
 
@@ -295,9 +303,7 @@ class EntityDetail extends Component {
     };
 
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
-
     const displayStocksCell = this.userHasStockPermissions();
-
     const hasStaffPermissions = this.userHasStaffPermissions();
 
 
@@ -369,26 +375,26 @@ class EntityDetail extends Component {
             <div className="col-sm-12 col-md-4 col-lg-6 col-xl-5">
               <div className="card">
                 <div className="card-header">
-                  <FormattedMessage id="options" defaultMessage={`Options`} />
+                  <FormattedMessage id="options" defaultMessage="Options" />
                 </div>
                 <div className="card-block">
                   <ul className="list-without-decoration subnavigation-links">
                     <li><NavLink to={`/entities/${entity.id}/events`}>
                       <button type="button" className="btn btn-link">
-                        <FormattedMessage id="events" defaultMessage={`Events`} />
+                        <FormattedMessage id="events" defaultMessage="Events" />
                       </button>
                     </NavLink></li>
 
                     <li><NavLink to={`/entities/${entity.id}/pricing_history`}>
                       <button type="button" className="btn btn-link">
-                        <FormattedMessage id="pricing_history" defaultMessage={`Pricing history`} />
+                        <FormattedMessage id="pricing_history" defaultMessage="Pricing history" />
                       </button>
                     </NavLink></li>
 
-                    {entity.store.permissions.includes('is_store_staff') && entity.category.permissions.includes('is_category_staff') &&
+                    {hasStaffPermissions &&
                     <li><NavLink to={'/entities/' + entity.id + '/associate'}>
                       <button type="button" className="btn btn-link">
-                        <FormattedMessage id="associate_to_prduct" defaultMessage={`Associate`} />
+                        <FormattedMessage id="associate_to_prduct" defaultMessage="Associate" />
                       </button>
                     </NavLink></li>}
                     {entity.store.permissions.includes('view_store_leads') && entity.category.permissions.includes('view_category_leads') &&
@@ -401,6 +407,12 @@ class EntityDetail extends Component {
                     <li><NavLink to={'/leads/stats?grouping=date&entities=' + entity.id}>
                       <button type="button" className="btn btn-link">
                         <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)" />
+                      </button>
+                    </NavLink></li>}
+                    {displayStocksCell &&
+                    <li><NavLink to={'/entities/estimated_sales/?ids=' + entity.id + '&grouping=entity'}>
+                      <button type="button" className="btn btn-link">
+                        <FormattedMessage id="estimated_sales" defaultMessage="Estimated sales" />
                       </button>
                     </NavLink></li>}
                   </ul>
@@ -756,6 +768,32 @@ class EntityDetail extends Component {
   }
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(backendStateToPropsUtils),
-    addApiResourceDispatchToPropsUtils())(EntityDetail));
+function mapStateToProps(state) {
+  const {ApiResourceObject, fetchAuth, fetchApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {user, preferredCurrency, preferredNumberFormat } = backendStateToPropsUtils(state);
+
+  return {
+    ApiResourceObject,
+    fetchAuth,
+    fetchApiResourceObject,
+    user,
+    preferredCurrency,
+    preferredNumberFormat,
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    updateEntity: entity => {
+      dispatch({
+        type: 'updateApiResourceObject',
+        apiResourceObject: entity
+      });
+    }
+  }
+}
+
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(EntityDetail));

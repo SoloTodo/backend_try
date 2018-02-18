@@ -3,13 +3,13 @@ import {Route, Switch} from "react-router-dom";
 import RequiredResources from "../../react-utils/components/RequiredResources";
 import EntityList from "./EntityList";
 import EntityDetail from "./EntityDetail";
-import ResourceObjectPermission from "../../auth/ResourceObjectPermission";
 import EntityDetailPricingHistory from "./EntityDetailPricingHistory";
 import EntityDetailEvents from "./EntityDetailEvents";
 import EntityConflicts from "./EntityConflicts";
 import EntityEstimatedSales from "./EntityEstimatedSales";
 import EntityDetailAssociate from "./EntityDetailAssociate";
 import EntityPending from "./EntityPending";
+import ResourceObjectPermission from "../../react-utils/components/ResourceObjectPermission";
 
 export default ({match}) => {
   return (
@@ -35,29 +35,21 @@ export default ({match}) => {
             </RequiredResources>
         )} />
         <Route path={match.url + '/:id'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="entities">
-              <RequiredResources resources={['stores', 'categories', 'users_with_staff_actions']}>
-                <EntityDetail />
-              </RequiredResources>
-            </ResourceObjectPermission>
+            <RequiredResources resources={['stores', 'categories', 'users_with_staff_actions']}>
+              <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetail} />
+            </RequiredResources>
         )} />
         <Route path={match.url + '/:id/pricing_history'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="entities">
               <RequiredResources resources={['stores']}>
-                <EntityDetailPricingHistory />
+                <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetailPricingHistory} />
               </RequiredResources>
-            </ResourceObjectPermission>
         )} />
         <Route path={match.url + '/:id/events'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="entities">
-              <EntityDetailEvents />
-            </ResourceObjectPermission>
+            <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetailEvents} />
         )} />
         <Route path={match.url + '/:id/associate'} exact render={props => (
             <RequiredResources resources={['stores', 'categories']}>
-              <ResourceObjectPermission match={props.match} resource="entities" permission={entity => entity.category.permissions.includes('is_category_staff') && entity.store.permissions.includes('is_store_staff')}>
-                <EntityDetailAssociate />
-              </ResourceObjectPermission>
+              <ResourceObjectPermission match={props.match} resource="entities" permission={entity => entity.category.permissions.includes('is_category_staff') && entity.store.permissions.includes('is_store_staff')} component={EntityDetailAssociate} />
             </RequiredResources>
         )} />
       </Switch>

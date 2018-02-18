@@ -104,7 +104,7 @@ class WtbEntityDetailAssociate extends Component {
           id="association_successful"
           defaultMessage="The entity has been associated successfully" />);
 
-      return <Redirect to={{
+      return <Redirect push to={{
         pathname: '/wtb/entities/pending',
         search: '?wtb_brands=' + wtbEntity.brand.id
       }} />

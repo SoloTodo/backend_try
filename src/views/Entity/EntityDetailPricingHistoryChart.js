@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Loading from "../../components/Loading";
 import {Line} from 'react-chartjs-2';
 import {
-  addApiResourceStateToPropsUtils,
+  apiResourceStateToPropsUtils,
 } from "../../react-utils/ApiResource";
 import {
   chartColors,
@@ -132,7 +132,7 @@ class EntityDetailPricingHistoryChart extends Component {
         ticks: {
           beginAtZero: true,
           suggestedMax: maxPriceValue * 1.1,
-          callback: function (value, index, values) {
+          callback: value => {
             return formatCurrency(value, currency, null,
                 preferredNumberFormat.thousands_separator,
                 preferredNumberFormat.decimal_sepator)
@@ -177,7 +177,7 @@ class EntityDetailPricingHistoryChart extends Component {
     }
 
     const stockData = filledChartData
-            .map(datapoint => datapoint.stock > 0 ? datapoint.stock : NaN)
+            .map(datapoint => datapoint.stock > 0 ? datapoint.stock : NaN);
     if (stockData.some(x => Boolean(x))) {
       const maxStock = filledChartData.reduce((acum, datapoint) => {
         return Math.max(acum, datapoint.stock || 0)
@@ -259,7 +259,7 @@ class EntityDetailPricingHistoryChart extends Component {
       maintainAspectRatio: false,
       tooltips: {
         callbacks: {
-          title: (tooltipItems, data) => {
+          title: tooltipItems => {
             return tooltipItems.length && tooltipItems[0].xLabel.format('llll')
           },
           label: (tooltipItem, data) => {
@@ -301,6 +301,15 @@ class EntityDetailPricingHistoryChart extends Component {
 
 }
 
-export default injectIntl(connect(
-    addApiResourceStateToPropsUtils(backendStateToPropsUtils))(EntityDetailPricingHistoryChart));
+function mapStateToProps(state) {
+  const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {preferredNumberFormat } = backendStateToPropsUtils(state);
 
+  return {
+    ApiResourceObject,
+    preferredNumberFormat,
+  }
+}
+
+
+export default injectIntl(connect(mapStateToProps)(EntityDetailPricingHistoryChart));

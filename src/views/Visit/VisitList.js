@@ -170,7 +170,6 @@ class VisitList extends Component {
                             value={this.state.formValues.products}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="products"
-                            updateResultsOnChange={true}
                         />
                       </div>
                     </div>

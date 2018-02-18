@@ -200,7 +200,6 @@ class LeadList extends Component {
                             value={this.state.formValues.entities}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="entities"
-                            updateResultsOnChange={true}
                         />
                       </div>
                       <div className={`col-12 col-sm-6 ${displayProductsFilter ? '' : ' hidden-xs-up'}`}>
@@ -213,7 +212,6 @@ class LeadList extends Component {
                             value={this.state.formValues.products}
                             onChange={this.state.apiFormFieldChangeHandler}
                             resource="products"
-                            updateResultsOnChange={true}
                         />
                       </div>
                     </div>

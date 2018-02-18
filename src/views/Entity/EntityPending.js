@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import {
-  addApiResourceStateToPropsUtils
+  apiResourceStateToPropsUtils,
+  filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import './EntityList.css'
 import {Link, NavLink} from "react-router-dom";
@@ -15,7 +16,6 @@ import {
   ApiFormSubmitButton,
   ApiFormResultTableWithPagination
 } from '../../react-utils/api_forms'
-import {backendStateToPropsUtils} from "../../utils";
 
 class EntityPending extends Component {
   constructor(props) {
@@ -139,7 +139,7 @@ class EntityPending extends Component {
                             id="stores"
                             choices={storeChoices}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.stores}
                             placeholder={messages.all_feminine}
@@ -155,7 +155,7 @@ class EntityPending extends Component {
                             id="categories"
                             choices={categoryChoices}
                             multiple={true}
-                            searchable={!this.props.breakpoint.isExtraSmall}
+                            searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.categories}
                             placeholder={messages.all_feminine}
@@ -205,12 +205,16 @@ class EntityPending extends Component {
   }
 }
 
+
 function mapStateToProps(state) {
+  const {fetchAuth} = apiResourceStateToPropsUtils(state);
+
   return {
-    breakpoint: state.breakpoint,
-    ...backendStateToPropsUtils(state),
+    fetchAuth,
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    isExtraSmall: state.breakpoint.isExtraSmall
   }
 }
 
-export default connect(
-    addApiResourceStateToPropsUtils(mapStateToProps))(EntityPending);
+export default connect(mapStateToProps)(EntityPending);
