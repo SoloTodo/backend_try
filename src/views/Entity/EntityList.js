@@ -17,6 +17,7 @@ import {
   ApiFormResultTableWithPagination
 } from '../../react-utils/api_forms'
 import {backendStateToPropsUtils, booleanChoices} from "../../utils";
+import Loading from "../../components/Loading";
 
 class EntityList extends Component {
   constructor(props) {
@@ -308,6 +309,7 @@ class EntityList extends Component {
                     onChange={this.state.apiFormFieldChangeHandler}
                     columns={columns}
                     ordering={this.state.formValues.ordering}
+                    loading={<Loading />}
                 />
               </div>
             </div>

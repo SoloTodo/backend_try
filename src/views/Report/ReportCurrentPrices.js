@@ -55,11 +55,12 @@ class ReportCurrentPrices extends Component {
             </div>
             <ApiForm
                 endpoints={['reports/current_prices']}
-                fields={['category', 'stores', 'countries', 'store_types', 'currency']}
+                fields={['category', 'stores', 'countries', 'store_types', 'currency', 'submit']}
                 onResultsChange={this.setDownloadLink}
                 onFormValueChange={this.handleFormValueChange}
                 setFieldChangeHandler={this.setApiFormFieldChangeHandler}
-                updateOnLoad={false}>
+                requiresSubmit={true}
+            >
               <div className="card-block">
                 <div className="row api-form-filters">
                   <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
@@ -134,7 +135,9 @@ class ReportCurrentPrices extends Component {
 
                   <div className="col-12 col-sm-7 col-md-6 col-lg-12 col-xl-12 float-right">
                     <label htmlFor="submit">&nbsp;</label>
+
                     <ApiFormSubmitButton
+                        value={this.state.formValues.submit}
                         label={<FormattedMessage id="generate" defaultMessage="Generate" />}
                         loadingLabel={<FormattedMessage id="generating" defaultMessage="Generating" />}
                         onChange={this.state.apiFormFieldChangeHandler}
