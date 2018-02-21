@@ -5,8 +5,11 @@ import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import {ToastContainer} from "react-toastify";
 import { polyfill } from 'smoothscroll-polyfill'
-import syncBreakpointWithStore, {breakpointReducer} from "redux-breakpoint";
 import GoogleAnalytics from 'react-ga';
+import {
+  createResponsiveStateReducer,
+  responsiveStoreEnhancer
+} from "redux-responsive";
 
 import {
   ApiResourceObject,
@@ -45,10 +48,14 @@ class App extends Component {
       authToken: authTokenReducer,
       apiResourceObjects: apiResourceObjectsReducer,
       loadedResources: loadedResourcesReducer,
-      breakpoint: breakpointReducer
-    }));
+      browser: createResponsiveStateReducer({
+        extraSmall: 575,
+        small: 767,
+        medium: 991,
+        large: 1199,
+      })
+    }), responsiveStoreEnhancer);
 
-    syncBreakpointWithStore(this.store);
     polyfill();
     GoogleAnalytics.initialize(settings.googleAnalyticsId);
     this.TrackedUserLoader = withTracker(UserLoader);

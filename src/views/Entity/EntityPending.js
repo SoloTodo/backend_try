@@ -205,7 +205,7 @@ function mapStateToProps(state) {
         .filter(store => store.permissions.includes('is_store_staff')),
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
         .filter(category => category.permissions.includes('is_category_staff')),
-    isExtraSmall: state.breakpoint.isExtraSmall
+    isExtraSmall: state.browser.is.extraSmall
   }
 }
 

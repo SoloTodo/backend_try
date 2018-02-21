@@ -227,7 +227,7 @@ function mapStateToProps(state) {
   return {
     wtb_brands: filterApiResourceObjectsByType(state.apiResourceObjects, 'wtb_brands'),
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
-    isExtraSmall: state.breakpoint.isExtraSmall
+    isExtraSmall: state.browser.is.extraSmall
   }
 }
 

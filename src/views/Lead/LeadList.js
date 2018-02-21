@@ -237,7 +237,7 @@ function mapStateToProps(state) {
     stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
     websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
-    isExtraSmall: state.breakpoint.isExtraSmall
+    isExtraSmall: state.browser.is.extraSmall
   }
 }
 

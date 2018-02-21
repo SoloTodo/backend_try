@@ -36,7 +36,7 @@
     "react-transition-group": "^1.2.0",
     "reactstrap": "^4.8.0",
     "redux": "^3.7.2",
-    "redux-breakpoint": "^3.0.6",
+    "redux-responsive": "^4.3.5",
     "route-parser": "0.0.5",
     "smoothscroll-polyfill": "^0.3.6",
     "uuid": "^3.1.0"
