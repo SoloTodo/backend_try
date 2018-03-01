@@ -54,7 +54,7 @@ class ReportCurrentPrices extends Component {
               <FormattedMessage id="filters" defaultMessage={`Filters`} />
             </div>
             <ApiForm
-                endpoints={['reports/current_prices']}
+                endpoints={['reports/current_prices/']}
                 fields={['category', 'stores', 'countries', 'store_types', 'currency', 'submit']}
                 onResultsChange={this.setDownloadLink}
                 onFormValueChange={this.handleFormValueChange}
