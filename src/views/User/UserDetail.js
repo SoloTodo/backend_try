@@ -5,12 +5,14 @@ import {
 } from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
 import {NavLink} from "react-router-dom";
+import {backendStateToPropsUtils} from "../../utils";
 
 
 
 class UserDetail extends Component {
   render() {
     const user = this.props.ApiResourceObject(this.props.apiResourceObject);
+    const displaySidebar = this.props.sessionUser.is_superuser || user.id === this.props.sessionUser.id;
 
     return (
         <div className="animated fadeIn">
@@ -35,22 +37,27 @@ class UserDetail extends Component {
               </div>
             </div>
 
+            {displaySidebar &&
             <div className="col-sm-6 col-md-4">
               <div className="card">
-                <div className="card-header"><FormattedMessage id="options" defaultMessage="Options" /></div>
+                <div className="card-header"><FormattedMessage id="options"
+                                                               defaultMessage="Options"/>
+                </div>
                 <div className="card-block">
                   <ul className="list-without-decoration subnavigation-links">
                     <li>
                       <NavLink to={this.props.match.url + '/staff_summary'}>
                         <button type="button" className="btn btn-link">
-                          <FormattedMessage id="staff_summary" defaultMessage="Staff summary" />
+                          <FormattedMessage id="staff_summary"
+                                            defaultMessage="Staff summary"/>
                         </button>
                       </NavLink>
                     </li>
                     <li>
                       <NavLink to={this.props.match.url + '/staff_actions'}>
                         <button type="button" className="btn btn-link">
-                          <FormattedMessage id="staff_actions" defaultMessage="Staff actions" />
+                          <FormattedMessage id="staff_actions"
+                                            defaultMessage="Staff actions"/>
                         </button>
                       </NavLink>
                     </li>
@@ -58,6 +65,7 @@ class UserDetail extends Component {
                 </div>
               </div>
             </div>
+            }
           </div>
         </div>)
   }
@@ -65,9 +73,11 @@ class UserDetail extends Component {
 
 function mapStateToProps(state) {
   const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {user} = backendStateToPropsUtils(state);
 
   return {
     ApiResourceObject,
+    sessionUser: user
   }
 }
 

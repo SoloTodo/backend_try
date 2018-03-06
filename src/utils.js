@@ -27,7 +27,7 @@ export function backendStateToPropsUtils(state, ownProps) {
     user,
     preferredCurrency,
     preferredNumberFormat,
-    preferredCountry: state.apiResourceObjects[user.preferred_country] || null,
+    preferredLanguage: state.apiResourceObjects[user.preferred_language] || null,
     formatCurrency: (value, currency=null, convertToPreferredCurrency=false) => {
       if (!currency) {
         currency = preferredCurrency

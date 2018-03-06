@@ -6,6 +6,7 @@ import UserDetail from "./UserDetail";
 import UserDetailStaffSummary from "./UserDetailStaffSummary";
 import UserDetailStaffActions from "./UserDetailStaffActions";
 import ResourceObjectPermission from "../../react-utils/components/ResourceObjectPermission";
+import Page404 from "../Pages/Page404";
 
 export default ({match}) => {
   return (
@@ -16,15 +17,15 @@ export default ({match}) => {
             </RequiredResources>
         )} />
         <Route path={match.url + '/:id'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="users" component={UserDetail} />
+            <ResourceObjectPermission match={props.match} resource="users" component={UserDetail} Http404={Page404} />
         )} />
         <Route path={match.url + '/:id/staff_summary'} exact render={props => (
             <RequiredResources resources={['currencies']}>
-              <ResourceObjectPermission match={props.match} resource="users" component={UserDetailStaffSummary} />
+              <ResourceObjectPermission match={props.match} resource="users" component={UserDetailStaffSummary} Http404={Page404} />
             </RequiredResources>
         )} />
         <Route path={match.url + '/:id/staff_actions'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="users" component={UserDetailStaffActions} />
+            <ResourceObjectPermission match={props.match} resource="users" component={UserDetailStaffActions} Http404={Page404} />
         )} />
       </Switch>
   )

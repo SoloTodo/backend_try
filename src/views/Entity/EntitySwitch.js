@@ -10,6 +10,7 @@ import EntityEstimatedSales from "./EntityEstimatedSales";
 import EntityDetailAssociate from "./EntityDetailAssociate";
 import EntityPending from "./EntityPending";
 import ResourceObjectPermission from "../../react-utils/components/ResourceObjectPermission";
+import Page404 from "../Pages/Page404";
 
 export default ({match}) => {
   return (
@@ -36,20 +37,20 @@ export default ({match}) => {
         )} />
         <Route path={match.url + '/:id'} exact render={props => (
             <RequiredResources resources={['stores', 'categories', 'users_with_staff_actions']}>
-              <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetail} />
+              <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetail} Http404={Page404} />
             </RequiredResources>
         )} />
         <Route path={match.url + '/:id/pricing_history'} exact render={props => (
               <RequiredResources resources={['stores']}>
-                <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetailPricingHistory} />
+                <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetailPricingHistory} Http404={Page404} />
               </RequiredResources>
         )} />
         <Route path={match.url + '/:id/events'} exact render={props => (
-            <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetailEvents} />
+            <ResourceObjectPermission match={props.match} resource="entities" component={EntityDetailEvents} Http404={Page404} />
         )} />
         <Route path={match.url + '/:id/associate'} exact render={props => (
             <RequiredResources resources={['stores', 'categories']}>
-              <ResourceObjectPermission match={props.match} resource="entities" permission={entity => entity.category.permissions.includes('is_category_staff') && entity.store.permissions.includes('is_store_staff')} component={EntityDetailAssociate} />
+              <ResourceObjectPermission match={props.match} resource="entities" permission={entity => entity.category.permissions.includes('is_category_staff') && entity.store.permissions.includes('is_store_staff')} component={EntityDetailAssociate} Http404={Page404} />
             </RequiredResources>
         )} />
       </Switch>
