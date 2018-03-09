@@ -16,6 +16,7 @@ import {
 import {
   filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
+import Loading from "../../components/Loading";
 
 class ProductList extends Component {
   constructor(props) {
@@ -204,6 +205,7 @@ class ProductList extends Component {
                     onChange={this.state.apiFormFieldChangeHandler}
                     columns={columns}
                     ordering={this.state.formValues.ordering}
+                    loading={<Loading />}
                 />
               </div>
             </div>

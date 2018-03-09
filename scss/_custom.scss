@@ -172,3 +172,11 @@ list-without-decoration {
   list-style-type: none;
   padding-left: 0;
 }
+
+.Select * {
+  z-index: 100;
+}
+
+.Select-option, .Select-menu-outer {
+  z-index: 101 !important;
+}

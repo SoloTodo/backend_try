@@ -11,6 +11,7 @@
     "gulp-sass": "^3.1.0",
     "history": "^4.6.3",
     "moment": "^2.18.1",
+    "node-sass-chokidar": "^1.1.0",
     "pubnub": "^4.15.1",
     "query-string": "^5.0.0",
     "rc-slider": "^8.3.1",
@@ -46,7 +47,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "translate": "react-intl-cra './src/**/*.js' './src/translations/messages.json' && node ./translationRunner.js"
+    "translate": "react-intl-cra './src/**/*.js' './src/translations/messages.json' && node ./translationRunner.js",
+    "build-css": "node-sass-chokidar scss/style.scss -o public/css/",
+    "watch-css": "npm run build-css && node-sass-chokidar scss/style.scss -o public/css/ --watch"
   },
   "devDependencies": {
     "react-intl-translations-manager": "^5.0.0"
