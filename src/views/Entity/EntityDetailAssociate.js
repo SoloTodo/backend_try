@@ -54,9 +54,23 @@ class EntityDetailAssociate extends Component {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     const endpoint = `${entity.category.url}products/?page_size=200&search=${encodeURIComponent(this.state.keywords)}`;
 
+    const toastId = toast.info(<FormattedMessage
+        id="searching_product"
+        defaultMessage="Searching..." />, {
+      autoClose: false
+    });
+
     this.props.fetchAuth(endpoint).then(json => {
       const productChoices = json.results;
-      const selectedProductId = json.results.length ? json.results[0].id.toString() : '';
+      const selectedProductId = productChoices.length ? productChoices[0].id.toString() : '';
+
+      toast.dismiss(toastId);
+
+      if (!productChoices.length) {
+        toast.error(<FormattedMessage
+            id="no_products_found"
+            defaultMessage="No products found" />)
+      }
 
       this.setState({
         productChoices,
@@ -241,7 +255,7 @@ class EntityDetailAssociate extends Component {
                 <div className="card-header">
                   <FormattedMessage id="form" defaultMessage="Form" />
                 </div>
-                <div className="card-block">
+                <div className="card-block" id="entity_association_card">
                   <form onSubmit={this.handleProductSearchSubmit}>
                     <div className="form-group">
                       <input autoComplete="off" type="text" id="search" className="form-control" placeholder={this.props.intl.formatMessage({id: 'keywords'})} value={this.state.keywords} onChange={evt => this.setState({keywords: evt.target.value})} />

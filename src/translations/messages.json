@@ -1,30 +1,5 @@
 [
   {
-    "id": "results_lower_case",
-    "defaultMessage": "results",
-    "filepath": "./src/api_forms/ApiFormContinouousRangeField.js"
-  },
-  {
-    "id": "results_lower_case",
-    "defaultMessage": "results",
-    "filepath": "./src/api_forms/ApiFormDiscreteRangeField.js"
-  },
-  {
-    "id": "no_results_found",
-    "defaultMessage": "No results found",
-    "filepath": "./src/api_forms/ApiFormResultsTable.js"
-  },
-  {
-    "id": "results_per_page",
-    "defaultMessage": "Results per page",
-    "filepath": "./src/api_forms/ApiFormResultTableWithPagination.js"
-  },
-  {
-    "id": "permission_denied_toast",
-    "defaultMessage": "This resource does not exist or you don't have permission to access it.",
-    "filepath": "./src/auth/ResourceObjectPermission.js"
-  },
-  {
     "id": "login_required",
     "defaultMessage": "Please login to access this page",
     "filepath": "./src/auth/UserPermissionFilter.js"
@@ -310,6 +285,16 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "no_results_found",
+    "defaultMessage": "No results found",
+    "filepath": "./src/react-utils/api_forms/ApiFormResultsTable.js"
+  },
+  {
+    "id": "results_per_page",
+    "defaultMessage": "Results per page",
+    "filepath": "./src/react-utils/api_forms/ApiFormResultTableWithPagination.js"
+  },
+  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/TopLevelRoutes.js"
@@ -485,6 +470,11 @@
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
   },
   {
+    "id": "results_lower_case",
+    "defaultMessage": "results",
+    "filepath": "./src/views/Category/CategoryDetailBrowse.js"
+  },
+  {
     "id": "options",
     "defaultMessage": "Options",
     "filepath": "./src/views/Category/CategoryDetailMenu.js"
@@ -547,6 +537,11 @@
   {
     "id": "filters",
     "defaultMessage": "Filters",
+    "filepath": "./src/views/Category/CategoryDetailProducts.js"
+  },
+  {
+    "id": "results_lower_case",
+    "defaultMessage": "results",
     "filepath": "./src/views/Category/CategoryDetailProducts.js"
   },
   {
@@ -635,16 +630,6 @@
     "filepath": "./src/views/Entity/EntityConflicts.js"
   },
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Entity/EntityConflicts.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
-    "filepath": "./src/views/Entity/EntityConflicts.js"
-  },
-  {
     "id": "conflicts",
     "defaultMessage": "Conflicts",
     "filepath": "./src/views/Entity/EntityConflicts.js"
@@ -665,6 +650,11 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "entity_information_updated_successfully",
+    "defaultMessage": "Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff.",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
     "id": "entity_staff_overlap_warning",
     "defaultMessage": "Someone has been working here recently. Be mindful!",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -682,11 +672,6 @@
   {
     "id": "entity_not_available_info",
     "defaultMessage": "Please note that this entity is not available for purchase according to our system.",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "entity_information_updated_successfully",
-    "defaultMessage": "Entity information has been updated successfully and it should be reflected in the panels below. If it doesn't please contact our staff.",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -742,6 +727,11 @@
   {
     "id": "leads_stats",
     "defaultMessage": "Leads (stats)",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "estimated_sales",
+    "defaultMessage": "Estimated sales",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -950,6 +940,16 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
+    "id": "searching_product",
+    "defaultMessage": "Searching...",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "no_products_found",
+    "defaultMessage": "No products found",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
     "id": "product_currently_cloning",
     "defaultMessage": "Cloning product, please wait!",
     "filepath": "./src/views/Entity/EntityDetailAssociate.js"
@@ -1125,16 +1125,6 @@
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
   },
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
-    "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
-  },
-  {
     "id": "result",
     "defaultMessage": "Result",
     "filepath": "./src/views/Entity/EntityDetailPricingHistory.js"
@@ -1207,16 +1197,6 @@
   {
     "id": "ordering",
     "defaultMessage": "Ordering",
-    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
-  },
-  {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/views/Entity/EntityEstimatedSales.js"
-  },
-  {
-    "id": "updating",
-    "defaultMessage": "Updating",
     "filepath": "./src/views/Entity/EntityEstimatedSales.js"
   },
   {
@@ -1345,16 +1325,6 @@
     "filepath": "./src/views/Entity/EntityList.js"
   },
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
-    "filepath": "./src/views/Entity/EntityList.js"
-  },
-  {
     "id": "entities",
     "defaultMessage": "Entities",
     "filepath": "./src/views/Entity/EntityList.js"
@@ -1407,16 +1377,6 @@
   {
     "id": "keywords",
     "defaultMessage": "Keywords",
-    "filepath": "./src/views/Entity/EntityPending.js"
-  },
-  {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Entity/EntityPending.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
     "filepath": "./src/views/Entity/EntityPending.js"
   },
   {
@@ -1482,16 +1442,6 @@
   {
     "id": "websites",
     "defaultMessage": "Websites",
-    "filepath": "./src/views/Lead/LeadList.js"
-  },
-  {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Lead/LeadList.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
     "filepath": "./src/views/Lead/LeadList.js"
   },
   {
@@ -1585,16 +1535,6 @@
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/views/Lead/LeadStats.js"
-  },
-  {
-    "id": "updating",
-    "defaultMessage": "Updating",
-    "filepath": "./src/views/Lead/LeadStats.js"
-  },
-  {
     "id": "additional_filters",
     "defaultMessage": "Additional filters",
     "filepath": "./src/views/Lead/LeadStats.js"
@@ -1620,59 +1560,64 @@
     "filepath": "./src/views/Lead/LeadStats.js"
   },
   {
+    "id": "login_error",
+    "defaultMessage": "Unable to login with the given email / password",
+    "filepath": "./src/views/Pages/Login.js"
+  },
+  {
     "id": "login",
     "defaultMessage": "Login",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "sign_in_message",
     "defaultMessage": "Sign In to your account",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "login_email_error_message",
     "defaultMessage": "Please enter a valid email",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "login_password_error_message",
     "defaultMessage": "Please enter your password",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "login_button",
     "defaultMessage": "Login",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "forgot_password",
     "defaultMessage": "Forgot password?",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "sign_up_title",
     "defaultMessage": "Sign up",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "sign_up_message",
     "defaultMessage": "This section is reserved for the staff at SoloTodo",
-    "filepath": "./src/views/Pages/Login/Login.js"
+    "filepath": "./src/views/Pages/Login.js"
   },
   {
     "id": "404_title",
     "defaultMessage": "Oops! You're lost",
-    "filepath": "./src/views/Pages/Page404/Page404.js"
+    "filepath": "./src/views/Pages/Page404.js"
   },
   {
     "id": "404_body",
     "defaultMessage": "The page you are looking for was not found.",
-    "filepath": "./src/views/Pages/Page404/Page404.js"
+    "filepath": "./src/views/Pages/Page404.js"
   },
   {
     "id": "404_home_link",
     "defaultMessage": "Go back to homepage",
-    "filepath": "./src/views/Pages/Page404/Page404.js"
+    "filepath": "./src/views/Pages/Page404.js"
   },
   {
     "id": "product_currently_cloning",
@@ -1965,16 +1910,6 @@
     "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
   },
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
-    "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
-  },
-  {
     "id": "chart",
     "defaultMessage": "Chart",
     "filepath": "./src/views/Product/ProductDetailPricingHistory.js"
@@ -2067,16 +2002,6 @@
   {
     "id": "last_updated_from_to",
     "defaultMessage": "Last updated (from / to)",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Product/ProductList.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
@@ -2365,16 +2290,6 @@
     "filepath": "./src/views/Store/StoreList.js"
   },
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
     "id": "stores",
     "defaultMessage": "Stores",
     "filepath": "./src/views/Store/StoreList.js"
@@ -2525,16 +2440,6 @@
     "filepath": "./src/views/User/UserDetailStaffActions.js"
   },
   {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/views/User/UserDetailStaffActions.js"
-  },
-  {
-    "id": "updating",
-    "defaultMessage": "Updating",
-    "filepath": "./src/views/User/UserDetailStaffActions.js"
-  },
-  {
     "id": "handled_entities",
     "defaultMessage": "Handled entities",
     "filepath": "./src/views/User/UserDetailStaffActions.js"
@@ -2577,16 +2482,6 @@
   {
     "id": "date_range_from_to",
     "defaultMessage": "Date range (from / to)",
-    "filepath": "./src/views/User/UserDetailStaffSummary.js"
-  },
-  {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/views/User/UserDetailStaffSummary.js"
-  },
-  {
-    "id": "updating",
-    "defaultMessage": "Updating",
     "filepath": "./src/views/User/UserDetailStaffSummary.js"
   },
   {
@@ -2695,16 +2590,6 @@
     "filepath": "./src/views/Visit/VisitList.js"
   },
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Visit/VisitList.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
-    "filepath": "./src/views/Visit/VisitList.js"
-  },
-  {
     "id": "additional_filters",
     "defaultMessage": "Additional filters",
     "filepath": "./src/views/Visit/VisitList.js"
@@ -2772,16 +2657,6 @@
   {
     "id": "grouping",
     "defaultMessage": "Grouping",
-    "filepath": "./src/views/Visit/VisitStats.js"
-  },
-  {
-    "id": "update",
-    "defaultMessage": "Update",
-    "filepath": "./src/views/Visit/VisitStats.js"
-  },
-  {
-    "id": "updating",
-    "defaultMessage": "Updating",
     "filepath": "./src/views/Visit/VisitStats.js"
   },
   {
@@ -3250,16 +3125,6 @@
     "filepath": "./src/views/Wtb/WtbEntityList.js"
   },
   {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Wtb/WtbEntityList.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
-    "filepath": "./src/views/Wtb/WtbEntityList.js"
-  },
-  {
     "id": "entities",
     "defaultMessage": "Entities",
     "filepath": "./src/views/Wtb/WtbEntityList.js"
@@ -3307,16 +3172,6 @@
   {
     "id": "keywords",
     "defaultMessage": "Keywords",
-    "filepath": "./src/views/Wtb/WtbEntityPending.js"
-  },
-  {
-    "id": "search",
-    "defaultMessage": "Search",
-    "filepath": "./src/views/Wtb/WtbEntityPending.js"
-  },
-  {
-    "id": "searching",
-    "defaultMessage": "Searching",
     "filepath": "./src/views/Wtb/WtbEntityPending.js"
   },
   {
