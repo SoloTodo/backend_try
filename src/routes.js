@@ -36,6 +36,7 @@ const routes = {
   '/wtb/entities/:id': params => ({apiResource: 'wtb_entities', apiResourceObjectId: params.id}),
   '/reports': 'reports',
   '/reports/current_prices': 'current_prices',
+  '/reports/store_analysis': 'store_analysis',
   '/users': 'users',
   '/users/:id': params => ({apiResource: 'users', apiResourceObjectId: params.id}),
   '/users/:id/staff_summary': 'staff_summary',

@@ -50,6 +50,7 @@ const messages = {
   conflicts: <FormattedMessage id="conflicts" defaultMessage="Conflicts" />,
   brands: <FormattedMessage id="brands" defaultMessage="Brands" />,
   associate: <FormattedMessage id="associate" defaultMessage="Associate" />,
+  store_analysis: <FormattedMessage id="store_analysis" defaultMessage="Store analysis" />,
 };
 
 export default messages;

@@ -285,6 +285,11 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "store_analysis",
+    "defaultMessage": "Store analysis",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "no_results_found",
     "defaultMessage": "No results found",
     "filepath": "./src/react-utils/api_forms/ApiFormResultsTable.js"
@@ -2068,6 +2073,56 @@
     "id": "name",
     "defaultMessage": "Name",
     "filepath": "./src/views/Report/ReportList.js"
+  },
+  {
+    "id": "offer_price",
+    "defaultMessage": "Offer price",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "normal_price",
+    "defaultMessage": "Normal price",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "competing_stores",
+    "defaultMessage": "Competing stores",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "price_type",
+    "defaultMessage": "Price type",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "generate",
+    "defaultMessage": "Generate",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "generating",
+    "defaultMessage": "Generating",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
   },
   {
     "id": "name",
