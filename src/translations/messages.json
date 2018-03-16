@@ -2055,6 +2055,16 @@
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
   },
   {
+    "id": "filename_optional",
+    "defaultMessage": "Filename (optional)",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
+    "id": "optional",
+    "defaultMessage": "Opcional",
+    "filepath": "./src/views/Report/ReportCurrentPrices.js"
+  },
+  {
     "id": "generate",
     "defaultMessage": "Generate",
     "filepath": "./src/views/Report/ReportCurrentPrices.js"

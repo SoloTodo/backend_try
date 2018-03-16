@@ -9,6 +9,7 @@ import {
 import {
   filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
+import ApiFormTextField from "../../react-utils/api_forms/ApiFormTextField";
 
 class ReportCurrentPrices extends Component {
   constructor(props) {
@@ -55,7 +56,7 @@ class ReportCurrentPrices extends Component {
             </div>
             <ApiForm
                 endpoints={['reports/current_prices/']}
-                fields={['category', 'stores', 'countries', 'store_types', 'currency', 'submit']}
+                fields={['category', 'stores', 'countries', 'store_types', 'currency', 'filename', 'submit']}
                 onResultsChange={this.setDownloadLink}
                 onFormValueChange={this.handleFormValueChange}
                 setFieldChangeHandler={this.setApiFormFieldChangeHandler}
@@ -130,6 +131,18 @@ class ReportCurrentPrices extends Component {
                         placeholder={<FormattedMessage id="all_masculine" defaultMessage="All" />}
                         onChange={this.state.apiFormFieldChangeHandler}
                         value={this.state.formValues.store_types}
+                    />
+                  </div>
+
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
+                      <FormattedMessage id="filename_optional" defaultMessage="Filename (optional)" />
+                    </label>
+                    <ApiFormTextField
+                        name="filename"
+                        placeholder={<FormattedMessage id="optional" defaultMessage="Opcional" />}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        debounceTimeout={1}
                     />
                   </div>
 
