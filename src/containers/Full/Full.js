@@ -17,6 +17,7 @@ import VisitSwitch from "../../views/Visit/VisitSwitch";
 import WtbSwitch from "../../views/Wtb/WtbSwitch";
 import UserSwitch from "../../views/User/UserSwitch";
 import Page404 from "../../views/Pages/Page404";
+import RatingSwitch from "../../views/Rating/RatingSwitch";
 
 
 class Full extends Component {
@@ -67,6 +68,12 @@ class Full extends Component {
                   <Route path="/visits" render={props => (
                       <UserPermissionFilter requiredPermission="solotodo.backend_list_visits">
                         <VisitSwitch {...props} location={props.location}/>
+                      </UserPermissionFilter>
+                  )} />
+
+                  <Route path="/ratings" render={props => (
+                      <UserPermissionFilter requiredPermission="solotodo.backend_list_ratings">
+                        <RatingSwitch {...props} location={props.location}/>
                       </UserPermissionFilter>
                   )} />
 

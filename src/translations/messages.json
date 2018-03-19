@@ -370,6 +370,11 @@
     "filepath": "./src/TopLevelRoutes.js"
   },
   {
+    "id": "ratings",
+    "defaultMessage": "Ratings",
+    "filepath": "./src/TopLevelRoutes.js"
+  },
+  {
     "id": "where_to_buy",
     "defaultMessage": "Where to Buy",
     "filepath": "./src/TopLevelRoutes.js"
@@ -1675,6 +1680,11 @@
     "filepath": "./src/views/Product/ProductDetail.js"
   },
   {
+    "id": "ratings",
+    "defaultMessage": "Ratings",
+    "filepath": "./src/views/Product/ProductDetail.js"
+  },
+  {
     "id": "associated_entities",
     "defaultMessage": "Associated entities",
     "filepath": "./src/views/Product/ProductDetail.js"
@@ -2010,6 +2020,256 @@
     "filepath": "./src/views/Product/ProductList.js"
   },
   {
+    "id": "approve",
+    "defaultMessage": "Approve",
+    "filepath": "./src/views/Rating/RatingApproveButton.js"
+  },
+  {
+    "id": "delete",
+    "defaultMessage": "Delete",
+    "filepath": "./src/views/Rating/RatingDeleteButton.js"
+  },
+  {
+    "id": "id",
+    "defaultMessage": "ID",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "store_rating",
+    "defaultMessage": "Store rating",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "store_comments",
+    "defaultMessage": "Store comments",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "product_rating",
+    "defaultMessage": "Product rating",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "product_comments",
+    "defaultMessage": "Product comments",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "approval_date",
+    "defaultMessage": "Approval date",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "pending",
+    "defaultMessage": "Pending",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "user",
+    "defaultMessage": "User",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "ip",
+    "defaultMessage": "IP",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "purchase_proof",
+    "defaultMessage": "Purchase proof",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "download",
+    "defaultMessage": "Download",
+    "filepath": "./src/views/Rating/RatingDetail.js"
+  },
+  {
+    "id": "id",
+    "defaultMessage": "ID",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "creation_date",
+    "defaultMessage": "Creation date",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "approval_date",
+    "defaultMessage": "Approval date",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "product_rating",
+    "defaultMessage": "Product rating",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "store_rating",
+    "defaultMessage": "Store rating",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "ip",
+    "defaultMessage": "IP",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "user",
+    "defaultMessage": "User",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "additional_filters",
+    "defaultMessage": "Additional filters",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "products",
+    "defaultMessage": "Products",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "ratings",
+    "defaultMessage": "Ratings",
+    "filepath": "./src/views/Rating/RatingList.js"
+  },
+  {
+    "id": "rating_approved",
+    "defaultMessage": "Rating approved",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "rating_deleted",
+    "defaultMessage": "Rating deleted",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "id",
+    "defaultMessage": "ID",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "creation_date",
+    "defaultMessage": "Creation date",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "product_rating",
+    "defaultMessage": "Product rating",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "product_comments",
+    "defaultMessage": "Product comments",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "store",
+    "defaultMessage": "Store",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "store_rating",
+    "defaultMessage": "Store rating",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "store_comments",
+    "defaultMessage": "Store comments",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "purchase_proof",
+    "defaultMessage": "Purchase proof",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "download",
+    "defaultMessage": "Download",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "ip",
+    "defaultMessage": "IP",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "user",
+    "defaultMessage": "User",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "approve",
+    "defaultMessage": "Approve",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "delete",
+    "defaultMessage": "Delete",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
+    "id": "ratings",
+    "defaultMessage": "Ratings",
+    "filepath": "./src/views/Rating/RatingPendingList.js"
+  },
+  {
     "id": "filters",
     "defaultMessage": "Filters",
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
@@ -2187,6 +2447,11 @@
   {
     "id": "conflicting_entities",
     "defaultMessage": "Conflicting entities",
+    "filepath": "./src/views/Store/StoreDetailMenu.js"
+  },
+  {
+    "id": "ratings",
+    "defaultMessage": "Ratings",
     "filepath": "./src/views/Store/StoreDetailMenu.js"
   },
   {

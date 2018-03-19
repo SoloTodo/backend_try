@@ -61,6 +61,15 @@ export default function StoreDetailMenu(props) {
             </NavLink>
           </li>
           }
+          {props.user.permissions.includes('solotodo.backend_list_ratings') &&
+          <li>
+            <NavLink to={'/ratings?stores=' + store.id}>
+              <button type="button" className="btn btn-link">
+                <FormattedMessage id="ratings" defaultMessage="Ratings" />
+              </button>
+            </NavLink>
+          </li>
+          }
         </ul>
       </div>
     </div>

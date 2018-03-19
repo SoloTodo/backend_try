@@ -5,6 +5,7 @@ import {
 } from "../../react-utils/ApiResource";
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
+import {backendStateToPropsUtils} from "../../utils";
 
 
 
@@ -46,7 +47,7 @@ class StoreDetail extends Component {
                 </div>
               </div>
             </div>
-            <StoreDetailMenu store={store} />
+            <StoreDetailMenu store={store} user={this.props.user} />
           </div>
         </div>)
   }
@@ -54,9 +55,11 @@ class StoreDetail extends Component {
 
 function mapStateToProps(state) {
   const {ApiResourceObject} = apiResourceStateToPropsUtils(state);
+  const {user} = backendStateToPropsUtils(state);
 
   return {
-    ApiResourceObject
+    ApiResourceObject,
+    user
   }
 }
 

@@ -99,6 +99,22 @@ export const sidebarLayout = [
     ]
   },
   {
+    title: <FormattedMessage id="ratings" defaultMessage="Ratings" />,
+    icon: "fa fa-thumbs-up",
+    entries: [
+      {
+        label: <FormattedMessage id="show_list_male" defaultMessage="Show all" />,
+        path: "/ratings",
+        requiredPermission: "solotodo.backend_list_ratings",
+      },
+      {
+        label: <FormattedMessage id="pending_plural" defaultMessage="Pending" />,
+        path: "/ratings/pending",
+        requiredPermission: "solotodo.is_ratings_staff",
+      }
+    ]
+  },
+  {
     title: <FormattedMessage id="where_to_buy" defaultMessage="Where to Buy" />,
     icon: "fa fa-compass",
     entries: [

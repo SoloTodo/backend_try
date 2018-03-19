@@ -16,6 +16,7 @@ import {
   ButtonDropdown, DropdownItem, DropdownMenu,
   DropdownToggle, Modal, ModalBody, ModalHeader
 } from "reactstrap";
+import {backendStateToPropsUtils} from "../../utils";
 
 class ProductDetail extends Component {
   initialState = {
@@ -178,11 +179,22 @@ class ProductDetail extends Component {
                       </NavLink>
                     </li>
                     }
+
                     {product.category.permissions.includes('view_category_leads') &&
                     <li>
                       <NavLink to={'/leads/stats?grouping=date&products=' + product.id}>
                         <button type="button" className="btn btn-link">
                           <FormattedMessage id="leads_stats" defaultMessage="Leads (stats)"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+
+                    {this.props.user.permissions.includes('solotodo.backend_list_ratings') &&
+                    <li>
+                      <NavLink to={'/ratings?products=' + product.id}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="ratings" defaultMessage="Ratings"/>
                         </button>
                       </NavLink>
                     </li>
@@ -274,10 +286,12 @@ class ProductDetail extends Component {
 
 function mapStateToProps(state) {
   const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {user} = backendStateToPropsUtils(state);
 
   return {
     ApiResourceObject,
     fetchAuth,
+    user,
     websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
   }
 }

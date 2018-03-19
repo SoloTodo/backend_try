@@ -41,5 +41,8 @@ const routes = {
   '/users/:id': params => ({apiResource: 'users', apiResourceObjectId: params.id}),
   '/users/:id/staff_summary': 'staff_summary',
   '/users/:id/staff_actions': 'staff_actions',
+  '/ratings': 'ratings',
+  '/ratings/pending': 'pending_plural',
+  '/ratings/:id': params => ({apiResource: 'ratings', apiResourceObjectId: params.id}),
 };
 export default routes;
