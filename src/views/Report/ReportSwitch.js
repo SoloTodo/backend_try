@@ -4,6 +4,7 @@ import RequiredResources from "../../react-utils/components/RequiredResources";
 import ReportCurrentPrices from "./ReportCurrentPrices";
 import ReportList from "./ReportList";
 import ReportStoreAnalysis from "./ReportStoreAnalysis";
+import ReportWeeklyPrices from "./ReportWeeklyPrices";
 
 export default ({match}) => {
   return (
@@ -21,6 +22,11 @@ export default ({match}) => {
         <Route path={match.url + '/store_analysis'} exact render={props => (
             <RequiredResources resources={['categories', 'stores']}>
               <ReportStoreAnalysis />
+            </RequiredResources>
+        )} />
+        <Route path={match.url + '/weekly_prices'} exact render={props => (
+            <RequiredResources resources={['categories', 'stores']}>
+              <ReportWeeklyPrices />
             </RequiredResources>
         )} />
       </Switch>

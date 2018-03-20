@@ -2395,6 +2395,76 @@
     "filepath": "./src/views/Report/ReportStoreAnalysis.js"
   },
   {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "dont_convert",
+    "defaultMessage": "Don't convert",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "store_types",
+    "defaultMessage": "Store types",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "filename_optional",
+    "defaultMessage": "Filename (optional)",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "optional",
+    "defaultMessage": "Opcional",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "generate",
+    "defaultMessage": "Generate",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
+    "id": "generating",
+    "defaultMessage": "Generating",
+    "filepath": "./src/views/Report/ReportWeeklyPrices.js"
+  },
+  {
     "id": "name",
     "defaultMessage": "Name",
     "filepath": "./src/views/Store/StoreDetail.js"
