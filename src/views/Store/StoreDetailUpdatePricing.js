@@ -9,6 +9,7 @@ import StoreDetailMenu from "./StoreDetailMenu";
 import {Redirect} from "react-router-dom";
 import { toast } from 'react-toastify';
 import Loading from "../../components/Loading";
+import {backendStateToPropsUtils} from "../../utils";
 
 
 class StoreDetailUpdatePricing extends Component {
@@ -197,7 +198,7 @@ class StoreDetailUpdatePricing extends Component {
                 </div>
               </div>
             </div>
-            <StoreDetailMenu store={store} />
+            <StoreDetailMenu store={store} user={this.props.user} />
           </div>
         </div>
     )
@@ -206,10 +207,12 @@ class StoreDetailUpdatePricing extends Component {
 
 function mapStateToProps(state) {
   const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {user} = backendStateToPropsUtils(state);
 
   return {
     ApiResourceObject,
     fetchAuth,
+    user,
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
   }
 }
