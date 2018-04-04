@@ -109,7 +109,7 @@ class EntityPending extends Component {
         <div className="animated fadeIn">
           <ApiForm
               endpoints={["entities/pending/"]}
-              fields={['stores', 'categories', 'search', 'page', 'page_size', 'ordering']}
+              fields={['stores', 'categories', 'countries', 'search', 'page', 'page_size', 'ordering']}
               onResultsChange={this.setEntities}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -129,7 +129,7 @@ class EntityPending extends Component {
                   </div>
                   <div className="card-block">
                     <div className="row entity-form-controls">
-                      <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                      <div className="col-12 col-sm-6">
                         <label htmlFor="stores">
                           <FormattedMessage id="stores" defaultMessage={`Stores`} />
                         </label>
@@ -145,7 +145,7 @@ class EntityPending extends Component {
 
                         />
                       </div>
-                      <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                      <div className="col-12 col-sm-6">
                         <label htmlFor="categories">
                           <FormattedMessage id="categories" defaultMessage={`Categories`} />
                         </label>
@@ -160,7 +160,22 @@ class EntityPending extends Component {
                             placeholder={messages.all_feminine}
                         />
                       </div>
-                      <div className="col-12 col-sm-5 col-md-6 col-lg-4 col-xl-4">
+                      <div className="col-12 col-sm-6">
+                        <label htmlFor="countries">
+                          <FormattedMessage id="countries" defaultMessage="Countries" />
+                        </label>
+                        <ApiFormChoiceField
+                            name="countries"
+                            id="countries"
+                            choices={this.props.countries}
+                            multiple={true}
+                            searchable={false}
+                            onChange={this.state.apiFormFieldChangeHandler}
+                            value={this.state.formValues.countries}
+                            placeholder={messages.all_masculine}
+                        />
+                      </div>
+                      <div className="col-12 col-sm-6">
                         <label htmlFor="search">
                           <FormattedMessage id="keywords" defaultMessage={'Keywords'} />
                         </label>
@@ -205,6 +220,7 @@ function mapStateToProps(state) {
         .filter(store => store.permissions.includes('is_store_staff')),
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
         .filter(category => category.permissions.includes('is_category_staff')),
+    countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
     isExtraSmall: state.browser.is.extraSmall
   }
 }
