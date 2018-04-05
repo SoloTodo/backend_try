@@ -39,7 +39,7 @@ class StoreUpdate extends Component {
           .then((latestUpdateLogs) => {
             const storesForUpdate = this.props.stores
                 .filter(store => store.permissions.includes('update_store_pricing')
-                    && store.is_active);
+                    && store.last_activation);
 
             const availableStores = storesForUpdate.map(store => ({
               store,

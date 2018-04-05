@@ -126,7 +126,7 @@ class StoreDetailUpdatePricing extends Component {
 
     return (
         <div className="animated fadeIn">
-          {!store.isActive && (
+          {!store.lastActivation && (
               <div className="alert alert-warning" role="alert">
                 <strong><FormattedMessage id="warning_exclamation" defaultMessage={`Warning!`} /></strong> <FormattedMessage id="store_inactive_warning" defaultMessage={`This store is inactive, it has to be set as active to update its prices`} />
               </div>
@@ -190,7 +190,7 @@ class StoreDetailUpdatePricing extends Component {
                           </select>
                         </div>
                         <div className="form-actions">
-                          <button type="submit" className="btn btn-primary" disabled={!store.isActive}><FormattedMessage id="update" defaultMessage={`Update`} /></button>
+                          <button type="submit" className="btn btn-primary" disabled={!store.lastActivation}><FormattedMessage id="update" defaultMessage={`Update`} /></button>
                         </div>
                       </form>
                     </div>

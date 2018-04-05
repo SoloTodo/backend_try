@@ -6,6 +6,7 @@ import {
 import {FormattedMessage} from "react-intl";
 import StoreDetailMenu from "./StoreDetailMenu";
 import {backendStateToPropsUtils} from "../../utils";
+import moment from "moment/moment";
 
 
 
@@ -35,8 +36,10 @@ class StoreDetail extends Component {
                       <td>{store.country.name}</td>
                     </tr>
                     <tr>
-                      <th><FormattedMessage id="active_question" defaultMessage={`Is active?`} /></th>
-                      <td><i className={store.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i></td>
+                      <th><FormattedMessage id="last_activation" defaultMessage="Last activation" /></th>
+                      <td>
+                        {store.lastActivation ? moment(store.lastActivation).format('lll') : 'N/A'}
+                      </td>
                     </tr>
                     <tr>
                       <th>Scraper</th>

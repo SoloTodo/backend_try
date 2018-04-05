@@ -12,7 +12,7 @@ import {connect} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import NavLink from "react-router-dom/es/NavLink";
 import messages from "../../messages";
-import {booleanChoices} from "../../utils";
+import moment from "moment";
 
 
 class StoreList extends Component {
@@ -60,10 +60,9 @@ class StoreList extends Component {
         renderer: entry => entry.type.name
       },
       {
-        label: <FormattedMessage id="active_question" defaultMessage={`Active?`}/>,
-        ordering: 'is_active',
-        renderer: entry => <i className={entry.isActive ? 'glyphicons glyphicons-check' : 'glyphicons glyphicons-unchecked'}>&nbsp;</i>,
-        cssClasses: 'hidden-xs-down text-center'
+        label: <FormattedMessage id="last_activation" defaultMessage="Last activation" />,
+        renderer: entry => entry.lastActivation ? moment(entry.lastActivation).format('lll') : 'N/A',
+        cssClasses: 'hidden-xs-down'
       },
       {
         label: <FormattedMessage id="scraper" defaultMessage={`Scraper`}/>,
@@ -76,7 +75,7 @@ class StoreList extends Component {
     return <div className="animated fadeIn">
       <ApiForm
           endpoints={["stores/"]}
-          fields={['countries', 'types', 'is_active', 'ordering']}
+          fields={['countries', 'types', 'ordering']}
           onResultsChange={this.setStores}
           onFormValueChange={this.handleFormValueChange}
           setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -116,22 +115,6 @@ class StoreList extends Component {
                     onChange={this.state.apiFormFieldChangeHandler}
                     value={this.state.formValues.types}
                     placeholder={messages.all_masculine}
-                />
-              </div>
-              <div className="col-12 col-sm-8 col-md-6 col-xl-2">
-                <label htmlFor="is_active">
-                  <FormattedMessage id="is_active" defaultMessage="Is active?" />
-                </label>
-
-                <ApiFormChoiceField
-                    name="is_active"
-                    id="is_active"
-                    choices={booleanChoices}
-                    multiple={false}
-                    searchable={false}
-                    onChange={this.state.apiFormFieldChangeHandler}
-                    value={this.state.formValues.is_active}
-                    placeholder={messages.all_feminine}
                 />
               </div>
 
