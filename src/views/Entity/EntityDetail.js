@@ -284,15 +284,13 @@ class EntityDetail extends Component {
     entity = entity || this.props.apiResourceObject;
     entity = this.props.ApiResourceObject(entity);
 
-    return entity.category.permissions.includes('view_category_stocks') &&
-        entity.store.permissions.includes('view_store_stocks');
+    return entity.store.permissions.includes('view_store_stocks');
   };
 
   userHasStaffPermissions = entity => {
     entity = entity || this.props.apiResourceObject;
     entity = this.props.ApiResourceObject(entity);
-    return entity.category.permissions.includes('is_category_staff') &&
-        entity.store.permissions.includes('is_store_staff');
+    return entity.category.permissions.includes('is_category_staff');
   };
 
   render() {

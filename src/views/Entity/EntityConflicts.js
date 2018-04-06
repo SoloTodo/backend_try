@@ -146,8 +146,7 @@ class EntityConflicts extends Component {
 
 function mapStateToProps(state) {
   return {
-    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores')
-        .filter(store => store.permissions.includes('is_store_staff')),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
         .filter(category => category.permissions.includes('is_category_staff'))
   }

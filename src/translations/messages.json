@@ -1385,6 +1385,11 @@
     "filepath": "./src/views/Entity/EntityPending.js"
   },
   {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Entity/EntityPending.js"
+  },
+  {
     "id": "keywords",
     "defaultMessage": "Keywords",
     "filepath": "./src/views/Entity/EntityPending.js"
@@ -2480,8 +2485,8 @@
     "filepath": "./src/views/Store/StoreDetail.js"
   },
   {
-    "id": "active_question",
-    "defaultMessage": "Is active?",
+    "id": "last_activation",
+    "defaultMessage": "Last activation",
     "filepath": "./src/views/Store/StoreDetail.js"
   },
   {
@@ -2660,8 +2665,8 @@
     "filepath": "./src/views/Store/StoreList.js"
   },
   {
-    "id": "active_question",
-    "defaultMessage": "Active?",
+    "id": "last_activation",
+    "defaultMessage": "Last activation",
     "filepath": "./src/views/Store/StoreList.js"
   },
   {
@@ -2682,11 +2687,6 @@
   {
     "id": "store_types",
     "defaultMessage": "Types",
-    "filepath": "./src/views/Store/StoreList.js"
-  },
-  {
-    "id": "is_active",
-    "defaultMessage": "Is active?",
     "filepath": "./src/views/Store/StoreList.js"
   },
   {

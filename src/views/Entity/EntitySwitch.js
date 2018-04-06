@@ -50,7 +50,7 @@ export default ({match}) => {
         )} />
         <Route path={match.url + '/:id/associate'} exact render={props => (
             <RequiredResources resources={['stores', 'categories']}>
-              <ResourceObjectPermission match={props.match} resource="entities" permission={entity => entity.category.permissions.includes('is_category_staff') && entity.store.permissions.includes('is_store_staff')} component={EntityDetailAssociate} Http404={Page404} />
+              <ResourceObjectPermission match={props.match} resource="entities" permission={entity => entity.category.permissions.includes('is_category_staff')} component={EntityDetailAssociate} Http404={Page404} />
             </RequiredResources>
         )} />
       </Switch>

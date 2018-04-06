@@ -402,8 +402,7 @@ function mapStateToProps(state) {
 
   return {
     formatCurrency,
-    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories')
-        .filter(category => category.permissions.includes('view_category_stocks')),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
     stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores')
         .filter(store => store.permissions.includes('view_store_stocks')),
   }
