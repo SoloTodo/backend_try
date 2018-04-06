@@ -149,8 +149,8 @@ class ReportStoreAnalysis extends Component {
 
 function mapStateToProps(state) {
   return {
-    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
-    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores').filter(store => store.permissions.includes('view_store_reports')),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories').filter(category => category.permissions.includes('view_category_reports')),
     currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
     store_types: filterApiResourceObjectsByType(state.apiResourceObjects, 'store_types'),
     countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
