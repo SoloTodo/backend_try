@@ -12,9 +12,8 @@ import {
 import ApiFormTextField from "../../react-utils/api_forms/ApiFormTextField";
 import ApiFormDateRangeField from "../../react-utils/api_forms/ApiFormDateRangeField";
 import moment from "moment/moment";
-import {booleanChoices} from "../../utils";
 
-class ReportPricesHistory extends Component {
+class ReportWebsitesTraffic extends Component {
   constructor(props) {
     super(props);
 
@@ -52,28 +51,17 @@ class ReportPricesHistory extends Component {
     const today = moment().startOf('day');
     const todayMinus7Days = moment().startOf('day').subtract(7, 'days');
 
-    const timeZoneChoices = [
-      {
-        id: 'America/Santiago',
-        name: 'Chile Continental',
-      },
-      {
-        id: 'UTC',
-        name: 'UTC',
-      }
-    ];
-
     return <div className="animated fadeIn d-flex flex-column">
       <div className="row">
         <div className="col-12">
           <div className="card">
             <div className="card-header">
               <i className="glyphicons glyphicons-search">&nbsp;</i>
-              <FormattedMessage id="filters" defaultMessage="Filters" />
+              <FormattedMessage id="filters" defaultMessage={`Filters`} />
             </div>
             <ApiForm
-                endpoints={['reports/prices_history/']}
-                fields={['timestamp', 'categories', 'stores', 'countries', 'store_types', 'currency', 'filename', 'exclude_unavailable', 'timezone', 'submit']}
+                endpoints={['reports/websites_traffic/']}
+                fields={['timestamp', 'categories', 'stores', 'websites', 'countries', 'store_types', 'currency', 'filename', 'submit']}
                 onResultsChange={this.setDownloadLink}
                 onFormValueChange={this.handleFormValueChange}
                 setFieldChangeHandler={this.setApiFormFieldChangeHandler}
@@ -96,7 +84,7 @@ class ReportPricesHistory extends Component {
 
                   <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <label>
-                      <FormattedMessage id="categories" defaultMessage="Categories" />
+                      <FormattedMessage id="categories" defaultMessage="Category" />
                     </label>
                     <ApiFormChoiceField
                         name="categories"
@@ -136,6 +124,20 @@ class ReportPricesHistory extends Component {
 
                   <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <label>
+                      <FormattedMessage id="websites" defaultMessage="Websites" />
+                    </label>
+                    <ApiFormChoiceField
+                        name="websites"
+                        choices={this.props.websites}
+                        multiple={true}
+                        placeholder={<FormattedMessage id="all_masculine" defaultMessage="All" />}
+                        searchable={true}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                    />
+                  </div>
+
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
                       <FormattedMessage id="countries" defaultMessage="Countries" />
                     </label>
                     <ApiFormChoiceField
@@ -162,30 +164,6 @@ class ReportPricesHistory extends Component {
 
                   <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <label>
-                      <FormattedMessage id="exclude_unavailable_question" defaultMessage="Exclude unavailable?" />
-                    </label>
-                    <ApiFormChoiceField
-                        name="exclude_unavailable"
-                        choices={booleanChoices}
-                        required={true}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                    />
-                  </div>
-
-                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <label>
-                      <FormattedMessage id="timezone" defaultMessage="Timezone" />
-                    </label>
-                    <ApiFormChoiceField
-                        name="timezone"
-                        choices={timeZoneChoices}
-                        required={true}
-                        onChange={this.state.apiFormFieldChangeHandler}
-                    />
-                  </div>
-
-                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <label>
                       <FormattedMessage id="filename_optional" defaultMessage="Filename (optional)" />
                     </label>
                     <ApiFormTextField
@@ -200,7 +178,6 @@ class ReportPricesHistory extends Component {
                     <label htmlFor="submit">&nbsp;</label>
 
                     <ApiFormSubmitButton
-                        value={this.state.formValues.submit}
                         label={<FormattedMessage id="generate" defaultMessage="Generate" />}
                         loadingLabel={<FormattedMessage id="generating" defaultMessage="Generating" />}
                         onChange={this.state.apiFormFieldChangeHandler}
@@ -223,9 +200,10 @@ function mapStateToProps(state) {
     stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores').filter(store => store.permissions.includes('view_store_reports')),
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories').filter(category => category.permissions.includes('view_category_reports')),
     currencies: filterApiResourceObjectsByType(state.apiResourceObjects, 'currencies'),
+    websites: filterApiResourceObjectsByType(state.apiResourceObjects, 'websites'),
     store_types: filterApiResourceObjectsByType(state.apiResourceObjects, 'store_types'),
     countries: filterApiResourceObjectsByType(state.apiResourceObjects, 'countries'),
   }
 }
 
-export default connect(mapStateToProps)(ReportPricesHistory);
+export default connect(mapStateToProps)(ReportWebsitesTraffic);
