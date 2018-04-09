@@ -198,7 +198,6 @@ class CategoryDetailBrowse extends Component {
               min={this.state.priceRange.min || null}
               max={this.state.priceRange.max || null}
               p80th={this.state.priceRange.p80th || null}
-              value={this.state.formValues.normal_price_usd}
               currency={usdCurrency}
               conversionCurrency={this.props.preferredCurrency}
               numberFormat={this.props.preferredNumberFormat}
@@ -214,7 +213,6 @@ class CategoryDetailBrowse extends Component {
               name="search"
               placeholder={<FormattedMessage id="keywords" defaultMessage="Keywords" />}
               onChange={this.state.apiFormFieldChangeHandler}
-              value={this.state.formValues.search}
               debounceTimeout={500}
           />
         }]
@@ -226,6 +224,7 @@ class CategoryDetailBrowse extends Component {
       for (const filter of fieldset.filters) {
         apiFormFields.push(filter.name);
 
+        const filterChoiceIdToNameDict = {};
         let originalFilterChoices = undefined;
 
         if (filter.type === 'exact') {
@@ -234,12 +233,36 @@ class CategoryDetailBrowse extends Component {
           originalFilterChoices = filter.choices || []
         }
 
-        const filterChoiceIdToNameDict = {};
-        for (const choice of (originalFilterChoices || [])) {
-          filterChoiceIdToNameDict[choice.id] = choice.name
+        for (const choice of originalFilterChoices) {
+          filterChoiceIdToNameDict[choice.id] = choice.name;
         }
 
-        let filterAggs = resultsAggs[filter.name];
+        const filterDocCountsDict = {};
+
+        let filterAggs = [];
+        const rawFilterAggs = resultsAggs[filter.name];
+
+        if (rawFilterAggs) {
+          for (const filterDocCount of rawFilterAggs) {
+            filterDocCountsDict[filterDocCount.id] = filterDocCount.doc_count
+          }
+
+          for (const choice of originalFilterChoices) {
+            const choiceDocCount = filterDocCountsDict[choice.id];
+
+            if (!choiceDocCount) {
+              continue
+            }
+
+            filterAggs.push({
+              ...choice,
+              doc_count: choiceDocCount
+            })
+          }
+        } else {
+          filterAggs = originalFilterChoices
+        }
+
         let filterComponent = null;
 
         if (filter.type === 'exact') {
@@ -282,7 +305,6 @@ class CategoryDetailBrowse extends Component {
               placeholder={filter.label}
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
-              value={value}
               multiple={Boolean(filter.choices)}
           />
         } else if (filter.type === 'lte') {
@@ -312,7 +334,6 @@ class CategoryDetailBrowse extends Component {
               placeholder={filter.label}
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
-              value={this.state.formValues[filter.name]}
           />
         } else if (filter.type === 'gte') {
           let filterChoices = undefined;
@@ -343,23 +364,16 @@ class CategoryDetailBrowse extends Component {
               placeholder={filter.label}
               searchable={true}
               onChange={this.state.apiFormFieldChangeHandler}
-              value={this.state.formValues[filter.name]}
           />
         } else if (filter.type === 'range') {
           if (filter.continuous_range_step) {
             // Continous (weight....)
-            let filterChoices = [];
-
-            if (filterAggs) {
-              filterChoices = filterAggs
-            }
 
             filterComponent = <ApiFormContinuousRangeField
                 name={filter.name}
                 label={filter.label}
                 onChange={this.state.apiFormFieldChangeHandler}
-                choices={filterChoices}
-                value={this.state.formValues[filter.name]}
+                choices={rawFilterAggs}
                 step={filter.continuous_range_step}
                 unit={filter.continuous_range_unit}
                 resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
@@ -381,13 +395,11 @@ class CategoryDetailBrowse extends Component {
               }))
             }
 
-
             filterComponent = <ApiFormDiscreteRangeField
                 name={filter.name}
                 label={filter.label}
                 onChange={this.state.apiFormFieldChangeHandler}
                 choices={filterChoices}
-                value={this.state.formValues[filter.name]}
                 resultCountSuffix={<FormattedMessage id="results_lower_case" defaultMessage="results" />}
             />
           }
@@ -509,7 +521,6 @@ class CategoryDetailBrowse extends Component {
                             multiple={true}
                             searchable={!this.props.isExtraSmall}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            value={this.state.formValues.stores}
                             placeholder={messages.all_feminine}
                         />
                       </div>
@@ -523,7 +534,6 @@ class CategoryDetailBrowse extends Component {
                             choices={countries}
                             multiple={true}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            value={this.state.formValues.countries}
                             placeholder={messages.all_masculine}
                         />
                       </div>
@@ -537,7 +547,6 @@ class CategoryDetailBrowse extends Component {
                             choices={storeTypes}
                             multiple={true}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            value={this.state.formValues.store_types}
                             placeholder={messages.all_masculine}
                         />
                       </div>
@@ -550,7 +559,6 @@ class CategoryDetailBrowse extends Component {
                             id="ordering"
                             choices={orderingChoices}
                             onChange={this.state.apiFormFieldChangeHandler}
-                            value={this.state.formValues.ordering}
                             required={true}
                         />
                       </div>

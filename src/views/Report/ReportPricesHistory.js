@@ -51,7 +51,7 @@ class ReportPricesHistory extends Component {
   render() {
     const today = moment().startOf('day');
     const todayMinus7Days = moment().startOf('day').subtract(7, 'days');
-    
+
     const timeZoneChoices = [
       {
         id: 'America/Santiago',
