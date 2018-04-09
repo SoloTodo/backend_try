@@ -2350,6 +2350,86 @@
     "filepath": "./src/views/Report/ReportList.js"
   },
   {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Categories",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "dont_convert",
+    "defaultMessage": "Don't convert",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "store_types",
+    "defaultMessage": "Store types",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "exclude_unavailable_question",
+    "defaultMessage": "Exclude unavailable?",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "timezone",
+    "defaultMessage": "Timezone",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "filename_optional",
+    "defaultMessage": "Filename (optional)",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "optional",
+    "defaultMessage": "Opcional",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "generate",
+    "defaultMessage": "Generate",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
+    "id": "generating",
+    "defaultMessage": "Generating",
+    "filepath": "./src/views/Report/ReportPricesHistory.js"
+  },
+  {
     "id": "offer_price",
     "defaultMessage": "Offer price",
     "filepath": "./src/views/Report/ReportStoreAnalysis.js"

@@ -5,6 +5,7 @@ import ReportCurrentPrices from "./ReportCurrentPrices";
 import ReportList from "./ReportList";
 import ReportStoreAnalysis from "./ReportStoreAnalysis";
 import ReportWeeklyPrices from "./ReportWeeklyPrices";
+import ReportPricesHistory from "./ReportPricesHistory";
 
 export default ({match}) => {
   return (
@@ -27,6 +28,11 @@ export default ({match}) => {
         <Route path={match.url + '/weekly_prices'} exact render={props => (
             <RequiredResources resources={['categories', 'stores']}>
               <ReportWeeklyPrices />
+            </RequiredResources>
+        )} />
+        <Route path={match.url + '/prices_history'} exact render={props => (
+            <RequiredResources resources={['categories', 'stores']}>
+              <ReportPricesHistory />
             </RequiredResources>
         )} />
       </Switch>
