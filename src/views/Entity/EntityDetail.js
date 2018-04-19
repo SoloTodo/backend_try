@@ -4,17 +4,12 @@ import {
   apiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
-import {
-  createOption,
-  createOptions,
-} from "../../react-utils/form_utils";
 import {FormattedMessage, injectIntl} from "react-intl";
 import {NavLink} from "react-router-dom";
 import LaddaButton, { XL, EXPAND_LEFT } from 'react-ladda';
 import { Markdown } from 'react-showdown';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
-import Select from 'react-select';
 import trim from 'lodash/trim';
 import ImageGallery from 'react-image-gallery';
 import {formatCurrency, formatDateStr} from "../../react-utils/utils";
@@ -22,6 +17,7 @@ import imageNotAvailable from '../../images/image-not-available.svg';
 import './EntityDetail.css'
 import moment from "moment";
 import {backendStateToPropsUtils} from "../../utils";
+import EntityCategoryChange from "./EntityCategoryChange";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -33,7 +29,6 @@ class EntityDetail extends Component {
   initialState = {
     updatingPricing: false,
     changingVisibility: false,
-    categoryForChange: null,
     dissociatingState: DISSOCIATING_STATES.STAND_BY,
     dissociationReason: '',
     stock: undefined,
@@ -198,24 +193,6 @@ class EntityDetail extends Component {
     }
   };
 
-  changeCategory = () => {
-    const requestBody = JSON.stringify({category: this.state.categoryForChange.id});
-
-    this.props.fetchAuth(`${this.props.apiResourceObject.url}change_category/`, {
-      method: 'POST',
-      body: requestBody
-    }).then(json => {
-      this.setState({
-        categoryForChange: null
-      }, () => {
-        // We may no longer have permissions to access the entity, so fetch it again.
-        // If we don't, the rsource will be deleted from the app ApiResources and
-        // we will be automatically redirected to another page.
-        this.props.fetchApiResourceObject('entities', json.id, this.props.dispatch)
-      });
-    });
-  };
-
   dissociate = () => {
     this.setState({
       dissociatingState: DISSOCIATING_STATES.EXECUTING
@@ -240,38 +217,10 @@ class EntityDetail extends Component {
     });
   };
 
-  userHasStaffPermissionOverSelectedCategory = () => {
-    return this.state.categoryForChange.permissions.includes('is_category_staff')
-  };
-
-  handleChangeCategory = newCategoryChoice => {
-    this.setState({
-      categoryForChange: newCategoryChoice.option
-    }, () => {
-      if (this.userHasStaffPermissionOverSelectedCategory()) {
-        this.changeCategory();
-      }
-    });
-  };
-
-  handleChangeCategoryClick = (event) => {
-    if (this.props.apiResourceObject.product) {
-      toast.warn(<FormattedMessage id="changing_category_of_associated_entity_warning" defaultMessage="Please deassociate the the entity before changing it's category" />, {
-        autoClose: false
-      });
-    }
-  };
-
   handleDissociateClick = (event) => {
     this.setState({
       dissociatingState: DISSOCIATING_STATES.CONFIRMING
     });
-  };
-
-  resetCategoryForChange = () => {
-    this.setState({
-      categoryForChange: null
-    })
   };
 
   resetdissociating = () => {
@@ -312,8 +261,6 @@ class EntityDetail extends Component {
 
     const preferredCurrency = this.props.ApiResourceObject(this.props.preferredCurrency);
     const visibilitySwitchEnabled = !this.state.changingVisibility && !entity.product;
-    const categorySelectEnabled = !this.state.categoryForChange && !entity.product;
-    const categoryOptions = createOptions(this.props.categories);
 
     const conditions = [
       {
@@ -335,8 +282,6 @@ class EntityDetail extends Component {
     ];
 
     const currentCondition = conditions.filter(condition => condition.id === entity.condition)[0];
-
-    const isModalOpen = Boolean(this.state.categoryForChange) && !this.userHasStaffPermissionOverSelectedCategory();
 
     let images = null;
 
@@ -479,18 +424,7 @@ class EntityDetail extends Component {
                       <th><FormattedMessage id="category" defaultMessage='Category' /></th>
                       <td>
                         {hasStaffPermissions ?
-                            <div onClick={this.handleChangeCategoryClick}>
-                              <Select
-                                  name="categories"
-                                  id="categories"
-                                  options={categoryOptions}
-                                  value={createOption(entity.category)}
-                                  onChange={this.handleChangeCategory}
-                                  searchable={false}
-                                  clearable={false}
-                                  disabled={!categorySelectEnabled}
-                              />
-                            </div>
+                            <EntityCategoryChange entity={entity} />
                             :
                             entity.category.name
                         }
@@ -706,18 +640,6 @@ class EntityDetail extends Component {
             </div>
 
           </div>
-
-          <Modal isOpen={isModalOpen}>
-            <ModalHeader><FormattedMessage id="entity_irreversible_category_change_title" defaultMessage='Irreversible category change' /></ModalHeader>
-            <ModalBody>
-              <FormattedMessage id="entity_irreversible_category_change_body" defaultMessage="You don't have staff permissions over the category you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more." />
-
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={this.changeCategory}><FormattedMessage id="entity_irreversible_category_change_proceed" defaultMessage='OK, Proceed either way' /></Button>{' '}
-              <Button color="secondary" onClick={this.resetCategoryForChange}><FormattedMessage id="cancel" defaultMessage='Cancel' /></Button>
-            </ModalFooter>
-          </Modal>
 
           <Modal isOpen={this.state.dissociatingState !== DISSOCIATING_STATES.STAND_BY}>
             <ModalHeader><FormattedMessage id="entity_dissociation_title" defaultMessage='Confirm entity dissociation' /></ModalHeader>

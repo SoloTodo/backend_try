@@ -10,14 +10,17 @@ import { toast } from 'react-toastify';
 import ImageGallery from "react-image-gallery";
 import imageNotAvailable from '../../images/image-not-available.svg';
 import {settings} from "../../settings";
+import EntityCategoryChange from "./EntityCategoryChange";
+import {Button} from "reactstrap";
 
 class EntityDetailAssociate extends Component {
   initialState = {
     productChoices: [],
     cellPlanChoices: [],
-    selectedProductId: '',
+    selectedProduct: undefined,
     finishedAssociating: false,
-    keywords: ''
+    keywords: '',
+    hidEntity: false
   };
 
   constructor(props) {
@@ -62,7 +65,7 @@ class EntityDetailAssociate extends Component {
 
     this.props.fetchAuth(endpoint).then(json => {
       const productChoices = json.results;
-      const selectedProductId = productChoices.length ? productChoices[0].id.toString() : '';
+      const selectedProduct = productChoices.length ? productChoices[0] : undefined;
 
       toast.dismiss(toastId);
 
@@ -74,14 +77,16 @@ class EntityDetailAssociate extends Component {
 
       this.setState({
         productChoices,
-        selectedProductId
+        selectedProduct
       })
     });
   };
 
   handleProductSelectChange = evt => {
+    const selectedProduct = this.state.productChoices.filter(product => product.id.toString() === evt.target.value)[0];
+
     this.setState({
-      selectedProductId: evt.target.value
+      selectedProduct
     })
   };
 
@@ -92,7 +97,7 @@ class EntityDetailAssociate extends Component {
       autoClose: false
     });
 
-    const endpoint = `${settings.apiResourceEndpoints.products}${this.state.selectedProductId}/clone/`;
+    const endpoint = `${settings.apiResourceEndpoints.products}${this.state.selectedProduct.id}/clone/`;
 
     this.props.fetchAuth(endpoint, {method: 'POST'}).then(json => {
       const clonedInstanceId = json.instance_id;
@@ -108,7 +113,7 @@ class EntityDetailAssociate extends Component {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
 
     const payload = {
-      product: this.state.selectedProductId
+      product: this.state.selectedProduct.id
     };
 
     const selectedCellPlanId = document.getElementById('cell_plan').value;
@@ -122,7 +127,7 @@ class EntityDetailAssociate extends Component {
       matchExistingCellPlan = !entity.cellPlan
     }
 
-    if (entity.product && entity.product.id.toString() === this.state.selectedProductId && matchExistingCellPlan) {
+    if (entity.product && entity.product.id === this.state.selectedProduct.id && matchExistingCellPlan) {
       toast.error(<FormattedMessage
           id="please_select_a_different_product_cell_plan"
           defaultMessage="Please select a different product / cell plan from the current ones" />, {
@@ -146,12 +151,41 @@ class EntityDetailAssociate extends Component {
 
       this.setState({
         finishedAssociating: true
-      })
+      }, () => this.props.updateEntity(json));
+    })
+  };
+
+  handleEntityHideClick = evt => {
+    const toastId = toast.info(<FormattedMessage
+        id="hiding_entity"
+        defaultMessage="Hiding entity" />, {
+      autoClose: false
+    });
+
+    this.props.fetchAuth(`${this.props.apiResourceObject.url}toggle_visibility/`, {
+      method: 'POST'
+    }).then(json => {
+      toast.dismiss(toastId);
+
+      this.setState({
+        hidEntity: true
+      }, () => this.props.updateEntity(json))
     })
   };
 
   render() {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
+
+    if (this.state.hidEntity) {
+      toast.success(<FormattedMessage
+          id="entity_hiding_successful"
+          defaultMessage="The entity has been hidden successfully" />);
+
+      return <Redirect push to={{
+        pathname: '/entities/pending',
+        search: '?categories=' + entity.category.id
+      }} />
+    }
 
     if (this.state.finishedAssociating) {
       toast.success(<FormattedMessage
@@ -187,6 +221,8 @@ class EntityDetailAssociate extends Component {
 
     const cell_plan_selector_visibility_class = this.state.cellPlanChoices.length ? '' : 'd-none';
 
+    const selectedProductId = this.state.selectedProduct ? this.state.selectedProduct.id : '';
+
     return (
         <div className="animated fadeIn">
           <NavLink to="/entities/18279/associate">Break</NavLink>
@@ -216,13 +252,18 @@ class EntityDetailAssociate extends Component {
 
                         <dt><FormattedMessage id="url" defaultMessage="URL" /></dt>
                         <dd><a href={entity.externalUrl} target="_blank">{entity.externalUrl}</a></dd>
+
+                        <dt><FormattedMessage id="hide" defaultMessage="Hide" /></dt>
+                        <dd><Button onClick={this.handleEntityHideClick}><FormattedMessage id="hide_entity" defaultMessage="Hide entity" /></Button></dd>
                       </dl>
                     </div>
                     <div className="col-12 col-sm-6">
                       <dl>
 
                         <dt><FormattedMessage id="category" defaultMessage="Category" /></dt>
-                        <dd>{entity.category.name}</dd>
+                        <dd>
+                          <EntityCategoryChange entity={entity} />
+                        </dd>
 
                         {entity.partNumber &&
                         <dt><FormattedMessage id="part_number" defaultMessage="Part number" /></dt>
@@ -265,7 +306,7 @@ class EntityDetailAssociate extends Component {
                   <form onSubmit={this.handleProductAssociationSubmit}>
                     <div className="form-group">
                       <label htmlFor="product"><FormattedMessage id="product" defaultMessage="Product"/></label>
-                      <select size={10} className="form-control" id="product" name="product" required={true} value={this.state.selectedProductId} onChange={this.handleProductSelectChange}>
+                      <select size={10} className="form-control" id="product" name="product" required={true} value={selectedProductId} onChange={this.handleProductSelectChange}>
                         {this.state.productChoices.map(product => (
                             <option key={product.id} value={product.id}>{product.name}</option>
                         ))}
@@ -285,16 +326,16 @@ class EntityDetailAssociate extends Component {
                     <div className="btn-toolbar" role="toolbar">
 
                       <div className="btn-group mr-2" role="group">
-                        <button type="submit" className="btn btn-success" disabled={this.state.selectedProductId === ''}>
+                        <button type="submit" className="btn btn-success" disabled={false}>
                           <FormattedMessage id="associate"
                                             defaultMessage="Associate"/>
                         </button>
                       </div>
 
-                      {this.state.selectedProductId &&
+                      {this.state.selectedProduct &&
                       <div className="btn-group mr-2" role="group">
                         <a className="btn btn-secondary"
-                           href={`/products/${this.state.selectedProductId}`}
+                           href={`/products/${this.state.selectedProduct.id}`}
                            target="_blank">
                           <FormattedMessage id="view_product"
                                             defaultMessage="View product"/>
@@ -302,17 +343,27 @@ class EntityDetailAssociate extends Component {
                       </div>
                       }
 
-                      {this.state.selectedProductId &&
+                      {this.state.selectedProduct &&
                       <div className="btn-group mr-2" role="group">
                         <a className="btn btn-secondary"
-                           href={`${settings.solotodoUrl}products/${this.state.selectedProductId}`}
+                           href={`${settings.solotodoUrl}products/${this.state.selectedProduct.id}`}
                            target="_blank">
                           <FormattedMessage id="view_in_solotodo" defaultMessage="View in SoloTodo"/>
                         </a>
                       </div>
                       }
 
-                      {this.state.selectedProductId &&
+                      {this.state.selectedProduct &&
+                      <div className="btn-group mr-2" role="group">
+                        <a className="btn btn-secondary"
+                           href={`${settings.endpoint}metamodel/instances/${this.state.selectedProduct.instance_model_id}`}
+                           target="_blank">
+                          <FormattedMessage id="edit" defaultMessage="Edit"/>
+                        </a>
+                      </div>
+                      }
+
+                      {this.state.selectedProduct &&
                       <div className="btn-group mr-2" role="group">
                         <button type="button" className="btn btn-info" onClick={this.handleProductClone}>
                           <FormattedMessage id="clone" defaultMessage="Clone"/>
@@ -370,4 +421,16 @@ function mapStateToProps(state) {
   }
 }
 
-export default injectIntl(connect(mapStateToProps)(EntityDetailAssociate));
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    updateEntity: entity => {
+      dispatch({
+        type: 'updateApiResourceObject',
+        apiResourceObject: entity
+      });
+    }
+  }
+}
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(EntityDetailAssociate));

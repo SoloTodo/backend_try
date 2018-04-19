@@ -600,6 +600,31 @@
     "filepath": "./src/views/Dashboard/DashboardStoreLeadsChart.js"
   },
   {
+    "id": "changing_category_of_associated_entity_warning",
+    "defaultMessage": "Please deassociate the the entity before changing it's category",
+    "filepath": "./src/views/Entity/EntityCategoryChange.js"
+  },
+  {
+    "id": "entity_irreversible_category_change_title",
+    "defaultMessage": "Irreversible category change",
+    "filepath": "./src/views/Entity/EntityCategoryChange.js"
+  },
+  {
+    "id": "entity_irreversible_category_change_body",
+    "defaultMessage": "You don't have staff permissions over the category you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more.",
+    "filepath": "./src/views/Entity/EntityCategoryChange.js"
+  },
+  {
+    "id": "entity_irreversible_category_change_proceed",
+    "defaultMessage": "OK, Proceed either way",
+    "filepath": "./src/views/Entity/EntityCategoryChange.js"
+  },
+  {
+    "id": "cancel",
+    "defaultMessage": "Cancel",
+    "filepath": "./src/views/Entity/EntityCategoryChange.js"
+  },
+  {
     "id": "store",
     "defaultMessage": "Store",
     "filepath": "./src/views/Entity/EntityConflicts.js"
@@ -652,11 +677,6 @@
   {
     "id": "hiding_associated_entity_warning",
     "defaultMessage": "Please dissociate the the entity before hiding it",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "changing_category_of_associated_entity_warning",
-    "defaultMessage": "Please deassociate the the entity before changing it's category",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -910,26 +930,6 @@
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
-    "id": "entity_irreversible_category_change_title",
-    "defaultMessage": "Irreversible category change",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "entity_irreversible_category_change_body",
-    "defaultMessage": "You don't have staff permissions over the category you are assigning. If you proceed you will not be able to edit (or maybe even access) this entity any more.",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "entity_irreversible_category_change_proceed",
-    "defaultMessage": "OK, Proceed either way",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
-    "id": "cancel",
-    "defaultMessage": "Cancel",
-    "filepath": "./src/views/Entity/EntityDetail.js"
-  },
-  {
     "id": "entity_dissociation_title",
     "defaultMessage": "Confirm entity dissociation",
     "filepath": "./src/views/Entity/EntityDetail.js"
@@ -947,6 +947,11 @@
   {
     "id": "dissociating",
     "defaultMessage": "Dissociating",
+    "filepath": "./src/views/Entity/EntityDetail.js"
+  },
+  {
+    "id": "cancel",
+    "defaultMessage": "Cancel",
     "filepath": "./src/views/Entity/EntityDetail.js"
   },
   {
@@ -972,6 +977,16 @@
   {
     "id": "associating_please_wait",
     "defaultMessage": "Associating entity, please wait!",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "hiding_entity",
+    "defaultMessage": "Hiding entity",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "entity_hiding_successful",
+    "defaultMessage": "The entity has been hidden successfully",
     "filepath": "./src/views/Entity/EntityDetailAssociate.js"
   },
   {
@@ -1007,6 +1022,16 @@
   {
     "id": "url",
     "defaultMessage": "URL",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "hide",
+    "defaultMessage": "Hide",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "hide_entity",
+    "defaultMessage": "Hide entity",
     "filepath": "./src/views/Entity/EntityDetailAssociate.js"
   },
   {
@@ -1062,6 +1087,11 @@
   {
     "id": "view_in_solotodo",
     "defaultMessage": "View in SoloTodo",
+    "filepath": "./src/views/Entity/EntityDetailAssociate.js"
+  },
+  {
+    "id": "edit",
+    "defaultMessage": "Edit",
     "filepath": "./src/views/Entity/EntityDetailAssociate.js"
   },
   {
@@ -2340,6 +2370,86 @@
     "filepath": "./src/views/Report/ReportCurrentPrices.js"
   },
   {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "dont_convert",
+    "defaultMessage": "Don't convert",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "store_types",
+    "defaultMessage": "Store types",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "brand",
+    "defaultMessage": "Marca",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "optional",
+    "defaultMessage": "Opcional",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "exclude_unavailable_question",
+    "defaultMessage": "Exclude unavailable?",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "filename_optional",
+    "defaultMessage": "Filename (optional)",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "generate",
+    "defaultMessage": "Generate",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
+    "id": "generating",
+    "defaultMessage": "Generating",
+    "filepath": "./src/views/Report/ReportDailyPrices.js"
+  },
+  {
     "id": "reports",
     "defaultMessage": "Reportes",
     "filepath": "./src/views/Report/ReportList.js"
@@ -2430,6 +2540,36 @@
     "filepath": "./src/views/Report/ReportPricesHistory.js"
   },
   {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Report/ReportSecPrices.js"
+  },
+  {
+    "id": "category",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Report/ReportSecPrices.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportSecPrices.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Report/ReportSecPrices.js"
+  },
+  {
+    "id": "generate",
+    "defaultMessage": "Generate",
+    "filepath": "./src/views/Report/ReportSecPrices.js"
+  },
+  {
+    "id": "generating",
+    "defaultMessage": "Generating",
+    "filepath": "./src/views/Report/ReportSecPrices.js"
+  },
+  {
     "id": "offer_price",
     "defaultMessage": "Offer price",
     "filepath": "./src/views/Report/ReportStoreAnalysis.js"
@@ -2478,6 +2618,81 @@
     "id": "generating",
     "defaultMessage": "Generating",
     "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "filters",
+    "defaultMessage": "Filters",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "date_range_from_to",
+    "defaultMessage": "Date range (from / to)",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "categories",
+    "defaultMessage": "Category",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "all_feminine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "currency",
+    "defaultMessage": "Currency",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "dont_convert",
+    "defaultMessage": "Don't convert",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "stores",
+    "defaultMessage": "Stores",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "websites",
+    "defaultMessage": "Websites",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "all_masculine",
+    "defaultMessage": "All",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "countries",
+    "defaultMessage": "Countries",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "store_types",
+    "defaultMessage": "Store types",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "filename_optional",
+    "defaultMessage": "Filename (optional)",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "optional",
+    "defaultMessage": "Opcional",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "generate",
+    "defaultMessage": "Generate",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
+  },
+  {
+    "id": "generating",
+    "defaultMessage": "Generating",
+    "filepath": "./src/views/Report/ReportWebsitesTraffic.js"
   },
   {
     "id": "filters",

@@ -108,7 +108,7 @@ class EntityPending extends Component {
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoints={["entities/pending/"]}
+              endpoints={["entities/pending/?ordering=-id"]}
               fields={['stores', 'categories', 'countries', 'search', 'page', 'page_size', 'ordering']}
               onResultsChange={this.setEntities}
               onFormValueChange={this.handleFormValueChange}
