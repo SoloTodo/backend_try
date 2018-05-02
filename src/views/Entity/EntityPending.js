@@ -90,9 +90,9 @@ class EntityPending extends Component {
       },
       {
         label: <FormattedMessage id="associate" defaultMessage="Associate" />,
-        renderer: entity => <a href={`/entities/${entity.id}/associate`} className="btn btn-secondary">
+        renderer: entity => <Link to={`/entities/${entity.id}/associate`} className="btn btn-secondary">
           <FormattedMessage id="associate" defaultMessage="Associate" />
-        </a>,
+        </Link>,
       },
       {
         label: <FormattedMessage id="hide" defaultMessage="Hide" />,

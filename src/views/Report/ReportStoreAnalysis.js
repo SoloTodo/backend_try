@@ -56,6 +56,17 @@ class ReportStoreAnalysis extends Component {
       }
     ];
 
+    const layoutChoices = [
+      {
+        id: 'layout_1',
+        name: <FormattedMessage id="layout_1" defaultMessage="Layout 1"/>
+      },
+      {
+        id: 'layout_2',
+        name: <FormattedMessage id="layout_2" defaultMessage="Layout 2"/>
+      }
+    ];
+
     return <div className="animated fadeIn d-flex flex-column">
       <div className="row">
         <div className="col-12">
@@ -66,7 +77,7 @@ class ReportStoreAnalysis extends Component {
             </div>
             <ApiForm
                 endpoints={['reports/store_analysis/']}
-                fields={['store', 'competing_stores', 'categories', 'price_type', 'submit']}
+                fields={['store', 'competing_stores', 'categories', 'price_type', 'layout', 'submit']}
                 onResultsChange={this.setDownloadLink}
                 onFormValueChange={this.handleFormValueChange}
                 setFieldChangeHandler={this.setApiFormFieldChangeHandler}
@@ -96,6 +107,7 @@ class ReportStoreAnalysis extends Component {
                         name="competing_stores"
                         choices={this.props.stores}
                         searchable={true}
+                        multiple={true}
                         placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
                         onChange={this.state.apiFormFieldChangeHandler}
                     />
@@ -122,6 +134,18 @@ class ReportStoreAnalysis extends Component {
                     <ApiFormChoiceField
                         name="price_type"
                         choices={priceTypeChoices}
+                        onChange={this.state.apiFormFieldChangeHandler}
+                        required={true}
+                    />
+                  </div>
+
+                  <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label>
+                      <FormattedMessage id="Layout" defaultMessage="Layout" />
+                    </label>
+                    <ApiFormChoiceField
+                        name="layout"
+                        choices={layoutChoices}
                         onChange={this.state.apiFormFieldChangeHandler}
                         required={true}
                     />
