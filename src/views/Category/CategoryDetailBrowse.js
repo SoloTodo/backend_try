@@ -10,7 +10,6 @@ import {FormattedMessage} from "react-intl";
 import {
   ApiForm,
   ApiFormChoiceField,
-  ApiFormResultTableWithPagination,
   ApiFormTextField,
   ApiFormDiscreteRangeField,
   ApiFormContinuousRangeField,
@@ -26,13 +25,14 @@ import {
   backendStateToPropsUtils
 } from "../../utils";
 import {areObjectsEqual} from "../../react-utils/utils";
+import CategoryDetailBrowseResult from "./CategoryDetailBrowseResult";
 
 class CategoryDetailBrowse extends Component {
   initialState = {
     formLayout: undefined,
     apiFormFieldChangeHandler: undefined,
     formValues: {},
-    productsPage: undefined,
+    results: undefined,
     resultsAggs: {},
     priceRange: undefined,
     columns: undefined
@@ -53,19 +53,16 @@ class CategoryDetailBrowse extends Component {
     this.setState({formValues})
   };
 
-  setProductsPage = json => {
+  setResults = json => {
     if (json) {
       this.setState({
-        productsPage: {
-          count: json.payload.count,
-          results: json.payload.results
-        },
+        results: json.payload.results,
         resultsAggs: json.payload.aggs,
       })
     } else {
       // Only reset the actual results to keep the old filter aggregations
       this.setState({
-        productsPage: null
+        results: null
       })
     }
   };
@@ -152,7 +149,7 @@ class CategoryDetailBrowse extends Component {
   }
 
   apiEndpoint = () => {
-    return `categories/${this.props.apiResourceObject.id}/browse/`;
+    return `categories/${this.props.apiResourceObject.id}/full_browse/`;
   };
 
   render() {
@@ -170,12 +167,6 @@ class CategoryDetailBrowse extends Component {
       }} />
     }
 
-    let products = null;
-
-    if (this.state.productsPage) {
-      products = this.state.productsPage
-    }
-
     const resultsAggs = this.state.resultsAggs;
 
     const currenciesDict = {};
@@ -185,7 +176,7 @@ class CategoryDetailBrowse extends Component {
 
     const usdCurrency = this.props.currencies.filter(currency => currency.url === settings.usdCurrencyUrl)[0];
 
-    const apiFormFields = ['stores', 'countries', 'store_types', 'ordering', 'normal_price_usd', 'page', 'page_size', 'search'];
+    const apiFormFields = ['stores', 'countries', 'store_types', 'ordering', 'normal_price_usd', 'search'];
     const processedFormLayout = [
       {
         id: 'normal_price',
@@ -498,7 +489,7 @@ class CategoryDetailBrowse extends Component {
           <ApiForm
               endpoints={[apiEndpoint]}
               fields={apiFormFields}
-              onResultsChange={this.setProductsPage}
+              onResultsChange={this.setResults}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <div className="row">
@@ -569,17 +560,15 @@ class CategoryDetailBrowse extends Component {
             </div>
             <div className="row">
               <div className="col-12 col-md-6 col-lg-8 col-xl-8">
-                <ApiFormResultTableWithPagination
-                    page_size_choices={[50, 100, 200]}
-                    page={this.state.formValues.page}
-                    page_size={this.state.formValues.page_size}
-                    data={products}
-                    onChange={this.state.apiFormFieldChangeHandler}
-                    columns={columns}
-                    ordering={this.state.formValues.ordering}
-                    label={<FormattedMessage id="results" defaultMessage="Results"/>}
-                    loading={<Loading />}
-                />
+                <div className="card">
+                  <div className="card-header">
+                  </div>
+                  <div className="card-block">
+                    <CategoryDetailBrowseResult
+                        data={this.state.results}
+                    />
+                  </div>
+                </div>
               </div>
               <div className="col-12 col-md-6 col-lg-4 col-xl-4">
                 <div className="card">
