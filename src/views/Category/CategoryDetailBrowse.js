@@ -566,6 +566,7 @@ class CategoryDetailBrowse extends Component {
                   <div className="card-block">
                     <CategoryDetailBrowseResult
                         data={this.state.results}
+                        specsColumns={this.state.columns}
                     />
                   </div>
                 </div>
