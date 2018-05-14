@@ -16,7 +16,7 @@ import {
   ApiFormPriceRangeField
 } from "../../react-utils/api_forms";
 
-import {NavLink, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import {injectIntl} from "react-intl";
 import "./CategoryDetailBrowse.css"
 import { toast } from 'react-toastify';
@@ -26,6 +26,7 @@ import {
 } from "../../utils";
 import {areObjectsEqual} from "../../react-utils/utils";
 import CategoryDetailBrowseResult from "./CategoryDetailBrowseResult";
+import {Accordion, AccordionItem} from "react-sanfona";
 
 class CategoryDetailBrowse extends Component {
   initialState = {
@@ -35,7 +36,8 @@ class CategoryDetailBrowse extends Component {
     results: undefined,
     resultsAggs: {},
     priceRange: undefined,
-    columns: undefined
+    columns: undefined,
+    specsFiltersModelOpen: false
   };
 
   constructor(props) {
@@ -53,12 +55,28 @@ class CategoryDetailBrowse extends Component {
     this.setState({formValues})
   };
 
+  toggleSpecsFiltersModel = () => {
+    this.setState({
+      specsFiltersModelOpen: !this.state.specsFiltersModelOpen
+    })
+  };
+
   setResults = json => {
     if (json) {
-      this.setState({
+      const stateChanges = {
         results: json.payload.results,
         resultsAggs: json.payload.aggs,
-      })
+      };
+
+      if (!this.state.priceRange) {
+        stateChanges.priceRange = {
+          min: Math.floor(parseFloat(json.payload.price_ranges.normal_price_usd.min)),
+          max: Math.ceil(parseFloat(json.payload.price_ranges.normal_price_usd.max)),
+          p80th: Math.floor(parseFloat(json.payload.price_ranges.normal_price_usd['80th']))
+        }
+      }
+
+      this.setState(stateChanges)
     } else {
       // Only reset the actual results to keep the old filter aggregations
       this.setState({
@@ -106,8 +124,10 @@ class CategoryDetailBrowse extends Component {
           const formLayout = processed_form_layouts[0] || null;
 
           if (formLayout && preferredCountry) {
-            formLayout.fieldsets = formLayout.fieldsets.map(fieldset => ({
+            formLayout.fieldsets = formLayout.fieldsets.map((fieldset, idx) => ({
+              id: fieldset.id,
               label: fieldset.label,
+              expanded: idx === 0 ? true : undefined,
               filters: fieldset.filters.filter(filter =>
                   !filter.country || filter.country === preferredCountry.url
               )
@@ -117,20 +137,6 @@ class CategoryDetailBrowse extends Component {
           this.setState({
             formLayout: formLayout,
           })
-        });
-
-    const endpoint = this.apiEndpoint();
-
-    // Make an empty call to the endpoint to obtain the global min / max and 80th percentile values
-    this.props.fetchAuth(endpoint)
-        .then(json => {
-          this.setState({
-            priceRange: {
-              min: Math.floor(parseFloat(json.price_ranges.normal_price_usd.min)),
-              max: Math.ceil(parseFloat(json.price_ranges.normal_price_usd.max)),
-              p80th: Math.floor(parseFloat(json.price_ranges.normal_price_usd['80th']))
-            }
-          });
         });
 
     // Obtain columns for the results
@@ -152,10 +158,28 @@ class CategoryDetailBrowse extends Component {
     return `categories/${this.props.apiResourceObject.id}/full_browse/`;
   };
 
+  handleFieldsetChange = (fieldset, expanded) => {
+    const newFieldsets = this.state.formLayout.fieldsets.map(stateFieldset => {
+      const newExpanded = stateFieldset.id === fieldset.id ? expanded : stateFieldset.expanded;
+
+      return {
+        ...stateFieldset,
+        expanded: newExpanded
+      }
+    });
+
+    this.setState({
+      formLayout: {
+        ...this.state.formLayout,
+        fieldsets: newFieldsets
+      }
+    })
+  };
+
   render() {
     const formLayout = this.state.formLayout;
 
-    if (typeof(formLayout) === 'undefined' || typeof(this.state.priceRange) === 'undefined' || !this.state.columns) {
+    if (typeof(formLayout) === 'undefined' || !this.state.columns) {
       return <Loading />
     }
 
@@ -176,19 +200,20 @@ class CategoryDetailBrowse extends Component {
 
     const usdCurrency = this.props.currencies.filter(currency => currency.url === settings.usdCurrencyUrl)[0];
 
-    const apiFormFields = ['stores', 'countries', 'store_types', 'ordering', 'normal_price_usd', 'search'];
+    const apiFormFields = ['stores', 'countries', 'store_types', 'normal_price_usd', 'search'];
     const processedFormLayout = [
       {
         id: 'normal_price',
-        label: <FormattedMessage id="normal_price" defaultMessage="Normal price" />,
+        label: <legend><FormattedMessage id="normal_price" defaultMessage="Normal price" /></legend>,
+        expanded: true,
         filters: [{
           name: 'normal_price_usd',
           component: <ApiFormPriceRangeField
               name="normal_price_usd"
               onChange={this.state.apiFormFieldChangeHandler}
-              min={this.state.priceRange.min || null}
-              max={this.state.priceRange.max || null}
-              p80th={this.state.priceRange.p80th || null}
+              min={this.state.priceRange && this.state.priceRange.min}
+              max={this.state.priceRange && this.state.priceRange.max}
+              p80th={this.state.priceRange && this.state.priceRange.p80th}
               currency={usdCurrency}
               conversionCurrency={this.props.preferredCurrency}
               numberFormat={this.props.preferredNumberFormat}
@@ -197,14 +222,15 @@ class CategoryDetailBrowse extends Component {
       },
       {
         id: 'keywords',
-        label: <FormattedMessage id="keywords" defaultMessage="Keywords" />,
+        label: <legend><FormattedMessage id="keywords" defaultMessage="Keywords" /></legend>,
+        expanded: true,
         filters: [{
           name: 'search',
           component: <ApiFormTextField
               name="search"
               placeholder={<FormattedMessage id="keywords" defaultMessage="Keywords" />}
               onChange={this.state.apiFormFieldChangeHandler}
-              debounceTimeout={500}
+              debounceTimeout={2000}
           />
         }]
       }
@@ -408,32 +434,24 @@ class CategoryDetailBrowse extends Component {
       })
     }
 
-    const columns = [
-      {
-        label: <FormattedMessage id="name" defaultMessage="Name" />,
-        renderer: result => <NavLink to={'/products/' + result.productEntries[0].product.id}>{result.productEntries[0].product.name}</NavLink>
-      },
-      {
-        label: <FormattedMessage id="prices_normal_offer" defaultMessage="Prices (normal / offer)" />,
-        renderer: result => {
-          const priceEntries = result.productEntries[0].prices.map(priceEntry => this.props.ApiResourceObject(priceEntry));
-
-          return <ul className="list-without-decoration">
-            {priceEntries.map(priceEntry => (
-                <li key={priceEntry.currency.isoCode}>{priceEntry.currency.isoCode} {this.props.formatCurrency(priceEntry.minNormalPrice, priceEntry.currency)} / {this.props.formatCurrency(priceEntry.minOfferPrice, priceEntry.currency)}
-                </li>
+    const filtersComponent = <Accordion allowMultiple={true}>
+      {processedFormLayout.map(fieldset => (
+          <AccordionItem
+              key={fieldset.id || fieldset.label}
+              title={fieldset.label}
+              expanded={fieldset.expanded}
+              titleTag={'legend'}
+              onExpand={() => this.handleFieldsetChange(fieldset, true)}
+              onClose={() => this.handleFieldsetChange(fieldset, false)}
+          >
+            {fieldset.filters.map(filter => (
+                <div key={filter.name} className="pt-2">
+                  {filter.component}
+                </div>
             ))}
-          </ul>
-        }
-      },
-    ];
-
-    for (const layoutColumn of this.state.columns) {
-      columns.push({
-        label: layoutColumn.label,
-        renderer: result => result.productEntries[0].product.specs[layoutColumn.es_field] || <em>N/A</em>
-      })
-    }
+          </AccordionItem>
+      ))}
+    </Accordion>;
 
     const countryUrls = this.props.stores.map(store => store.country);
     const countries = this.props.countries.filter(country => countryUrls.includes(country.url));
@@ -441,59 +459,16 @@ class CategoryDetailBrowse extends Component {
     const storeTypeUrls = this.props.stores.map(store => store.type);
     const storeTypes = this.props.storeTypes.filter(storeType => storeTypeUrls.includes(storeType.url));
 
-    const orderingChoices = [
-      {
-        id: 'normal_price_usd',
-        name: <FormattedMessage id="normal_price" defaultMessage="Normal price"/>
-      },
-      {
-        id: 'offer_price_usd',
-        name: <FormattedMessage id="offer_price" defaultMessage="Offer price"/>
-      },
-    ];
-
-    for (const orderingChoice of formLayout.orders) {
-      const use = orderingChoice.suggested_use;
-
-      if (use === 'ascending') {
-        orderingChoices.push({
-          id: orderingChoice.name,
-          name: orderingChoice.label
-        })
-      }
-
-      if (use === 'descending') {
-        orderingChoices.push({
-          id: '-' + orderingChoice.name,
-          name: orderingChoice.label
-        })
-      }
-
-      if (use === 'both') {
-        orderingChoices.push({
-          id: orderingChoice.name,
-          name: `${orderingChoice.label} (${this.props.intl.formatMessage({id: 'ascending'})})`
-        });
-
-        orderingChoices.push({
-          id: '-' + orderingChoice.name,
-          name: `${orderingChoice.label} (${this.props.intl.formatMessage({id: 'descending'})})`
-        })
-      }
-    }
-
-    const apiEndpoint = this.apiEndpoint();
-
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoints={[apiEndpoint]}
+              endpoints={[this.apiEndpoint()]}
               fields={apiFormFields}
               onResultsChange={this.setResults}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <div className="row">
-              <div className="col-12">
+              <div className="col-12 col-md-6 col-lg-8 col-xl-8">
                 <div className="card">
                   <div className="card-header">
                     <i className="glyphicons glyphicons-search">&nbsp;</i>
@@ -541,25 +516,25 @@ class CategoryDetailBrowse extends Component {
                             placeholder={messages.all_masculine}
                         />
                       </div>
-                      <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <label htmlFor="ordering">
-                          <FormattedMessage id="ordering" defaultMessage="Ordering" />
-                        </label>
-                        <ApiFormChoiceField
-                            name="ordering"
-                            id="ordering"
-                            choices={orderingChoices}
-                            onChange={this.state.apiFormFieldChangeHandler}
-                            required={true}
-                        />
-                      </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-12 col-md-6 col-lg-4 col-xl-4">
+                <div className="card">
+                  <div className="card-header">
+                    <i className="glyphicons glyphicons-search">&nbsp;</i>
+                    <FormattedMessage id="filters" defaultMessage="Filters" />
+                  </div>
+                  <div className="card-block" id="category-browse-filters">
+                    {filtersComponent}
                   </div>
                 </div>
               </div>
             </div>
             <div className="row">
-              <div className="col-12 col-md-6 col-lg-8 col-xl-8">
+              <div className="col-12">
                 <div className="card">
                   <div className="card-header">
                   </div>
@@ -571,26 +546,7 @@ class CategoryDetailBrowse extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-md-6 col-lg-4 col-xl-4">
-                <div className="card">
-                  <div className="card-header">
-                    <i className="glyphicons glyphicons-search">&nbsp;</i>
-                    <FormattedMessage id="filters" defaultMessage="Filters" />
-                  </div>
-                  <div className="card-block">
-                    {processedFormLayout.map(fieldset => (
-                        <fieldset key={fieldset.id || fieldset.label}>
-                          <legend>{fieldset.label}</legend>
-                          {fieldset.filters.map(filter => (
-                              <div key={filter.name} className="pb-2">
-                                {filter.component}
-                              </div>
-                          ))}
-                        </fieldset>
-                    ))}
-                  </div>
-                </div>
-              </div>
+
             </div>
           </ApiForm>
         </div>
