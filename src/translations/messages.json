@@ -430,21 +430,6 @@
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
   },
   {
-    "id": "name",
-    "defaultMessage": "Name",
-    "filepath": "./src/views/Category/CategoryDetailBrowse.js"
-  },
-  {
-    "id": "prices_normal_offer",
-    "defaultMessage": "Prices (normal / offer)",
-    "filepath": "./src/views/Category/CategoryDetailBrowse.js"
-  },
-  {
-    "id": "offer_price",
-    "defaultMessage": "Offer price",
-    "filepath": "./src/views/Category/CategoryDetailBrowse.js"
-  },
-  {
     "id": "pricing_parameters",
     "defaultMessage": "Pricing parameters",
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
@@ -465,8 +450,8 @@
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
   },
   {
-    "id": "ordering",
-    "defaultMessage": "Ordering",
+    "id": "filters",
+    "defaultMessage": "Filters",
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
   },
   {
@@ -475,14 +460,84 @@
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
   },
   {
-    "id": "filters",
-    "defaultMessage": "Filters",
-    "filepath": "./src/views/Category/CategoryDetailBrowse.js"
-  },
-  {
     "id": "results_lower_case",
     "defaultMessage": "results",
     "filepath": "./src/views/Category/CategoryDetailBrowse.js"
+  },
+  {
+    "id": "sku",
+    "defaultMessage": "SKU",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "product",
+    "defaultMessage": "Product",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "cell_plan",
+    "defaultMessage": "Cell plan",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "any",
+    "defaultMessage": "Any",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "general_information",
+    "defaultMessage": "General information",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "normal",
+    "defaultMessage": "Normal",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "offer",
+    "defaultMessage": "Offer",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "minima",
+    "defaultMessage": "Minimum",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "previous",
+    "defaultMessage": "Previous",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "next",
+    "defaultMessage": "Next",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "Loading",
+    "defaultMessage": "Loading",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "no_results_found",
+    "defaultMessage": "No results found",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "page",
+    "defaultMessage": "Page",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "of",
+    "defaultMessage": "of",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
+  },
+  {
+    "id": "rows",
+    "defaultMessage": "rows",
+    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
   },
   {
     "id": "options",
@@ -2580,6 +2635,16 @@
     "filepath": "./src/views/Report/ReportStoreAnalysis.js"
   },
   {
+    "id": "layout_1",
+    "defaultMessage": "Layout 1",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "layout_2",
+    "defaultMessage": "Layout 2",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
     "id": "filters",
     "defaultMessage": "Filters",
     "filepath": "./src/views/Report/ReportStoreAnalysis.js"
@@ -2607,6 +2672,11 @@
   {
     "id": "price_type",
     "defaultMessage": "Price type",
+    "filepath": "./src/views/Report/ReportStoreAnalysis.js"
+  },
+  {
+    "id": "Layout",
+    "defaultMessage": "Layout",
     "filepath": "./src/views/Report/ReportStoreAnalysis.js"
   },
   {

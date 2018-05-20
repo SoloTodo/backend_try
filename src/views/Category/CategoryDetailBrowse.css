@@ -1,3 +1,31 @@
-legend {
-    font-size: 1.2rem;
+.Collapsible__trigger.is-open .fa-angle-down {
+    color: blue;
+    transform: rotate(-180deg);
+}
+
+#category-browse-filters {
+    font-size: 0.8rem;
+}
+
+#category-browse-filters legend {
+    font-size: 0.9rem;
+}
+
+#category-browse-filters .react-sanfona-item {
+    margin-bottom: 10px
+}
+
+#category-browse-filters .react-sanfona-item-title::before {
+    display: inline-block;
+    font-family: "Font Awesome\ 5 Free";
+    content: "\f107";
+    font-weight: 900;
+    margin-right: 5px;
+    font-size: 16px;
+    transform: rotate(0deg);
+    transition: 0.3s;
+}
+
+#category-browse-filters .react-sanfona-item-expanded legend::before {
+    transform: rotate(-180deg);
 }

@@ -22,11 +22,13 @@ export function backendStateToPropsUtils(state, ownProps) {
   const user = state.apiResourceObjects[apiSettings.ownUserUrl] || null;
   const preferredNumberFormat = state.apiResourceObjects[user.preferred_number_format] || null;
   const preferredCurrency = state.apiResourceObjects[user.preferred_currency] || null;
+  const preferredStore = state.apiResourceObjects[user.preferred_store] || null;
 
   return {
     user,
     preferredCurrency,
     preferredNumberFormat,
+    preferredStore,
     preferredLanguage: state.apiResourceObjects[user.preferred_language] || null,
     formatCurrency: (value, currency=null, convertToPreferredCurrency=false) => {
       if (!currency) {
