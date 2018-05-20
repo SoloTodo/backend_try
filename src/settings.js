@@ -17,5 +17,6 @@ export const settings = {
   ownWebsiteId: 1,
   ownWebsiteUrl: apiSettings.endpoint + 'websites/1/',
   solotodoUrl: 'https://www.solotodo.com/',
-  googleAnalyticsId: 'UA-11970222-3'
+  googleAnalyticsId: 'UA-11970222-3',
+  mobileNetworkOperatorId: 3
 };
