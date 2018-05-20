@@ -537,6 +537,8 @@ class CategoryDetailBrowse extends Component {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
+                    <i className="glyphicons glyphicons-list">&nbsp;</i>
+                    <FormattedMessage id="results" defaultMessage="Results"/>
                   </div>
                   <div className="card-block">
                     <CategoryDetailBrowseResult

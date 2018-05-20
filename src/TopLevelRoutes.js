@@ -84,7 +84,7 @@ export const sidebarLayout = [
   },
   {
     title: <FormattedMessage id="leads" defaultMessage="Leads" />,
-    icon: "fa fa-external-link",
+    icon: "fas fa-external-link-alt",
     entries: [
       {
         label: <FormattedMessage id="show_list_male" defaultMessage="Show all" />,
