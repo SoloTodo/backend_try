@@ -17,6 +17,7 @@ import ProductDetailPriceTableTab from "./ProductDetailPriceTableTab";
 class ProductDetailPricesTable extends Component {
   initialState = {
     availableEntities: undefined,
+    cellPlanPrices: undefined,
     activeTab: 0
   };
 
@@ -42,9 +43,37 @@ class ProductDetailPricesTable extends Component {
     this.props
         .fetchAuth(product.url + 'entities/')
         .then(entities => {
+          const availableEntities = entities.filter(entity => entity.active_registry && entity.active_registry.is_available)
+
           this.setState({
-            availableEntities: entities.filter(entity => entity.active_registry && entity.active_registry.is_available)
-          })
+            availableEntities
+          });
+
+          /* If some of the entities are associated to cell plans with contract
+          retrieve the monthly prices of those plans.*/
+          const contractCellPlansInEntities = availableEntities
+              .filter(entity => entity.active_registry.cell_monthly_payment !== null && entity.cell_plan !== null)
+              .map(entity => entity.cell_plan);
+
+          if (contractCellPlansInEntities.length) {
+            let cellPlanPricesUrl = 'products/available_entities/?';
+
+            for (const cellPlan of contractCellPlansInEntities) {
+              cellPlanPricesUrl += `ids=${cellPlan.id}&`;
+            }
+
+            this.props.fetchAuth(cellPlanPricesUrl).then(cellPlanPricesResult => {
+              const cellPlanPrices = {};
+
+              for (const priceEntry of cellPlanPricesResult.results) {
+                cellPlanPrices[priceEntry.product.id] = parseFloat(priceEntry.entities[0].active_registry.normal_price);
+              }
+
+              this.setState({
+                cellPlanPrices
+              })
+            })
+          }
         })
   }
 
@@ -77,6 +106,16 @@ class ProductDetailPricesTable extends Component {
         convertedCellMonthlyPayment: this.props.convertToPreferredCurrency(cellMonthlyPayment, currency),
       };
 
+      let cellPlanPrice = null;
+
+      if (this.state.cellPlanPrices && e.cell_plan) {
+        cellPlanPrice = this.state.cellPlanPrices[e.cell_plan.id];
+
+        if (typeof(cellPlanPrice) !== 'undefined') {
+          expandedEntity.cellPlanPrice = cellPlanPrice;
+        }
+      }
+
       return this.props.ApiResourceObject(expandedEntity);
     });
 
@@ -98,7 +137,9 @@ class ProductDetailPricesTable extends Component {
     const storesDict = listToObject(this.props.stores, 'id');
 
     if (Object.keys(mobile_network_operators_entities).length === 0) {
-      return <ProductDetailPriceTableTab entities={retail_and_wholesaler_entities} />
+      return <ProductDetailPriceTableTab
+          entities={retail_and_wholesaler_entities}
+          />
     } else {
       return <div>
         <Nav tabs>
@@ -122,11 +163,15 @@ class ProductDetailPricesTable extends Component {
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId={0}>
-            <ProductDetailPriceTableTab entities={retail_and_wholesaler_entities} />
+            <ProductDetailPriceTableTab
+                entities={retail_and_wholesaler_entities}
+                />
           </TabPane>
           {Object.keys(mobile_network_operators_entities).map(storeId => (
               <TabPane key={storeId} tabId={storeId}>
-                <ProductDetailPriceTableTab entities={mobile_network_operators_entities[storeId]} />
+                <ProductDetailPriceTableTab
+                    entities={mobile_network_operators_entities[storeId]}
+                    />
               </TabPane>)
           )}
         </TabContent>

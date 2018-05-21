@@ -290,6 +290,11 @@
     "filepath": "./src/messages.js"
   },
   {
+    "id": "rows",
+    "defaultMessage": "rows",
+    "filepath": "./src/messages.js"
+  },
+  {
     "id": "no_results_found",
     "defaultMessage": "No results found",
     "filepath": "./src/react-utils/api_forms/ApiFormResultsTable.js"
@@ -532,11 +537,6 @@
   {
     "id": "of",
     "defaultMessage": "of",
-    "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
-  },
-  {
-    "id": "rows",
-    "defaultMessage": "rows",
     "filepath": "./src/views/Category/CategoryDetailBrowseResult.js"
   },
   {
@@ -1892,32 +1892,37 @@
   {
     "id": "store",
     "defaultMessage": "Stores",
-    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+    "filepath": "./src/views/Product/ProductDetailPriceTableTab.js"
   },
   {
     "id": "country",
     "defaultMessage": "Country",
-    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+    "filepath": "./src/views/Product/ProductDetailPriceTableTab.js"
   },
   {
     "id": "cell_plan",
     "defaultMessage": "Cell plan",
-    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+    "filepath": "./src/views/Product/ProductDetailPriceTableTab.js"
   },
   {
     "id": "normal_price",
     "defaultMessage": "Normal",
-    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+    "filepath": "./src/views/Product/ProductDetailPriceTableTab.js"
   },
   {
     "id": "offer_price",
     "defaultMessage": "Offer price",
-    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+    "filepath": "./src/views/Product/ProductDetailPriceTableTab.js"
+  },
+  {
+    "id": "cell_plan_price",
+    "defaultMessage": "Cell plan price",
+    "filepath": "./src/views/Product/ProductDetailPriceTableTab.js"
   },
   {
     "id": "monthly_payment",
     "defaultMessage": "Monthly payment",
-    "filepath": "./src/views/Product/ProductDetailPricesTable.js"
+    "filepath": "./src/views/Product/ProductDetailPriceTableTab.js"
   },
   {
     "id": "only_when_available",

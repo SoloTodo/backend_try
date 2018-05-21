@@ -92,6 +92,23 @@ class ProductDetailPriceTableTab extends Component {
       className: 'text-right'
     });
 
+    if (entities.some(entity => typeof(entity.cellPlanPrice) !== 'undefined')) {
+      columns.push({
+        name: 'cellPlanPrice',
+        label: <FormattedMessage id="cell_plan_price"
+                                 defaultMessage="Cell plan price"/>,
+        field: entity => {
+          if (typeof(entity.cellPlanPrice) === 'undefined') {
+            return <em>N/A</em>
+          }
+
+          return this.props.formatCurrency(entity.cellPlanPrice, entity.currency)
+        },
+        ordering: commonCurrency ? entity => entity.cellPlanPrice : undefined,
+        className: 'text-right'
+      });
+    }
+
     // Add cell monthly payment, if there are any entities with it
 
     const hasCellMonthlyPayments = entities.some(entity => entity.activeRegistry.cell_monthly_payment !== null);
