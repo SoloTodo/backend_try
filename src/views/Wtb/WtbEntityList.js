@@ -56,7 +56,7 @@ class WtbEntityList extends Component {
         ordering: 'brand',
         renderer: wtbEntity => <span>
           <NavLink to={'/wtb/brands/' + wtbEntity.brand.id}>{wtbEntity.brand.name}</NavLink>
-          <a href={wtbEntity.externalUrl} target="_blank" className="ml-2">
+          <a href={wtbEntity.externalUrl} target="_blank" rel="noopener noreferrer" className="ml-2">
             <span className="glyphicons glyphicons-link">&nbsp;</span>
           </a>
         </span>

@@ -92,7 +92,7 @@ class StoreDetailUpdateLogs extends Component {
       {
         label: <FormattedMessage id="log" defaultMessage={`Log`} />,
         renderer: entry => entry.registryFile ?
-            <a href={entry.registryFile} target="_blank"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
+            <a href={entry.registryFile} target="_blank" rel="noopener noreferrer"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
             <FormattedMessage id="unavailable" defaultMessage={`Unavailable`} />,
         cssClasses: 'hidden-md-down'
       }

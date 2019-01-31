@@ -283,7 +283,7 @@ class StoreUpdate extends Component {
 
                               <td className="hidden-md-down">
                                 {storeEntry.latestUpdateLog.registryFile ?
-                                    <a href={storeEntry.latestUpdateLog.registryFile} target="_blank"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
+                                    <a href={storeEntry.latestUpdateLog.registryFile} target="_blank" rel="noopener noreferrer"><FormattedMessage id="download" defaultMessage={`Download`} /></a> :
                                     <FormattedMessage id="unavailable" defaultMessage={`Unavailable`} />
                                 }
                               </td>

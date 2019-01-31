@@ -64,7 +64,7 @@ class LeadList extends Component {
         renderer: lead => (
             <span>
               <NavLink to={'/entities/' + lead.entity.id}>{lead.entity.name}</NavLink>
-              <a href={lead.entity.external_url} target="_blank" className="ml-2">
+              <a href={lead.entity.external_url} target="_blank" rel="noopener noreferrer" className="ml-2">
                 <span className="glyphicons glyphicons-link">&nbsp;</span>
               </a>
             </span>

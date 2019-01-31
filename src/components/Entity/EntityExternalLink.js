@@ -9,7 +9,7 @@ export default class EntityExternalLink extends Component {
       <Link to={'/entities/' + entity.id}>
         {this.props.label}
       </Link>
-      <a href={entity.external_url} target="_blank" className="ml-2">
+      <a href={entity.external_url} target="_blank" rel="noopener noreferrer" className="ml-2">
         <span className="glyphicons glyphicons-link">&nbsp;</span>
       </a>
     </div>

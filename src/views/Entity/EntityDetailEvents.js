@@ -47,7 +47,7 @@ class EntityDetailEvents extends Component {
     } else if (['product', 'cell_plan'].includes(field)) {
       return value ? <NavLink to={`/products/${value.id}`}>{value.name}</NavLink> : <em>N/A</em>
     } else if (['url', 'discovery_url'].includes(field)) {
-      return <a className="url-link" href={value} target="_blank">{value || <em>N/A</em>}</a>
+      return <a className="url-link" href={value} target="_blank" rel="noopener noreferrer">{value || <em>N/A</em>}</a>
     } else if (field === 'description') {
       return <div className="description-container"><Markdown markup={ value } tables={true} /></div>
     } else if (field === 'is_visible') {
@@ -56,7 +56,7 @@ class EntityDetailEvents extends Component {
       if (value) {
         return <ul>
           {JSON.parse(value).map(pictureUrl =>
-            <li key={pictureUrl}><a href={pictureUrl} target="_blank">{pictureUrl}</a></li>
+            <li key={pictureUrl}><a href={pictureUrl} target="_blank" rel="noopener noreferrer">{pictureUrl}</a></li>
           )}
         </ul>
       } else {

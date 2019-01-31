@@ -63,7 +63,7 @@ class ProductDetailEntities extends Component {
         label: <FormattedMessage id="store" defaultMessage="Store"/>,
         renderer: entity => <span>
           <NavLink to={`/stores/${entity.store.id}`}>{entity.store.name}</NavLink>
-          <a href={entity.externalUrl} target="_blank" className="ml-2">
+          <a href={entity.externalUrl} target="_blank" rel="noopener noreferrer" className="ml-2">
             <span className="glyphicons glyphicons-link">&nbsp;</span>
           </a>
         </span>

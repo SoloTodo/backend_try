@@ -251,7 +251,7 @@ class EntityDetailAssociate extends Component {
                         <dd>{entity.store.name}</dd>
 
                         <dt><FormattedMessage id="url" defaultMessage="URL" /></dt>
-                        <dd><a href={entity.externalUrl} target="_blank">{entity.externalUrl}</a></dd>
+                        <dd><a href={entity.externalUrl} target="_blank" rel="noopener noreferrer">{entity.externalUrl}</a></dd>
 
                         <dt><FormattedMessage id="hide" defaultMessage="Hide" /></dt>
                         <dd><Button onClick={this.handleEntityHideClick}><FormattedMessage id="hide_entity" defaultMessage="Hide entity" /></Button></dd>
@@ -336,7 +336,7 @@ class EntityDetailAssociate extends Component {
                       <div className="btn-group mr-2" role="group">
                         <a className="btn btn-secondary"
                            href={`/products/${this.state.selectedProduct.id}`}
-                           target="_blank">
+                           target="_blank" rel="noopener noreferrer">
                           <FormattedMessage id="view_product"
                                             defaultMessage="View product"/>
                         </a>
@@ -347,7 +347,7 @@ class EntityDetailAssociate extends Component {
                       <div className="btn-group mr-2" role="group">
                         <a className="btn btn-secondary"
                            href={`${settings.solotodoUrl}products/${this.state.selectedProduct.id}`}
-                           target="_blank">
+                           target="_blank" rel="noopener noreferrer">
                           <FormattedMessage id="view_in_solotodo" defaultMessage="View in SoloTodo"/>
                         </a>
                       </div>
@@ -357,7 +357,7 @@ class EntityDetailAssociate extends Component {
                       <div className="btn-group mr-2" role="group">
                         <a className="btn btn-secondary"
                            href={`${settings.endpoint}metamodel/instances/${this.state.selectedProduct.instance_model_id}`}
-                           target="_blank">
+                           target="_blank" rel="noopener noreferrer">
                           <FormattedMessage id="edit" defaultMessage="Edit"/>
                         </a>
                       </div>

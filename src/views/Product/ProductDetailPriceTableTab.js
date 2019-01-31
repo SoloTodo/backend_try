@@ -19,7 +19,7 @@ class ProductDetailPriceTableTab extends Component {
         label: <FormattedMessage id="store" defaultMessage="Stores" />,
         field: entity => <span className="">
           <Link to={'/entities/' + entity.id}>{entity.store.name}</Link>
-          <a href={entity.externalUrl} target="_blank" className="ml-2">
+          <a href={entity.externalUrl} target="_blank" rel="noopener noreferrer" className="ml-2">
             <span className="glyphicons glyphicons-link">&nbsp;</span>
           </a>
         </span>,

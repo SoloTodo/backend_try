@@ -418,7 +418,7 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="url" defaultMessage='URL' /></th>
-                      <td className="overflowed-table-cell"><a href={entity.externalUrl} target="_blank">{entity.externalUrl}</a></td>
+                      <td className="overflowed-table-cell"><a href={entity.externalUrl} target="_blank" rel="noopener noreferrer">{entity.externalUrl}</a></td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="category" defaultMessage='Category' /></th>
@@ -612,7 +612,7 @@ class EntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="discovery_url" defaultMessage='Discovery URL' /></th>
-                      <td className="overflowed-table-cell"><a href={staffInfo.discoveryUrl} target="_blank">{staffInfo.discoveryUrl}</a></td>
+                      <td className="overflowed-table-cell"><a href={staffInfo.discoveryUrl} target="_blank" rel="noopener noreferrer">{staffInfo.discoveryUrl}</a></td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="last_association" defaultMessage='Last association' /></th>

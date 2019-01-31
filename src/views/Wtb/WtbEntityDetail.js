@@ -292,7 +292,7 @@ class WtbEntityDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="url" defaultMessage='URL' /></th>
-                      <td className="overflowed-table-cell"><a href={wtbEntity.externalUrl} target="_blank">{wtbEntity.externalUrl}</a></td>
+                      <td className="overflowed-table-cell"><a href={wtbEntity.externalUrl} target="_blank" rel="noopener noreferrer">{wtbEntity.externalUrl}</a></td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="category" defaultMessage='Category' /></th>

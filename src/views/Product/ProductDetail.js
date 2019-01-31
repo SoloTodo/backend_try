@@ -257,7 +257,7 @@ class ProductDetail extends Component {
                           {websites.map(website => (
                               <DropdownItem key={website.id}>
                                 <a href={`${website.external_url}/products/${product.id}`}
-                                   target="_blank">{website.name}</a>
+                                   target="_blank" rel="noopener noreferrer">{website.name}</a>
                               </DropdownItem>
                           ))}
                         </DropdownMenu>

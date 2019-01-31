@@ -5,7 +5,6 @@ import { createBrowserHistory } from 'history';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import {ToastContainer} from "react-toastify";
 import { polyfill } from 'smoothscroll-polyfill'
-import GoogleAnalytics from 'react-ga';
 import {
   createResponsiveStateReducer,
   responsiveStoreEnhancer
@@ -16,12 +15,10 @@ import {
   authTokenReducer, loadedBundleReducer, loadedResourcesReducer
 } from "./react-utils/redux-utils";
 import UserLoader from "./react-utils/components/UserLoader";
-import withTracker from "./react-utils/components/GoogleAnalyticsTracker";
 
 import ConnectedIntlProvider from './ConnectedIntlProvider';
 import Full from './containers/Full/Full';
 import Login from './views/Pages/Login';
-import { settings } from './settings';
 import UserPermissionFilter from "./auth/UserPermissionFilter";
 
 import 'react-select/dist/react-select.css';
@@ -49,13 +46,10 @@ class App extends Component {
     }), responsiveStoreEnhancer);
 
     polyfill();
-    GoogleAnalytics.initialize(settings.googleAnalyticsId);
-    this.TrackedUserLoader = withTracker(UserLoader);
   }
 
   render() {
     let history = createBrowserHistory();
-    const TrackedUserLoader = this.TrackedUserLoader;
 
     return (
         <Provider store={this.store}>
@@ -75,7 +69,7 @@ class App extends Component {
                   <Route exact path="/login" name="Login Page"
                          component={Login}/>
                   <Route path="/" render={props => (
-                      <TrackedUserLoader {...props}>
+                      <UserLoader {...props}>
                         <UserPermissionFilter redirectPath="/login">
                           <RequiredBundle
                               resources={['languages', 'currencies', 'countries', 'store_types', 'number_formats']}
@@ -86,7 +80,7 @@ class App extends Component {
                             </UserPreferences>
                           </RequiredBundle>
                         </UserPermissionFilter>
-                      </TrackedUserLoader>
+                      </UserLoader>
                   )} />
                 </Switch>
               </BrowserRouter>

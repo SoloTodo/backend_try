@@ -129,7 +129,7 @@ class ProductDetailPricingHistory extends Component {
               <NavLink
                   to={'/stores/' + store.id}>{store.name}</NavLink>
               <a href={entry.entity.external_url} target="_blank"
-                 className="ml-2">
+                 rel="noopener noreferrer" className="ml-2">
                 <span className="glyphicons glyphicons-link">&nbsp;</span>
               </a>
             </span>

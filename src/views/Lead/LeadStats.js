@@ -166,7 +166,7 @@ class LeadStats extends Component {
             label: <FormattedMessage id="entity" defaultMessage="Entidad" />,
             renderer: entry => <span>
               <NavLink to={'/entities/' + entry.entity.id}>{entry.entity.name}</NavLink>
-              <a href={entry.entity.external_url} target="_blank" className="ml-2">
+              <a href={entry.entity.external_url} target="_blank" rel="noopener noreferrer" className="ml-2">
                 <span className="glyphicons glyphicons-link">&nbsp;</span>
               </a>
             </span>

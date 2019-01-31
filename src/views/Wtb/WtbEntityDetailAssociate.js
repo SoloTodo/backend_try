@@ -144,7 +144,7 @@ class WtbEntityDetailAssociate extends Component {
                         <dd>{wtbEntity.brand.name}</dd>
 
                         <dt><FormattedMessage id="url" defaultMessage="URL" /></dt>
-                        <dd><a href={wtbEntity.externalUrl} target="_blank">{wtbEntity.externalUrl}</a></dd>
+                        <dd><a href={wtbEntity.externalUrl} target="_blank" rel="noopener noreferrer">{wtbEntity.externalUrl}</a></dd>
                       </dl>
                     </div>
                     <div className="col-12 col-sm-6">
@@ -196,7 +196,7 @@ class WtbEntityDetailAssociate extends Component {
                       <div className="btn-group mr-2" role="group">
                         <a className="btn btn-secondary"
                            href={`/products/${this.state.selectedProductId}`}
-                           target="_blank">
+                           target="_blank" rel="noopener noreferrer">
                           <FormattedMessage id="view_product"
                                             defaultMessage="View product"/>
                         </a>
@@ -207,7 +207,7 @@ class WtbEntityDetailAssociate extends Component {
                       <div className="btn-group mr-2" role="group">
                         <a className="btn btn-secondary"
                            href={`${settings.solotodoUrl}products/${this.state.selectedProductId}`}
-                           target="_blank">
+                           target="_blank" rel="noopener noreferrer">
                           <FormattedMessage id="view_in_solotodo" defaultMessage="View in SoloTodo"/>
                         </a>
                       </div>

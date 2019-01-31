@@ -64,7 +64,7 @@ class VisitList extends Component {
         renderer: visit => {
           return <span>
               <NavLink to={'/products/' + visit.product.id}>{visit.product.name}</NavLink>
-              <a href={`${visit.website.externalUrl}/products/${visit.product.id}`} target="_blank" className="ml-2">
+              <a href={`${visit.website.externalUrl}/products/${visit.product.id}`} target="_blank" rel="noopener noreferrer" className="ml-2">
                 <span className="glyphicons glyphicons-link">&nbsp;</span>
               </a>
           </span>

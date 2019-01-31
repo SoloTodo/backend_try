@@ -12,7 +12,7 @@ function OrderTableHeader ({column, ordering, descending, onChange}) {
     orderingArrow = descending ? <span>&#9660;</span> : <span>&#9650;</span>;
   }
 
-  return <a href="" onClick={evt => onChange(evt, column)}>
+  return <a href="/" onClick={evt => onChange(evt, column)}>
     {column.label} {orderingArrow}
   </a>
 }

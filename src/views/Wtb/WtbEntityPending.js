@@ -69,7 +69,7 @@ class WtbEntityPending extends Component {
         label: <FormattedMessage id="brand" defaultMessage="Brand" />,
         renderer: wtbEntity => <span>
           <Link to={'/wtb/brands/' + wtbEntity.brand.id}>{wtbEntity.brand.name}</Link>
-          <a href={wtbEntity.externalUrl} target="_blank" className="ml-2">
+          <a href={wtbEntity.externalUrl} target="_blank" rel="noopener noreferrer" className="ml-2">
             <span className="glyphicons glyphicons-link">&nbsp;</span>
           </a>
         </span>
