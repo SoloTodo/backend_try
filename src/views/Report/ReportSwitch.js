@@ -9,6 +9,7 @@ import ReportPricesHistory from "./ReportPricesHistory";
 import ReportWebsitesTraffic from "./ReportWebsitesTraffic";
 import ReportSecPrices from "./ReportSecPrices";
 import ReportDailyPrices from "./ReportDailyPrices";
+import ReportWtb from "./ReportWtb";
 
 export default ({match}) => {
   return (
@@ -51,6 +52,11 @@ export default ({match}) => {
         <Route path={match.url + '/daily_prices'} exact render={props => (
             <RequiredResources resources={['categories', 'stores']}>
               <ReportDailyPrices />
+            </RequiredResources>
+        )} />
+        <Route path={match.url + '/wtb_report'} exact render={props => (
+            <RequiredResources resources={['wtb_brands', 'categories', 'stores', 'currencies', 'store_types', 'countries']}>
+              <ReportWtb />
             </RequiredResources>
         )} />
       </Switch>
