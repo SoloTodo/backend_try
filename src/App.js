@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 import {ToastContainer} from "react-toastify";
 import { polyfill } from 'smoothscroll-polyfill'
 import {
@@ -64,7 +64,7 @@ class App extends Component {
                   closeOnClick
                   pauseOnHover
               />
-              <BrowserRouter history={history}>
+              <Router history={history}>
                 <Switch>
                   <Route exact path="/login" name="Login Page"
                          component={Login}/>
@@ -83,7 +83,7 @@ class App extends Component {
                       </UserLoader>
                   )} />
                 </Switch>
-              </BrowserRouter>
+              </Router>
             </div>
           </ConnectedIntlProvider>
         </Provider>

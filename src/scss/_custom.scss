@@ -168,7 +168,7 @@ main > .container-fluid {
   z-index: 0;
 }
 
-list-without-decoration {
+.list-without-decoration {
   list-style-type: none;
   padding-left: 0;
 }
@@ -181,6 +181,10 @@ list-without-decoration {
   z-index: 101 !important;
 }
 
+.Select-option {
+  color: #666666 !important;
+}
+
 #entity_association_card .form-control {
   color: #374767;
 }
@@ -189,3 +193,9 @@ list-without-decoration {
   color: #28a745 !important;
   //font-weight: bold;
 }
+
+.css-mueken, [data-css-mueken] {
+    top: 5em;
+    right: 1em;
+}
+
