@@ -834,7 +834,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.1.2":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0":
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.1.tgz#574b03e8e8a9898eaf4a872a92ea20b7846f6f2a"
   integrity sha512-7jGW8ppV0ant637pIqAcFfQDDH1orEPGJb8aXfUozuCU3QqX7rX4DA8iwrbPrR1hcH0FTTHz47yQnk+bl5xHQA==
@@ -2846,13 +2846,13 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-chart.js@^2.6.0:
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.7.3.tgz#cdb61618830bf216dc887e2f7b1b3c228b73c57e"
-  integrity sha512-3+7k/DbR92m6BsMUYP6M0dMsMVZpMnwkUyNSAbqolHKsbIzH2Q4LWVEHHYq7v0fmEV8whXE0DrjANulw9j2K5g==
+chart.js@2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.6.0.tgz#308f9a4b0bfed5a154c14f5deb1d9470d22abe71"
+  integrity sha1-MI+aSwv+1aFUwU9d6x2UcNIqvnE=
   dependencies:
     chartjs-color "^2.1.0"
-    moment "^2.10.2"
+    moment "^2.10.6"
 
 chartjs-color-string@^0.5.0:
   version "0.5.0"
@@ -7462,7 +7462,7 @@ lodash.isarray@^3.0.0:
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
   integrity sha1-eeTriMNqgSKvhvhEqpvNhRtfu1U=
 
-lodash.isfunction@^3.0.8:
+lodash.isfunction@^3.0.9:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/lodash.isfunction/-/lodash.isfunction-3.0.9.tgz#06de25df4db327ac931981d1bdb067e5af68d051"
   integrity sha512-AirXNj15uRIMMPihnkInB4i3NHeb4iBtNg9WRWuK2o31S+ePwwNmDPaTL3o7dTJ+VXNZim7rFs4rxN4YU1oUJw==
@@ -7980,7 +7980,7 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
-moment@^2.10.2, moment@^2.18.1:
+moment@^2.10.6, moment@^2.18.1:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
@@ -8944,6 +8944,11 @@ pnp-webpack-plugin@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pnp-webpack-plugin/-/pnp-webpack-plugin-1.1.0.tgz#947a96d1db94bb5a1fc014d83b581e428699ac8c"
   integrity sha512-CPCdcFxx7fEcDMWTDjXe2Wypt4JuMt4q5Q2UrpTcyBBkLiCIyPEh/mCGmUWIcNkKGyXwQ9Y2wVhlKm6ketiBNQ==
+
+popper.js@^1.14.1:
+  version "1.14.7"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.7.tgz#e31ec06cfac6a97a53280c3e55e4e0c860e7738e"
+  integrity sha512-4q1hNvoUre/8srWsH7hnoSJ5xVmIL4qgz+s4qf2TnJIMyZFUFMGH+9vE7mXynAlHSZ/NdTmmow86muD0myUkVQ==
 
 portfinder@^1.0.9:
   version "1.0.20"
@@ -9992,10 +9997,10 @@ react-base16-styling@^0.5.1:
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
 
-react-chartjs-2@^2.6.1:
-  version "2.7.4"
-  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.7.4.tgz#e41ea4e81491dc78347111126a48e96ee57db1a6"
-  integrity sha512-lXTpBaDlk9rIMjRONjZd76dIUhEm3vOp2jOrJrsFG/UpFI5VqX8Xw83apVHTnUGJ968f8i/i/syLddls4NHy2g==
+react-chartjs-2@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-2.6.1.tgz#d6499780f5dcac934b5c293e68d9650c98145873"
+  integrity sha512-wYvnwCrmmcAYuFJ0CGLy37fpeEAfx71Phxijepv5DcKNo7uBwPIZvLg7n8TUmeO4rCMdSv2Uo8Mp3tTHXw4g2w==
   dependencies:
     lodash "^4.17.4"
     prop-types "^15.5.8"
@@ -10143,6 +10148,14 @@ react-paginate@^4.4.3:
     classnames "^2.2.5"
     prop-types "^15.5.7"
     react-addons-create-fragment "^15.0.0"
+
+react-popper@^0.10.4:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.10.4.tgz#af2a415ea22291edd504678d7afda8a6ee3295aa"
+  integrity sha1-rypBXqIike3VBGeNev2opu4ylao=
+  dependencies:
+    popper.js "^1.14.1"
+    prop-types "^15.6.1"
 
 react-redux@^5.0.5:
   version "5.1.1"
@@ -10309,7 +10322,7 @@ react-transition-group@^1.2.0:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react-transition-group@^2.2.1:
+react-transition-group@^2.2.1, react-transition-group@^2.3.1:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.5.3.tgz#26de363cab19e5c88ae5dbae105c706cf953bb92"
   integrity sha512-2DGFck6h99kLNr8pOFk+z4Soq3iISydwOFeeEVPjTN6+Y01CmvbWmnN02VuTWyFdnRtIDPe+wy2q6Ui8snBPZg==
@@ -10329,22 +10342,20 @@ react@^16.7.0:
     prop-types "^15.6.2"
     scheduler "^0.12.0"
 
-reactstrap-tether@1.3.4:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/reactstrap-tether/-/reactstrap-tether-1.3.4.tgz#86d94d30216ffa34ceb2c626f4b9912c0d193894"
-  integrity sha1-htlNMCFv+jTOssYm9LmRLA0ZOJQ=
-
-reactstrap@^4.8.0:
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-4.8.0.tgz#eb350642a6282c79c7e1bd8d6f75c627131a42f6"
-  integrity sha1-6zUGQqYoLHnH4b2Nb3XGJxMaQvY=
+reactstrap@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-7.1.0.tgz#fd7125901737a3001c8564c0f8b40e319eec23b2"
+  integrity sha512-wtc4RkgnGn1TsZ0AxOZ2OqT+b8YmCWZj/tErPujWLepxzlEEhveZGC+uDerdaHVSAzJUP2DTk605iper7hutQQ==
   dependencies:
+    "@babel/runtime" "^7.2.0"
     classnames "^2.2.3"
-    lodash.isfunction "^3.0.8"
+    lodash.isfunction "^3.0.9"
     lodash.isobject "^3.0.2"
     lodash.tonumber "^4.0.3"
     prop-types "^15.5.8"
-    reactstrap-tether "1.3.4"
+    react-lifecycles-compat "^3.0.4"
+    react-popper "^0.10.4"
+    react-transition-group "^2.3.1"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
