@@ -67,7 +67,7 @@ class Sidebar extends Component {
                 <ul className="nav-dropdown-items">
                   {this.props.currencies.map(currency => (
                       <li className="nav-item" key={currency.url}>
-                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredCurrency', currency, this.props.authToken)}><i className={currency === selectedCurrency && 'fa fa-check'}/>{ currency.name }</a>
+                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredCurrency', currency, this.props.authToken)}><i className={currency === selectedCurrency ? 'fa fa-check' : ''}/>{ currency.name }</a>
                       </li>
                   ))}
                 </ul>
@@ -78,7 +78,7 @@ class Sidebar extends Component {
                 <ul className="nav-dropdown-items">
                   {this.props.numberFormats.map(numberFormat => (
                       <li className="nav-item" key={numberFormat.url}>
-                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredNumberFormat', numberFormat, this.props.authToken)}><i className={numberFormat === selectedNumberFormat && 'fa fa-check'}/> { numberFormat.name }</a>
+                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredNumberFormat', numberFormat, this.props.authToken)}><i className={numberFormat === selectedNumberFormat ? 'fa fa-check' : ''}/> { numberFormat.name }</a>
                       </li>
                   ))}
                 </ul>
@@ -89,7 +89,7 @@ class Sidebar extends Component {
                 <ul className="nav-dropdown-items">
                   {this.props.languages.map(language => (
                       <li className="nav-item" key={language.url}>
-                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredLanguage', language, this.props.authToken)}><i className={language === selectedLanguage && 'fa fa-check'}/>{ language.name }</a>
+                        <a className="nav-link" href="/" onClick={(e) => this.props.setUserProperty(e, user, 'preferredLanguage', language, this.props.authToken)}><i className={language === selectedLanguage ? 'fa fa-check' : ''}/>{ language.name }</a>
                       </li>
                   ))}
                 </ul>
