@@ -55,7 +55,7 @@ class ReportWtb extends React.Component {
             </div>
             <ApiForm
                 endpoints={['reports/wtb_report/']}
-                fields={['wtb_brand', 'category', 'stores', 'countries', 'store_types', 'currency', 'submit']}
+                fields={['wtb_brand', 'categories', 'stores', 'countries', 'store_types', 'currency', 'submit']}
                 onResultsChange={this.setDownloadLink}
                 onFormValueChange={this.handleFormValueChange}
                 setFieldChangeHandler={this.setApiFormFieldChangeHandler}
@@ -78,15 +78,15 @@ class ReportWtb extends React.Component {
                   </div>
                   <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <label>
-                      <FormattedMessage id="category" defaultMessage="Category" />
+                      <FormattedMessage id="category" defaultMessage="Categories" />
                     </label>
                     <ApiFormChoiceField
-                        name="category"
-                        required={true}
+                        name="categories"
                         choices={this.props.categories}
+                        multiple={true}
                         placeholder={<FormattedMessage id="all_feminine" defaultMessage="All" />}
                         onChange={this.state.apiFormFieldChangeHandler}
-                        value={this.state.formValues.category}
+                        value={this.state.formValues.categories}
                     />
                   </div>
                   <div className="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
