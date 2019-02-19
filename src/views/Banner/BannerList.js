@@ -11,6 +11,10 @@ import {
   apiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
+import {booleanChoices} from "../../utils";
+import {formatDateStr} from "../../react-utils/utils";
+import Nav from "reactstrap/es/Nav";
+import NavLink from "react-router-dom/es/NavLink";
 
 
 class BannerList extends React.Component{
@@ -43,11 +47,15 @@ class BannerList extends React.Component{
   setBanners = json => {
     this.setState({
       banners: json? json.payload : null
-    })
+    });
   };
 
   render() {
     const columns = [
+      {
+        label: 'Asset',
+        renderer: banner => <NavLink to={`/banner_assets/${banner.id}`}>Asset</NavLink>
+      },
       {
         label: 'Tienda',
         ordering: 'store',
@@ -55,33 +63,48 @@ class BannerList extends React.Component{
       },
       {
         label: 'Categoría',
-        renderer: banner => banner.category || 'N/A'
+        renderer: banner => banner.category || 'Home'
       },
       {
         label: 'Imagen',
-        renderer: banner => banner.asset.picture_url
+        renderer: banner => <a href={banner.asset.picture_url} target="_blank" rel="noopener noreferrer">Imagen</a>
+      },
+      {
+        label: '¿Activo?',
+        renderer: banner => banner.update.is_active? 'Sí' : 'No'
+      },
+      {
+        label: 'Porcentaje',
+        renderer: banner => {
+          let percentage = 0;
+          for (const content of banner.asset.contents) {
+            percentage += content.percentage
+          }
+          return `${percentage} %`
+        }
       },
       {
         label:'Posición',
+        ordering: 'position',
         renderer: banner => banner.position
       },
       {
         label: 'Fecha creación',
         ordering: 'timestamp',
-        renderer: banner => banner.update.timestamp
+        renderer: banner => formatDateStr(banner.update.timestamp)
       }
     ];
 
     return <div className="animated fadeIn">
       <ApiForm
         endpoints={['banners/']}
-        fields={['stores', 'ordering']}
+        fields={['stores', 'ordering', 'is_active']}
         onResultsChange={this.setBanners}
         onFormValueChange={this.handleFormValueChange}
         setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
         <ApiFormChoiceField
           name='ordering'
-          choices={createOrderingOptionChoices(['store', 'timestamp'])}
+          choices={createOrderingOptionChoices(['store', 'timestamp', 'position'])}
           hidden={true}
           required={true}
           value={this.state.formValues.ordering}
@@ -103,6 +126,16 @@ class BannerList extends React.Component{
                       onChange={this.state.apiFormFieldChangeHandler}
                       value={this.state.formValues.stores}
                       placeholder='Todas'/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <label htmlFor="is_active">¿Activo?</label>
+                    <ApiFormChoiceField
+                      name="is_active"
+                      id="is_active"
+                      choices={booleanChoices}
+                      searchable={false}
+                      onChange={this.state.apiFormFieldChangeHandler}
+                      value={this.state.formValues.stores}/>
                   </Col>
                 </Row>
               </div>
