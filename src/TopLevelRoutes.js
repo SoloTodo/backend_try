@@ -153,12 +153,12 @@ export const sidebarLayout = [
       {
         label: 'Banners',
         path: "/banners",
-        requiredPermission: "banners.backend_list_banners"
+        requiredPermission: "banners.is_staff_of_banner_assets"
       },
       {
         label: 'Assets',
         path: "/banner_assets",
-        requiredPermission: "banners.backend_list_banners"
+        requiredPermission: "banners.is_staff_of_banner_assets"
       },
       {
         label: 'Updates',

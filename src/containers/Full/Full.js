@@ -6,6 +6,7 @@ import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import Aside from '../../components/Aside/Aside';
 import Dashboard from '../../views/Dashboard/Dashboard';
 import BannerSwitch from '../../views/Banner/BannerSwitch'
+import BannerAssetSwitch from '../../views/Banner/BannerAssetSwitch'
 import UserPermissionFilter from "../../auth/UserPermissionFilter";
 import StoreSwitch from "../../views/Store/StoreSwitch";
 import EntitySwitch from "../../views/Entity/EntitySwitch";
@@ -91,6 +92,10 @@ class Full extends Component {
 
                 <Route path="/banners" render={props => (
                     <BannerSwitch {...props}/>
+                )} />
+
+                <Route path="/banner_assets" render={props => (
+                    <BannerAssetSwitch {...props}/>
                 )} />
 
                 <Route path="/users" render={props => (

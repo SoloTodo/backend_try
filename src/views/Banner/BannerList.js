@@ -13,7 +13,6 @@ import {
 } from "../../react-utils/ApiResource";
 import {booleanChoices} from "../../utils";
 import {formatDateStr} from "../../react-utils/utils";
-import Nav from "reactstrap/es/Nav";
 import NavLink from "react-router-dom/es/NavLink";
 
 

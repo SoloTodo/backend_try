@@ -10,7 +10,7 @@ export default ({match}) => {
         <RequiredResources resources={['stores']}>
           <BannerList />
         </RequiredResources>
-      )}/>
+      )} />
     </Switch>
   )
 }
