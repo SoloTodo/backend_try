@@ -161,6 +161,11 @@ export const sidebarLayout = [
         requiredPermission: "banners.is_staff_of_banner_assets"
       },
       {
+        label: 'Assets pendientes',
+        path: "/banner_assets/pending",
+        requiredPermission: "banners.is_staff_of_banner_assets"
+      },
+      {
         label: 'Updates',
         path: "/banner_updates",
         requiredPermission: "banners.backend_list_banners"
