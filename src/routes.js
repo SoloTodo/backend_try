@@ -44,5 +44,11 @@ const routes = {
   '/ratings': 'ratings',
   '/ratings/pending': 'pending_plural',
   '/ratings/:id': params => ({apiResource: 'ratings', apiResourceObjectId: params.id}),
+  '/banners': 'Banners',
+  '/banner_assets': 'Banner Assets',
+  '/banner_assets/pending': 'Pendientes',
+  '/banner_assets/:id': params => ({apiResource: 'banner_assets', apiResourceObjectId: params.id}),
+  '/banner_updates': 'Banner Updates'
+
 };
 export default routes;

@@ -147,6 +147,32 @@ export const sidebarLayout = [
     ]
   },
   {
+    title: 'Banner Visibility',
+    icon: "fa fa-eye",
+    entries:[
+      {
+        label: 'Banners',
+        path: "/banners",
+        requiredPermission: "banners.is_staff_of_banner_assets"
+      },
+      {
+        label: 'Assets',
+        path: "/banner_assets",
+        requiredPermission: "banners.is_staff_of_banner_assets"
+      },
+      {
+        label: 'Assets pendientes',
+        path: "/banner_assets/pending",
+        requiredPermission: "banners.is_staff_of_banner_assets"
+      },
+      {
+        label: 'Updates',
+        path: "/banner_updates",
+        requiredPermission: "banners.is_staff_of_banner_assets"
+      }
+    ]
+  },
+  {
     title: <FormattedMessage id="users" defaultMessage="Users" />,
     icon: "fa fa-users",
     entries: [
