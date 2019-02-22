@@ -3,7 +3,7 @@ import {Row, Col, Card, CardHeader} from 'reactstrap'
 import {
   ApiForm,
   ApiFormChoiceField,
-  ApiFormResultsTable,
+  ApiFormResultTableWithPagination,
 } from "../../react-utils/api_forms";
 import {booleanChoices} from "../../utils";
 import {formatDateStr} from "../../react-utils/utils";
@@ -61,8 +61,8 @@ class BannerAssetList extends React.Component {
         renderer: asset => asset.isActive? 'Sí' : 'No'
       },
       {
-        label: '¿Completo?',
-        renderer: asset => asset.isComplete? 'Sí' : 'No'
+        label: 'Completitud',
+        renderer: asset => `${asset.totalPercentage || 0} %`
       }
     ];
 
@@ -106,15 +106,13 @@ class BannerAssetList extends React.Component {
       </ApiForm>
       <Row>
         <Col sm="12">
-          <Card>
-            <CardHeader>Banners Assets</CardHeader>
-            <div className="card-block">
-              <ApiFormResultsTable
-                results = {this.state.assets}
-                onChange={this.state.apiFormFieldChangeHandler}
-                columns={columns}/>
-            </div>
-          </Card>
+          <ApiFormResultTableWithPagination
+            page_size_choices={[50, 100, 200]}
+            page={this.state.formValues.page}
+            page_size={this.state.formValues.page_size}
+            data = {this.state.assets}
+            onChange={this.state.apiFormFieldChangeHandler}
+            columns={columns}/>
         </Col>
       </Row>
 

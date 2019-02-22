@@ -1,12 +1,12 @@
 import React from 'react'
-import {Row, Col, Card, CardHeader} from 'reactstrap'
+import {Row, Col} from 'reactstrap'
 import {
   ApiForm, ApiFormChoiceField,
-  ApiFormResultsTable,
+  ApiFormResultTableWithPagination,
   createOrderingOptionChoices,
 } from "../../react-utils/api_forms";
 import {formatDateStr} from "../../react-utils/utils";
-import NavLink from "react-router-dom/es/NavLink";
+import {NavLink} from "react-router-dom";
 
 class BannerAssetListPending extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class BannerAssetListPending extends React.Component {
       {
         label: 'Id',
         ordering: 'id',
-        renderer: asset => <NavLink to={`/banner_assets/${asset.id}`}>{asset.id}</NavLink>
+        renderer: asset => asset.id
       },
       {
         label: 'Key',
@@ -55,6 +55,14 @@ class BannerAssetListPending extends React.Component {
       {
         label: 'Fecha Creación',
         renderer: asset => formatDateStr(asset.creationDate)
+      },
+      {
+        label: 'Completitud',
+        renderer: asset => `${asset.totalPercentage || 0} %`
+      },
+      {
+        label: 'Completar',
+        renderer: asset => <NavLink to={`/banner_assets/${asset.id}`} className="btn btn-secondary">Completar</NavLink>
       }
     ];
 
@@ -75,16 +83,14 @@ class BannerAssetListPending extends React.Component {
       </ApiForm>
       <Row>
         <Col sm="12">
-          <Card>
-            <CardHeader>Banners Assets</CardHeader>
-            <div className="card-block">
-              <ApiFormResultsTable
-                results = {this.state.assets}
-                onChange={this.state.apiFormFieldChangeHandler}
-                columns={columns}
-                ordering={this.state.formValues.ordering}/>
-            </div>
-          </Card>
+          <ApiFormResultTableWithPagination
+            page_size_choices={[50, 100, 200]}
+            page={this.state.formValues.page}
+            page_size={this.state.formValues.page_size}
+            data = {this.state.assets}
+            onChange={this.state.apiFormFieldChangeHandler}
+            columns={columns}
+            ordering={this.state.formValues.ordering}/>
         </Col>
       </Row>
     </div>

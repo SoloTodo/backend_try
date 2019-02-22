@@ -168,7 +168,7 @@ export const sidebarLayout = [
       {
         label: 'Updates',
         path: "/banner_updates",
-        requiredPermission: "banners.backend_list_banners"
+        requiredPermission: "banners.is_staff_of_banner_assets"
       }
     ]
   },

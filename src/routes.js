@@ -48,6 +48,7 @@ const routes = {
   '/banner_assets': 'Banner Assets',
   '/banner_assets/pending': 'Pendientes',
   '/banner_assets/:id': params => ({apiResource: 'banner_assets', apiResourceObjectId: params.id}),
+  '/banner_updates': 'Banner Updates'
 
 };
 export default routes;

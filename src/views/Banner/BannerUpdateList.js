@@ -1,34 +1,29 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {Row, Col, Card, CardHeader} from 'reactstrap'
+import {connect} from "react-redux";
+import {Card, CardHeader, Col, Row} from "reactstrap";
 import {
   ApiForm,
   ApiFormChoiceField,
+  ApiFormDateRangeField,
   ApiFormResultTableWithPagination,
-  ApiFormRemoveOnlyListField,
   createOrderingOptionChoices
-} from '../../react-utils/api_forms'
+} from "../../react-utils/api_forms";
 import {
   apiResourceStateToPropsUtils,
   filterApiResourceObjectsByType
 } from "../../react-utils/ApiResource";
 import {booleanChoices} from "../../utils";
 import {formatDateStr} from "../../react-utils/utils";
-import NavLink from "react-router-dom/es/NavLink";
+import {NavLink} from "react-router-dom";
 
-
-class BannerList extends React.Component{
+class BannerUpdateList extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       formValues: {},
-      apiFormFieldChangeHandler: undefined,
-      banners: undefined
-    };
-
-    this.storeObject = {};
-    for (const store of this.props.stores){
-      this.storeObject[store.url] = store
+      apiFormFieldChangeHandler:undefined,
+      updates: undefined
     }
   }
 
@@ -44,74 +39,63 @@ class BannerList extends React.Component{
     })
   };
 
-  setBanners = json => {
+  setUpdates = json => {
     this.setState({
-      banners: json? json.payload : null
-    });
+      updates: json? json.payload : null
+    })
   };
 
   render() {
     const columns = [
       {
-        label: 'Asset',
-        renderer: banner => <NavLink to={`/banner_assets/${banner.asset.id}`}>Asset</NavLink>
+        label: 'Id',
+        renderer: update => <NavLink to={`/banners/?update_id=${update.id}`}>{update.id}</NavLink>
       },
       {
-        label: 'Tienda',
-        ordering: 'store',
-        renderer: banner => this.storeObject[banner.update.store].name
-      },
-      {
-        label: 'Categoría',
-        renderer: banner => banner.category || 'Home'
-      },
-      {
-        label: 'Imagen',
-        renderer: banner => <a href={banner.asset.picture_url} target="_blank" rel="noopener noreferrer">Imagen</a>
+        label: 'Store',
+        renderer: update => update.store.name
       },
       {
         label: '¿Activo?',
-        renderer: banner => banner.update.is_active? 'Sí' : 'No'
+        renderer: update => update.isActive? 'Sí' : 'No'
       },
       {
-        label: 'Completitud',
-        renderer: banner => `${banner.asset.total_percentage || 0} %`
-      },
-      {
-        label:'Posición',
-        ordering: 'position',
-        renderer: banner => banner.position
-      },
-      {
-        label: 'Fecha creación',
+        label: 'Fecha',
         ordering: 'timestamp',
-        renderer: banner => formatDateStr(banner.update.timestamp)
+        renderer: update => formatDateStr(update.timestamp)
       }
     ];
 
-    const displayUpdateFilter = this.state.formValues.update_id && this.state.formValues.update_id.length;
-
     return <div className="animated fadeIn">
       <ApiForm
-        endpoints={['banners/']}
-        fields={['stores', 'ordering', 'is_active', 'update_id']}
-        onResultsChange={this.setBanners}
+        endpoints={['banner_updates/']}
+        fields={['stores', 'ordering', 'is_active']}
+        onResultsChange={this.setUpdates}
         onFormValueChange={this.handleFormValueChange}
         setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
         <ApiFormChoiceField
           name='ordering'
-          choices={createOrderingOptionChoices(['store', 'timestamp', 'position'])}
+          choices={createOrderingOptionChoices(['timestamp'])}
+          initial='-timestamp'
           hidden={true}
           required={true}
           value={this.state.formValues.ordering}
           onChange={this.state.apiFormFieldChangeHandler}/>
-
         <Row>
           <Col sm="12">
             <Card>
               <CardHeader>Filtros</CardHeader>
               <div className="card-block">
                 <Row className="entity-form-controls">
+                  <Col xs="12" sm="6">
+                    <label htmlFor="timestamp">Rango de fechas (desde / hasta)</label>
+                    <ApiFormDateRangeField
+                      name="timestamp"
+                      id="timestamp"
+                      nullable={true}
+                      onChange={this.state.apiFormFieldChangeHandler}
+                      value={this.state.formValues.timestamp}/>
+                  </Col>
                   <Col xs="12" sm="6">
                     <label htmlFor="stores">Tiendas</label>
                     <ApiFormChoiceField
@@ -131,32 +115,13 @@ class BannerList extends React.Component{
                       choices={booleanChoices}
                       searchable={false}
                       onChange={this.state.apiFormFieldChangeHandler}
-                      value={this.state.formValues.stores}/>
-                  </Col>
-                </Row>
-              </div>
-            </Card>
-          </Col>
-          <Col sm="12" className={`${displayUpdateFilter? '' : 'hidden-xs-up'}`}>
-            <Card>
-              <CardHeader>Filtros Extra</CardHeader>
-              <div className="card-block">
-                <Row className="entity-form-controls">
-                  <Col xs="12" sm="6">
-                    <label htmlFor="update_id">Banner Update</label>
-                    <ApiFormRemoveOnlyListField
-                      name="update_id"
-                      id="update_id"
-                      value={this.state.formValues.update_id}
-                      onChange={this.state.apiFormFieldChangeHandler}
-                      resource="banner_updates"/>
+                      value={this.state.formValues.is_active}/>
                   </Col>
                 </Row>
               </div>
             </Card>
           </Col>
         </Row>
-
       </ApiForm>
       <Row>
         <Col sm="12">
@@ -164,7 +129,7 @@ class BannerList extends React.Component{
             page_size_choices={[50, 100, 200]}
             page={this.state.formValues.page}
             page_size={this.state.formValues.page_size}
-            data={this.state.banners}
+            data = {this.state.updates}
             onChange={this.state.apiFormFieldChangeHandler}
             columns={columns}
             ordering={this.state.formValues.ordering}/>
@@ -183,4 +148,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(BannerList);
+export default connect(mapStateToProps)(BannerUpdateList);
