@@ -69,7 +69,7 @@ class BannerAssetListPending extends React.Component {
     return <div className="animated fadeIn">
       <ApiForm
         endpoints={['banner_assets/?is_active=1&is_complete=0']}
-        fields={['ordering']}
+        fields={['ordering', 'page', 'page_size']}
         onResultsChange={this.setAssets}
         onFormValueChange={this.handleFormValueChange}
         setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -84,7 +84,7 @@ class BannerAssetListPending extends React.Component {
       <Row>
         <Col sm="12">
           <ApiFormResultTableWithPagination
-            page_size_choices={[50, 100, 200]}
+            page_size_choices={[10, 20, 50]}
             page={this.state.formValues.page}
             page_size={this.state.formValues.page_size}
             data = {this.state.assets}

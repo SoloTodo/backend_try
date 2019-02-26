@@ -62,8 +62,9 @@ class BannerList extends React.Component{
         renderer: banner => this.storeObject[banner.update.store].name
       },
       {
-        label: 'Categoría',
-        renderer: banner => banner.category || 'Home'
+        label: 'Subsección',
+        ordering: 'subsection',
+        renderer: banner => `${banner.subsection.section.name} > ${banner.subsection.name}`
       },
       {
         label: 'Imagen',
@@ -84,7 +85,7 @@ class BannerList extends React.Component{
       },
       {
         label: 'Fecha creación',
-        ordering: 'timestamp',
+        ordering: 'update__timestamp',
         renderer: banner => formatDateStr(banner.update.timestamp)
       }
     ];
@@ -94,13 +95,14 @@ class BannerList extends React.Component{
     return <div className="animated fadeIn">
       <ApiForm
         endpoints={['banners/']}
-        fields={['stores', 'ordering', 'is_active', 'update_id']}
+        fields={['stores', 'ordering', 'is_active', 'update_id', 'page', 'page_size']}
         onResultsChange={this.setBanners}
         onFormValueChange={this.handleFormValueChange}
         setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
         <ApiFormChoiceField
           name='ordering'
-          choices={createOrderingOptionChoices(['store', 'timestamp', 'position'])}
+          choices={createOrderingOptionChoices(['store', 'update__timestamp', 'subsection', 'position'])}
+          initial='-update__timestamp'
           hidden={true}
           required={true}
           value={this.state.formValues.ordering}
@@ -161,7 +163,7 @@ class BannerList extends React.Component{
       <Row>
         <Col sm="12">
           <ApiFormResultTableWithPagination
-            page_size_choices={[50, 100, 200]}
+            page_size_choices={[10, 20, 50]}
             page={this.state.formValues.page}
             page_size={this.state.formValues.page_size}
             data={this.state.banners}

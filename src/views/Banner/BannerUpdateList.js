@@ -69,7 +69,7 @@ class BannerUpdateList extends React.Component {
     return <div className="animated fadeIn">
       <ApiForm
         endpoints={['banner_updates/']}
-        fields={['stores', 'ordering', 'is_active']}
+        fields={['stores', 'ordering', 'is_active', 'page', 'page_size']}
         onResultsChange={this.setUpdates}
         onFormValueChange={this.handleFormValueChange}
         setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -126,7 +126,7 @@ class BannerUpdateList extends React.Component {
       <Row>
         <Col sm="12">
           <ApiFormResultTableWithPagination
-            page_size_choices={[50, 100, 200]}
+            page_size_choices={[10, 20, 50]}
             page={this.state.formValues.page}
             page_size={this.state.formValues.page_size}
             data = {this.state.updates}
