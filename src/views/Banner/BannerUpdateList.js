@@ -46,6 +46,12 @@ class BannerUpdateList extends React.Component {
   };
 
   render() {
+    const status_codes = {
+      1: 'En proceso',
+      2: 'Exitoso',
+      3: 'Error'
+    };
+
     const columns = [
       {
         label: 'Id',
@@ -58,6 +64,10 @@ class BannerUpdateList extends React.Component {
       {
         label: '¿Activo?',
         renderer: update => update.isActive? 'Sí' : 'No'
+      },
+      {
+        label: 'Estado',
+        renderer: update => `${status_codes[update.status]} ${update.status === 3 ? `(${update.statusMessage})` : ''}`
       },
       {
         label: 'Fecha',

@@ -59,6 +59,11 @@ class BannerAssetDetail extends React.Component {
       body: formData
     }).then(json => {
       this.props.updateAsset(json);
+      this.setState({
+        selectedBrand: null,
+        selectedCategory: null,
+        inputPercentage: null
+      });
       toast.success('Contenido agregado exitosamente')
     }).catch(async error => {
       const jsonError = await error.json();
@@ -82,6 +87,15 @@ class BannerAssetDetail extends React.Component {
       const jsonError = await error.json();
       toast.error(jsonError.error)
     });
+  };
+
+  handleEnterKeyPress = e => {
+    if(e.key === 'Enter'){
+      if(!this.state.selectedBrand || !this.state.selectedCategory || !this.state.inputPercentage){
+        return
+      }
+      this.handleAddContentButtonClick()
+    }
   };
 
   render() {
@@ -159,7 +173,7 @@ class BannerAssetDetail extends React.Component {
               </Col>
               <Col sm="6">
                 <label htmlFor="percentage_input">Porcentaje</label>
-                <Input onChange={this.handlePercentageChange} type="number" name="percentage" id="percentage_input"/>
+                <Input onChange={this.handlePercentageChange} onKeyPress={this.handleEnterKeyPress} type="number" name="percentage" id="percentage_input"/>
               </Col>
             </Row>
           </Container>
