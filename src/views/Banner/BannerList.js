@@ -64,11 +64,17 @@ class BannerList extends React.Component{
       {
         label: 'Subsección',
         ordering: 'subsection',
-        renderer: banner => `${banner.subsection.section.name} > ${banner.subsection.name}`
+        renderer: banner => <a href={banner.externalUrl} target="_blank" rel="noopener noreferrer">{banner.subsection.section.name} > {banner.subsection.name}</a>
       },
       {
         label: 'Imagen',
         renderer: banner => <a href={banner.asset.picture_url} target="_blank" rel="noopener noreferrer">Imagen</a>
+      },
+      {
+        label: 'Destino',
+        renderer: banner => <ul className="list-without-decoration mb-0">{banner.destinationUrlList.map(url => {
+          return <li><a href={url} target="_blank" rel="noopener noreferrer">Link</a></li>
+        })}</ul>
       },
       {
         label: '¿Activo?',
