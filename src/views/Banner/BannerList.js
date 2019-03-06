@@ -72,9 +72,9 @@ class BannerList extends React.Component{
       },
       {
         label: 'Destino',
-        renderer: banner => <ul className="list-without-decoration mb-0">{banner.destinationUrlList.map(url => {
-          return <li><a href={url} target="_blank" rel="noopener noreferrer">Link</a></li>
-        })}</ul>
+        renderer: banner => {return banner.destinationUrlList.length? <ul className="list-without-decoration mb-0">{banner.destinationUrlList.map(url => {
+          return <li key={url}><a href={url} target="_blank" rel="noopener noreferrer">Link</a></li>
+        })}</ul> : 'Sin link'}
       },
       {
         label: '¿Activo?',

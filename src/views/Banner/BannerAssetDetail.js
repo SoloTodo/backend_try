@@ -11,6 +11,7 @@ import {
 import './BannerAssetDetail.css'
 import {createOption} from "../../react-utils/form_utils";
 import {settings} from "../../settings";
+import {NavLink} from 'react-router-dom'
 
 class BannerAssetDetail extends React.Component {
   constructor(props) {
@@ -116,7 +117,10 @@ class BannerAssetDetail extends React.Component {
             <CardHeader className="d-flex justify-content-between card-header-with-button">
               <span>Contenidos</span>
               {bannerAsset.is_complete?
-                <Button color="success" disabled><i className="fas fa-check"/> Completo!</Button> :
+                <span>
+                  <Button color="success" disabled><i className="fas fa-check"/> Completo!</Button>
+                  <NavLink to="/banner_assets/pending" className='btn btn-info ml-2'>Ver pendientes</NavLink>
+                </span>:
                 <Button color="success" onClick={this.toggleAddContentModal}><i className="fas fa-plus"/> Agregar</Button>
               }
             </CardHeader>
