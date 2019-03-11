@@ -12,6 +12,7 @@ import './BannerAssetDetail.css'
 import {createOption} from "../../react-utils/form_utils";
 import {settings} from "../../settings";
 import {NavLink} from 'react-router-dom'
+import {formatDateStr} from "../../react-utils/utils";
 
 class BannerAssetDetail extends React.Component {
   constructor(props) {
@@ -20,8 +21,17 @@ class BannerAssetDetail extends React.Component {
       addContentModalIsActive: false,
       selectedBrand:undefined,
       selectedCategory:undefined,
-      inputPercentage:undefined
+      inputPercentage:undefined,
+      banners: undefined
     };
+  }
+
+  componentDidMount() {
+    this.props.fetchAuth(`banners/?ordering=-id&asset=${this.props.apiResourceObject.id}`).then(json => {
+      this.setState({
+        banners: json.results
+      })
+    })
   }
 
   toggleAddContentModal = () => {
@@ -127,12 +137,12 @@ class BannerAssetDetail extends React.Component {
             <div className="card-block">
               <Table striped responsive>
                 <thead>
-                  <tr>
-                    <th>Marca</th>
-                    <th>Categoría</th>
-                    <th>Porcentaje</th>
-                    <th>Eliminar</th>
-                  </tr>
+                <tr>
+                  <th>Marca</th>
+                  <th>Categoría</th>
+                  <th>Porcentaje</th>
+                  <th>Eliminar</th>
+                </tr>
                 </thead>
                 <tbody>
                 {bannerAsset.contents.map(content => <tr key={content.id}>
@@ -145,11 +155,48 @@ class BannerAssetDetail extends React.Component {
                   <th colSpan="2">Total</th>
                   <th colSpan="2">{bannerAsset.contents.reduce((previous, current) => {
                     return {"percentage": previous.percentage + current.percentage}
-                    }, {"percentage": 0})['percentage']}
+                  }, {"percentage": 0})['percentage']}
                   </th>
                 </tr>
                 </tbody>
               </Table>
+            </div>
+          </Card>
+        </Col>
+        <Col sm="12">
+          <Card>
+            <CardHeader>
+              Banners
+            </CardHeader>
+            <div className="card-block">
+              {this.state.banners?
+                <Table striped responsive>
+                  <thead>
+                  <tr>
+                    <th>Tienda</th>
+                    <th>Subsección</th>
+                    <th>Destino</th>
+                    <th>¿Activo?</th>
+                    <th>Posición</th>
+                    <th>Fecha creación</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {this.state.banners.map(banner => <tr key={banner.id}>
+                    <td>{this.props.stores.filter(store => store.url === banner.update.store)[0].name}</td>
+                    <td><a href={banner.external_url} target="_blank" rel="noopener noreferrer">{banner.subsection.section.name}>{banner.subsection.name}</a></td>
+                    <td>{banner.destination_url_list.length? <ul className="list-without-decoration mb-0">{banner.destination_url_list.map(url =>
+                      <li key={url}><a href={url} target="_blank" rel="noopener noreferrer">Link</a></li>
+                    )}</ul> : 'Sin link'}</td>
+                    <td>{banner.update.is_active? 'Sí' : 'No'}</td>
+                    <td>{banner.position}</td>
+                    <td>{formatDateStr(banner.update.timestamp)}</td>
+                  </tr>)}
+                  </tbody>
+                </Table>:
+                'Loading ...'
+              }
+
             </div>
           </Card>
         </Col>
@@ -198,6 +245,7 @@ function mapStateToProps(state) {
     fetchAuth,
     categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
     brands: filterApiResourceObjectsByType(state.apiResourceObjects, 'brands'),
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
   }
 }
 

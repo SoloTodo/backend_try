@@ -18,7 +18,7 @@ export default ({match}) => {
         <BannerAssetListPending />
       )} />
       <Route path={match.url + '/:id'} exact render={props => (
-        <RequiredResources resources={['categories', 'brands']}>
+        <RequiredResources resources={['categories', 'brands', 'stores']}>
           <ResourceObjectPermission match={props.match} resource="banner_assets" component={BannerAssetDetail} Http404={Page404} />
         </RequiredResources>
       )}/>
