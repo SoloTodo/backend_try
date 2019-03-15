@@ -30,6 +30,7 @@ class UserPreferences extends Component {
 
     if (!user.preferredLanguage || (user.preferredLanguage.url !== preferredLanguage.url)) {
       user.preferredLanguage = preferredLanguage;
+      user.save(this.props.authToken, this.props.dispatch);
     }
 
     // Set currency and number format
