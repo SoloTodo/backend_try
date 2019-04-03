@@ -150,7 +150,7 @@ class StoreDetailUpdatePricing extends Component {
                                 name="async"
                                 id="async"
                                 type="checkbox"
-                                checked={formData.async}
+                                checked={formData.prefer_async}
                                 onChange={this.handleInputChange} /> <FormattedMessage id="use_async_question" defaultMessage={`Use async?`} />
                           </label>
                         </div>

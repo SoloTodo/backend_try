@@ -21,7 +21,7 @@ class StoreUpdate extends Component {
     this.state = {
       formData: {
         categories: [],
-        async: true,
+        prefer_async: true,
         stores: []
       },
       availableStores: undefined,
@@ -135,7 +135,7 @@ class StoreUpdate extends Component {
     for (let store of this.state.formData.stores) {
       const payload = {
         categories: categories,
-        async: this.state.formData.async
+        prefer_async: this.state.formData.prefer_async
       };
 
       this.props.fetchAuth(`${store}update_pricing/`, {
@@ -204,12 +204,12 @@ class StoreUpdate extends Component {
                     </select>
                   </div>
                   <div className="checkbox">
-                    <label htmlFor="async">
+                    <label htmlFor="prefer_async">
                       <input
-                          name="async"
-                          id="async"
+                          name="prefer_async"
+                          id="prefer_async"
                           type="checkbox"
-                          checked={formData.async}
+                          checked={formData.prefer_async}
                           onChange={this.handleInputChange} /> <FormattedMessage id="use_async_question" defaultMessage={`Use async?`} />
                     </label>
                   </div>
