@@ -14,21 +14,9 @@ class UserDetailStaffActions extends Component {
     super(props);
 
     this.state = {
-      formValues: {},
-      apiFormFieldChangeHandler: undefined,
       staffActions: undefined
     }
   }
-
-  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
-    this.setState({
-      apiFormFieldChangeHandler
-    })
-  };
-
-  handleFormValueChange = formValues => {
-    this.setState({formValues})
-  };
 
   setStaffActions = json => {
     this.setState({
@@ -46,16 +34,12 @@ class UserDetailStaffActions extends Component {
     const dateRangeInitialMin = dateRangeInitialMax.clone().subtract(7, 'days');
 
     return (
-        <div className="animated fadeIn">
-          <ApiForm
-              endpoints={[endpoint]}
-              fields={['timestamp']}
-              onResultsChange={this.setStaffActions}
-              onFormValueChange={this.handleFormValueChange}
-              setFieldChangeHandler={this.setApiFormFieldChangeHandler}
-              updateOnLoad={true}
-          >
-          </ApiForm>
+      <div className="animated fadeIn">
+        <ApiForm
+          endpoints={[endpoint]}
+          fields={['timestamp']}
+          onResultsChange={this.setStaffActions}
+        >
 
           <div className="row">
             <div className="col-12">
@@ -72,11 +56,9 @@ class UserDetailStaffActions extends Component {
                         <FormattedMessage id="date_range_from_to" defaultMessage="Date range (from / to)" />
                       </label>
                       <ApiFormDateRangeField
-                          name="timestamp"
-                          id="timestamp"
-                          initial={[dateRangeInitialMin, dateRangeInitialMax]}
-                          value={this.state.formValues.timestamp}
-                          onChange={this.state.apiFormFieldChangeHandler}
+                        name="timestamp"
+                        id="timestamp"
+                        initial={[dateRangeInitialMin, dateRangeInitialMax]}
                       />
                     </div>
                   </div>
@@ -85,93 +67,94 @@ class UserDetailStaffActions extends Component {
             </div>
 
             {staffActions &&
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-header">
-                    <FormattedMessage id="handled_entities"
-                                      defaultMessage="Handled entities"/>
-                  </div>
-                  <div className="card-block">
-                    <table className="table">
-                      <thead>
-                      <tr>
-                        <th><FormattedMessage id="entity" defaultMessage="Entity" /></th>
-                        <th><FormattedMessage id="date" defaultMessage="Date" /></th>
+            <div className="col-12">
+              <div className="card">
+                <div className="card-header">
+                  <FormattedMessage id="handled_entities"
+                                    defaultMessage="Handled entities"/>
+                </div>
+                <div className="card-block">
+                  <table className="table">
+                    <thead>
+                    <tr>
+                      <th><FormattedMessage id="entity" defaultMessage="Entity" /></th>
+                      <th><FormattedMessage id="date" defaultMessage="Date" /></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {staffActions.entities.map(entry => (
+                      <tr key={entry.id}>
+                        <td><NavLink to={`/entities/` + entry.entity_id}>{entry.name}</NavLink></td>
+                        <td>{moment(entry.date).format('llll')}</td>
                       </tr>
-                      </thead>
-                      <tbody>
-                        {staffActions.entities.map(entry => (
-                          <tr key={entry.id}>
-                            <td><NavLink to={`/entities/` + entry.entity_id}>{entry.name}</NavLink></td>
-                            <td>{moment(entry.date).format('llll')}</td>
-                          </tr>
-                      ))}
-                      </tbody>
-                    </table>
-                  </div>
+                    ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            </div>
             }
 
             {staffActions &&
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-header">
-                    <FormattedMessage id="created_products"
-                                      defaultMessage="Created products"/>
-                  </div>
-                  <div className="card-block">
-                    <table className="table">
-                      <thead>
-                      <tr>
-                        <th><FormattedMessage id="product" defaultMessage="Product" /></th>
-                        <th><FormattedMessage id="date" defaultMessage="Date" /></th>
+            <div className="col-12">
+              <div className="card">
+                <div className="card-header">
+                  <FormattedMessage id="created_products"
+                                    defaultMessage="Created products"/>
+                </div>
+                <div className="card-block">
+                  <table className="table">
+                    <thead>
+                    <tr>
+                      <th><FormattedMessage id="product" defaultMessage="Product" /></th>
+                      <th><FormattedMessage id="date" defaultMessage="Date" /></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {staffActions.products.map(entry => (
+                      <tr key={entry.id}>
+                        <td><NavLink to={`/products/` + entry.id}>{entry.name}</NavLink></td>
+                        <td>{moment(entry.date).format('llll')}</td>
                       </tr>
-                      </thead>
-                      <tbody>
-                        {staffActions.products.map(entry => (
-                          <tr key={entry.id}>
-                            <td><NavLink to={`/products/` + entry.id}>{entry.name}</NavLink></td>
-                            <td>{moment(entry.date).format('llll')}</td>
-                          </tr>
-                      ))}
-                      </tbody>
-                    </table>
-                  </div>
+                    ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            </div>
             }
 
             {staffActions &&
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-header">
-                    <FormattedMessage id="associated_wtb_entities"
-                                      defaultMessage="Associated WTB entities"/>
-                  </div>
-                  <div className="card-block">
-                    <table className="table">
-                      <thead>
-                      <tr>
-                        <th><FormattedMessage id="wtb_entity" defaultMessage="WTB Entity" /></th>
-                        <th><FormattedMessage id="date" defaultMessage="Date" /></th>
+            <div className="col-12">
+              <div className="card">
+                <div className="card-header">
+                  <FormattedMessage id="associated_wtb_entities"
+                                    defaultMessage="Associated WTB entities"/>
+                </div>
+                <div className="card-block">
+                  <table className="table">
+                    <thead>
+                    <tr>
+                      <th><FormattedMessage id="wtb_entity" defaultMessage="WTB Entity" /></th>
+                      <th><FormattedMessage id="date" defaultMessage="Date" /></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {staffActions.wtb_entities.map(entry => (
+                      <tr key={entry.id}>
+                        <td><NavLink to={`/wtb/entities/` + entry.id}>{entry.name}</NavLink></td>
+                        <td>{moment(entry.date).format('llll')}</td>
                       </tr>
-                      </thead>
-                      <tbody>
-                        {staffActions.wtb_entities.map(entry => (
-                          <tr key={entry.id}>
-                            <td><NavLink to={`/wtb/entities/` + entry.id}>{entry.name}</NavLink></td>
-                            <td>{moment(entry.date).format('llll')}</td>
-                          </tr>
-                      ))}
-                      </tbody>
-                    </table>
-                  </div>
+                    ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            </div>
             }
           </div>
-        </div>)
+        </ApiForm>
+      </div>)
   }
 }
 

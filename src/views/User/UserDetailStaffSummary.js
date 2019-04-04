@@ -21,21 +21,9 @@ class UserDetailStaffSummary extends Component {
     super(props);
 
     this.state = {
-      formValues: {},
-      apiFormFieldChangeHandler: undefined,
       staffSummary: undefined
     }
   }
-
-  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
-    this.setState({
-      apiFormFieldChangeHandler
-    })
-  };
-
-  handleFormValueChange = formValues => {
-    this.setState({formValues})
-  };
 
   setStaffSummary = json => {
     this.setState({
@@ -57,16 +45,12 @@ class UserDetailStaffSummary extends Component {
     const dateRangeInitialMin = dateRangeInitialMax.clone().subtract(30, 'days');
 
     return (
-        <div className="animated fadeIn">
-          <ApiForm
-              endpoints={[endpoint]}
-              fields={['timestamp']}
-              onResultsChange={this.setStaffSummary}
-              onFormValueChange={this.handleFormValueChange}
-              setFieldChangeHandler={this.setApiFormFieldChangeHandler}
-              updateOnLoad={true}
-          >
-          </ApiForm>
+      <div className="animated fadeIn">
+        <ApiForm
+          endpoints={[endpoint]}
+          fields={['timestamp']}
+          onResultsChange={this.setStaffSummary}
+        >
 
           <div className="row">
             <div className="col-12">
@@ -83,11 +67,9 @@ class UserDetailStaffSummary extends Component {
                         <FormattedMessage id="date_range_from_to" defaultMessage="Date range (from / to)" />
                       </label>
                       <ApiFormDateRangeField
-                          name="timestamp"
-                          id="timestamp"
-                          initial={[dateRangeInitialMin, dateRangeInitialMax]}
-                          value={this.state.formValues.timestamp}
-                          onChange={this.state.apiFormFieldChangeHandler}
+                        name="timestamp"
+                        id="timestamp"
+                        initial={[dateRangeInitialMin, dateRangeInitialMax]}
                       />
                     </div>
                   </div>
@@ -102,99 +84,100 @@ class UserDetailStaffSummary extends Component {
                 </div>
                 <div className="card-block">
                   {staffSummary ?
-                      <table className="table">
-                        <thead>
-                        <tr>
-                          <th>
-                            <FormattedMessage id="item" defaultMessage="Item"/>
-                          </th>
-                          <th>
-                            <FormattedMessage id="count"
-                                              defaultMessage="Count"/>
-                          </th>
-                          <th>
-                            <FormattedMessage id="individual_amount"
-                                              defaultMessage="Individual amount"/>
-                          </th>
-                          <th>
-                            <FormattedMessage id="total_amount"
-                                              defaultMessage="Total amount"/>
-                          </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
+                    <table className="table">
+                      <thead>
+                      <tr>
+                        <th>
+                          <FormattedMessage id="item" defaultMessage="Item"/>
+                        </th>
+                        <th>
+                          <FormattedMessage id="count"
+                                            defaultMessage="Count"/>
+                        </th>
+                        <th>
+                          <FormattedMessage id="individual_amount"
+                                            defaultMessage="Individual amount"/>
+                        </th>
+                        <th>
+                          <FormattedMessage id="total_amount"
+                                            defaultMessage="Total amount"/>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td>
+                          <FormattedMessage id="associated_entities"
+                                            defaultMessage="Associated entities"/>
+                        </td>
+                        <td>
+                          {staffSummary.entities.count}
+                        </td>
+                        <td>
+                          {formatClpCurrency(staffSummary.entities.individual_amount)}
+                        </td>
+                        <td>
+                          {formatClpCurrency(staffSummary.entities.total_amount)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <FormattedMessage id="associated_wtb_entities"
+                                            defaultMessage="Associated WTB entities"/>
+                        </td>
+                        <td>
+                          {staffSummary.wtb_entities.count}
+                        </td>
+                        <td>
+                          {formatClpCurrency(staffSummary.wtb_entities.individual_amount)}
+                        </td>
+                        <td>
+                          {formatClpCurrency(staffSummary.wtb_entities.total_amount)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={4}>
+                          <strong><FormattedMessage id="created_products"
+                                                    defaultMessage="Created products"/></strong>
+                        </td>
+                      </tr>
+                      {staffSummary.products.map(productEntry => (
+                        <tr key={productEntry.tier}>
                           <td>
-                            <FormattedMessage id="associated_entities"
-                                              defaultMessage="Associated entities"/>
+                            {productEntry.tier}
                           </td>
                           <td>
-                            {staffSummary.entities.count}
+                            {productEntry.count}
                           </td>
                           <td>
-                            {formatClpCurrency(staffSummary.entities.individual_amount)}
+                            {formatClpCurrency(productEntry.individual_amount)}
                           </td>
                           <td>
-                            {formatClpCurrency(staffSummary.entities.total_amount)}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <FormattedMessage id="associated_wtb_entities"
-                                              defaultMessage="Associated WTB entities"/>
-                          </td>
-                          <td>
-                            {staffSummary.wtb_entities.count}
-                          </td>
-                          <td>
-                            {formatClpCurrency(staffSummary.wtb_entities.individual_amount)}
-                          </td>
-                          <td>
-                            {formatClpCurrency(staffSummary.wtb_entities.total_amount)}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td colSpan={4}>
-                            <strong><FormattedMessage id="created_products"
-                                                      defaultMessage="Created products"/></strong>
-                          </td>
-                        </tr>
-                        {staffSummary.products.map(productEntry => (
-                            <tr key={productEntry.tier}>
-                              <td>
-                                {productEntry.tier}
-                              </td>
-                              <td>
-                                {productEntry.count}
-                              </td>
-                              <td>
-                                {formatClpCurrency(productEntry.individual_amount)}
-                              </td>
-                              <td>
-                                {formatClpCurrency(productEntry.total_amount)}
-                              </td>
-                            </tr>
-                        ))}
-                        <tr>
-                          <td>
-                            <strong>
-                              <FormattedMessage id="total"
-                                                defaultMessage="Total"/>
-                            </strong>
-                          </td>
-                          <td colSpan={2}>&nbsp;</td>
-                          <td>
-                            <strong>{formatClpCurrency(staffSummary.total_amount)}</strong>
+                            {formatClpCurrency(productEntry.total_amount)}
                           </td>
                         </tr>
-                        </tbody>
-                      </table>
-                      : <Loading />}
+                      ))}
+                      <tr>
+                        <td>
+                          <strong>
+                            <FormattedMessage id="total"
+                                              defaultMessage="Total"/>
+                          </strong>
+                        </td>
+                        <td colSpan={2}>&nbsp;</td>
+                        <td>
+                          <strong>{formatClpCurrency(staffSummary.total_amount)}</strong>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    : <Loading />}
                 </div>
               </div>
             </div>
           </div>
-        </div>)
+        </ApiForm>
+      </div>)
   }
 }
 
