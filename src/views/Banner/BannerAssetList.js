@@ -15,16 +15,9 @@ class BannerAssetList extends React.Component {
 
     this.state = {
       formValues: {},
-      apiFormFieldChangeHandler: undefined,
       assets: undefined
     }
   }
-
-  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
-    this.setState({
-      apiFormFieldChangeHandler
-    })
-  };
 
   handleFormValueChange = formValues => {
     this.setState({
@@ -71,8 +64,7 @@ class BannerAssetList extends React.Component {
         endpoints={['banner_assets/']}
         fields={['is_active', 'is_complete', 'page', 'page_size']}
         onResultsChange={this.setAssets}
-        onFormValueChange={this.handleFormValueChange}
-        setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
+        onFormValueChange={this.handleFormValueChange}>
 
         <Row>
           <Col sm="12">
@@ -85,36 +77,31 @@ class BannerAssetList extends React.Component {
                     <ApiFormChoiceField
                       name="is_active"
                       id="is_active" choices={booleanChoices}
-                      searchable={false}
-                      onChange={this.state.apiFormFieldChangeHandler}
-                      value={this.state.formValues.is_active}/>
+                      searchable={false}/>
                   </Col>
                   <Col xs="12" sm="6">
                     <label htmlFor="is_complete">¿Completo?</label>
                     <ApiFormChoiceField
                       name="is_complete"
                       id="is_complete" choices={booleanChoices}
-                      searchable={false}
-                      onChange={this.state.apiFormFieldChangeHandler}
-                      value={this.state.formValues.is_complete}/>
+                      searchable={false}/>
                   </Col>
                 </Row>
               </div>
             </Card>
           </Col>
         </Row>
+        <Row>
+          <Col sm="12">
+            <ApiFormResultTableWithPagination
+              page_size_choices={[10, 20, 50]}
+              page={this.state.formValues.page}
+              page_size={this.state.formValues.page_size}
+              data = {this.state.assets}
+              columns={columns}/>
+          </Col>
+        </Row>
       </ApiForm>
-      <Row>
-        <Col sm="12">
-          <ApiFormResultTableWithPagination
-            page_size_choices={[10, 20, 50]}
-            page={this.state.formValues.page}
-            page_size={this.state.formValues.page_size}
-            data = {this.state.assets}
-            onChange={this.state.apiFormFieldChangeHandler}
-            columns={columns}/>
-        </Col>
-      </Row>
 
     </div>
   }

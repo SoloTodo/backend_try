@@ -14,16 +14,9 @@ class BannerAssetListPending extends React.Component {
 
     this.state = {
       formValues: {},
-      apiFormFieldChangeHandler: undefined,
       assets: undefined
     }
   }
-
-  setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
-    this.setState({
-      apiFormFieldChangeHandler
-    })
-  };
 
   handleFormValueChange = formValues => {
     this.setState({
@@ -71,28 +64,25 @@ class BannerAssetListPending extends React.Component {
         endpoints={['banner_assets/?is_active=1&is_complete=0']}
         fields={['ordering', 'page', 'page_size']}
         onResultsChange={this.setAssets}
-        onFormValueChange={this.handleFormValueChange}
-        setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
+        onFormValueChange={this.handleFormValueChange}>
         <ApiFormChoiceField
           name='ordering'
           choices={createOrderingOptionChoices(['id'])}
           hidden={true}
           required={true}
-          value={this.state.formValues.ordering}
-          onChange={this.state.apiFormFieldChangeHandler}/>
+          value={this.state.formValues.ordering} />
+        <Row>
+          <Col sm="12">
+            <ApiFormResultTableWithPagination
+              page_size_choices={[10, 20, 50]}
+              page={this.state.formValues.page}
+              page_size={this.state.formValues.page_size}
+              data={this.state.assets}
+              columns={columns}
+              ordering={this.state.formValues.ordering}/>
+          </Col>
+        </Row>
       </ApiForm>
-      <Row>
-        <Col sm="12">
-          <ApiFormResultTableWithPagination
-            page_size_choices={[10, 20, 50]}
-            page={this.state.formValues.page}
-            page_size={this.state.formValues.page_size}
-            data = {this.state.assets}
-            onChange={this.state.apiFormFieldChangeHandler}
-            columns={columns}
-            ordering={this.state.formValues.ordering}/>
-        </Col>
-      </Row>
     </div>
   }
 }
