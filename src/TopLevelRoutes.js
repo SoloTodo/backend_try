@@ -166,8 +166,13 @@ export const sidebarLayout = [
         requiredPermission: "banners.is_staff_of_banner_assets"
       },
       {
-        label: 'Updates',
+        label: 'Actualizaciones',
         path: "/banner_updates",
+        requiredPermission: "banners.is_staff_of_banner_assets"
+      },
+      {
+        label: 'Últimas actualizaciones',
+        path: "/banner_updates/latest",
         requiredPermission: "banners.is_staff_of_banner_assets"
       }
     ]
