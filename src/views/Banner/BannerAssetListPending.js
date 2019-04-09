@@ -61,7 +61,7 @@ class BannerAssetListPending extends React.Component {
 
     return <div className="animated fadeIn">
       <ApiForm
-        endpoints={['banner_assets/?is_active=1&is_complete=0']}
+        endpoints={['banner_assets/?is_complete=0']}
         fields={['ordering', 'page', 'page_size']}
         onResultsChange={this.setAssets}
         onFormValueChange={this.handleFormValueChange}>

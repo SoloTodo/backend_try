@@ -99,7 +99,7 @@ class WtbEntityPending extends Component {
         <div className="animated fadeIn">
           <ApiForm
               endpoints={["wtb/entities/pending/"]}
-              fields={['wtb_brands', 'categories', 'search', 'page', 'page_size', 'ordering']}
+              fields={['brands', 'categories', 'search', 'page', 'page_size', 'ordering']}
               onResultsChange={this.setWtbEntities}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
@@ -124,8 +124,8 @@ class WtbEntityPending extends Component {
                           <FormattedMessage id="brands" defaultMessage="Brands" />
                         </label>
                         <ApiFormChoiceField
-                            name="wtb_brands"
-                            id="wtb_brands"
+                            name="brands"
+                            id="brands"
                             choices={wtbBrandChoices}
                             multiple={true}
                             onChange={this.state.apiFormFieldChangeHandler}
