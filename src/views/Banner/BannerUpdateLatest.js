@@ -59,11 +59,11 @@ class BannerUpdateLatest extends React.Component {
                   </tr>
                   </thead>
                   <tbody>
-                  {this.state.updates.map(updateEntry => <tr key={updateEntry.update.id}>
+                  {this.state.updates.map(updateEntry => <tr key={updateEntry.store.id}>
                     <td>{updateEntry.store.name}</td>
                     <td>{updateEntry.update ? statusCodes[updateEntry.update.status] : 'N/A'}</td>
-                    <td>{formatDateStr(updateEntry.update.timestamp)}</td>
-                    <td>{updateEntry.update.status_message || <em>N/A</em>}</td>
+                    <td>{updateEntry.update ? formatDateStr(updateEntry.update.timestamp) : 'N/A'}</td>
+                    <td>{updateEntry.update ? updateEntry.update.status_message || <em>N/A</em> : 'N/A'}</td>
                   </tr>)}
                   </tbody>
                 </Table>
