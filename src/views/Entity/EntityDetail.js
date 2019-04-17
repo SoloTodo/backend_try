@@ -32,7 +32,8 @@ class EntityDetail extends Component {
     dissociatingState: DISSOCIATING_STATES.STAND_BY,
     dissociationReason: '',
     stock: undefined,
-    staffInfo: undefined
+    staffInfo: undefined,
+    entityPositions: undefined
   };
 
   constructor(props) {
@@ -146,6 +147,15 @@ class EntityDetail extends Component {
         })
       })
     }
+
+    // TODO: add permission check
+
+    const position_endpoint = `entity_section_positions/?entities=${entity.id}&is_active=1`
+    this.props.fetchAuth(position_endpoint).then(json => {
+      this.setState({
+        entityPositions: json.results
+      })
+    })
   }
 
   updatePricingInformation = () => {
@@ -243,6 +253,7 @@ class EntityDetail extends Component {
   };
 
   render() {
+    console.log(this.state.entityPositions);
     const localFormatCurrency = (value, valueCurrency, conversionCurrency) => {
       return formatCurrency(value, valueCurrency, conversionCurrency,
         this.props.preferredNumberFormat.thousands_separator,
@@ -483,6 +494,12 @@ class EntityDetail extends Component {
                 </table>
               </div>
             </div>
+            <div className="card">
+              <div className="card-header"> Posicionamiento </div>
+              <div className="card-block">
+
+              </div>
+            </div>
           </div>
           <div className="col-12 col-md-6">
             <div className="card">
@@ -627,6 +644,7 @@ class EntityDetail extends Component {
               </div>
             </div>}
           </div>
+
 
           <div className="col-12">
             <div className="card">
