@@ -18,6 +18,7 @@ import './EntityDetail.css'
 import moment from "moment";
 import {backendStateToPropsUtils} from "../../utils";
 import EntityCategoryChange from "./EntityCategoryChange";
+import EntitySectionPositionTable from "../../components/Entity/EntitySectionPositionTable"
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -33,7 +34,6 @@ class EntityDetail extends Component {
     dissociationReason: '',
     stock: undefined,
     staffInfo: undefined,
-    entityPositions: undefined
   };
 
   constructor(props) {
@@ -109,7 +109,7 @@ class EntityDetail extends Component {
           defaultMessage="This entity has not yet been processed by our staff. Please contact us if you want to prioritize it."/>, {autoClose: false})
       }
 
-      if (!entity.active_registry.is_available) {
+      if (!entity.active_registry || !entity.active_registry.is_available) {
         toast.info(<FormattedMessage
           id="entity_not_available_info"
           defaultMessage="Please note that this entity is not available for purchase according to our system."/>, {autoClose: false})
@@ -147,15 +147,6 @@ class EntityDetail extends Component {
         })
       })
     }
-
-    // TODO: add permission check
-
-    const position_endpoint = `entity_section_positions/?entities=${entity.id}&is_active=1`
-    this.props.fetchAuth(position_endpoint).then(json => {
-      this.setState({
-        entityPositions: json.results
-      })
-    })
   }
 
   updatePricingInformation = () => {
@@ -253,7 +244,6 @@ class EntityDetail extends Component {
   };
 
   render() {
-    console.log(this.state.entityPositions);
     const localFormatCurrency = (value, valueCurrency, conversionCurrency) => {
       return formatCurrency(value, valueCurrency, conversionCurrency,
         this.props.preferredNumberFormat.thousands_separator,
@@ -494,12 +484,7 @@ class EntityDetail extends Component {
                 </table>
               </div>
             </div>
-            <div className="card">
-              <div className="card-header"> Posicionamiento </div>
-              <div className="card-block">
-
-              </div>
-            </div>
+            <EntitySectionPositionTable entity={entity}/>
           </div>
           <div className="col-12 col-md-6">
             <div className="card">
