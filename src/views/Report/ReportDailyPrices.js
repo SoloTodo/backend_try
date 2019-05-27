@@ -13,6 +13,7 @@ import ApiFormTextField from "../../react-utils/api_forms/ApiFormTextField";
 import ApiFormDateRangeField from "../../react-utils/api_forms/ApiFormDateRangeField";
 import moment from "moment/moment";
 import {booleanChoices} from "../../utils";
+import {toast} from 'react-toastify'
 
 class ReportDailyPrices extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class ReportDailyPrices extends Component {
     this.state = {
       formValues: {},
       apiFormFieldChangeHandler: undefined,
-      downloadLink: undefined
+      loading: undefined
     }
   }
 
@@ -35,15 +36,13 @@ class ReportDailyPrices extends Component {
     this.setState({formValues})
   };
 
-  setDownloadLink = json => {
+  setLoading = json => {
     if (json) {
-      window.location = json.payload.url;
-      this.setState({
-        downloadLink: undefined
-      })
+      toast.success('El reporte esta siendo generado. Una vez finalizado este será enviado a su correo.',
+        {autoClose: false})
     } else {
       this.setState({
-        downloadLink: null
+        loading: null
       })
     }
   };
@@ -63,7 +62,7 @@ class ReportDailyPrices extends Component {
             <ApiForm
                 endpoints={['reports/daily_prices/']}
                 fields={['timestamp', 'category', 'stores', 'countries', 'store_types', 'currency', 'brand', 'exclude_unavailable', 'filename', 'submit']}
-                onResultsChange={this.setDownloadLink}
+                onResultsChange={this.setLoading}
                 onFormValueChange={this.handleFormValueChange}
                 setFieldChangeHandler={this.setApiFormFieldChangeHandler}
                 requiresSubmit={true}
@@ -198,7 +197,7 @@ class ReportDailyPrices extends Component {
                         label={<FormattedMessage id="generate" defaultMessage="Generate" />}
                         loadingLabel={<FormattedMessage id="generating" defaultMessage="Generating" />}
                         onChange={this.state.apiFormFieldChangeHandler}
-                        loading={this.state.downloadLink === null}
+                        loading={this.state.loading === null}
                     />
                   </div>
                 </div>
