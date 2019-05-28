@@ -18,6 +18,7 @@ import './EntityDetail.css'
 import moment from "moment";
 import {backendStateToPropsUtils} from "../../utils";
 import EntityCategoryChange from "./EntityCategoryChange";
+import EntitySectionPositionTable from "../../components/Entity/EntitySectionPositionTable"
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -32,7 +33,7 @@ class EntityDetail extends Component {
     dissociatingState: DISSOCIATING_STATES.STAND_BY,
     dissociationReason: '',
     stock: undefined,
-    staffInfo: undefined
+    staffInfo: undefined,
   };
 
   constructor(props) {
@@ -108,7 +109,7 @@ class EntityDetail extends Component {
           defaultMessage="This entity has not yet been processed by our staff. Please contact us if you want to prioritize it."/>, {autoClose: false})
       }
 
-      if (!entity.active_registry.is_available) {
+      if (!entity.active_registry || !entity.active_registry.is_available) {
         toast.info(<FormattedMessage
           id="entity_not_available_info"
           defaultMessage="Please note that this entity is not available for purchase according to our system."/>, {autoClose: false})
@@ -483,6 +484,7 @@ class EntityDetail extends Component {
                 </table>
               </div>
             </div>
+            <EntitySectionPositionTable entity={entity}/>
           </div>
           <div className="col-12 col-md-6">
             <div className="card">
@@ -627,6 +629,7 @@ class EntityDetail extends Component {
               </div>
             </div>}
           </div>
+
 
           <div className="col-12">
             <div className="card">
