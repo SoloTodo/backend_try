@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {
-  apiResourceStateToPropsUtils, filterApiResourceObjectsByType
-} from "../../react-utils/ApiResource";
-import moment from 'moment';
+import {UncontrolledTooltip} from "reactstrap";
 import {FormattedMessage} from "react-intl";
-import {
-  convertToDecimal,
-  listToObject,
-} from "../../react-utils/utils";
+import {NavLink} from "react-router-dom";
+import moment from 'moment';
+
+import {apiResourceStateToPropsUtils, filterApiResourceObjectsByType} from "../../react-utils/ApiResource";
+import {convertToDecimal, listToObject} from "../../react-utils/utils";
 import {
   ApiForm,
   ApiFormDateRangeField,
   ApiFormChoiceField,
   ApiFormResultsTable
 } from "../../react-utils/api_forms";
-import ProductDetailPricingHistoryChart from "./ProductDetailPricingHistoryChart";
-import {UncontrolledTooltip} from "reactstrap";
-import {NavLink} from "react-router-dom";
+
 import {backendStateToPropsUtils} from "../../utils";
+import ProductDetailPricingHistoryChart from "./ProductDetailPricingHistoryChart";
 
 class ProductDetailPricingHistory extends Component {
   constructor(props) {
@@ -72,8 +69,13 @@ class ProductDetailPricingHistory extends Component {
   render() {
     const product = this.props.ApiResourceObject(this.props.apiResourceObject);
 
-    const dateRangeInitialMin = moment().startOf('day').subtract(30, 'days');
-    const dateRangeInitialMax = moment().startOf('day');
+    const productCreationDate = moment(product.creationDate).startOf('day');
+    const todayMinus30Days = moment().startOf('day').subtract(30, 'days');
+
+    let dateRangeInitialMin = productCreationDate;
+    if (productCreationDate.isBefore(todayMinus30Days)) {
+      dateRangeInitialMin = todayMinus30Days
+    }
 
     const currencyOptions = this.props.currencies.map(currency => {
       const priority = currency.id === this.props.preferredCurrency.id ? 1 : 2;
@@ -181,7 +183,7 @@ class ProductDetailPricingHistory extends Component {
                     <ApiFormDateRangeField
                         name="timestamp"
                         id="timestamp"
-                        initial={[dateRangeInitialMin, dateRangeInitialMax]}
+                        initial={[dateRangeInitialMin]}
                         value={this.state.formValues.timestamp}
                         onChange={this.state.apiFormFieldChangeHandler}
                     />
@@ -265,7 +267,7 @@ class ProductDetailPricingHistory extends Component {
                 </div>
               </div>
             </div>
-            <div className="card d-flex flex-column flex-grow">
+            <div className="card">
               <div className="card-header">
                 <i className="fa fa-line-chart" aria-hidden="true">&nbsp;</i>
                 <FormattedMessage id="chart" defaultMessage="Chart" />
@@ -278,7 +280,7 @@ class ProductDetailPricingHistory extends Component {
               </div>
             </div>
 
-            <div className="card d-flex flex-column flex-grow">
+            <div className="card">
               <div className="card-header">
                 <i className="glyphicons glyphicons-inbox">&nbsp;</i>
                 <FormattedMessage id="entities_found" defaultMessage="Entities found" />

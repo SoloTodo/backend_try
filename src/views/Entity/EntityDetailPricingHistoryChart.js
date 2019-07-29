@@ -21,8 +21,8 @@ class EntityDetailPricingHistoryChart extends Component {
     const targetCurrency = this.props.chart.currency;
 
     const exchangeRate =
-        targetCurrency.exchange_rate /
-        entity.currency.exchangeRate;
+      targetCurrency.exchange_rate /
+      entity.currency.exchangeRate;
 
     let initiallyAvailable = false;
     let includesStockInfo = false;
@@ -60,7 +60,7 @@ class EntityDetailPricingHistoryChart extends Component {
     for (const pricingHistory of datapoints) {
       if (typeof lastPriceHistorySeen !== 'undefined') {
         result = result.concat(this.fillTimeLapse(
-            lastPriceHistorySeen.timestamp, pricingHistory.timestamp, lastPriceHistorySeen.isAvailable, includesStockInfo))
+          lastPriceHistorySeen.timestamp, pricingHistory.timestamp, lastPriceHistorySeen.isAvailable, includesStockInfo))
       }
       lastPriceHistorySeen = pricingHistory;
 
@@ -134,8 +134,8 @@ class EntityDetailPricingHistoryChart extends Component {
           suggestedMax: maxPriceValue * 1.1,
           callback: value => {
             return formatCurrency(value, currency, null,
-                preferredNumberFormat.thousands_separator,
-                preferredNumberFormat.decimal_sepator)
+              preferredNumberFormat.thousands_separator,
+              preferredNumberFormat.decimal_sepator)
           }
         }
       }
@@ -177,28 +177,28 @@ class EntityDetailPricingHistoryChart extends Component {
     }
 
     const stockData = filledChartData
-            .map(datapoint => datapoint.stock > 0 ? datapoint.stock : NaN);
+      .map(datapoint => datapoint.stock > 0 ? datapoint.stock : NaN);
     if (stockData.some(x => Boolean(x))) {
       const maxStock = filledChartData.reduce((acum, datapoint) => {
         return Math.max(acum, datapoint.stock || 0)
       }, 0);
 
       yAxes.push(
-          {
-            id: 'stock-axis',
-            position: 'right',
-            ticks: {
-              beginAtZero: true,
-              suggestedMax: maxStock * 1.1
-            },
-            scaleLabel: {
-              display: true,
-              labelString: this.props.intl.formatMessage({id: 'stock'})
-            },
-            gridLines: {
-              display: false
-            }
+        {
+          id: 'stock-axis',
+          position: 'right',
+          ticks: {
+            beginAtZero: true,
+            suggestedMax: maxStock * 1.1
+          },
+          scaleLabel: {
+            display: true,
+            labelString: this.props.intl.formatMessage({id: 'stock'})
+          },
+          gridLines: {
+            display: false
           }
+        }
       );
 
       datasets.push({
@@ -266,9 +266,9 @@ class EntityDetailPricingHistoryChart extends Component {
             const yAxisId = data.datasets[tooltipItem.datasetIndex].yAxisID;
             if (yAxisId === 'price-axis') {
               const formattedCurrency = formatCurrency(
-                  tooltipItem.yLabel, currency, null,
-                  preferredNumberFormat.thousands_separator,
-                  preferredNumberFormat.decimal_separator);
+                tooltipItem.yLabel, currency, null,
+                preferredNumberFormat.thousands_separator,
+                preferredNumberFormat.decimal_separator);
               return `${data.datasets[tooltipItem.datasetIndex].label}: ${formattedCurrency}`
             }
             if (yAxisId === 'stock-axis') {
@@ -294,7 +294,7 @@ class EntityDetailPricingHistoryChart extends Component {
       datasets: datasets
     };
 
-    return <div id="chart-container" className="flex-grow">
+    return <div id="chart-container">
       <Line data={chartData} options={chartOptions} />
     </div>
   }

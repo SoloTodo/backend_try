@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {
-  apiResourceStateToPropsUtils,
-  filterApiResourceObjectsByType
-} from "../../react-utils/ApiResource";
-import moment from 'moment';
+import { toast } from 'react-toastify';
+import {UncontrolledTooltip} from "reactstrap";
 import {FormattedMessage, injectIntl} from "react-intl";
+import moment from 'moment';
+
+import {apiResourceStateToPropsUtils, filterApiResourceObjectsByType} from "../../react-utils/ApiResource";
 import {convertToDecimal} from "../../react-utils/utils";
 import {
   ApiForm,
   ApiFormDateRangeField,
   ApiFormChoiceField,
 } from '../../react-utils/api_forms'
-import { toast } from 'react-toastify';
-import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
-import {UncontrolledTooltip} from "reactstrap";
+
 import {backendStateToPropsUtils} from "../../utils";
+import EntityDetailPricingHistoryChart from "./EntityDetailPricingHistoryChart";
 
 class EntityDetailPricingHistory extends Component {
   constructor(props) {
@@ -83,8 +82,6 @@ class EntityDetailPricingHistory extends Component {
       dateRangeInitialMin = todayMinus30Days;
     }
 
-    const dateRangeInitialMax = moment().startOf('day');
-
     const currencyOptions = this.props.currencies.map(currency => {
       let priority = 3;
       let name = currency.name;
@@ -139,7 +136,7 @@ class EntityDetailPricingHistory extends Component {
                         id="timestamp"
                         label={<FormattedMessage id="date_range_from_to" defaultMessage='Date range (from / to)' />}
                         min={entityCreationDate}
-                        initial={[dateRangeInitialMin, dateRangeInitialMax]}
+                        initial={[dateRangeInitialMin]}
                         value={this.state.formValues.timestamp}
                         onChange={this.state.apiFormFieldChangeHandler}
                     />
@@ -162,11 +159,11 @@ class EntityDetailPricingHistory extends Component {
                 </div>
               </div>
             </div>
-            <div className="card d-flex flex-column flex-grow">
+            <div className="card">
               <div className="card-header">
                 <FormattedMessage id="result" defaultMessage={`Result`} />
               </div>
-              <div className="card-block d-flex flex-column">
+              <div className="card-block">
                 <EntityDetailPricingHistoryChart
                     entity={this.props.apiResourceObject}
                     chart={this.state.chart}

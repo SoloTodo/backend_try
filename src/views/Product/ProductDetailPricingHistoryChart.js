@@ -92,6 +92,8 @@ class ProductDetailPricingHistoryChart extends Component {
   }
 
   render() {
+    console.log(this.props.chart);
+
     if (!this.props.chart) {
       return <Loading />;
     }
@@ -193,7 +195,7 @@ class ProductDetailPricingHistoryChart extends Component {
       datasets: datasets
     };
 
-    return <div id="chart-container" className="flex-grow">
+    return <div id="chart-container">
       <Line data={chartData} options={chartOptions} />
     </div>
   }
