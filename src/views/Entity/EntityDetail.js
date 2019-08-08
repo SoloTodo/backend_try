@@ -19,6 +19,7 @@ import moment from "moment";
 import {backendStateToPropsUtils} from "../../utils";
 import EntityCategoryChange from "./EntityCategoryChange";
 import EntitySectionPositionTable from "../../components/Entity/EntitySectionPositionTable"
+import EntityConditionChange from "./EntityConditionChange";
 
 const DISSOCIATING_STATES = {
   STAND_BY: 1,
@@ -434,7 +435,10 @@ class EntityDetail extends Component {
                   <tr>
                     <th><FormattedMessage id="condition" defaultMessage="Condition" /></th>
                     <td>
-                      {currentCondition.name}
+                      {hasStaffPermissions ?
+                        <EntityConditionChange entity={entity}/> :
+                        currentCondition.name
+                      }
                     </td>
                   </tr>
                   <tr>

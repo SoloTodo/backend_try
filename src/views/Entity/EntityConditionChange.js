@@ -1,49 +1,70 @@
 import React from 'react';
+import {connect} from "react-redux";
+import Select from "react-select";
+
+import {apiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
 
 
 class EntityConditionChange extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newCondition: null,
+      selectedCondition: this.props.entity.condition,
     }
   }
 
   changeCondition = () => {
-    const requestBody = JSON.stringify({condition: this.state.newCondition});
+    const requestBody = JSON.stringify({condition: this.state.selectedCondition});
 
     this.props.fetchAuth(`${this.props.entity.url}set_condition/`, {
       method: 'POST',
       body: requestBody
-    }).then(json => {
-      this.setState({
-        newCondition: null
-      })
     })
   };
 
-  handleChangeCondition = newCondition => {
+  handleChangeCondition = conditionOption => {
     this.setState({
-      newCondition: newCondition
+      selectedCondition: conditionOption.value
     }, () => {
       this.changeCondition()
     })
   };
 
-  resetNewCondition = () => {
-    this.setState({
-      newCondition: null
-    })
-  };
-
   render() {
-    const entity = this.props.entity;
-    const conditionSelectEnabled = !this.state.newCondition;
-    const conditionOptions = {
-      
-    };
-    return <div>Hola</div>
+    const conditionOptions = [
+      { option: 'https://schema.org/DamagedCondition',
+        value: 'https://schema.org/DamagedCondition',
+        label: 'Dañado'},
+      { option: 'https://schema.org/NewCondition',
+        value: 'https://schema.org/NewCondition',
+        label: 'Nuevo'},
+      { option: 'https://schema.org/RefurbishedCondition',
+        value: 'https://schema.org/RefurbishedCondition',
+        label: 'Reacondicionado'},
+      { option: 'https://schema.org/UsedCondition',
+        value: 'https://schema.org/UsedCondition',
+        label: 'Usado'},
+
+    ];
+    return <div>
+      <Select
+        name='conditions'
+        id='conditions'
+        options={conditionOptions}
+        value={this.state.selectedCondition}
+        onChange={this.handleChangeCondition}
+        clearable={false}
+        />
+    </div>
   }
 }
 
-export default EntityConditionChange
+function mapStateToProps(state) {
+  const {fetchAuth} = apiResourceStateToPropsUtils(state);
+
+  return {
+    fetchAuth
+  }
+}
+
+export default connect(mapStateToProps)(EntityConditionChange)
