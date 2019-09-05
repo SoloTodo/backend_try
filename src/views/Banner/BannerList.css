@@ -1,0 +1,20 @@
+.banner-preview {
+    max-width: 500px !important;
+}
+
+.banner-content-container {
+    width: 300px !important;
+}
+
+.banner-content-brand {
+    width: 45% !important;
+}
+
+.banner-content-category {
+    padding-left: 5px !important;
+    width: 55% !important;
+}
+
+.banner-content-percentage {
+    width: 50px !important;
+}

@@ -7,7 +7,7 @@ export default ({match}) => {
   return(
     <Switch>
       <Route path={match.url} exact render={props => (
-        <RequiredResources resources={['stores']}>
+        <RequiredResources resources={['stores', 'brands', 'categories', 'banner_subsection_types']}>
           <BannerList />
         </RequiredResources>
       )} />

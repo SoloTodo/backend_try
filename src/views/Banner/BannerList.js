@@ -6,7 +6,7 @@ import {
   ApiFormChoiceField,
   ApiFormResultTableWithPagination,
   ApiFormRemoveOnlyListField,
-  createOrderingOptionChoices
+  createOrderingOptionChoices, ApiFormDateRangeField
 } from '../../react-utils/api_forms'
 import {
   apiResourceStateToPropsUtils,
@@ -15,6 +15,9 @@ import {
 import {booleanChoices} from "../../utils";
 import {formatDateStr} from "../../react-utils/utils";
 import NavLink from "react-router-dom/es/NavLink";
+
+import './BannerList.css'
+import {FormattedMessage} from "react-intl";
 
 
 class BannerList extends React.Component{
@@ -47,7 +50,9 @@ class BannerList extends React.Component{
     const columns = [
       {
         label: 'Asset',
-        renderer: banner => <NavLink to={`/banner_assets/${banner.asset.id}`}>Asset</NavLink>
+        renderer: banner => <NavLink to={`/banner_assets/${banner.asset.id}`}>
+          <img className="banner-preview img-fluid" src={banner.asset.picture_url} alt=""/>
+        </NavLink>
       },
       {
         label: 'Tienda',
@@ -60,10 +65,6 @@ class BannerList extends React.Component{
         renderer: banner => <a href={banner.externalUrl} target="_blank" rel="noopener noreferrer">{banner.subsection.section.name} > {banner.subsection.name}</a>
       },
       {
-        label: 'Imagen',
-        renderer: banner => <a href={banner.asset.picture_url} target="_blank" rel="noopener noreferrer">Imagen</a>
-      },
-      {
         label: 'Destino',
         renderer: banner => {return banner.destinationUrlList.length? <ul className="list-without-decoration mb-0">{banner.destinationUrlList.map(url => {
           return <li key={url}><a href={url} target="_blank" rel="noopener noreferrer">Link</a></li>
@@ -74,8 +75,24 @@ class BannerList extends React.Component{
         renderer: banner => banner.update.is_active? 'Sí' : 'No'
       },
       {
-        label: 'Completitud',
-        renderer: banner => `${banner.asset.total_percentage || 0} %`
+        label: <div className='d-flex flex-row banner-content-container'>
+          <div className="d-flex flex-column align-items-start banner-content-brand">Marca</div>
+          <div className="d-flex flex-column align-items-start banner-content-category">Categoría</div>
+          <div className="d-flex flex-column align-items-center banner-content-percentage">%</div>
+        </div>,
+        renderer: banner => {
+          return banner.asset.total_percentage?
+            <div>
+              {banner.asset.contents.map(content =>
+                <div className='d-flex flex-row banner-content-container'>
+                  <div className="d-flex flex-column align-items-start banner-content-brand">{content.brand.name}</div>
+                  <div className="d-flex flex-column align-items-start banner-content-category">{content.category.name}</div>
+                  <div className="d-flex flex-column align-items-center banner-content-percentage">{`${content.percentage} %`}</div>
+                </div>
+              )}
+            </div>
+            : "Sin contenido"
+        }
       },
       {
         label:'Posición',
@@ -110,11 +127,38 @@ class BannerList extends React.Component{
               <div className="card-block">
                 <Row className="entity-form-controls">
                   <Col xs="12" sm="6">
+                    <label htmlFor="brands">Marcas</label>
+                    <ApiFormChoiceField
+                      name="brands"
+                      id="brand"
+                      choices={this.props.brands}
+                      multiple={true}
+                      placeholder='Todas'/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <label htmlFor="categories">Categorías</label>
+                    <ApiFormChoiceField
+                      name="categories"
+                      id="categories"
+                      choices={this.props.categories}
+                      multiple={true}
+                      placeholder='Todas'/>
+                  </Col>
+                  <Col xs="12" sm="6">
                     <label htmlFor="stores">Tiendas</label>
                     <ApiFormChoiceField
                       name="stores"
                       id="stores"
                       choices={this.props.stores}
+                      multiple={true}
+                      placeholder='Todas'/>
+                  </Col>
+                  <Col xs="12" sm="6">
+                    <label htmlFor="types">Tipos</label>
+                    <ApiFormChoiceField
+                      name="types"
+                      id="types"
+                      choices={this.props.banner_subsection_types}
                       multiple={true}
                       placeholder='Todas'/>
                   </Col>
@@ -126,6 +170,13 @@ class BannerList extends React.Component{
                       choices={booleanChoices}
                       searchable={false} />
                   </Col>
+                  <div className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <label htmlFor="creation_date">Fecha creación (desde / hasta)</label>
+                    <ApiFormDateRangeField
+                      name="creation_date"
+                      id="creation_date"
+                      nullable={true}/>
+                  </div>
                 </Row>
               </div>
             </Card>
@@ -170,7 +221,10 @@ function mapStateToProps(state) {
 
   return {
     ApiResourceObject,
-    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores')
+    stores: filterApiResourceObjectsByType(state.apiResourceObjects, 'stores'),
+    brands: filterApiResourceObjectsByType(state.apiResourceObjects, 'brands'),
+    categories: filterApiResourceObjectsByType(state.apiResourceObjects, 'categories'),
+    banner_subsection_types: filterApiResourceObjectsByType(state.apiResourceObjects, 'banner_subsection_types')
   }
 }
 
