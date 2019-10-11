@@ -41,7 +41,7 @@ class UserDetailStaffSummary extends Component {
 
     const formatClpCurrency = value => formatCurrency(value, clpCurrency, null, '.', ',');
 
-    const dateRangeInitialMax = moment().startOf('day');
+    const dateRangeInitialMax = moment.utc().startOf('day');
     const dateRangeInitialMin = dateRangeInitialMax.clone().subtract(30, 'days');
 
     return (
@@ -49,8 +49,7 @@ class UserDetailStaffSummary extends Component {
         <ApiForm
           endpoints={[endpoint]}
           fields={['timestamp']}
-          onResultsChange={this.setStaffSummary}
-        >
+          onResultsChange={this.setStaffSummary}>
 
           <div className="row">
             <div className="col-12">

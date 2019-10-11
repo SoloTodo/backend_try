@@ -27,9 +27,23 @@ class WtbEntityDetailAssociate extends Component {
     const entity = this.props.ApiResourceObject(this.props.apiResourceObject);
     const endpoint = `${entity.category.url}products/?page_size=200&search=${encodeURIComponent(keywords)}`;
 
+    const toastId = toast.info(<FormattedMessage
+        id="searching_product"
+        defaultMessage="Searching..." />, {
+      autoClose: false
+    });
+
     this.props.fetchAuth(endpoint).then(json => {
       const productChoices = json.results;
       const selectedProductId = json.results.length ? json.results[0].id.toString() : '';
+
+      toast.dismiss(toastId);
+
+      if (!productChoices.length) {
+        toast.error(<FormattedMessage
+            id="no_products_found"
+            defaultMessage="No products found" />)
+      }
 
       this.setState({
         productChoices,
@@ -108,7 +122,7 @@ class WtbEntityDetailAssociate extends Component {
 
       return <Redirect push to={{
         pathname: '/wtb/entities/pending',
-        search: '?wtb_brands=' + wtbEntity.brand.id
+        search: '?brands=' + wtbEntity.brand.id
       }} />
     }
 

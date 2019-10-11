@@ -225,7 +225,6 @@ class EntityDetailAssociate extends Component {
 
     return (
         <div className="animated fadeIn">
-          <NavLink to="/entities/18279/associate">Break</NavLink>
           <div className="row">
             <div className="col-12">
               <div className="card">

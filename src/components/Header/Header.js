@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import {settings} from "../../settings";
@@ -7,18 +7,16 @@ import {settings} from "../../settings";
 class Header extends Component {
   constructor(props) {
     super(props);
-
-    this.toggle = this.toggle.bind(this);
     this.state = {
       dropdownOpen: false
     };
   }
 
-  toggle() {
+  toggle = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
-  }
+  };
 
   sidebarToggle(e) {
     e.preventDefault();
@@ -37,7 +35,6 @@ class Header extends Component {
 
   render() {
     const user = this.props.user;
-
     return (
       <header className="app-header navbar">
         <button className="navbar-toggler mobile-sidebar-toggler d-lg-none" onClick={this.mobileSidebarToggle} type="button">&#9776;</button>
@@ -50,11 +47,10 @@ class Header extends Component {
         <ul className="nav navbar-nav ml-auto">
           <li className="nav-item dropdown">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                <span onClick={this.toggle} className="nav-link nav-pill avatar" data-toggle="dropdown"  role="button" aria-haspopup="true" aria-expanded={this.state.dropdownOpen} id="account-nav-link">
-                  <img src={'/img/avatars/default.png'} className="img-avatar" alt={ user.email }/>
-                </span>
-
-              <DropdownMenu className="dropdown-menu-right">
+              <DropdownToggle onClick={this.toggle} className="nav-link mr-3" data-toggle="dropdown" role="button" aria-haspopup={true} aria-expanded={this.state.dropdownOpen}>
+                {user.first_name} {user.last_name}
+              </DropdownToggle>
+              <DropdownMenu className="mr-0">
                 <DropdownItem header className="text-center"><strong>{ user.email }</strong></DropdownItem>
                 <DropdownItem onClick={this.handleSignOut}><i className="fa fa-lock"/> <FormattedMessage id="header_signout_title" defaultMessage={`Logout`} /></DropdownItem>
               </DropdownMenu>

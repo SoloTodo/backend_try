@@ -17,7 +17,6 @@ import {formatDateStr} from "../../react-utils/utils";
 import NavLink from "react-router-dom/es/NavLink";
 
 import './BannerList.css'
-import {FormattedMessage} from "react-intl";
 
 
 class BannerList extends React.Component{
