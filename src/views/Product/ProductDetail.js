@@ -212,6 +212,16 @@ class ProductDetail extends Component {
 
                     {product.category.permissions.includes('is_category_staff') &&
                     <li>
+                      <NavLink to={`/products/${product.id}/wtb_entities`}>
+                        <button type="button" className="btn btn-link">
+                          <FormattedMessage id="associated_wtb_entities" defaultMessage="Associated wtb entities"/>
+                        </button>
+                      </NavLink>
+                    </li>
+                    }
+
+                    {product.category.permissions.includes('is_category_staff') &&
+                    <li>
                       <a href={`${settings.endpoint}metamodel/instances/${product.instanceModelId}`}>
                         <button type="button" className="btn btn-link">
                           <FormattedMessage id="edit" defaultMessage="Edit"/>
@@ -272,6 +282,9 @@ class ProductDetail extends Component {
               <div className="card">
                 <div className="card-header">
                   <FormattedMessage id="tech_specs" defaultMessage="Tech specs" />
+                </div>
+                <div className="card-block pb-0">
+                  <b>Creador:</b> {product.creator.first_name} {product.creator.last_name}
                 </div>
                 <div className="card-block">
                   {techSpecs}
