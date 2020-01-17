@@ -4,6 +4,7 @@ import ProductList from "./ProductList";
 import RequiredResources from "../../react-utils/components/RequiredResources";
 import ProductDetail from "./ProductDetail";
 import ProductDetailEntities from "./ProductDetailEntities";
+import ProductDetailWtbEntities from "./ProductDetailWtbEntities";
 import ProductDetailPricingHistory from "./ProductDetailPricingHistory";
 import ResourceObjectPermission from "../../react-utils/components/ResourceObjectPermission";
 import Page404 from "../Pages/Page404";
@@ -29,6 +30,11 @@ export default ({match}) => {
         <Route path={match.url + '/:id/entities'} exact render={props => (
             <RequiredResources resources={['categories', 'stores']}>
               <ResourceObjectPermission match={props.match} resource="products" permission={product => product.category.permissions.includes('is_category_staff')} component={ProductDetailEntities} Http404={Page404} />
+            </RequiredResources>
+        )} />
+        <Route path={match.url + '/:id/wtb_entities'} exact render={props => (
+            <RequiredResources resources={['categories', 'stores', 'wtb_brands']}>
+              <ResourceObjectPermission match={props.match} resource="products" permission={product => product.category.permissions.includes('is_category_staff')} component={ProductDetailWtbEntities} Http404={Page404} />
             </RequiredResources>
         )} />
       </Switch>
