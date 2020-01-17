@@ -33,7 +33,7 @@ export default ({match}) => {
             </RequiredResources>
         )} />
         <Route path={match.url + '/:id/wtb_entities'} exact render={props => (
-            <RequiredResources resources={['categories', 'stores']}>
+            <RequiredResources resources={['categories', 'stores', 'wtb_brands']}>
               <ResourceObjectPermission match={props.match} resource="products" permission={product => product.category.permissions.includes('is_category_staff')} component={ProductDetailWtbEntities} Http404={Page404} />
             </RequiredResources>
         )} />

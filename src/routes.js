@@ -18,6 +18,8 @@ const routes = {
   '/products': 'products',
   '/products/:id': params => ({apiResource: 'products', apiResourceObjectId: params.id}),
   '/products/:id/pricing_history': 'pricing_history',
+  '/products/:id/wtb_entities': 'Entidades WTB',
+  '/products/:id/entities': 'entities',
   '/categories': 'categories',
   '/categories/:id': params => ({apiResource: 'categories', apiResourceObjectId: params.id}),
   '/categories/:id/products': 'products',

@@ -13,7 +13,7 @@ import {apiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
 
 class ProductDetailWtbEntities extends Component {
   initialState = {
-    entities: undefined
+    wtb_entities: undefined
   };
 
   constructor(props) {
@@ -37,105 +37,61 @@ class ProductDetailWtbEntities extends Component {
   componentUpdate(product) {
     const wtb_url = settings.apiResourceEndpoints.wtb_entities;
     this.props.fetchAuth(`${wtb_url}?products=${product.id}`)
-      .then(entities => {
-        entities.sort((a, b) => moment(a.last_pricing_update).isBefore(moment(b.last_pricing_update)));
+      .then(result => {
+        const wtb_entities = result['results'];
+        wtb_entities.sort((a, b) => moment(a.last_update).isBefore(moment(b.last_update)));
         this.setState({
-          entities
+          wtb_entities
         })
       })
   }
 
   render() {
-    if (!this.state.entities) {
+    if (!this.state.wtb_entities) {
       return <Loading />
     }
 
     const columns = [
       {
         label: <FormattedMessage id="id" defaultMessage="ID"/>,
-        renderer: entity => entity.id
+        renderer: entity => <NavLink to={`/wtb/entities/${entity.id}`}>{entity.id}</NavLink>
+      },
+      {
+        label: <FormattedMessage id="key" defaultMessage="Key"/>,
+        renderer: entity => entity.key
       },
       {
         label: <FormattedMessage id="name" defaultMessage="Name"/>,
-        renderer: entity => <NavLink to={`/entities/${entity.id}`}>{entity.name}</NavLink>
-      },
-      {
-        label: <FormattedMessage id="store" defaultMessage="Store"/>,
         renderer: entity => <span>
-          <NavLink to={`/stores/${entity.store.id}`}>{entity.store.name}</NavLink>
-          <a href={entity.externalUrl} target="_blank" rel="noopener noreferrer" className="ml-2">
-            <span className="glyphicons glyphicons-link">&nbsp;</span>
+          <a href={entity.externalUrl} target="_blank" rel="noopener noreferrer">
+            {entity.name}
           </a>
         </span>
       },
       {
-        label: <FormattedMessage id="sku" defaultMessage="SKU"/>,
-        renderer: entity => entity.sku || <em>N/A</em>
+        label: <FormattedMessage id="category" defaultMessage="Category"/>,
+        renderer: entity => entity.category.name
       },
       {
-        label: <FormattedMessage id="part_number" defaultMessage="Part Number"/>,
-        displayFilter: entities => entities.some(entity => entity.partNumber),
-        renderer: entity => entity.partNumber || <em>N/A</em>
+        label: <FormattedMessage id="brand" defaultMessage="Brand"/>,
+        renderer: entity => entity.brand.name
       },
       {
-        label: <FormattedMessage id="ean" defaultMessage="EAN"/>,
-        displayFilter: entities => entities.some(entity => entity.ean),
-        renderer: entity => entity.ean || <em>N/A</em>
+        label: <FormattedMessage id="is_visible" defaultMessage="Visible?"/>,
+        renderer: entity => entity.isVisible? 'Sí': 'No'
       },
       {
-        label: <FormattedMessage id="cell_plan_name" defaultMessage="Cell plan name"/>,
-        displayFilter: entities => entities.some(entity => entity.cellPlanName),
-        renderer: entity => entity.cellPlanName || <em>N/A</em>
+        label: <FormattedMessage id="is_active" defaultMessage="¿Activo?"/>,
+        renderer: entity => entity.isActive? 'Sí': 'No'
       },
       {
-        label: <FormattedMessage id="cell_plan" defaultMessage="Cell plan"/>,
-        displayFilter: entities => entities.some(entity => entity.cellPlan),
-        renderer: entity => entity.cellPlan ? <NavLink to={`/products/${entity.cellPlan.id}`}>{entity.cellPlan.name}</NavLink> : <em>N/A</em>
+        label: <FormattedMessage id="creation_date" defaultMessage="Creation date"/>,
+        renderer: entity => moment(entity.creationDate).format('lll')
       },
       {
         label: <FormattedMessage id="last_update" defaultMessage="Last update"/>,
-        renderer: entity => moment(entity.lastPricingUpdate).format('lll')
-      },
-      {
-        label: <FormattedMessage id="is_available_short_question" defaultMessage="Avail?" />,
-        renderer: entity => <i className={entity.activeRegistry && entity.activeRegistry.is_available ?
-            'glyphicons glyphicons-check' :
-            'glyphicons glyphicons-unchecked' }/>,
-        cssClasses: 'center-aligned',
-      },
-      {
-        label: <FormattedMessage id="is_active_short_question" defaultMessage="Act?" />,
-        renderer: entity => <i className={entity.activeRegistry ?
-            'glyphicons glyphicons-check' :
-            'glyphicons glyphicons-unchecked'}/>,
-        cssClasses: 'center-aligned',
-      },
-      {
-        label: <FormattedMessage id="currency" defaultMessage="Currency" />,
-        renderer: entity => entity.currency.isoCode,
-      },
-      {
-        label: <FormattedMessage id="normal_price" defaultMessage="Normal price" />,
-        renderer: entity => entity.activeRegistry ?
-            this.props.formatCurrency(entity.activeRegistry.normal_price) :
-            <em>N/A</em>,
-        cssClasses: 'right-aligned',
-      },
-      {
-        label: <FormattedMessage id="offer_price" defaultMessage="Offer price" />,
-        renderer: entity => entity.activeRegistry ?
-            this.props.formatCurrency(entity.activeRegistry.offer_price) :
-            <em>N/A</em>,
-        cssClasses: 'right-aligned',
-      },
-      {
-        label: <FormattedMessage id="cell_monthly_payment" defaultMessage="Cell monthly payment" />,
-        displayFilter: entities => entities.some(entity => entity.activeRegistry && entity.activeRegistry.cell_monthly_payment),
-        renderer: entity => entity.activeRegistry && entity.activeRegistry.cell_monthly_payment ?
-            this.props.formatCurrency(entity.activeRegistry.cell_monthly_payment) :
-            <em>N/A</em>,
-        cssClasses: 'right-aligned',
-      },
+        renderer: entity => moment(entity.lastUpdated).format('lll')
+      }
     ];
 
     return (
@@ -148,7 +104,7 @@ class ProductDetailWtbEntities extends Component {
                 </div>
                 <div className="card-block">
                   <ApiFormResultsTable
-                      results={this.state.entities}
+                      results={this.state.wtb_entities}
                       columns={columns}
                   />
                 </div>
