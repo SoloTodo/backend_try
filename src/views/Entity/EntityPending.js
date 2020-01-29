@@ -15,6 +15,7 @@ import {
   ApiFormTextField,
   ApiFormResultTableWithPagination
 } from '../../react-utils/api_forms'
+import {settings} from "../../settings";
 
 class EntityPending extends Component {
   constructor(props) {
@@ -23,8 +24,29 @@ class EntityPending extends Component {
     this.state = {
       formValues: {},
       apiFormFieldChangeHandler: undefined,
-      entities: undefined
+      entities: undefined,
+      cat_count: undefined,
     }
+  }
+
+  componentDidMount() {
+    this.componentUpdate()
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.entities && this.state.entities && prevState.entities.count !== this.state.entities.count){
+      this.componentUpdate()
+    }
+  }
+
+  componentUpdate() {
+    this.props.fetchAuth(settings.apiResourceEndpoints.entities + 'pending_stats/').then(
+        stats => {
+          this.setState({
+            cat_count: stats
+          })
+        }
+    )
   }
 
   setApiFormFieldChangeHandler = apiFormFieldChangeHandler => {
@@ -84,6 +106,13 @@ class EntityPending extends Component {
         </span>
       },
       {
+        label: <FormattedMessage id="country" defaultMessage="Country" />,
+        ordering: 'country',
+        renderer: entity => <span>
+          {entity.store.country.name}
+        </span>
+      },
+      {
         label: <FormattedMessage id="category" defaultMessage="Category" />,
         ordering: 'category',
         renderer: entity => entity.category.name,
@@ -103,7 +132,14 @@ class EntityPending extends Component {
     ];
 
     const storeChoices = this.props.stores;
-    const categoryChoices = this.props.categories;
+    const categoryChoices = [];
+
+    if (this.state.cat_count){
+      for (const category of this.props.categories) {
+        const categoryChoice = {name: `${category.name} (${this.state.cat_count[category.id] || 0})`, id: category.id}
+        categoryChoices.push(categoryChoice)
+      }
+    }
 
     return (
         <div className="animated fadeIn">
@@ -115,7 +151,7 @@ class EntityPending extends Component {
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <ApiFormChoiceField
                 name="ordering"
-                choices={createOrderingOptionChoices(['name', 'store', 'category'])}
+                choices={createOrderingOptionChoices(['name', 'store', 'category', 'country'])}
                 hidden={true}
                 required={true}
                 value={this.state.formValues.ordering}
