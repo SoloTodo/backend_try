@@ -107,7 +107,6 @@ class EntityPending extends Component {
       },
       {
         label: <FormattedMessage id="country" defaultMessage="Country" />,
-        ordering: 'country',
         renderer: entity => <span>
           {entity.store.country.name}
         </span>
@@ -132,11 +131,13 @@ class EntityPending extends Component {
     ];
 
     const storeChoices = this.props.stores;
-    const categoryChoices = [];
+    let categoryChoices = [];
 
-    if (this.state.cat_count){
+    if (!this.state.cat_count) {
+      categoryChoices = this.props.categories;
+    } else {
       for (const category of this.props.categories) {
-        const categoryChoice = {name: `${category.name} (${this.state.cat_count[category.id] || 0})`, id: category.id}
+        const categoryChoice = {...category, name: `${category.name} (${this.state.cat_count[category.id] || 0})`, id: category.id};
         categoryChoices.push(categoryChoice)
       }
     }
@@ -144,14 +145,15 @@ class EntityPending extends Component {
     return (
         <div className="animated fadeIn">
           <ApiForm
-              endpoints={["entities/pending/?ordering=-id"]}
+              endpoints={["entities/pending/?"]}
               fields={['stores', 'categories', 'countries', 'search', 'page', 'page_size', 'ordering']}
               onResultsChange={this.setEntities}
               onFormValueChange={this.handleFormValueChange}
               setFieldChangeHandler={this.setApiFormFieldChangeHandler}>
             <ApiFormChoiceField
                 name="ordering"
-                choices={createOrderingOptionChoices(['name', 'store', 'category', 'country'])}
+                choices={createOrderingOptionChoices(['id', 'name', 'store', 'category'])}
+                initial="-id"
                 hidden={true}
                 required={true}
                 value={this.state.formValues.ordering}
@@ -178,7 +180,6 @@ class EntityPending extends Component {
                             onChange={this.state.apiFormFieldChangeHandler}
                             value={this.state.formValues.stores}
                             placeholder={messages.all_feminine}
-
                         />
                       </div>
                       <div className="col-12 col-sm-6">
