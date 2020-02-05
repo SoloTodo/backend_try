@@ -47,12 +47,11 @@ class EntityDetail extends Component {
     this.componentUpdate(this.props.apiResourceObject, this.props.user)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentEntity = this.props.apiResourceObject;
-    const nextEntity = nextProps.apiResourceObject;
-
-    const currentUser = this.props.user;
-    const nextUser = nextProps.user;
+  componentDidUpdate(prevProps) {
+    const currentEntity = prevProps.apiResourceObject;
+    const nextEntity = this.props.apiResourceObject;
+    const currentUser = prevProps.user;
+    const nextUser = this.props.user;
 
     if (currentEntity.id !== nextEntity.id || currentUser.id !== nextUser.id) {
       this.setState(this.initialState, () => this.componentUpdate(nextEntity, nextUser));
@@ -75,54 +74,8 @@ class EntityDetail extends Component {
     // If the user is staff:
     // if some other staff has been editing this entity in the last 10 minutes, show a warning
     // Othjerwise register the staff entry
-    let registerStaffAccess = false;
 
     const userHasStaffPermissions = this.userHasStaffPermissions(entity);
-
-    if (userHasStaffPermissions) {
-      if (entity.last_staff_access) {
-        const lastStaffAccess = moment(entity.last_staff_access);
-        const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccess));
-        if (durationSinceLastStaffAccess.asMinutes() < 10) {
-          if (entity.last_staff_access_user !== user.detail_url) {
-            toast.warn(<FormattedMessage
-              id="entity_staff_overlap_warning"
-              defaultMessage="Someone has been working here recently. Be mindful!"/>, {autoClose: false})
-          }
-        } else {
-          registerStaffAccess = true;
-        }
-      } else {
-        registerStaffAccess = true;
-      }
-    } else {
-      // If the user is not staff, show warnings when the entity is not visible, nos availalble, or pending
-
-      if (!entity.is_visible) {
-        toast.warn(<FormattedMessage
-          id="entity_invisible_warning"
-          defaultMessage="Our staff has marked this entity as non-relevant, so it is ignored by our system. If this is not the case please contact us."/>, {autoClose: false})
-      }
-
-      if (entity.is_visible && entity.active_registry && entity.active_registry.is_available && !entity.product) {
-        toast.info(<FormattedMessage
-          id="entity_not_associated_info"
-          defaultMessage="This entity has not yet been processed by our staff. Please contact us if you want to prioritize it."/>, {autoClose: false})
-      }
-
-      if (!entity.active_registry || !entity.active_registry.is_available) {
-        toast.info(<FormattedMessage
-          id="entity_not_available_info"
-          defaultMessage="Please note that this entity is not available for purchase according to our system."/>, {autoClose: false})
-      }
-    }
-
-    if (registerStaffAccess) {
-      this.props.fetchAuth(`${entity.url}register_staff_access/`, {method: 'POST'})
-        .then(json => {
-          this.props.updateEntity(json);
-        })
-    }
 
     if (this.userHasStockPermissions(entity)) {
       if (entity.active_registry && entity.active_registry.is_available) {
@@ -142,7 +95,30 @@ class EntityDetail extends Component {
 
     if (userHasStaffPermissions) {
       const endpoint = entity.url + 'staff_info/';
+
       this.props.fetchAuth(endpoint).then(staffInfo => {
+        let registerStaffAccess = false;
+
+        if (staffInfo.last_staff_access) {
+          const lastStaffAccess = moment(staffInfo.last_staff_access);
+          const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccess));
+          if (durationSinceLastStaffAccess.asMinutes() < 10) {
+            if (staffInfo.last_staff_access_user !== user.detail_url) {
+              toast.warn(<FormattedMessage id="entity_staff_overlap_warning" defaultMessage="Someone has been working here recently. Be mindful!"/>, {autoClose: false})
+            }
+          } else {
+            registerStaffAccess = true;
+          }
+        } else {
+          registerStaffAccess = true;
+        }
+
+        if (registerStaffAccess) {
+          this.props.fetchAuth(`${entity.url}register_staff_access/`, {method: 'POST'}).then(json => {
+            this.props.updateEntity(json);
+          })
+        }
+
         this.setState({
           staffInfo
         })

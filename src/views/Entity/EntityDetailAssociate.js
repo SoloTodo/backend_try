@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 import { Markdown } from 'react-showdown';
 import {FormattedMessage, injectIntl} from "react-intl";
-import {
-  apiResourceStateToPropsUtils
-} from "../../react-utils/ApiResource";
+import {apiResourceStateToPropsUtils} from "../../react-utils/ApiResource";
+import {backendStateToPropsUtils} from "../../utils";
 import {connect} from "react-redux";
 import {NavLink, Redirect} from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -12,6 +11,8 @@ import imageNotAvailable from '../../images/image-not-available.svg';
 import {settings} from "../../settings";
 import EntityCategoryChange from "./EntityCategoryChange";
 import {Button} from "reactstrap";
+import moment from "moment";
+
 
 class EntityDetailAssociate extends Component {
   initialState = {
@@ -29,27 +30,66 @@ class EntityDetailAssociate extends Component {
   }
 
   componentDidMount() {
-    this.componentUpdate(this.props.apiResourceObject);
+    this.componentUpdate(this.props.apiResourceObject, this.props.user);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const currentEntity = this.props.apiResourceObject;
-    const nextEntity = nextProps.apiResourceObject;
+  componentDidUpdate(prevProps,) {
+    const currentEntity = prevProps.apiResourceObject;
+    const nextEntity = this.props.apiResourceObject;
 
     if (currentEntity.id !== nextEntity.id) {
-      this.setState(this.initialState, () => this.componentUpdate(nextEntity));
+      this.setState(this.initialState, () => this.componentUpdate(nextEntity, this.props.user));
     }
   }
 
-  componentUpdate(entity) {
+  componentUpdate(entity, user) {
     const endpoint = `${entity.url}cell_plan_choices/`;
+    const userHasStaffPermissions = this.userHasStaffPermissions(entity);
 
     this.props.fetchAuth(endpoint).then(cellPlanChoices => {
       this.setState({
         cellPlanChoices
       })
     });
+
+    if (userHasStaffPermissions) {
+      const endpoint = entity.url + 'staff_info/';
+
+      this.props.fetchAuth(endpoint).then(staffInfo => {
+        let registerStaffAccess = false;
+
+        if (staffInfo.last_staff_access) {
+          const lastStaffAccess = moment(staffInfo.last_staff_access);
+          const durationSinceLastStaffAccess = moment.duration(moment().diff(lastStaffAccess));
+          if (durationSinceLastStaffAccess.asMinutes() < 10) {
+            if (staffInfo.last_staff_access_user !== user.detail_url) {
+              toast.warn(<FormattedMessage id="entity_staff_overlap_warning" defaultMessage="Someone has been working here recently. Be mindful!"/>, {autoClose: false})
+            }
+          } else {
+            registerStaffAccess = true;
+          }
+        } else {
+          registerStaffAccess = true;
+        }
+
+        if (registerStaffAccess) {
+          this.props.fetchAuth(`${entity.url}register_staff_access/`, {method: 'POST'}).then(json => {
+            this.props.updateEntity(json);
+          })
+        }
+
+        this.setState({
+          staffInfo
+        })
+      })
+    }
   }
+
+  userHasStaffPermissions = entity => {
+    entity = entity || this.props.apiResourceObject;
+    entity = this.props.ApiResourceObject(entity);
+    return entity.category.permissions.includes('is_category_staff');
+  };
 
   handleProductSearchSubmit = evt => {
     evt.preventDefault();
@@ -413,8 +453,10 @@ class EntityDetailAssociate extends Component {
 
 function mapStateToProps(state) {
   const {ApiResourceObject, fetchAuth} = apiResourceStateToPropsUtils(state);
+  const {user} = backendStateToPropsUtils(state);
 
   return {
+    user,
     ApiResourceObject,
     fetchAuth,
   }
