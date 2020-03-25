@@ -159,6 +159,11 @@ class EntityDetailAssociate extends Component {
     const selectedCellPlanId = document.getElementById('cell_plan').value;
 
     let matchExistingCellPlan = false;
+    
+    if (entity.cellPlanName && !selectedCellPlanId) {
+      toast.error('Debe seleccionar un plan celular.');
+      return
+    }
 
     if (selectedCellPlanId) {
       payload.cell_plan = selectedCellPlanId;
