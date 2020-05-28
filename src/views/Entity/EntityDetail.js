@@ -270,9 +270,7 @@ class EntityDetail extends Component {
         thumbnail: pictureUrl
       }))
     }
-
-    console.log(entity);
-
+    
     const staffInfo = this.state.staffInfo ? this.props.ApiResourceObject(this.state.staffInfo) : null;
 
     return (
