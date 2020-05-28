@@ -12,6 +12,7 @@ import {settings} from "../../settings";
 import EntityCategoryChange from "./EntityCategoryChange";
 import {Button} from "reactstrap";
 import moment from "moment";
+import EntityConditionChange from "./EntityConditionChange";
 
 
 class EntityDetailAssociate extends Component {
@@ -268,6 +269,27 @@ class EntityDetailAssociate extends Component {
 
     const selectedProductId = this.state.selectedProduct ? this.state.selectedProduct.id : '';
 
+    const conditions = [
+      {
+        'id': 'https://schema.org/NewCondition',
+        'name': <FormattedMessage id="condition_new" defaultMessage="New"/>
+      },
+      {
+        'id': 'https://schema.org/DamagedCondition',
+        'name': <FormattedMessage id="condition_damaged" defaultMessage="Damaged"/>
+      },
+      {
+        'id': 'https://schema.org/RefurbishedCondition',
+        'name': <FormattedMessage id="condition_refurbished" defaultMessage="Refurbished"/>
+      },
+      {
+        'id': 'https://schema.org/UsedCondition',
+        'name': <FormattedMessage id="condition_used" defaultMessage="Used"/>
+      }
+    ];
+
+    const currentCondition = conditions.filter(condition => condition.id === entity.condition)[0];
+
     return (
         <div className="animated fadeIn">
           <div className="row">
@@ -294,6 +316,11 @@ class EntityDetailAssociate extends Component {
                         <dt><FormattedMessage id="store" defaultMessage="Store" /></dt>
                         <dd>{entity.store.name}</dd>
 
+                        {entity.seller &&
+                        <dt>Vendedor</dt>}
+                        {entity.seller &&
+                        <dd>{entity.seller}</dd>}
+
                         <dt><FormattedMessage id="url" defaultMessage="URL" /></dt>
                         <dd><a href={entity.externalUrl} target="_blank" rel="noopener noreferrer">{entity.externalUrl}</a></dd>
 
@@ -303,7 +330,13 @@ class EntityDetailAssociate extends Component {
                     </div>
                     <div className="col-12 col-sm-6">
                       <dl>
-
+                        <dt>Condición</dt>
+                        <dd>
+                        {this.userHasStaffPermissions()?
+                            <EntityConditionChange entity={entity}/> :
+                            currentCondition.name
+                        }
+                        </dd>
                         <dt><FormattedMessage id="category" defaultMessage="Category" /></dt>
                         <dd>
                           <EntityCategoryChange entity={entity} />

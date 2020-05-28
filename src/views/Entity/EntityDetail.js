@@ -259,6 +259,7 @@ class EntityDetail extends Component {
       }
     ];
 
+    const originalCondition = conditions.filter(condition => condition.id === entity.scrapedCondition)[0];
     const currentCondition = conditions.filter(condition => condition.id === entity.condition)[0];
 
     let images = null;
@@ -269,6 +270,8 @@ class EntityDetail extends Component {
         thumbnail: pictureUrl
       }))
     }
+
+    console.log(entity);
 
     const staffInfo = this.state.staffInfo ? this.props.ApiResourceObject(this.state.staffInfo) : null;
 
@@ -418,6 +421,10 @@ class EntityDetail extends Component {
                     </td>
                   </tr>
                   <tr>
+                    <th>Condición Original</th>
+                    <td>{originalCondition.name}</td>
+                  </tr>
+                  <tr>
                     <th><FormattedMessage id="part_number" defaultMessage='Part Number' /></th>
                     <td>{entity.partNumber || <em>N/A</em>}</td>
                   </tr>
@@ -480,6 +487,12 @@ class EntityDetail extends Component {
                       <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink> :
                       <em>N/A</em>}</td>
                   </tr>
+                  {entity.seller &&
+                      <tr>
+                        <th>Vendedor</th>
+                        <td>{entity.seller}</td>
+                      </tr>
+                  }
                   {hasStaffPermissions && entity.product && <tr>
                     <th>&nbsp;</th>
                     <td><button className="btn btn-danger" onClick={this.handleDissociateClick} disabled={this.state.dissociatingState !== DISSOCIATING_STATES.STAND_BY}><FormattedMessage id="dissociate" defaultMessage='Dissociate' /></button></td>
