@@ -396,6 +396,10 @@ class EntityDetail extends Component {
                     </td>
                   </tr>
                   <tr>
+                    <th>Vendedor</th>
+                    <td>{entity.seller || 'N/A'}</td>
+                  </tr>
+                  <tr>
                     <th><FormattedMessage id="url" defaultMessage='URL' /></th>
                     <td className="overflowed-table-cell"><a href={entity.externalUrl} target="_blank" rel="noopener noreferrer">{entity.externalUrl}</a></td>
                   </tr>
@@ -485,12 +489,6 @@ class EntityDetail extends Component {
                       <NavLink to={'/products/' + entity.product.id}>{entity.product.name}</NavLink> :
                       <em>N/A</em>}</td>
                   </tr>
-                  {entity.seller &&
-                      <tr>
-                        <th>Vendedor</th>
-                        <td>{entity.seller}</td>
-                      </tr>
-                  }
                   {hasStaffPermissions && entity.product && <tr>
                     <th>&nbsp;</th>
                     <td><button className="btn btn-danger" onClick={this.handleDissociateClick} disabled={this.state.dissociatingState !== DISSOCIATING_STATES.STAND_BY}><FormattedMessage id="dissociate" defaultMessage='Dissociate' /></button></td>
