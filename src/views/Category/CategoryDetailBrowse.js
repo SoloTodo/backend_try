@@ -345,7 +345,7 @@ class CategoryDetailBrowse extends Component {
 
           filterComponent = <ApiFormChoiceField
               name={filter.name}
-              apiField={filter.name + '_1'}
+              apiField={filter.name + '_before'}
               urlField={filter.name + '_end'}
               choices={filterChoices}
               placeholder={filter.label}
@@ -375,7 +375,7 @@ class CategoryDetailBrowse extends Component {
 
           filterComponent = <ApiFormChoiceField
               name={filter.name}
-              apiField={filter.name + '_0'}
+              apiField={filter.name + '_after'}
               urlField={filter.name + '_start'}
               choices={filterChoices}
               placeholder={filter.label}

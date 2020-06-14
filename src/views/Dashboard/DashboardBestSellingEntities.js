@@ -22,7 +22,7 @@ class DashboardBestSellingEntities extends Component {
   componentDidMount() {
     const oneWeekAgo = moment().subtract(2, 'days').startOf('day');
 
-    this.props.fetchAuth(settings.apiResourceEndpoints.entities + 'estimated_sales/?grouping=entity&page_size=10&timestamp_0=' + oneWeekAgo.toISOString())
+    this.props.fetchAuth(settings.apiResourceEndpoints.entities + 'estimated_sales/?grouping=entity&page_size=10&timestamp_after=' + oneWeekAgo.toISOString())
         .then(json => {
           const estimatedSalesPage = json.results.map(e => ({
             ...e,

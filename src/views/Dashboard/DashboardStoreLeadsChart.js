@@ -33,7 +33,7 @@ class DashboardStoreLeadsChart extends Component {
     const tomorrow = moment().add(1, 'days').startOf('day');
     const oneWeekAgo = moment().subtract(7, 'days').startOf('day');
 
-    const endpointParams = `timestamp_0=${oneWeekAgo.toISOString()}&timestamp_1=${tomorrow.toISOString()}&stores=${user.preferredStore.id}&grouping=date`;
+    const endpointParams = `timestamp_after=${oneWeekAgo.toISOString()}&timestamp_before=${tomorrow.toISOString()}&stores=${user.preferredStore.id}&grouping=date`;
 
     const endpoint = `${settings.apiResourceEndpoints.leads}grouped/?${endpointParams}`;
 
