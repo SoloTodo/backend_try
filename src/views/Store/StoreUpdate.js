@@ -271,7 +271,7 @@ class StoreUpdate extends Component {
                               <td>
                                 <NavLink to={'/stores/' + storeEntry.store.id}>{storeEntry.store.name}</NavLink>
                               </td>
-                              <td>{storeEntry.latestUpdateLog.availableProductsCount ? statusDict[storeEntry.latestUpdateLog.status] : 'Error'}</td>
+                              <td>{!storeEntry.latestUpdateLog.availableProductsCount && storeEntry.latestUpdateLog.status === 3 ? "Error": statusDict[storeEntry.latestUpdateLog.status]}</td>
                               <td className="hidden-xs-down">
                                 {storeEntry.latestUpdateLog.availableProductsCount
                                     ? `${storeEntry.latestUpdateLog.availableProductsCount} / ${storeEntry.latestUpdateLog.unavailableProductsCount} / ${storeEntry.latestUpdateLog.discoveryUrlsWithoutProductsCount}`
