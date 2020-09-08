@@ -9,6 +9,7 @@ import {
 import {
   filterApiResourceObjectsByType,
 } from "../../react-utils/ApiResource";
+import {toast} from "react-toastify";
 
 class ReportStoreAnalysis extends Component {
   constructor(props) {
@@ -31,15 +32,13 @@ class ReportStoreAnalysis extends Component {
     this.setState({formValues})
   };
 
-  setDownloadLink = json => {
+  setLoading = json => {
     if (json) {
-      window.location = json.payload.url;
-      this.setState({
-        downloadLink: undefined
-      })
+      toast.success('El reporte esta siendo generado. Una vez finalizado este será enviado a su correo.',
+        {autoClose: false})
     } else {
       this.setState({
-        downloadLink: null
+        loading: null
       })
     }
   };
@@ -78,7 +77,7 @@ class ReportStoreAnalysis extends Component {
             <ApiForm
                 endpoints={['reports/store_analysis/']}
                 fields={['store', 'competing_stores', 'categories', 'price_type', 'layout', 'submit']}
-                onResultsChange={this.setDownloadLink}
+                onResultsChange={this.setLoading}
                 onFormValueChange={this.handleFormValueChange}
                 setFieldChangeHandler={this.setApiFormFieldChangeHandler}
                 requiresSubmit={true}
