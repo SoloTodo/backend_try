@@ -1,0 +1,10 @@
+name = "backend_try"
+type = "webpack"
+account_id = "f7abe609288c03079cc6bef526b0d0e2"
+workers_dev = true
+route = ""
+zone_id = ""
+
+[site]
+bucket = "./build"
+entry-point = "workers-site"
