@@ -96,11 +96,11 @@ class RatingPendingList extends Component {
           },
           {
             label: <FormattedMessage id="product_rating" defaultMessage="Product rating" />,
-            renderer: rating => rating.productRating
+            renderer: rating => rating.productRating || <em>Producto no recibido</em>
           },
           {
             label: <FormattedMessage id="product_comments" defaultMessage="Product comments" />,
-            renderer: rating => rating.productComments
+            renderer: rating => rating.productRating ? rating.productComments : <em>Producto no recibido</em>
           },
           {
             label: <FormattedMessage id="store" defaultMessage="Store" />,

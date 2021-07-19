@@ -63,7 +63,7 @@ class RatingList extends Component {
       },
       {
         label: <FormattedMessage id="product_rating" defaultMessage="Product rating" />,
-        renderer: rating => rating.productRating
+        renderer: rating => rating.productRating ? rating.productRating : 'Producto no recibido'
       },
       {
         label: <FormattedMessage id="store" defaultMessage="Store" />,

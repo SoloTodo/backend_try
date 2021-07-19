@@ -45,11 +45,11 @@ class RatingDetail extends Component {
                     </tr>
                     <tr>
                       <th><FormattedMessage id="product_rating" defaultMessage="Product rating" /></th>
-                      <td>{rating.productRating}</td>
+                      <td>{rating.productRating || <em>Producto no recibido</em>}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="product_comments" defaultMessage="Product comments" /></th>
-                      <td>{rating.productComments}</td>
+                      <td>{rating.productRating ? rating.productComments : <em>Producto no recibido</em>}</td>
                     </tr>
                     <tr>
                       <th><FormattedMessage id="approval_date" defaultMessage="Approval date" /></th>
